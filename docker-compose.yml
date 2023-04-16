@@ -1,0 +1,20 @@
+services:
+    webserver:
+        build:
+            context: ./web/init
+            # args:
+            #     conf_path: ${CONF_PATH}@
+        ports:
+            - "${WEB_EXT_PORT}:80"
+        volumes:
+            - ./web/volumes/htdocs/:/var/www/localhost/htdocs/
+            - ./web/volumes/lighttpd/:/etc/lighttpd/
+        tty: true
+    #     links:
+    #         - mariadb
+    # db:
+    #     image: mariadb:10.5.9
+    #     ports:
+    #         - "${DB_EXT_PORT}:3306"
+    #     environment:
+    #         - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PWD}
