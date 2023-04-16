@@ -1,2 +1,3 @@
 Make changes to php.ini in a separate file copied to conf.d
 MIT
+Only use Alpine image
