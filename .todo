@@ -1,3 +1,5 @@
 Make changes to php.ini in a separate file copied to conf.d
 MIT
 Only use Alpine image
+Check SQL is in strict mode
+PHP DI: check lazy mode, prod mode

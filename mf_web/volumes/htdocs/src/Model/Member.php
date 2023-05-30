@@ -9,4 +9,12 @@ class Member
         private LongString $passwordHash,
     ) {
     }
+
+    public function getPasswordHash(): LongString {
+        return $this->passwordHash;
+    }
+
+    public function getUsername(): LongString {
+        return $this->username;
+    }
 }

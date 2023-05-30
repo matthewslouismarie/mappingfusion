@@ -2,17 +2,18 @@
 
 namespace MF\Repository;
 
+use MF\Database\Connection;
 use MF\Model\Member;
-use PDO;
 
 class MemberRepository
 {
     public function __construct(
-        private PDO $pdo,
+        private Connection $conn,
     ) {
     }
 
     public function add(Member $member): void {
-        $this->pdo->prepare('')
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO t_member VALUES (:username, :password)');
+        $stmt->execute(['username' => $member->getUsername(), 'password' => $member->getPasswordHash()]);
     }
 }
