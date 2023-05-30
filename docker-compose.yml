@@ -13,7 +13,7 @@ services:
         links:
             - mf_db
     mf_db:
-        image: mariadb:11
+        image: mariadb:10
         ports:
             - "${DB_EXT_PORT}:3306"
         environment:

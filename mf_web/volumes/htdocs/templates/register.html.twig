@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<form autocomplete="on" method="post">
+    <div class="form-row">
+        <label for="username">Nom d’utilisateur :</label>
+        <input id="username" name="username" required>
+    </div>
+    <div class="form-row">
+        <label for="password">Mot de passe :</label>
+        <input id="password" name="password" required type="password">
+    </div>
+    <button type="submit">S’inscrire</button>
+</form>
+{% endblock %}
