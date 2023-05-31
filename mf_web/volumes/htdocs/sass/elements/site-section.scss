@@ -1,0 +1,33 @@
+.site-section {
+    > .wrapper {
+        margin: auto;
+        max-width: 100%;
+        width: 70rem;
+        padding: $block-padding-s;
+    }
+
+    &.-header {
+        > .wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $gap-l;
+            row-gap: $gap-s;
+
+            > .logo > .img {
+                height: $btn-l-height;
+                width: auto;
+            }
+
+            > .text {
+                display: flex;
+                row-gap: $gap-s;
+                flex-direction: column;
+                justify-content: center;
+
+                > .intro {
+                    color: #19577a;
+                }
+            }
+        }
+    }
+}

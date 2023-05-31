@@ -1,13 +1,37 @@
-<!DOCTYPE html>
+{% apply spaceless %}<!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="/public/style.css?{{ app.stylesheetVersion }}">
         <title>{% block title %}{% endblock %} - Mapping-Fusion</title>
     </head>
-    <body>
+    <body class="site-body">
+        <header class="site-section -header">
+            <div class="wrapper">
+                <a class="logo" href="/">
+                    <img alt="Mapping-Fusion" class="img" src="/public/mapping-fusion-logo.png">
+                </a>
+                <div class="text">
+                    <p class="intro">Communauté francophone sur l’univers d’<strong>Half-Life et le modding pour Goldsource et Source</strong>.</p>
+                    <nav class="header-nav">
+                        <ul class="list">
+                            <li class="item">
+                                <input class="search" type="search" placeholder="Votre recherche">
+                            </li>
+                            <li class="item">
+                                <a class="link">Nouveau sur Sven Co-op ?</a>
+                            </li>
+                            <li class="item">
+                                <a class="link">Comment installer un mod Half-Life</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
         {% if session.currentMemberUsername %}{{ session.currentMemberUsername }}{% endif %}
         {% block body %}
         {% endblock %}
     </body>
 </html>
+{% endapply %}

@@ -1,0 +1,59 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.site-body {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+.site-section > .wrapper {
+  margin: auto;
+  max-width: 100%;
+  width: 70rem;
+  padding: 0.3rem;
+}
+.site-section.-header > .wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  row-gap: 0.3rem;
+}
+.site-section.-header > .wrapper > .logo > .img {
+  height: 6rem;
+  width: auto;
+}
+.site-section.-header > .wrapper > .text {
+  display: flex;
+  row-gap: 0.3rem;
+  flex-direction: column;
+  justify-content: center;
+}
+.site-section.-header > .wrapper > .text > .intro {
+  color: #19577a;
+}
+.header-nav > .list {
+  list-style-type: none;
+  display: flex;
+  gap: 1rem;
+  row-gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.header-nav > .list > .item {
+  display: inline-block;
+}
+.header-nav > .list > .item > .search, .header-nav > .list > .item > .link {
+  display: block;
+  border-radius: 0.5rem;
+  padding: 0.3rem;
+  border-width: 3px;
+  border-style: solid;
+}
+.header-nav > .list > .item > .search {
+  color: #1e1e1e;
+  background-color: #f2f2f2;
+  border-color: #f2f2f2;
+}
+.header-nav > .list > .item > .link {
+  border-color: #3d9cce;
+  color: #206b96;
+}

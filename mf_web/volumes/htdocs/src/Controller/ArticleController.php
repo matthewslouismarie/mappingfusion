@@ -48,7 +48,6 @@ class ArticleController
         } elseif (null !== $request->getQueryParams()['id']) {
             $article = $this->repo->find($request->getQueryParams()['id']);
             $articleData = $article->toArray();
-            print_r($articleData);
         }
         return $this->twig->render('article.html.twig', [
             'article' => $articleData,
