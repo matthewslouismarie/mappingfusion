@@ -22,4 +22,8 @@ class Member
     public function getUsername(): LongString {
         return $this->username;
     }
+
+    public function setPasswordHash(string $passwordHash): Member {
+        return new Member($passwordHash, $this->username);
+    }
 }

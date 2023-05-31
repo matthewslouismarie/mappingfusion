@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Compte{% endblock %}
+
+{% block body %}
+Compte
+<form autocomplete="on" method="post">
+    {% if success %}
+    {{ success }}
+    {% endif %}
+    {% if formError %}
+    {{ formError }}
+    {% endif %}
+    <div class="form-row">
+        <label for="password">Mot de passe :</label>
+        <input id="password" name="password" required type="password">
+    </div>
+    <button type="submit">Mettre à jour</button>
+</form>
+{% endblock %}

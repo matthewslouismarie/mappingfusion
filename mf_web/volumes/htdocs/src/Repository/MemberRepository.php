@@ -31,4 +31,9 @@ class MemberRepository
             throw new UnexpectedValueException();
         }
     }
+
+    public function updateMember(Member $member): void {
+        $stmt = $this->conn->getPdo()->prepare('UPDATE t_member SET c_password = :password WHERE c_username = :username');
+        $stmt->execute(['password' => $member->getPasswordHash(), 'username' => $member->getUsername()]);
+    }
 }
