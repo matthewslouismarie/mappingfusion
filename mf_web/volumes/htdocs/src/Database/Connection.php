@@ -14,9 +14,10 @@ class Connection
         $dbName = $config->getSetting('DB_NAME');
         $dbPwd = $config->getSetting('DB_ROOT_PWD');
         $this->pdo = new PDO("mysql:host=mf_db", 'root', $dbPwd, [PDO::ATTR_PERSISTENT => true]);
-        $stmt = $this->pdo->exec("CREATE DATABASE IF NOT EXISTS ${dbName}");
-        $stmt = $this->pdo->exec('USE ' . $dbName);
-        $stmt = $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/t_member.sql'), LongString::MAX_LENGTH));
+        $this->pdo->exec("CREATE DATABASE IF NOT EXISTS ${dbName}");
+        $this->pdo->exec('USE ' . $dbName);
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/t_member.sql'), LongString::MAX_LENGTH));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_article.sql'), LongString::MAX_LENGTH));
     }
 
     public function getPdo(): PDO {

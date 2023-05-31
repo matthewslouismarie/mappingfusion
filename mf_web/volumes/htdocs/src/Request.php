@@ -18,7 +18,10 @@ class Request
         return $_POST;
     }
 
-    public function getQueryParams(): array {
+    public function getQueryParams(): ?array {
+        if (!isset($_GET)) {
+            return null;
+        }
         return $_GET;
     }
 }

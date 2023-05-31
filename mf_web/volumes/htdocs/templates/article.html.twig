@@ -4,7 +4,15 @@
 
 {% block body %}
 <form autocomplete="on" method="post">
-    <textarea></textarea>
+    <div class="form-row">
+        <label class="label" for="p-id">ID</label>
+        <input id="p-id" name="p_id" value="{{ article['p_id'] }}">
+    </div>
+    <div class="form-row">
+        <label class="label" for="p-title">Titre</label>
+        <input id="p-title" name="p_title" value="{{ article['p_title'] }}">
+    </div>
+    <textarea id="p-content" name="p_content">{{ article['p_content'] }}</textarea>
     <button type="submit">Poster</button>
 </form>
 {% endblock %}

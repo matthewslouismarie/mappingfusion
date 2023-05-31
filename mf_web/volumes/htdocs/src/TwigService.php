@@ -19,7 +19,9 @@ class TwigService
         $loader = new FilesystemLoader('templates');
         $this->session = $session;
         $this->twig = new Environment($loader, [
+            'debug' => $config->getSetting('dev') ? true : false,
             'cache' => $config->getSetting('dev') ? false : 'cache',
+            'strict_variables' => true,
         ]);
     }
 
