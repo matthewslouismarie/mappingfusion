@@ -1,6 +1,6 @@
 FROM sebp/lighttpd
 
-RUN apk --update add php81 php81-cgi php81-openssl php81-phar php81-iconv php81-mbstring php81-ctype php81-session php81-simplexml php81-tokenizer php81-xml php81-dom php81-pdo php81-pdo_mysql
+RUN apk --update add php81 php81-cgi php81-phar php81-mbstring php81-session php81-pdo php81-pdo_mysql
 
 RUN ln /usr/bin/php81 /opt/php
 ENV PATH="/opt:$PATH"
