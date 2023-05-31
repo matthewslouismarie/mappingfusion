@@ -4,10 +4,15 @@ namespace MF\Model;
 
 class Member
 {
+    private LongString $passwordHash;
+    private LongString $username;
+
     public function __construct(
-        private LongString $username,
-        private LongString $passwordHash,
+        string $passwordHash,
+        string $username,
     ) {
+        $this->passwordHash = new LongString($passwordHash);
+        $this->username = new LongString($username);
     }
 
     public function getPasswordHash(): LongString {

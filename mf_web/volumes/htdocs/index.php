@@ -4,7 +4,8 @@ require_once './vendor/autoload.php';
 
 use DI\ContainerBuilder;
 use MF\Kernel;
-use MF\RequestFactory;
+
+session_start();
 
 $container = (new ContainerBuilder())->build();
 

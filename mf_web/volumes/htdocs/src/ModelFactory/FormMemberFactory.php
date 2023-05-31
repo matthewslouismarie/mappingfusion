@@ -8,6 +8,6 @@ use MF\Model\Member;
 class FormMemberFactory
 {
     public function createFromRequest(array $formData): Member {
-        return new Member(new LongString($formData['username']), new LongString(password_hash($formData['password'], PASSWORD_DEFAULT)));
+        return new Member(password_hash($formData['password'], PASSWORD_DEFAULT), $formData['username']);
     }
 }

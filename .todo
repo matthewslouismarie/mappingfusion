@@ -3,3 +3,6 @@ MIT
 Only use Alpine image
 Check SQL is in strict mode
 PHP DI: check lazy mode, prod mode
+CSRF
+XSS
+Check origin is server settings

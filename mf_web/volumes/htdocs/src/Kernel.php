@@ -2,18 +2,18 @@
 
 namespace MF;
 
-use MF\Controller\RegistrationController;
+use MF\Controller\AuthController;
 use Twig\Environment;
 
 class Kernel
 {
     private Environment $twig;
-    private RegistrationController $registration;
+    private AuthController $registration;
     private Request $request;
 
     public function __construct(
         TwigService $twigService,
-        RegistrationController $registration,
+        AuthController $registration,
         RequestFactory $requestFactory,
     ) {
         $this->request = $requestFactory->createRequest();
@@ -24,11 +24,11 @@ class Kernel
     public function manageRequest() {
         switch ($this->request->getQueryParams()['route_id']) {
             case 'login':
-                echo $this->twig->load('login.html.twig')->render();
+                echo $this->registration->handleLoginPage($this->request);
                 break;
         
             case 'register':
-                echo $this->registration->processRequest($this->request);
+                echo $this->registration->handleRegistrationPage($this->request);
                 break;
             
             case null:

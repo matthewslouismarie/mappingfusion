@@ -2,9 +2,11 @@
 <html lang="fr">
     <head>
         <meta charset="utf-8">
+        <link rel="stylesheet" href="/public/style.css?{{ app.stylesheetVersion }}">
         <title>{% block title %}{% endblock %} - Mapping-Fusion</title>
     </head>
     <body>
+        {% if session.currentMemberUsername %}{{ session.currentMemberUsername }}{% endif %}
         {% block body %}
         {% endblock %}
     </body>

@@ -6,6 +6,7 @@
     },
     "require": {
         "twig/twig": "^3.0",
-        "php-di/php-di": "^7.0"
+        "php-di/php-di": "^7.0",
+        "scssphp/scssphp": "^1.11"
     }
 }
