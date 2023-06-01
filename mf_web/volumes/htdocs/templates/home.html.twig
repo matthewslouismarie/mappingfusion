@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Acceuil{% endblock %}
+
+{% block resources %}
+<link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
+<script src="https://unpkg.com/@glidejs/glide@3.6.0/dist/glide.js"></script>
+{% endblock %}
+
+{% block body %}
+Acceuil
+<div class="glide">
+    <div class="glide__track" data-glide-el="track">
+        <ul class="glide__slides">
+        {% for a in featured_articles %}
+            <li class="glide__slide">
+                <a class="link" href="{{ app.router.generateUrl('article', {id: a.id}) }}" style="background-image: url(/public/uploaded/{{ a.coverFilename }});">
+                    <div class="text">{{ app.mk.format(a.title)|raw }}</div>
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+Contr
+{% endblock %}
+
+{% block scriptInit %}
+<script>
+  new Glide('.glide').mount()
+</script>
+{% endblock %}

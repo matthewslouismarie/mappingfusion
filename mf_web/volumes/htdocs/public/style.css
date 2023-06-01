@@ -3,13 +3,25 @@
   padding: 0;
   box-sizing: border-box;
 }
+.glide__slide > .link {
+  background-position: center;
+  background-size: cover;
+  height: 16rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 2rem;
+  text-shadow: 0 0 0.4rem #000000;
+}
 .site-body {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 .site-section > .wrapper {
   margin: auto;
-  max-width: 100%;
-  width: 70rem;
+  width: 90%;
+  max-width: 70rem;
   padding: 0.3rem;
 }
 .site-section.-header > .wrapper {

@@ -5,8 +5,9 @@ namespace MF\Controller;
 use MF\HttpBridge\Session;
 use MF\ModelFactory\FormMemberFactory;
 use MF\Repository\MemberRepository;
-use MF\Request;
+use GuzzleHttp\Psr7\Response;
 use MF\TwigService;
+use Psr\Http\Message\ServerRequestInterface;
 
 class AuthController
 {
@@ -25,15 +26,15 @@ class AuthController
         $this->session = $session;
     }
 
-    public function handleRegistrationPage(Request $request): string {
+    public function handleRegistrationPage(ServerRequestInterface $request): Response {
         if ('POST' === $request->getMethod()) {
             $member = (new FormMemberFactory())->createFromRequest($request->getParsedBody());
             $this->repo->add($member);
         }
-        return $this->twig->render('register.html.twig');
+        return new Response(body: $this->twig->render('register.html.twig'));
     }
 
-    public function handleLoginPage(Request $request): string {
+    public function handleLoginPage(ServerRequestInterface $request): Response {
         $formError = null;
         if ('POST' === $request->getMethod()) {
             $member = $this->repo->find($request->getParsedBody()['username']);
@@ -43,8 +44,8 @@ class AuthController
                 $this->session->setCurrentMemberUsername($member->getUsername());
             }
         }
-        return $this->twig->render('login.html.twig', [
+        return new Response(body: $this->twig->render('login.html.twig', [
             'formError' => $formError,
-        ]);
+        ]));
     }
 }

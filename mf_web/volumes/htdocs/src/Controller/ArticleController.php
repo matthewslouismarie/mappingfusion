@@ -1,16 +1,21 @@
 <?php
 
 namespace MF\Controller;
-use DateTimeImmutable;
+use DomainException;
+use MF\Model\SlugFilename;
 use MF\Repository\ArticleRepository;
 use MF\HttpBridge\Session;
 use MF\Model\Article;
-use MF\Request;
+use GuzzleHttp\Psr7\Response;
+use MF\Router;
 use MF\TwigService;
+use Psr\Http\Message\ServerRequestInterface;
 
 class ArticleController
 {
     private ArticleRepository $repo;
+
+    private Router $router;
 
     private Session $session;
 
@@ -18,39 +23,69 @@ class ArticleController
 
     public function __construct(
         ArticleRepository $repo,
+        Router $router,
         Session $session,
         TwigService $twig,
     ) {
         $this->repo = $repo;
+        $this->router = $router;
         $this->session = $session;
         $this->twig = $twig;
     }
 
-    public function handleArticlePage(Request $request): string {
+    public function handleArticlePage(ServerRequestInterface $request): Response {
         if (null === $this->session->getCurrentMemberUsername()) {
-            return $this->twig->render('error.html.twig', [
+            return new Response(body: $this->twig->render('error.html.twig', [
                 'title' => 'Connection requise',
                 'message' => 'Vous n’êtes pas connectés.',
-            ]);
+            ]));
+        }
+    
+        $article = $this->getArticleFromRequest($request);
+
+        if (null !== $article && (!isset($request->getQueryParams()['id']) || $article->getId() !== $request->getQueryParams()['id'])) {
+            return new Response(302, ['Location' => $this->router->generateUrl('article', ['id' => strval($article->getId())])]);
         }
 
-        $articleData = [
-            'p_title' => null,
-            'p_content' => null,
-        ];
+        return new Response(body: $this->twig->render('article.html.twig', [
+            'article' => $article?->toArray(),
+        ]));
+    }
+
+    private function getArticleFromRequest(ServerRequestInterface $request): ?Article {
         if ('POST' === $request->getMethod()) {
-            $article = Article::fromArray($request->getParsedBody() + [
-                'p_author' => $this->session->getCurrentMemberUsername(),
-                'p_creation_datetime' => new DateTimeImmutable(),
-                'p_last_update_datetime' => new DateTimeImmutable(),
-            ]);
-            $this->repo->add($article);
-        } elseif (null !== $request->getQueryParams()['id']) {
+            $data = $request->getParsedBody();
+
+            $uploadedFile = $request->getUploadedFiles()['p_cover_filename'];
+            $wasFileUploaded = null !== $uploadedFile->getSize() && $uploadedFile->getSize() > 0;
+            if ($wasFileUploaded) {
+                $filename = new SlugFilename($uploadedFile->getClientFilename());
+                $uploadedFile->moveTo(dirname(__FILE__) . "/../../public/uploaded/" . $filename->__toString());
+                $data['p_cover_filename'] = $filename->__toString();
+            }
+            $data['p_is_featured'] = isset($data['p_is_featured']);
+
+            if (isset($request->getQueryParams()['id'])) {
+                $article = Article::fromArray($data);
+                $this->repo->updateArticle($request->getQueryParams()['id'], $article, $wasFileUploaded);
+                return $article;
+            } else {
+                $article = Article::fromArray($data + [
+                    'p_author' => $this->session->getCurrentMemberUsername(),
+                    'p_creation_datetime' => "now",
+                    'p_last_update_datetime' => "now",
+                ]);
+                $this->repo->addNewArticle($article);
+                return $article;
+            }
+        } elseif (isset($request->getQueryParams()['id'])) {
             $article = $this->repo->find($request->getQueryParams()['id']);
-            $articleData = $article->toArray();
+            if (null === $article) {
+                throw new DomainException();
+            }
+            return $article;
+        } else {
+            return null;
         }
-        return $this->twig->render('article.html.twig', [
-            'article' => $articleData,
-        ]);
     }
 }

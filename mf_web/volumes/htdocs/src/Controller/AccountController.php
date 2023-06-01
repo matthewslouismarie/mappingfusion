@@ -4,8 +4,9 @@ namespace MF\Controller;
 
 use MF\HttpBridge\Session;
 use MF\Repository\MemberRepository;
-use MF\Request;
+use GuzzleHttp\Psr7\Response;
 use MF\TwigService;
+use Psr\Http\Message\ServerRequestInterface;
 
 class AccountController
 {
@@ -24,7 +25,7 @@ class AccountController
         $this->twig = $twig;
     }    
 
-    public function handleAccountPage(Request $request): string {
+    public function handleAccountPage(ServerRequestInterface $request): Response {
         $member = $this->repo->find($this->session->getCurrentMemberUsername());
         $success = null;
         if ('POST' === $request->getMethod()) {
@@ -32,6 +33,6 @@ class AccountController
             $this->repo->updateMember($member->setPasswordHash($newPasswordHash));
             $success = 'Votre mot de passe a été mis à jour.';
         }
-        return $this->twig->render('account.html.twig');
+        return new Response(body: $this->twig->render('account.html.twig'));
     }
 }
