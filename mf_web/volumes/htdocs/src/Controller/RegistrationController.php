@@ -7,9 +7,10 @@ use MF\ModelFactory\FormMemberFactory;
 use MF\Repository\MemberRepository;
 use GuzzleHttp\Psr7\Response;
 use MF\TwigService;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AuthController
+class RegistrationController implements ControllerInterface
 {
     private TwigService $twig;
     private MemberRepository $repo;
@@ -26,7 +27,7 @@ class AuthController
         $this->session = $session;
     }
 
-    public function handleRegistrationPage(ServerRequestInterface $request): Response {
+    public function generateResponse(ServerRequestInterface $request): ResponseInterface {
         if ('POST' === $request->getMethod()) {
             $member = (new FormMemberFactory())->createFromRequest($request->getParsedBody());
             $this->repo->add($member);
@@ -34,18 +35,8 @@ class AuthController
         return new Response(body: $this->twig->render('register.html.twig'));
     }
 
-    public function handleLoginPage(ServerRequestInterface $request): Response {
-        $formError = null;
-        if ('POST' === $request->getMethod()) {
-            $member = $this->repo->find($request->getParsedBody()['username']);
-            if (null === $member || !password_verify($request->getParsedBody()['password'], $member->getPasswordHash())) {
-                $formError = 'Identifiants invalides.';
-            } else {
-                $this->session->setCurrentMemberUsername($member->getUsername());
-            }
-        }
-        return new Response(body: $this->twig->render('login.html.twig', [
-            'formError' => $formError,
-        ]));
+    // @todo Use enum? Or class?
+    public function getAccessControl(): int {
+        return -1;
     }
 }

@@ -3,38 +3,42 @@
 namespace MF\Controller;
 
 use MF\HttpBridge\Session;
+use MF\ModelFactory\FormMemberFactory;
 use MF\Repository\MemberRepository;
 use GuzzleHttp\Psr7\Response;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AccountController implements ControllerInterface
+class LogoutController implements ControllerInterface
 {
-    private MemberRepository $repo;
-    private Session $session;
-
     private TwigService $twig;
+    private MemberRepository $repo;
+
+    private Session $session;
 
     public function __construct(
         MemberRepository $repo,
         Session $session,
-        TwigService $twig,
+        TwigService $twigService,
     ) {
+        $this->twig = $twigService;
         $this->repo = $repo;
         $this->session = $session;
-        $this->twig = $twig;
-    }    
+    }
 
     public function generateResponse(ServerRequestInterface $request): ResponseInterface {
-        $member = $this->repo->find($this->session->getCurrentMemberUsername());
-        $success = null;
+        $formError = null;
         if ('POST' === $request->getMethod()) {
-            $newPasswordHash = password_hash($request->getParsedBody()['password'], PASSWORD_DEFAULT);
-            $this->repo->updateMember($member->setPasswordHash($newPasswordHash));
-            $success = 'Votre mot de passe a été mis à jour.';
+            $this->session->setCurrentMemberUsername(null);
+            return new Response(
+                body: $this->twig->render('success.html.twig', [
+                    'message' => 'Vous avez étés déconnectés.',
+                    'title' => 'Déconnecté',
+                ]),
+            );
         }
-        return new Response(body: $this->twig->render('account.html.twig', ['success' => $success]));
+        return new Response(body: $this->twig->render('logout.html.twig'));
     }
 
     public function getAccessControl(): int {

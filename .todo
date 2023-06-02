@@ -1,11 +1,18 @@
-Make changes to php.ini in a separate file copied to conf.d
-MIT
-Only use Alpine image
-Check SQL is in strict mode
-PHP DI: check lazy mode, prod mode
-CSRF
-XSS
-Check origin is server settings
+Legal:
+ - MIT
+
+Refactoring:
+ - Only use Alpine image
+ - Check SQL is in strict mode
+ - Make changes to php.ini in a separate file copied to conf.d
+
+Performance:
+ - PHP DI: check lazy mode, prod mode
+
+Security:
+ - CSRF
+ - XSS
+ - Check origin is server settings
 
 Responsiveness:
  - Add srcset to images

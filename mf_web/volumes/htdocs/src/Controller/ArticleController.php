@@ -9,9 +9,10 @@ use MF\Model\Article;
 use GuzzleHttp\Psr7\Response;
 use MF\Router;
 use MF\TwigService;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ArticleController
+class ArticleController implements ControllerInterface
 {
     private ArticleRepository $repo;
 
@@ -33,7 +34,7 @@ class ArticleController
         $this->twig = $twig;
     }
 
-    public function handleArticlePage(ServerRequestInterface $request): Response {
+    public function generateResponse(ServerRequestInterface $request): ResponseInterface {
         if (null === $this->session->getCurrentMemberUsername()) {
             return new Response(body: $this->twig->render('error.html.twig', [
                 'title' => 'Connection requise',
@@ -87,5 +88,9 @@ class ArticleController
         } else {
             return null;
         }
+    }
+
+    public function getAccessControl(): int {
+        return 1;
     }
 }

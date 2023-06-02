@@ -14,10 +14,13 @@
         <nav class="site-admin-nav">
             <ul class="list">
                 <li class="item">
-                    <a class="link" href="#">{{ session.currentMemberUsername }}</a>
+                    <a class="link" href="{{ app.router.generateUrl('account') }}">{{ session.currentMemberUsername }}</a>
                 </li>
                 <li class="item">
                     <a class="link" href="{{ app.router.generateUrl('article') }}">Nouvel article</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="{{ app.router.generateUrl('logout') }}">Déconnexion</a>
                 </li>
             </ul>
         </nav>
@@ -48,7 +51,11 @@
         </header>
 
         <main class="site-section">
-            {% block body %}{% endblock %}
+            {% block body %}
+            <div class="wrapper">
+                {% block bodyContent %}{% endblock %}
+            </div>
+            {% endblock %}
         </main>
 
         {% block scriptInit %}{% endblock %}
