@@ -33,7 +33,9 @@
 
         {% if session.currentMemberUsername %}{{ session.currentMemberUsername }}{% endif %}
 
-        {% block body %}{% endblock %}
+        <main class="site-section">
+            {% block body %}{% endblock %}
+        </main>
 
         {% block scriptInit %}{% endblock %}
     </body>

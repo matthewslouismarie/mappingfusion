@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-strong {
+em {
     font-style: normal;
     font-weight: bold;
 }
@@ -16,6 +16,7 @@ $gap-l: 2rem;
 $block-padding-s: 0.3rem;
 $block-border: 0.5rem;
 $btn-l-height: 6rem;
+$img-s-width: 16rem;
 $area-l-height: 16rem;
 $txt-l-font-size: 2rem;
 $txt-l-shadow-blur: 0.4rem;
@@ -26,3 +27,6 @@ $txt-l-shadow-blur: 0.4rem;
 @import 'elements/site-section.scss';
 
 @import 'elements/header-nav.scss';
+
+@import 'elements/std-form.scss';
+@import 'elements/form-row.scss';

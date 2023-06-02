@@ -1,0 +1,25 @@
+.form-row {
+    > .input,
+    > .label {
+        display: block;
+    }
+
+    &.-checkbox {
+        > .input,
+        > .label {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        > .input {
+            margin-right: $gap-s;
+        }
+    }
+
+    &.-singleimage {
+        > .image {
+            width: 100%;
+            max-width: $img-s-width;
+        }
+    }
+}

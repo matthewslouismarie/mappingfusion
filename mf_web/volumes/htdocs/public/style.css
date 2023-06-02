@@ -3,6 +3,10 @@
   padding: 0;
   box-sizing: border-box;
 }
+em {
+  font-style: normal;
+  font-weight: bold;
+}
 .glide__slide > .link {
   background-position: center;
   background-size: cover;
@@ -14,6 +18,7 @@
   text-decoration: none;
   font-size: 2rem;
   text-shadow: 0 0 0.4rem #000000;
+  text-align: center;
 }
 .site-body {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
@@ -68,4 +73,21 @@
 .header-nav > .list > .item > .link {
   border-color: #3d9cce;
   color: #206b96;
+}
+.std-form > .form-row {
+  margin-bottom: 0.3rem;
+}
+.form-row > .input, .form-row > .label {
+  display: block;
+}
+.form-row.-checkbox > .input, .form-row.-checkbox > .label {
+  display: inline-block;
+  vertical-align: middle;
+}
+.form-row.-checkbox > .input {
+  margin-right: 0.3rem;
+}
+.form-row.-singleimage > .image {
+  width: 100%;
+  max-width: 16rem;
 }

@@ -6,3 +6,7 @@ PHP DI: check lazy mode, prod mode
 CSRF
 XSS
 Check origin is server settings
+
+Responsiveness:
+ - Add srcset to images
+ - Add width and height to images
