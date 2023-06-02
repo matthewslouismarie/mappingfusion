@@ -35,6 +35,10 @@ class LoginController implements ControllerInterface
                 $formError = 'Identifiants invalides.';
             } else {
                 $this->session->setCurrentMemberUsername($member->getUsername());
+                return new Response(body: $this->twig->render('success.html.twig', [
+                    'message' => 'Connexion réussie.',
+                    'title' => 'Connecté',
+                ]));
             }
         }
         return new Response(body: $this->twig->render('login.html.twig', [
