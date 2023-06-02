@@ -56,7 +56,7 @@ class ArticleController
         if ('POST' === $request->getMethod()) {
             $data = $request->getParsedBody();
 
-            $uploadedFile = $request->getUploadedFiles()['p_cover_filename'];
+            $uploadedFile = $request->getUploadedFiles()['p_cover_uploaded_file'];
             $wasFileUploaded = null !== $uploadedFile->getSize() && $uploadedFile->getSize() > 0;
             if ($wasFileUploaded) {
                 $filename = new SlugFilename($uploadedFile->getClientFilename());
