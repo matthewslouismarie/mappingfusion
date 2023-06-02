@@ -12,14 +12,14 @@
         }
 
         > .input {
-            margin-right: $gap-s;
+            margin-right: $gap-xs;
         }
     }
 
     &.-singleimage {
         > .image {
             width: 100%;
-            max-width: $img-s-width;
+            max-width: $img-s-size;
         }
     }
 }

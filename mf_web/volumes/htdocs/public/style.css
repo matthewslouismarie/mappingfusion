@@ -7,7 +7,31 @@ em {
   font-style: normal;
   font-weight: bold;
 }
-.glide__slide > .link {
+.glide > .glide__bullets {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+  top: -2rem;
+  height: 0;
+}
+.glide > .glide__bullets > .glide__bullet {
+  border: 3px solid transparent;
+  background: none;
+  height: fit-content;
+}
+.glide > .glide__bullets > .glide__bullet > .image {
+  font-size: 0;
+  background-size: cover;
+  background-position: center;
+  width: 6rem;
+  height: 3rem;
+}
+.glide > .glide__bullets > .glide__bullet.glide__bullet--active {
+  border-color: #3d9cce;
+}
+.glide .glide__slide > .link {
   background-position: center;
   background-size: cover;
   height: 16rem;
@@ -108,4 +132,39 @@ em {
 .form-row.-singleimage > .image {
   width: 100%;
   max-width: 16rem;
+}
+.site-social-networks {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  background-color: #19577a;
+  box-shadow: 0 -3rem 3rem 1.5rem #19577a;
+  z-index: 1;
+  position: relative;
+  padding-top: 2rem;
+}
+.site-social-networks > .link {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  justify-content: center;
+  position: relative;
+  top: 5vb;
+  border: 1.5px solid #ffffff;
+  padding: 0.3rem 1rem;
+  border-radius: 0.5rem;
+}
+.site-social-networks > .link > .image {
+  height: 3rem;
+}
+.site-social-networks > .link > .text {
+  text-align: center;
+}
+.site-social-networks > .link.-white {
+  background-color: #ffffff;
+  color: #0b4b6e;
+}
+.site-social-networks > .link.-blue {
+  background-color: #19577a;
+  color: #ffffff;
 }

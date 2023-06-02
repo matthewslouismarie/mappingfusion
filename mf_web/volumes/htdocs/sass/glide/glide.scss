@@ -1,0 +1,46 @@
+.glide {
+    > .glide__bullets {
+        display: flex;
+        justify-content: center;
+        gap: $gap-m;
+        position: relative;
+        z-index: 2;
+        top: -$gap-l;
+        height: 0;
+    
+        > .glide__bullet {
+            border: $border-s solid transparent;
+            background: none;
+            height: fit-content;
+            
+            > .image {
+                font-size: 0;
+                background-size: cover;
+                background-position: center;
+                width: $img-xs-size;
+                height: $img-xs-size / 2;
+            }
+
+            &.glide__bullet--active {
+                border-color: #3d9cce;
+            }
+
+        }
+    }
+
+    .glide__slide {
+        > .link {
+            background-position: center;
+            background-size: cover;
+            height: $area-l-height;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 2rem;
+            text-shadow: 0 0 $txt-l-shadow-blur #000000;
+            text-align: center;
+        }
+    }
+}

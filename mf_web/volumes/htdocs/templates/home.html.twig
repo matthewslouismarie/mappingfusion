@@ -8,7 +8,6 @@
 {% endblock %}
 
 {% block body %}
-Acceuil
 <div class="glide">
     <div class="glide__track" data-glide-el="track">
         <ul class="glide__slides">
@@ -21,6 +20,23 @@ Acceuil
         {% endfor %}
         </ul>
     </div>
+    <div class="glide__bullets" data-glide-el="controls[nav]">
+        {% for a in featured_articles %}
+        <button class="glide__bullet" data-glide-dir="={{ loop.index0 }}" type="button">
+            <div class="image" style="background-image: url('/public/uploaded/{{ featured_articles[loop.index0].coverFilename }}');">{{ featured_articles[loop.index0].title }}</div>
+        </button>
+        {% endfor %}
+  </div>
+</div>
+<div class="site-social-networks">
+    <a class="link -white">
+        <img alt="Discord" class="image" src="/public/discord_logo.svg">
+        <div class="text">Rejoignez-nous<br><em>sur Discord</em></div>
+    </a>
+    <a class="link -blue">
+        <img alt="Facebook" class="image" src="/public/facebook_logo.svg">
+        <div class="text">Rejoignez-nous<br><em>sur Facebook</em></div>
+    </a>
 </div>
 {% endblock %}
 

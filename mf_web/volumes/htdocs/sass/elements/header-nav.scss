@@ -3,7 +3,7 @@
         list-style-type: none;
         display: flex;
         gap: $gap-m;
-        row-gap: $gap-s;
+        row-gap: $gap-xs;
         flex-wrap: wrap;
 
         > .item {

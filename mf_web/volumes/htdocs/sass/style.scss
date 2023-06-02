@@ -9,19 +9,24 @@ em {
     font-weight: bold;
 }
 
+$border-xs: 1.5px;
 $border-s: 3px;
-$gap-s: 0.3rem;
+$gap-xs: 0.3rem;
+$gap-s: 0.5rem;
 $gap-m: 1rem;
 $gap-l: 2rem;
 $block-padding-s: 0.3rem;
 $block-border: 0.5rem;
 $btn-l-height: 6rem;
-$img-s-width: 16rem;
+$img-s-size: 16rem;
+$img-xs-size: 6rem;
+$img-xxs-size: 3rem;
 $area-l-height: 16rem;
+$area-s-size: 3rem;
 $txt-l-font-size: 2rem;
 $txt-l-shadow-blur: 0.4rem;
 
-@import 'glide/glide__slide.scss';
+@import 'glide/glide.scss';
 
 @import 'elements/site-admin-nav.scss';
 @import 'elements/site-body.scss';
@@ -31,3 +36,5 @@ $txt-l-shadow-blur: 0.4rem;
 
 @import 'elements/std-form.scss';
 @import 'elements/form-row.scss';
+
+@import 'elements/site-social-networks.scss';

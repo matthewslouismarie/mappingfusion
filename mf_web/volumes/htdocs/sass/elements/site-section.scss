@@ -11,7 +11,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: $gap-l;
-            row-gap: $gap-s;
+            row-gap: $gap-xs;
 
             > .logo > .img {
                 height: $btn-l-height;
@@ -20,7 +20,7 @@
 
             > .text {
                 display: flex;
-                row-gap: $gap-s;
+                row-gap: $gap-xs;
                 flex-direction: column;
                 justify-content: center;
 

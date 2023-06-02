@@ -1,0 +1,40 @@
+.site-social-networks {
+    display: flex;
+    justify-content: center;
+    gap: $gap-l;
+    background-color: #19577a;
+    box-shadow: 0 (-$area-s-size) $area-s-size ($area-s-size / 2) #19577a;
+    z-index: 1;
+    position: relative;
+    padding-top: $gap-l;
+
+    > .link {
+        display: flex;
+        align-items: center;
+        gap: $gap-xs;
+        justify-content: center;
+        position: relative;
+        top: 5vb;
+        border: $border-xs solid #ffffff;
+        padding: $gap-xs $gap-m;
+        border-radius: $gap-s;
+
+        > .image {
+            height: $img-xxs-size;
+        }
+
+        > .text {
+            text-align: center;
+        }
+
+        &.-white {
+            background-color: #ffffff;
+            color: #0b4b6e;
+        }
+
+        &.-blue {
+            background-color: #19577a;
+            color: #ffffff;
+        }
+    }
+}
