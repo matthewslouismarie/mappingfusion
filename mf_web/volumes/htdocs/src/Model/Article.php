@@ -5,7 +5,7 @@ use DateTimeImmutable;
 
 class Article
 {
-    private LongString $id;
+    private Slug $id;
 
     private DateTimeImmutable $creationDateTime;
 
@@ -31,7 +31,7 @@ class Article
         string $title,
         ?string $coverFilename,
     ) {
-        $this->id = new LongString($id);
+        $this->id = new Slug($id);
         $this->creationDateTime = $creationDateTime;
         $this->isFeatured = $isFeatured;
         $this->lastModificationDateTime = $lastModificationDateTime;
@@ -55,7 +55,7 @@ class Article
     }
 
     public function getId(): string {
-        return $this->id;
+        return $this->id->__toString();
     }
 
     public function getAuthorUsername(): string {

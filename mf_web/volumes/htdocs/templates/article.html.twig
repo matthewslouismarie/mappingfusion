@@ -16,8 +16,10 @@
         <div class="form-row -singleimage">
             <label class="label" for="p-cover-filename">Couverture</label>
             <input accept="image/*" class="input" id="p-cover-filename" name="p_cover_uploaded_file" type="file">
-            {% if article %}<p>Couverture actuelle : {{ article['p_cover_filename'] }}.</p>
-            <img alt="Image actuelle de couverture de l’article" class="image" src="/public/uploaded/{{ article['p_cover_filename'] }}">{% endif %}
+            {% if article and article['p_cover_filename'] %}
+            <p>Couverture actuelle : {{ article['p_cover_filename'] }}.</p>
+            <img alt="Image actuelle de couverture de l’article" class="image" src="/public/uploaded/{{ article['p_cover_filename'] }}">
+            {% endif %}
         </div>
         <div class="form-row -checkbox">
             <input class="input" id="is-featured" name="p_is_featured" type="checkbox"{% if article %}{% if article['p_is_featured'] %} checked{% endif %}{% endif %}><label class="label" for="is-featured">Mettre à la une</label>
@@ -27,9 +29,12 @@
             <textarea class="input" id="p-content" name="p_content">{% if article %}{{ article['p_content'] }}{% endif %}</textarea>
         </div>
         <button type="submit">Poster</button>
-        <input type="hidden" name="p_creation_datetime" value="{% if article %}{{ article['p_creation_datetime'] }}{% endif %}">
-        <input type="hidden" name="p_last_update_datetime" value="{% if article %}{{ article['p_last_update_datetime'] }}{% endif %}">
-        <input type="hidden" name="p_author" value="{% if article %}{{ article['p_author'] }}{% endif %}">
+        {% if article %}
+        <input type="hidden" name="p_creation_datetime" value="{{ article['p_creation_datetime'] }}">
+        <input type="hidden" name="p_last_update_datetime" value="{{ article['p_last_update_datetime'] }}">
+        <input type="hidden" name="p_author" value="{{ article['p_author'] }}">
+        <input type="hidden" name="p_cover_filename" value="{{ article['p_cover_filename'] }}">
+        {% endif %}
     </form>
 </div>
 {% endblock %}
