@@ -2,11 +2,27 @@
 <html lang="fr">
     <head>
         <meta charset="utf-8">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/public/style.css?{{ app.stylesheetVersion }}">
         <title>{% block title %}{% endblock %} - Mapping-Fusion</title>
         {% block resources %}{% endblock %}
     </head>
     <body class="site-body">
+        {% if session.currentMemberUsername %}
+        <nav class="site-admin-nav">
+            <ul class="list">
+                <li class="item">
+                    <a class="link" href="#">{{ session.currentMemberUsername }}</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="{{ app.router.generateUrl('article') }}">Nouvel article</a>
+                </li>
+            </ul>
+        </nav>
+        {% endif %}
+
         <header class="site-section -header">
             <div class="wrapper">
                 <a class="logo" href="/">
@@ -30,8 +46,6 @@
                 </div>
             </div>
         </header>
-
-        {% if session.currentMemberUsername %}{{ session.currentMemberUsername }}{% endif %}
 
         <main class="site-section">
             {% block body %}{% endblock %}
