@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS e_author (
+    p_id VARCHAR(%1$s) PRIMARY KEY,
+    p_name VARCHAR(%1$s) NOT NULL
+)

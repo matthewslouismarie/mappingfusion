@@ -2,7 +2,7 @@
 
 namespace MF\Model;
 
-class Member
+class Member implements Entity
 {
     private LongString $passwordHash;
     private LongString $username;
@@ -15,6 +15,10 @@ class Member
         $this->username = new LongString($username);
     }
 
+    public function getId(): string {
+        return $this->username;
+    }
+
     public function getPasswordHash(): LongString {
         return $this->passwordHash;
     }
@@ -25,5 +29,12 @@ class Member
 
     public function setPasswordHash(string $passwordHash): Member {
         return new Member($passwordHash, $this->username);
+    }
+
+    public function toArray(): array {
+        return [
+            'p_username' => $this->username,
+            'p_password_hash' => $this->passwordHash,
+        ];
     }
 }

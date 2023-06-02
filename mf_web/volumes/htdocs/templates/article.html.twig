@@ -24,6 +24,9 @@
         <div class="form-row -checkbox">
             <input class="input" id="is-featured" name="p_is_featured" type="checkbox"{% if article %}{% if article['p_is_featured'] %} checked{% endif %}{% endif %}><label class="label" for="is-featured">Mettre à la une</label>
         </div>
+        <div class="form-row -checkbox">
+            <input class="input" id="is-review" name="p_is_review" type="checkbox"{% if article %}{% if article['p_is_review'] %} checked{% endif %}{% endif %}><label class="label" for="is-review">Cet article est un test de map ou de mod.</label>
+        </div>
         <div class="form-row">
             <label class="label" for="p-content">Contenu de l’article</label>
             <textarea class="input" id="p-content" name="p_content">{% if article %}{{ article['p_content'] }}{% endif %}</textarea>
@@ -32,7 +35,7 @@
         {% if article %}
         <input type="hidden" name="p_creation_datetime" value="{{ article['p_creation_datetime'] }}">
         <input type="hidden" name="p_last_update_datetime" value="{{ article['p_last_update_datetime'] }}">
-        <input type="hidden" name="p_author" value="{{ article['p_author'] }}">
+        <input type="hidden" name="p_author_username" value="{{ article['p_author_username'] }}">
         <input type="hidden" name="p_cover_filename" value="{{ article['p_cover_filename'] }}">
         {% endif %}
     </form>

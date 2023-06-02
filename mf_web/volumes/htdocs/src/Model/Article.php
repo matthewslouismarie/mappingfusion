@@ -1,56 +1,62 @@
 <?php
 
 namespace MF\Model;
+
 use DateTimeImmutable;
 
-class Article
+class Article implements Entity
 {
     private Slug $id;
 
-    private DateTimeImmutable $creationDateTime;
-
-    private bool $isFeatured;
-
-    private DateTimeImmutable $lastModificationDateTime;
-
     private LongString $authorUsername;
-
-    private LongString $title;
 
     private string $content;
 
+    private bool $isFeatured;
+
+    private bool $isReview;
+
+    private LongString $title;
+
     private ?SlugFilename $coverFilename;
+
+    private DateTimeImmutable $creationDateTime;
+
+    private DateTimeImmutable $lastUpdateDateTime;
 
     public function __construct(
         string $id,
-        DateTimeImmutable $creationDateTime,
-        bool $isFeatured,
-        DateTimeImmutable $lastModificationDateTime,
         string $authorUsername,
         string $content,
+        bool $isFeatured,
+        bool $isReview,
         string $title,
-        ?string $coverFilename,
+        ?SlugFilename $coverFilename = null,
+        ?DateTimeImmutable $creationDateTime = null,
+        ?DateTimeImmutable $lastUpdateDateTime = null,
     ) {
         $this->id = new Slug($id);
-        $this->creationDateTime = $creationDateTime;
-        $this->isFeatured = $isFeatured;
-        $this->lastModificationDateTime = $lastModificationDateTime;
         $this->authorUsername = new LongString($authorUsername);
-        $this->title = new LongString($title);
         $this->content = $content;
-        $this->coverFilename = null !== $coverFilename ? new SlugFilename($coverFilename) : null;
+        $this->isFeatured = $isFeatured;
+        $this->isReview = $isReview;
+        $this->title = new LongString($title);
+        $this->coverFilename = $coverFilename ?? null;
+        $this->creationDateTime = $creationDateTime ?? new DateTimeImmutable();
+        $this->lastUpdateDateTime = $lastUpdateDateTime ?? new DateTimeImmutable();
     }
 
     public static function fromArray(array $data): self {
         return new self(
             $data['p_id'],
-            new DateTimeImmutable($data['p_creation_datetime']),
-            $data['p_is_featured'],
-            new DateTimeImmutable($data['p_last_update_datetime']),
-            $data['p_author'],
+            $data['p_author_username'],
             $data['p_content'],
+            $data['p_is_featured'],
+            $data['p_is_review'],
             $data['p_title'],
-            isset($data['p_cover_filename']) ? $data['p_cover_filename'] : null,
+            isset($data['p_cover_filename']) ? new SlugFileName($data['p_cover_filename']) : null,
+            new DateTimeImmutable($data['p_creation_datetime']),
+            new DateTimeImmutable($data['p_last_update_datetime']),
         );
     }
 
@@ -78,16 +84,21 @@ class Article
         return $this->isFeatured;
     }
 
+    public function isReview(): bool {
+        return $this->isReview;
+    }
+
     public function toArray(): array {
         return [
             'p_id' => $this->id->__toString(),
-            'p_creation_datetime' => $this->creationDateTime->format('Y-m-d H:m:s'),
-            'p_is_featured' => $this->isFeatured,
-            'p_last_update_datetime' => $this->lastModificationDateTime->format('Y-m-d H:m:s'),
-            'p_author' => $this->authorUsername->__toString(),
-            'p_title' => $this->title->__toString(),
+            'p_author_username' => $this->authorUsername->__toString(),
             'p_content' => $this->content,
+            'p_is_featured' => $this->isFeatured,
+            'p_is_review' => $this->isReview,
+            'p_title' => $this->title->__toString(),
             'p_cover_filename' => $this->coverFilename?->__toString(),
+            'p_creation_datetime' => $this->creationDateTime->format('Y-m-d H:m:s'),
+            'p_last_update_datetime' => $this->lastUpdateDateTime->format('Y-m-d H:m:s'),
         ];
     }
 }

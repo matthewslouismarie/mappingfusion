@@ -16,8 +16,6 @@
         position: relative;
         top: 5vb;
         border: $border-xs solid #ffffff;
-        padding: $gap-xs $gap-m;
-        border-radius: $gap-s;
 
         > .image {
             height: $img-xxs-size;
@@ -28,13 +26,11 @@
         }
 
         &.-white {
-            background-color: #ffffff;
-            color: #0b4b6e;
+            @include white-button;
         }
 
         &.-blue {
-            background-color: #19577a;
-            color: #ffffff;
+            @include blue-button;
         }
     }
 }

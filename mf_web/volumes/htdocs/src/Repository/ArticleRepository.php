@@ -16,7 +16,7 @@ class ArticleRepository
 
     public function addNewArticle(Article $article): void {
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW());');
-        $stmt->execute([$article->getId(), $this->session->getCurrentMemberUsername(), $article->getContent(), $article->isFeatured(), $article->getTitle(), $article->getCoverFilename()]);
+        $stmt->execute([$article->getId(), $this->session->getCurrentMemberUsername(), $article->getContent(), $article->isFeatured(), $article->isReview(), $article->getTitle(), $article->getCoverFilename()]);
     }
 
     public function deleteArticle(string $id): void {
@@ -47,10 +47,19 @@ class ArticleRepository
         return $articles;
     }
 
+    public function findReviews(): array {
+        $results = $this->conn->getPdo()->query('SELECT * FROM e_article WHERE p_is_review = 1;');
+        $articles = [];
+        foreach ($results->fetchAll() as $article) {
+            $articles[] = Article::fromArray($article);
+        }
+        return $articles;
+    }
+
     public function updateArticle(string $previousId, Article $article, bool $updateCoverFilename = true): void {
         if ($previousId === $article->getId()) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET p_content = ?, p_is_featured = ?, p_title = ?, ' . ($updateCoverFilename ? 'p_cover_filename = ?, ' : '') . 'p_last_update_datetime = NOW() WHERE p_id = ?;');
-            $parameters = [$article->getContent(), $article->isFeatured() ? 1 : 0, $article->getTitle()];
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET p_content = ?, p_is_featured = ?, p_is_review = ?, p_title = ?, ' . ($updateCoverFilename ? 'p_cover_filename = ?, ' : '') . 'p_last_update_datetime = NOW() WHERE p_id = ?;');
+            $parameters = [$article->getContent(), $article->isFeatured() ? 1 : 0, $article->isReview() ? 1 : 0, $article->getTitle()];
             if ($updateCoverFilename) {
                 $parameters[] = $article->getCoverFilename();
             }

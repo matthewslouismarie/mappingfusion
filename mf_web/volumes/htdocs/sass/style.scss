@@ -9,12 +9,18 @@ em {
     font-weight: bold;
 }
 
+._masked {
+    position: absolute;
+    left: 100%;
+}
+
 $border-xs: 1.5px;
 $border-s: 3px;
 $gap-xs: 0.3rem;
 $gap-s: 0.5rem;
 $gap-m: 1rem;
 $gap-l: 2rem;
+$gap-xl: 4rem;
 $block-padding-s: 0.3rem;
 $block-border: 0.5rem;
 $btn-l-height: 6rem;
@@ -23,8 +29,26 @@ $img-xs-size: 6rem;
 $img-xxs-size: 3rem;
 $area-l-height: 16rem;
 $area-s-size: 3rem;
-$txt-l-font-size: 2rem;
+$txt-l-font-size: 1.2rem;
+$txt-s-font-size: 0.8rem;
 $txt-l-shadow-blur: 0.4rem;
+
+@mixin button {
+    padding: $gap-s $gap-l;
+    border-radius: $gap-s;
+}
+
+@mixin white-button {
+    @include button;
+    background-color: #ffffff;
+    color: #0b4b6e;
+}
+
+@mixin blue-button {
+    @include button;
+    background-color: #19577a;
+    color: #ffffff;
+}
 
 @import 'glide/glide.scss';
 
@@ -37,4 +61,5 @@ $txt-l-shadow-blur: 0.4rem;
 @import 'elements/std-form.scss';
 @import 'elements/form-row.scss';
 
+@import 'elements/site-maps-and-mods-tests.scss';
 @import 'elements/site-social-networks.scss';

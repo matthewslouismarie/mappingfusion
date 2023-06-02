@@ -34,14 +34,7 @@ class ArticleController implements ControllerInterface
         $this->twig = $twig;
     }
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {
-        if (null === $this->session->getCurrentMemberUsername()) {
-            return new Response(body: $this->twig->render('error.html.twig', [
-                'title' => 'Connection requise',
-                'message' => 'Vous n’êtes pas connectés.',
-            ]));
-        }
-    
+    public function generateResponse(ServerRequestInterface $request): ResponseInterface {    
         $article = $this->getArticleFromRequest($request);
 
         if (null !== $article && (!isset($request->getQueryParams()['id']) || $article->getId() !== $request->getQueryParams()['id'])) {
@@ -72,7 +65,7 @@ class ArticleController implements ControllerInterface
                 return $article;
             } else {
                 $article = Article::fromArray($data + [
-                    'p_author' => $this->session->getCurrentMemberUsername(),
+                    'p_author_username' => $this->session->getCurrentMemberUsername(),
                     'p_creation_datetime' => "now",
                     'p_last_update_datetime' => "now",
                 ]);

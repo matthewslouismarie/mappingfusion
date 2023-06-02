@@ -28,7 +28,8 @@
         {% endfor %}
   </div>
 </div>
-<div class="site-social-networks">
+<section class="site-social-networks">
+    <h2 class="_masked">Réseaux sociaux</h2>
     <a class="link -white">
         <img alt="Discord" class="image" src="/public/discord_logo.svg">
         <div class="text">Rejoignez-nous<br><em>sur Discord</em></div>
@@ -37,11 +38,28 @@
         <img alt="Facebook" class="image" src="/public/facebook_logo.svg">
         <div class="text">Rejoignez-nous<br><em>sur Facebook</em></div>
     </a>
-</div>
+</section>
+<section class="site-maps-and-mods-tests">
+    <hgroup class="heading">
+        <p class="p">
+            <img alt="Tests maps et mods" class="image" src="/public/tests_icon.svg">
+        </p>
+        <h2 class="title" >Tests maps et mods</h2>
+        <p class="p">proposés par l’équipe</p>
+    </hgroup>
+    <ul class="reviews">
+        {% for a in reviews %}
+        <li class="item">
+            <a class="link"></a>
+        </li>
+        {% endfor %}
+    </ul>
+    <a class="more">Voir plus de tests</a>
+</section>
 {% endblock %}
 
 {% block scriptInit %}
 <script>
-  new Glide('.glide').mount()
+  new Glide('.glide', {gap: 0}).mount()
 </script>
 {% endblock %}

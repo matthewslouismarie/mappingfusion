@@ -1,0 +1,25 @@
+.site-maps-and-mods-tests {
+    background-color: #0c4b6e;
+    color: #ffffff;
+    text-align: center;
+    padding: $gap-xl 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    > .heading {
+        margin: $gap-m 0;
+        
+        > .title,
+        > .p {
+            font-size: $txt-l-font-size;
+        }
+    }
+
+    > .more {
+        display: block;
+        font-weight: bold;
+        font-size: $txt-s-font-size;
+        @include white-button;
+    }
+}

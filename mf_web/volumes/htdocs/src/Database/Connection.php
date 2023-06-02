@@ -18,6 +18,8 @@ class Connection
         $this->pdo->exec('USE ' . $dbName);
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/t_member.sql'), LongString::MAX_LENGTH));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_article.sql'), LongString::MAX_LENGTH));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_author.sql'), LongString::MAX_LENGTH));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_playable.sql'), LongString::MAX_LENGTH));
     }
 
     public function getPdo(): PDO {

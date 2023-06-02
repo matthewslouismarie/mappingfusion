@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Édition d’auteur{% endblock %}
+
+{% block body %}
+<div class="wrapper">
+    <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
+        <div class="form-row">
+            <label class="label" for="p-id">ID</label>
+            <input class="input" id="p-id" name="p_id"{% if entity %} value="{{ entity['p_id'] }}"{% endif %}>
+        </div>
+        <div class="form-row">
+            <label class="label" for="p-name">Nom</label>
+            <input class="input" id="p-name" name="p_name"{% if entity %} value="{{ entity['p_name'] }}"{% endif %}>
+        </div>
+        <div class="form-row">
+            <label class="label" for="p-author-id">ID de l’auteur</label>
+            <input class="input" id="p-author-id" name="p_author_id"{% if entity %} value="{{ entity['p_author_id'] }}"{% endif %}>
+        </div>
+        <div class="form-row">
+            <label class="label" for="p-game-id">ID du jeu (laisser vide si c’est un jeu stand-alone)</label>
+            <input class="input" id="p-game-id" name="p_game_id"{% if entity %} value="{{ entity['p_game_id'] }}"{% endif %}>
+        </div>
+        <button type="submit">Poster</button>
+    </form>
+</div>
+{% endblock %}
