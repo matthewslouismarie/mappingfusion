@@ -14,7 +14,7 @@ class Playable implements Entity
 
     static function fromArray(array $data): self {
         return new self(
-            new Slug($data['p_id']),
+            $data['p_id'] !== null ? new Slug($data['p_id']) : null,
             new LongString($data['p_name']),
             null !== $data['p_author_id'] ? new Slug($data['p_author_id']) : null,
             null !== $data['p_game_id'] ? new Slug($data['p_game_id']) : null,
@@ -22,12 +22,12 @@ class Playable implements Entity
     }
 
     public function __construct(
-        Slug $id,
+        ?Slug $id,
         LongString $name,
         ?Slug $authorId,
         ?Slug $gameId,
     ) {
-        $this->id = $id;
+        $this->id = $id ?? new Slug($name);
         $this->name = $name;
         $this->authorId = $authorId;
         $this->gameId = $gameId;

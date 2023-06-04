@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS e_review (
     p_body TEXT,
     p_cons TEXT,
     p_pros TEXT,
-    FOREIGN KEY (p_playable_id) REFERENCES e_playable (p_id)
+    FOREIGN KEY (p_playable_id) REFERENCES e_playable (p_id) ON UPDATE CASCADE
 )

@@ -42,6 +42,10 @@ class PlayableController implements ControllerInterface
         if ('POST' === $request->getMethod()) {
             $data = $request->getParsedBody();
             
+            if ('' === $data['p_id']) {
+                $data['p_id'] = null;
+            }
+            
             if ('' === $data['p_game_id']) {
                 $data['p_game_id'] = null;
             }
