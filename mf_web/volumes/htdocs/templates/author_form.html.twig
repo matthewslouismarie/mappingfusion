@@ -6,8 +6,8 @@
 <div class="wrapper">
     <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
         <div class="form-row">
-            <label class="label" for="p-id">ID</label>
-            <input class="input" id="p-id" name="p_id" required{% if author %} value="{{ author['p_id'] }}"{% endif %}>
+            <label class="label" for="p-id">ID (générée automatiquement)</label>
+            <input class="input" id="p-id" name="p_id"{% if author %} value="{{ author['p_id'] }}"{% endif %}>
         </div>
         <div class="form-row">
             <label class="label" for="p-name">Nom</label>

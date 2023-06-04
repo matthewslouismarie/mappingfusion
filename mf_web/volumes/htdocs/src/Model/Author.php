@@ -10,16 +10,16 @@ class Author implements Entity
 
     static function fromArray(array $data): self {
         return new self(
-            $data['p_id'],
+            $data['p_id'] ?? null,
             $data['p_name'],
         );
     }
 
     public function __construct(
-        string $id,
+        ?string $id,
         string $name,
     ) {
-        $this->id = new Slug($id);
+        $this->id = $id !== null ? new Slug($id) : new Slug($name);
         $this->name = new LongString($name);
     }
 

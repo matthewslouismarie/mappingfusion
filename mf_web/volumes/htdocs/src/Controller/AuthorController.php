@@ -38,6 +38,9 @@ class AuthorController implements ControllerInterface
     private function getAuthorFromRequest(ServerRequestInterface $request): ?Author {
         if ('POST' === $request->getMethod()) {
             $data = $request->getParsedBody();
+            if ('' === $data['p_id']) {
+                $data['p_id'] = null;
+            }
 
             if (isset($request->getQueryParams()['id'])) {
                 $author = Author::fromArray($data);
