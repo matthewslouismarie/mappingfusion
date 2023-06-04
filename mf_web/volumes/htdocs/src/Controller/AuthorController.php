@@ -2,6 +2,7 @@
 
 namespace MF\Controller;
 
+use DomainException;
 use GuzzleHttp\Psr7\Response;
 use MF\Model\Author;
 use MF\Repository\AuthorRepository;

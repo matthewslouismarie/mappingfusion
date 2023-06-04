@@ -2,6 +2,7 @@
 
 namespace MF\Controller;
 
+use DomainException;
 use GuzzleHttp\Psr7\Response;
 use MF\Model\Entity;
 use MF\Model\Playable;
@@ -26,12 +27,13 @@ class PlayableController implements ControllerInterface
         $entity = $this->getFromRequest($request);
 
         if (null !== $entity && (!isset($request->getQueryParams()['id']) || $entity->getId() !== $request->getQueryParams()['id'])) {
-            return new Response(302, ['Location' => $this->router->generateUrl($this->getRouteId(), ['id' => strval($entity->getId())])]);
+            return new Response(302, ['Location' => $this->router->generateUrl(self::ROUTE_ID, ['id' => strval($entity->getId())])]);
         }
 
         return new Response(
             body: $this->twig->render('playable_form.html.twig', [
                 'entity' => $entity?->toArray(),
+                'playables' => $this->repo->findAll(),
             ])
         );
     }
@@ -67,9 +69,5 @@ class PlayableController implements ControllerInterface
 
     public function getAccessControl(): int {
         return 1;
-    }
-
-    public function getRouteId(): string {
-        return 'manage_playable';
     }
 }

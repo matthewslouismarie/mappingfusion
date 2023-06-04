@@ -7,11 +7,11 @@
     <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
         <div class="form-row">
             <label class="label" for="p-id">ID</label>
-            <input class="input" id="p-id" name="p_id" value="{% if article %}{{ article['p_id'] }}{% endif %}">
+            <input class="input" id="p-id" name="p_id" required value="{% if article %}{{ article['p_id'] }}{% endif %}">
         </div>
         <div class="form-row">
             <label class="label" for="p-title">Titre</label>
-            <textarea class="input" id="p-title" name="p_title">{% if article %}{{ article['p_title'] }}{% endif %}</textarea>
+            <textarea class="input" id="p-title" name="p_title" required>{% if article %}{{ article['p_title'] }}{% endif %}</textarea>
         </div>
         <div class="form-row -singleimage">
             <label class="label" for="p-cover-filename">Couverture</label>
@@ -30,7 +30,7 @@
         </div>
         <div class="form-row">
             <label class="label" for="p-content">Contenu de l’article</label>
-            <textarea class="input" id="p-content" name="p_content">{% if article %}{{ article['p_content'] }}{% endif %}</textarea>
+            <textarea class="input" id="p-content" name="p_content" required>{% if article %}{{ article['p_content'] }}{% endif %}</textarea>
         </div>
         <button type="submit">Poster</button>
         {% if article %}

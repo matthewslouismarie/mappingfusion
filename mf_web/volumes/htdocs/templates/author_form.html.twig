@@ -7,11 +7,11 @@
     <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
         <div class="form-row">
             <label class="label" for="p-id">ID</label>
-            <input class="input" id="p-id" name="p_id"{% if author %} value="{{ author['p_id'] }}"{% endif %}>
+            <input class="input" id="p-id" name="p_id" required{% if author %} value="{{ author['p_id'] }}"{% endif %}>
         </div>
         <div class="form-row">
             <label class="label" for="p-name">Nom</label>
-            <input class="input" id="p-name" name="p_name"{% if author %} value="{{ author['p_name'] }}"{% endif %}>
+            <input class="input" id="p-name" name="p_name" required{% if author %} value="{{ author['p_name'] }}"{% endif %}>
         </div>
         <button type="submit">Poster</button>
     </form>

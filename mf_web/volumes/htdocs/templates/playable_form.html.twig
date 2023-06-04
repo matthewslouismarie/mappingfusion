@@ -7,19 +7,26 @@
     <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
         <div class="form-row">
             <label class="label" for="p-id">ID</label>
-            <input class="input" id="p-id" name="p_id"{% if entity %} value="{{ entity['p_id'] }}"{% endif %}>
+            <input class="input" id="p-id" name="p_id" required{% if entity %} value="{{ entity['p_id'] }}"{% endif %}>
         </div>
         <div class="form-row">
             <label class="label" for="p-name">Nom</label>
-            <input class="input" id="p-name" name="p_name"{% if entity %} value="{{ entity['p_name'] }}"{% endif %}>
+            <input class="input" id="p-name" name="p_name" required{% if entity %} value="{{ entity['p_name'] }}"{% endif %}>
         </div>
         <div class="form-row">
             <label class="label" for="p-author-id">ID de l’auteur</label>
-            <input class="input" id="p-author-id" name="p_author_id"{% if entity %} value="{{ entity['p_author_id'] }}"{% endif %}>
+            <input class="input" id="p-author-id" name="p_author_id" required{% if entity %} value="{{ entity['p_author_id'] }}"{% endif %}>
         </div>
         <div class="form-row">
-            <label class="label" for="p-game-id">ID du jeu (laisser vide si c’est un jeu stand-alone)</label>
-            <input class="input" id="p-game-id" name="p_game_id"{% if entity %} value="{{ entity['p_game_id'] }}"{% endif %}>
+            <label class="label" for="p-game-id">Si mod ou map, ID du jeu (laisser vide si c’est un jeu stand-alone)</label>
+            <input class="input" id="p-game-id" list="playables" name="p_game_id" required>
+            <datalist id="playables">
+                {% for p in playables %}
+                {% if entity is null or p.id != entity['p_id'] %}
+                <option label="{{ p.name }}" value="{{ p.id }}"{% if entity and entity['p_game_id'] == p.id %} selected{% endif %}>
+                {% endif %}
+                {% endfor %}
+            </datalist>
         </div>
         <button type="submit">Poster</button>
     </form>
