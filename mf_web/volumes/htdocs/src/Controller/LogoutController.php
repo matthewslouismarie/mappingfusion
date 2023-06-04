@@ -12,6 +12,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class LogoutController implements ControllerInterface
 {
+    const ROUTE_ID = 'logout';
+
     private TwigService $twig;
     private MemberRepository $repo;
 

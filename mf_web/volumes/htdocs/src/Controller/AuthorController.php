@@ -12,6 +12,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AuthorController implements ControllerInterface
 {
+    const ROUTE_ID = 'manage_author';
+
     public function __construct(
         private TwigService $twig,
         private Router $router,

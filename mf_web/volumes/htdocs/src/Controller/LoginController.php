@@ -12,6 +12,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class LoginController implements ControllerInterface
 {
+    const ROUTE_ID = 'login';
+
     private TwigService $twig;
     private MemberRepository $repo;
 

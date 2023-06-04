@@ -13,6 +13,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class PlayableController implements ControllerInterface
 {
+    const ROUTE_ID = 'manage_playable';
+
     public function __construct(
         private TwigService $twig,
         private Router $router,

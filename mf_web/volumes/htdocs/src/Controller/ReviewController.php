@@ -10,9 +10,12 @@ use MF\Router;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use UnexpectedValueException;
 
 class ReviewController implements ControllerInterface
 {
+    const ROUTE_ID = 'manage_review';
+
     private PlayableRepository $playableRepo;
 
     private ReviewRepository $repo;
@@ -40,7 +43,7 @@ class ReviewController implements ControllerInterface
         if ('POST' === $request->getMethod()) {
             if (null === $id) {
                 $updatedEntity = $this->repo->add($entity);
-                return new Response(302, ['Location' => $this->router->generateUrl('manage_review', ['id' => $updatedEntity->getId()])]);
+                return $this->router->generateRedirect(self::ROUTE_ID, ['id' => $updatedEntity->getId()]);
             } else {
                 $this->repo->update($entity);
             }
@@ -60,7 +63,11 @@ class ReviewController implements ControllerInterface
         if ('POST' === $request->getMethod()) {
             return Review::fromArray($request->getParsedBody());
         } elseif (null !== $id) {
-            return $this->repo->find($id);
+            $entity = $this->repo->find($id);
+            if (null === $entity) {
+                throw new UnexpectedValueException();
+            }
+            return $entity;
         } else {
             return null;
         }

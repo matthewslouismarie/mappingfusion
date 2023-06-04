@@ -10,6 +10,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class HomeController implements ControllerInterface
 {
+    const ROUTE_ID = 'home';
+
     private ArticleRepository $articleRepo;
 
     private TwigService $twig;

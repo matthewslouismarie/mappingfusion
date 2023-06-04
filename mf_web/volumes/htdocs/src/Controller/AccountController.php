@@ -11,6 +11,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AccountController implements ControllerInterface
 {
+    const ROUTE_ID = 'manage_account';
+
     private MemberRepository $repo;
     private Session $session;
 

@@ -1,6 +1,8 @@
 <?php
 
 namespace MF;
+use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 
 class Router
 {
@@ -10,5 +12,9 @@ class Router
             $url .= "&$key=$value";
         }
         return $url;
+    }
+
+    public function generateRedirect(string $routeId, $parameters = []): ResponseInterface {
+        return new Response(302, ['Location' => $this->generateUrl($routeId, $parameters)]);
     }
 }

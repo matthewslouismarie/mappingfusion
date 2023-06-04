@@ -14,6 +14,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ArticleController implements ControllerInterface
 {
+    const ROUTE_ID = 'manage_article';
+
     private ArticleRepository $repo;
 
     private Router $router;

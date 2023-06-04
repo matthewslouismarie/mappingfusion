@@ -12,6 +12,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class RegistrationController implements ControllerInterface
 {
+    const ROUTE_ID = 'registration';
+
     private TwigService $twig;
     private MemberRepository $repo;
 

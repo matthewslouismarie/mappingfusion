@@ -19,14 +19,15 @@ const CLI_ID = 'cli';
 
 const ROUTES = [
     '' => HomeController::class,
-    'account' => AccountController::class,
-    'article' => ArticleController::class,
-    'login' => LoginController::class,
-    'logout' => LogoutController::class,
-    'manage_author' => AuthorController::class,
-    'manage_playable' => PlayableController::class,
-    'manage_review' => ReviewController::class,
-    'register' => RegistrationController::class,
+    HomeController::ROUTE_ID => HomeController::class,
+    AccountController::ROUTE_ID=> AccountController::class,
+    ArticleController::ROUTE_ID => ArticleController::class,
+    LoginController::ROUTE_ID => LoginController::class,
+    LogoutController::ROUTE_ID => LogoutController::class,
+    AuthorController::ROUTE_ID => AuthorController::class,
+    PlayableController::ROUTE_ID => PlayableController::class,
+    ReviewController::ROUTE_ID => ReviewController::class,
+    RegistrationController::ROUTE_ID => RegistrationController::class,
 ];
 
 $container = (new ContainerBuilder())->build();
