@@ -15,4 +15,4 @@ services:
         ports:
             - "${DB_EXT_PORT}:3306"
         environment:
-            - MYSQL_ROOT_PASSWORD=${DB_ROOT_PWD}
+            - MARIADB_ROOT_PASSWORD=${DB_ROOT_PWD}
