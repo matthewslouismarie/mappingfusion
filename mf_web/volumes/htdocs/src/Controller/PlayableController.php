@@ -6,6 +6,7 @@ use DomainException;
 use GuzzleHttp\Psr7\Response;
 use MF\Model\Entity;
 use MF\Model\Playable;
+use MF\Repository\AuthorRepository;
 use MF\Repository\PlayableRepository;
 use MF\Router;
 use MF\TwigService;
@@ -17,6 +18,7 @@ class PlayableController implements ControllerInterface
     const ROUTE_ID = 'manage_playable';
 
     public function __construct(
+        private AuthorRepository $authorRepo,
         private TwigService $twig,
         private Router $router,
         private PlayableRepository $repo,
@@ -32,6 +34,7 @@ class PlayableController implements ControllerInterface
 
         return new Response(
             body: $this->twig->render('playable_form.html.twig', [
+                'authors' => $this->authorRepo->findAll(),
                 'entity' => $entity?->toArray(),
                 'playables' => $this->repo->findAll(),
             ])

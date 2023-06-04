@@ -11,9 +11,9 @@ class Slug implements Stringable
 
     public function __construct(string $value) {
         $this->value = new LongString(preg_replace('/[^a-z0-9\-]/', '', preg_replace('/[ _]/', '-', strtolower($value))));
-        // if (0 === strlen($this->value)) {
-        //     throw new UnexpectedValueException();
-        // }
+        if (0 === strlen($this->value)) {
+            throw new UnexpectedValueException();
+        }
     }
 
     public function __toString(): string

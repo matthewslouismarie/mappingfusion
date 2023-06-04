@@ -27,6 +27,10 @@ class Author implements Entity
         return $this->id->__toString();
     }
 
+    public function getName(): LongString {
+        return $this->name;
+    }
+
     public function toArray(): array {
         return [
             'p_id' => $this->id->__toString(),

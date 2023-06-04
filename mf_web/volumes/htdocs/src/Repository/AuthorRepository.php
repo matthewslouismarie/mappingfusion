@@ -37,6 +37,15 @@ class AuthorRepository
         }
     }
 
+    public function findAll(): array {
+        $results = $this->conn->getPdo()->query('SELECT * FROM e_author;')->fetchAll();
+        $entities = [];
+        foreach ($results as $r) {
+            $entities[] = Author::fromArray($r);
+        }
+        return $entities;
+    }
+
     public function update(string $previousId, Author $author): void {
         if ($previousId === $author->getId()) {
             $stmt = $this->conn->getPdo()->prepare('UPDATE e_author SET p_name = :p_name WHERE p_id = :p_id;');
