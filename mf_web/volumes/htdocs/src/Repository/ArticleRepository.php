@@ -48,7 +48,7 @@ class ArticleRepository
     }
 
     public function findReviews(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM e_article WHERE p_is_review = 1;');
+        $results = $this->conn->getPdo()->query('SELECT * FROM e_article WHERE p_review_id != NULL;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = Article::fromArray($article);
@@ -58,8 +58,8 @@ class ArticleRepository
 
     public function updateArticle(string $previousId, Article $article, bool $updateCoverFilename = true): void {
         if ($previousId === $article->getId()) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET p_content = ?, p_is_featured = ?, p_is_review = ?, p_title = ?, ' . ($updateCoverFilename ? 'p_cover_filename = ?, ' : '') . 'p_last_update_datetime = NOW() WHERE p_id = ?;');
-            $parameters = [$article->getContent(), $article->isFeatured() ? 1 : 0, $article->isReview() ? 1 : 0, $article->getTitle()];
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET p_content = ?, p_is_featured = ?, p_review_id = ?, p_title = ?, ' . ($updateCoverFilename ? 'p_cover_filename = ?, ' : '') . 'p_last_update_datetime = NOW() WHERE p_id = ?;');
+            $parameters = [$article->getContent(), $article->isFeatured() ? 1 : 0, $article->getReviewId(), $article->getTitle()];
             if ($updateCoverFilename) {
                 $parameters[] = $article->getCoverFilename();
             }

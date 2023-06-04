@@ -4,6 +4,7 @@ namespace MF\Repository;
 
 use MF\Database\Connection;
 use MF\Model\Playable;
+use UnexpectedValueException;
 
 class PlayableRepository
 {
@@ -34,6 +35,15 @@ class PlayableRepository
         } else {
             throw new UnexpectedValueException();
         }
+    }
+
+    public function findAll(): array {
+        $results = $this->conn->getPdo()->query('SELECT * FROM e_playable;')->fetchAll();
+        $playables = [];
+        foreach ($results as $r) {
+            $playables[] = Playable::fromArray($r);
+        }
+        return $playables;
     }
 
     public function update(string $previousId, Playable $playable): void {

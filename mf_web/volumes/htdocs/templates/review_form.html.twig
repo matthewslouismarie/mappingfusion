@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau test{% endblock %}
+
+{% block body %}
+<div class="wrapper">
+    <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
+        <div class="form-row">
+            <label class="label" for="p-id">ID du test (générée automatiquement)</label>
+            <input class="input" disabled id="p-id" name="p_id" value="{% if entity %}{{ entity['p_id'] }}{% endif %}">
+        </div>
+        <div class="form-row">
+            <label class="label" for="p-playable-id">ID du jeu ou mod testé</label>
+            <input class="input" id="p-playable-id" list="playables" name="p_playable_id" required>
+            <datalist id="playables">
+                {% for p in playables %}
+                <option label="{{ p.name }}" value="{{ p.id }}"{% if entity and entity['p_playable_id'] == p.id %} selected{% endif %}>
+                {% endfor %}
+            </datalist>
+        </div>
+        <div class="form-row">
+            <label class="label" for="p-rating">Note (de 1 à 5)</label>
+            <input class="input" id="p-rating" inputmode="decimal" min="1" max="5" name="p_rating" required step="0.1" type="number"{% if entity %} value="{{ entity['p_rating'] }}"{% endif %}>
+        </div>
+        <div class="form-row">
+            <label class="label" for="p-body">Avis final</label>
+            <textarea class="input" id="p-body" name="p_body">{% if entity %}{{ entity['p_body'] }}{% endif %}</textarea>
+        </div>
+        <div class="form-row">
+            <label class="label" for="p-cons">Points négatifs</label>
+            <textarea class="input" id="p-cons" name="p_cons">{% if entity %}{{ entity['p_cons'] }}{% endif %}</textarea>
+        </div>
+        <div class="form-row">
+            <label class="label" for="p-pros">Ponts positifs</label>
+            <textarea class="input" id="p-pros" name="p_pros">{% if entity %}{{ entity['p_pros'] }}{% endif %}</textarea>
+        </div>
+        <button type="submit">Poster</button>
+    </form>
+</div>
+{% endblock %}

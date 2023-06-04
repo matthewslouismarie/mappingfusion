@@ -24,8 +24,9 @@
         <div class="form-row -checkbox">
             <input class="input" id="is-featured" name="p_is_featured" type="checkbox"{% if article %}{% if article['p_is_featured'] %} checked{% endif %}{% endif %}><label class="label" for="is-featured">Mettre à la une</label>
         </div>
-        <div class="form-row -checkbox">
-            <input class="input" id="is-review" name="p_is_review" type="checkbox"{% if article %}{% if article['p_is_review'] %} checked{% endif %}{% endif %}><label class="label" for="is-review">Cet article est un test de map ou de mod.</label>
+        <div class="form-row">
+            <label class="label" for="review-id">ID du test lié</label>
+            <input class="input" id="review-id" name="p_review_id">
         </div>
         <div class="form-row">
             <label class="label" for="p-content">Contenu de l’article</label>

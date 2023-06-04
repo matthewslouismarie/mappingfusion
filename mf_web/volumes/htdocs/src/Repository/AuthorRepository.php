@@ -4,6 +4,7 @@ namespace MF\Repository;
 
 use MF\Database\Connection;
 use MF\Model\Author;
+use UnexpectedValueException;
 
 class AuthorRepository
 {

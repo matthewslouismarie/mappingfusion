@@ -37,6 +37,10 @@ class Playable implements Entity
         return $this->id->__toString();
     }
 
+    public function getName(): string {
+        return $this->name->__toString();
+    }
+
     public function toArray(): array {
         return [
             'p_id' => $this->id->__toString(),

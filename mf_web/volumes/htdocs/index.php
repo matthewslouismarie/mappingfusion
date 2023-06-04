@@ -12,6 +12,7 @@ use MF\Controller\LoginController;
 use MF\Controller\LogoutController;
 use MF\Controller\PlayableController;
 use MF\Controller\RegistrationController;
+use MF\Controller\ReviewController;
 use MF\Kernel;
 
 const CLI_ID = 'cli';
@@ -24,6 +25,7 @@ const ROUTES = [
     'logout' => LogoutController::class,
     'manage_author' => AuthorController::class,
     'manage_playable' => PlayableController::class,
+    'manage_review' => ReviewController::class,
     'register' => RegistrationController::class,
 ];
 
