@@ -2,8 +2,6 @@ services:
     mf_web:
         build:
             context: ./mf_web/init
-            # args:
-            #     conf_path: ${CONF_PATH}@
         ports:
             - "${WEB_EXT_PORT}:80"
         volumes:
