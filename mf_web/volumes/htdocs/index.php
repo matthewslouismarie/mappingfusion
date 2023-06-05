@@ -5,6 +5,7 @@ require_once './vendor/autoload.php';
 use DI\ContainerBuilder;
 use GuzzleHttp\Psr7\ServerRequest;
 use MF\Controller\AccountController;
+use MF\Controller\AdminArticleListController;
 use MF\Controller\ArticleController;
 use MF\Controller\AuthorController;
 use MF\Controller\CategoryAdminController;
@@ -22,6 +23,7 @@ const CLI_ID = 'cli';
 const ROUTES = [
     '' => HomeController::class,
     AccountController::ROUTE_ID=> AccountController::class,
+    AdminArticleListController::ROUTE_ID => AdminArticleListController::class,
     ArticleController::ROUTE_ID => ArticleController::class,
     AuthorController::ROUTE_ID => AuthorController::class,
     CategoryAdminController::ROUTE_ID => CategoryAdminController::class,

@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer les articles{% endblock %}
+
+{% block bodyContent %}
+<a class="link" href="{{ app.router.generateUrl('manage_article') }}">Créer un nouvel article</a>
+<ul>
+    {% for a in articles %}
+    <li class="item">
+        <a class="link" href="{{ app.router.generateUrl('manage_article', {id: a.id}) }}">{{ a.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

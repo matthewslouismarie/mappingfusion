@@ -39,6 +39,15 @@ class ArticleRepository
         }
     }
 
+    public function findAll(): array {
+        $results = $this->conn->getPdo()->query('SELECT * FROM e_article;')->fetchAll();
+        $entities = [];
+        foreach ($results as $r) {
+            $entities[] = Article::fromArray($r);
+        }
+        return $entities;
+    }
+
     public function findFeatured(): array {
         $results = $this->conn->getPdo()->query('SELECT * FROM e_article WHERE p_is_featured = 1;');
         $articles = [];
