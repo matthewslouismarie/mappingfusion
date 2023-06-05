@@ -2,6 +2,7 @@
 
 namespace MF\Controller;
 use DomainException;
+use MF\Form;
 use MF\Model\SlugFilename;
 use MF\Repository\ArticleRepository;
 use MF\HttpBridge\Session;
@@ -16,6 +17,8 @@ class ArticleController implements ControllerInterface
 {
     const ROUTE_ID = 'manage_article';
 
+    private Form $form;
+
     private ArticleRepository $repo;
 
     private Router $router;
@@ -25,11 +28,13 @@ class ArticleController implements ControllerInterface
     private TwigService $twig;
 
     public function __construct(
+        Form $form,
         ArticleRepository $repo,
         Router $router,
         Session $session,
         TwigService $twig,
     ) {
+        $this->form = $form;
         $this->repo = $repo;
         $this->router = $router;
         $this->session = $session;
@@ -37,10 +42,10 @@ class ArticleController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request): ResponseInterface {    
-        $article = $this->getArticleFromRequest($request);
+        $article = $this->getEntityFromRequest($request);
 
         if (null !== $article && (!isset($request->getQueryParams()['id']) || $article->getId() !== $request->getQueryParams()['id'])) {
-            return new Response(302, ['Location' => $this->router->generateUrl('article', ['id' => strval($article->getId())])]);
+            return new Response(302, ['Location' => $this->router->generateUrl(self::ROUTE_ID, ['id' => strval($article->getId())])]);
         }
 
         return new Response(body: $this->twig->render('article.html.twig', [
@@ -48,16 +53,18 @@ class ArticleController implements ControllerInterface
         ]));
     }
 
-    private function getArticleFromRequest(ServerRequestInterface $request): ?Article {
+    private function getEntityFromRequest(ServerRequestInterface $request): ?Article {
         if ('POST' === $request->getMethod()) {
-            $data = $request->getParsedBody();
-
+            $data = $this->form->nullifyEmptyStrings($request->getParsedBody());
+    
             $uploadedFile = $request->getUploadedFiles()['p_cover_uploaded_file'];
             $wasFileUploaded = null !== $uploadedFile->getSize() && $uploadedFile->getSize() > 0;
             if ($wasFileUploaded) {
                 $filename = new SlugFilename($uploadedFile->getClientFilename());
                 $uploadedFile->moveTo(dirname(__FILE__) . "/../../public/uploaded/" . $filename->__toString());
                 $data['p_cover_filename'] = $filename->__toString();
+            } else {
+                $data['p_cover_filename'] = null;
             }
             $data['p_is_featured'] = isset($data['p_is_featured']);
 

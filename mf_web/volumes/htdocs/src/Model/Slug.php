@@ -7,6 +7,8 @@ use UnexpectedValueException;
 
 class Slug implements Stringable
 {
+    const REGEX = '^(([a-z0-9])-?)*(?2)+$';
+
     private LongString $value;
 
     public function __construct(string $value) {

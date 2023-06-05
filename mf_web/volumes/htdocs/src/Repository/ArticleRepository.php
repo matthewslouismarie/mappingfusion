@@ -5,6 +5,7 @@ namespace MF\Repository;
 use MF\Database\Connection;
 use MF\HttpBridge\Session;
 use MF\Model\Article;
+use UnexpectedValueException;
 
 class ArticleRepository
 {
@@ -14,9 +15,9 @@ class ArticleRepository
     ) {
     }
 
-    public function addNewArticle(Article $article): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW());');
-        $stmt->execute([$article->getId(), $this->session->getCurrentMemberUsername(), $article->getContent(), $article->isFeatured(), $article->isReview(), $article->getTitle(), $article->getCoverFilename()]);
+    public function addNewArticle(Article $entity): void {
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), NULL);');
+        $stmt->execute([$entity->getId(), $this->session->getCurrentMemberUsername(), $entity->getCategoryId(), $entity->getContent(), $entity->isFeatured() ? 1 : 0, $entity->getTitle(), $entity->getCoverFilename()]);
     }
 
     public function deleteArticle(string $id): void {
@@ -58,8 +59,8 @@ class ArticleRepository
 
     public function updateArticle(string $previousId, Article $article, bool $updateCoverFilename = true): void {
         if ($previousId === $article->getId()) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET p_content = ?, p_is_featured = ?, p_review_id = ?, p_title = ?, ' . ($updateCoverFilename ? 'p_cover_filename = ?, ' : '') . 'p_last_update_datetime = NOW() WHERE p_id = ?;');
-            $parameters = [$article->getContent(), $article->isFeatured() ? 1 : 0, $article->getReviewId(), $article->getTitle()];
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET p_category_id = ?, p_content = ?, p_is_featured = ?, p_review_id = ?, p_title = ?, ' . ($updateCoverFilename ? 'p_cover_filename = ?, ' : '') . 'p_last_update_datetime = NOW() WHERE p_id = ?;');
+            $parameters = [$article->getCategoryId(), $article->getContent(), $article->isFeatured() ? 1 : 0, $article->getReviewId(), $article->getTitle()];
             if ($updateCoverFilename) {
                 $parameters[] = $article->getCoverFilename();
             }

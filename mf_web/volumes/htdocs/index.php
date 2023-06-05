@@ -7,6 +7,7 @@ use GuzzleHttp\Psr7\ServerRequest;
 use MF\Controller\AccountController;
 use MF\Controller\ArticleController;
 use MF\Controller\AuthorController;
+use MF\Controller\CategoryAdminController;
 use MF\Controller\HomeController;
 use MF\Controller\LoginController;
 use MF\Controller\LogoutController;
@@ -19,15 +20,16 @@ const CLI_ID = 'cli';
 
 const ROUTES = [
     '' => HomeController::class,
-    HomeController::ROUTE_ID => HomeController::class,
     AccountController::ROUTE_ID=> AccountController::class,
     ArticleController::ROUTE_ID => ArticleController::class,
+    AuthorController::ROUTE_ID => AuthorController::class,
+    CategoryAdminController::ROUTE_ID => CategoryAdminController::class,
+    HomeController::ROUTE_ID => HomeController::class,
     LoginController::ROUTE_ID => LoginController::class,
     LogoutController::ROUTE_ID => LogoutController::class,
-    AuthorController::ROUTE_ID => AuthorController::class,
     PlayableController::ROUTE_ID => PlayableController::class,
-    ReviewController::ROUTE_ID => ReviewController::class,
     RegistrationController::ROUTE_ID => RegistrationController::class,
+    ReviewController::ROUTE_ID => ReviewController::class,
 ];
 
 $container = (new ContainerBuilder())->build();

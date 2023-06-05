@@ -4,6 +4,8 @@ namespace MF\Database;
 
 use MF\Configuration;
 use MF\Model\LongString;
+use MF\Model\Slug;
+use MF\Model\SlugFilename;
 use PDO;
 
 class Connection
@@ -20,7 +22,8 @@ class Connection
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_author.sql'), LongString::MAX_LENGTH));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_playable.sql'), LongString::MAX_LENGTH));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_review.sql'), LongString::MAX_LENGTH));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_article.sql'), LongString::MAX_LENGTH));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_category.sql'), LongString::MAX_LENGTH, Slug::REGEX));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_article.sql'), LongString::MAX_LENGTH, Slug::REGEX, SlugFilename::REGEX));
     }
 
     public function getPdo(): PDO {

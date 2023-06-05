@@ -5,6 +5,11 @@ Refactoring:
  - Only use Alpine image
  - Check SQL is in strict mode
  - Make changes to php.ini in a separate file copied to conf.d
+ - Remove certain constraints from the db ? (slug for instance) and adapt models so that they correspond to the db. Values should be "prettifyed" only in what interacts with the user.
+ - Do we convert to scalars in getters? Do we admit scalars or models in constructors?
+  - Method for fetching object from request.
+  - Method for updating object from request.
+  - Method for preparing form data.
 
 Performance:
  - PHP DI: check lazy mode, prod mode

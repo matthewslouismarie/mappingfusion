@@ -13,6 +13,10 @@
             <label class="label" for="p-title">Titre</label>
             <textarea class="input" id="p-title" name="p_title" required>{% if article %}{{ article['p_title'] }}{% endif %}</textarea>
         </div>
+        <div class="form-row">
+            <label class="label" for="p-category-id">Catégorie</label>
+            <input class="input" id="p-category-id" name="p_category_id" required value="{% if article %}{{ article['p_category_id'] }}{% endif %}">
+        </div>
         <div class="form-row -singleimage">
             <label class="label" for="p-cover-filename">Couverture</label>
             <input accept="image/*" class="input" id="p-cover-filename" name="p_cover_uploaded_file" type="file">
