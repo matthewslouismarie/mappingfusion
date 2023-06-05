@@ -69,8 +69,6 @@ class ArticleController implements ControllerInterface
                 $filename = new SlugFilename($uploadedFile->getClientFilename());
                 $uploadedFile->moveTo(dirname(__FILE__) . "/../../public/uploaded/" . $filename->__toString());
                 $data['p_cover_filename'] = $filename->__toString();
-            } else {
-                $data['p_cover_filename'] = null;
             }
             $data['p_is_featured'] = isset($data['p_is_featured']);
 

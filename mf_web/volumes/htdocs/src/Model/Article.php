@@ -90,7 +90,7 @@ class Article implements Entity
     }
 
     public function getReviewId(): ?int {
-        return $this->reviewId->toInt();
+        return $this->reviewId?->toInt();
     }
 
     public function isFeatured(): bool {
