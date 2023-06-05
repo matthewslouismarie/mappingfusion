@@ -8,6 +8,7 @@ use MF\Controller\AccountController;
 use MF\Controller\ArticleController;
 use MF\Controller\AuthorController;
 use MF\Controller\CategoryAdminController;
+use MF\Controller\CategoryListAdminController;
 use MF\Controller\HomeController;
 use MF\Controller\LoginController;
 use MF\Controller\LogoutController;
@@ -24,6 +25,7 @@ const ROUTES = [
     ArticleController::ROUTE_ID => ArticleController::class,
     AuthorController::ROUTE_ID => AuthorController::class,
     CategoryAdminController::ROUTE_ID => CategoryAdminController::class,
+    CategoryListAdminController::ROUTE_ID => CategoryListAdminController::class,
     HomeController::ROUTE_ID => HomeController::class,
     LoginController::ROUTE_ID => LoginController::class,
     LogoutController::ROUTE_ID => LogoutController::class,
