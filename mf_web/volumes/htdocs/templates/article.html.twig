@@ -15,7 +15,11 @@
         </div>
         <div class="form-row">
             <label class="label" for="p-category-id">Catégorie</label>
-            <input class="input" id="p-category-id" name="p_category_id" required value="{% if article %}{{ article['p_category_id'] }}{% endif %}">
+            <select id="p-category-id" name="p_category_id" required value="{% if article %}{{ article['p_category_id'] }}{% endif %}">
+                {% for c in categories %}
+                <option value="{{ c.id }}" label="{{ c.name }}">
+                {% endfor %}
+            </select>
         </div>
         <div class="form-row -singleimage">
             <label class="label" for="p-cover-filename">Couverture</label>

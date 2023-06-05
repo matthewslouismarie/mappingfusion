@@ -8,6 +8,7 @@ use MF\Repository\ArticleRepository;
 use MF\HttpBridge\Session;
 use MF\Model\Article;
 use GuzzleHttp\Psr7\Response;
+use MF\Repository\CategoryRepository;
 use MF\Router;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
@@ -16,6 +17,8 @@ use Psr\Http\Message\ServerRequestInterface;
 class ArticleController implements ControllerInterface
 {
     const ROUTE_ID = 'manage_article';
+
+    private CategoryRepository $catRepo;
 
     private Form $form;
 
@@ -28,12 +31,14 @@ class ArticleController implements ControllerInterface
     private TwigService $twig;
 
     public function __construct(
+        CategoryRepository $catRepo,
         Form $form,
         ArticleRepository $repo,
         Router $router,
         Session $session,
         TwigService $twig,
     ) {
+        $this->catRepo = $catRepo;
         $this->form = $form;
         $this->repo = $repo;
         $this->router = $router;
@@ -50,6 +55,7 @@ class ArticleController implements ControllerInterface
 
         return new Response(body: $this->twig->render('article.html.twig', [
             'article' => $article?->toArray(),
+            'categories' => $this->catRepo->findAll(),
         ]));
     }
 
