@@ -7,15 +7,6 @@
     flex-direction: column;
     align-items: center;
 
-    > .heading {
-        margin: $gap-m 0;
-        
-        > .title,
-        > .p {
-            font-size: $txt-l-font-size;
-        }
-    }
-
     > .more {
         display: block;
         font-weight: bold;

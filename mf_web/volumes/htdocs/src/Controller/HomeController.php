@@ -28,6 +28,7 @@ class HomeController implements ControllerInterface
         return new Response(body: $this->twig->render('home.html.twig', [
             'featured_articles' => $this->articleRepo->findFeatured(),
             'reviews' => $this->articleRepo->findReviews(),
+            'last_articles' => $this->articleRepo->findLast(),
         ]));
     }
 

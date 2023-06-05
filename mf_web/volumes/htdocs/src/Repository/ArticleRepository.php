@@ -5,6 +5,7 @@ namespace MF\Repository;
 use MF\Database\Connection;
 use MF\HttpBridge\Session;
 use MF\Model\Article;
+use MF\Model\Uint;
 use UnexpectedValueException;
 
 class ArticleRepository
@@ -50,6 +51,15 @@ class ArticleRepository
 
     public function findFeatured(): array {
         $results = $this->conn->getPdo()->query('SELECT * FROM e_article WHERE p_is_featured = 1;');
+        $articles = [];
+        foreach ($results->fetchAll() as $article) {
+            $articles[] = Article::fromArray($article);
+        }
+        return $articles;
+    }
+
+    public function findLast(): array {
+        $results = $this->conn->getPdo()->query('SELECT * FROM e_article ORDER BY p_last_update_datetime DESC LIMIT 8;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = Article::fromArray($article);

@@ -1,0 +1,24 @@
+.section-heading {
+    text-align: center;
+
+    > .title,
+    > .p {
+        font-size: $txt-l-font-size;
+    }
+
+    > .title {
+        padding: $gap-s;
+    }
+
+    &.-inline {
+        > .p,
+        > .title {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        > .p {
+            font-weight: normal;
+        }
+    }
+}

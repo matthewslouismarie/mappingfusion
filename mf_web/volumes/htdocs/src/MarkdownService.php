@@ -15,4 +15,8 @@ class MarkdownService
     public function format(string $text): string {
         return $this->parser->transform($text);
     }
+
+    public function getText(string $text): string {
+        return strip_tags($this->format($text));
+    }
 }

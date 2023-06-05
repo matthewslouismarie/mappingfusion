@@ -28,8 +28,7 @@
         {% endfor %}
   </div>
 </div>
-<section class="site-social-networks">
-    <h2 class="_masked">Réseaux sociaux</h2>
+<div class="site-social-networks">
     <a class="link -white">
         <img alt="Discord" class="image" src="/public/discord_logo.svg">
         <div class="text">Rejoignez-nous<br><em>sur Discord</em></div>
@@ -38,9 +37,9 @@
         <img alt="Facebook" class="image" src="/public/facebook_logo.svg">
         <div class="text">Rejoignez-nous<br><em>sur Facebook</em></div>
     </a>
-</section>
+</div>
 <section class="site-maps-and-mods-tests">
-    <hgroup class="heading">
+    <hgroup class="section-heading">
         <p class="p">
             <img alt="Tests maps et mods" class="image" src="/public/tests_icon.svg">
         </p>
@@ -55,6 +54,35 @@
         {% endfor %}
     </ul>
     <a class="more">Voir plus de tests</a>
+</section>
+<section class="site-section-news-articles">
+    <div class="_wrapper">
+        <hgroup class="section-heading -inline">
+            <p class="imgp">
+                <img alt="Tests maps et mods" class="image" src="/public/news.svg">
+            </p>
+            <p class="p">Les dernières</p>
+            <h2 class="title">actualités</h2>
+        </hgroup>
+        <ul class="std-block-list">
+            {% for a in last_articles %}
+            <li class="item">
+                <a class="article-mosaic" href="">
+                    <div class="left" style="background-image: url('/public/uploaded/{{ a.coverFilename }}');">
+                        <em class="cat">Half-Life 2</em>
+                    </div>
+                    <div class="right">
+                        <h3 class="title">{{ app.mk.getText(a.title) }}</h3>
+                        <p class="date">Le {{ a.lastUpdateDateTime.format('d/m/y') }}</p>
+                        <div class="excerpt">
+                            {{ app.mk.getText(a.content) }}
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </section>
 {% endblock %}
 

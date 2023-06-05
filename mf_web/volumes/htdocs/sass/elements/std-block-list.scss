@@ -1,0 +1,13 @@
+.std-block-list {
+    list-style-type: none;
+
+    > .item {
+        display: inline-block;
+    }
+
+    @media (min-width: $screen-s-size) {
+        > .item {
+            width: 50%;
+        }
+    }
+}

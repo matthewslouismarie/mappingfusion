@@ -1,11 +1,4 @@
 .site-section {
-    > .wrapper {
-        margin: auto;
-        width: 90%;
-        max-width: 70rem;
-        padding: $block-padding-s;
-    }
-
     &.-header {
         > .wrapper {
             display: flex;

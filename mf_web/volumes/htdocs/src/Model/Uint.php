@@ -3,8 +3,9 @@
 namespace MF\Model;
 
 use DomainException;
+use Stringable;
 
-class Uint
+class Uint implements Stringable
 {
     private int $value;
 
@@ -16,6 +17,10 @@ class Uint
             throw new DomainException();
         }
         $this->value = $value;
+    }
+
+    public function __toString(): string {
+        return strval($this->value);
     }
 
     public function toInt(): int {

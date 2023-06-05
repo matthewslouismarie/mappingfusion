@@ -3,7 +3,7 @@
     justify-content: center;
     gap: $gap-l;
     background-color: #19577a;
-    box-shadow: 0 (-$area-s-size) $area-s-size ($area-s-size / 2) #19577a;
+    box-shadow: 0 (-$area-s-size / 2) $area-s-size ($area-s-size / 2) #19577a;
     z-index: 1;
     position: relative;
     padding-top: $gap-l;

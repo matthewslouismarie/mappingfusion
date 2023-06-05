@@ -1,19 +1,6 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-em {
-    font-style: normal;
-    font-weight: bold;
-}
-
-._masked {
-    position: absolute;
-    left: 100%;
-}
-
+$screen-s-size: 414px;
+$screen-m-size: 768px;
+$screen-l-size: 1024px;
 $border-xs: 1.5px;
 $border-s: 3px;
 $gap-xs: 0.3rem;
@@ -30,6 +17,7 @@ $img-xxs-size: 3rem;
 $area-l-height: 16rem;
 $area-s-size: 3rem;
 $txt-l-font-size: 1.2rem;
+$txt-m-font-size: 1rem;
 $txt-s-font-size: 0.8rem;
 $txt-l-shadow-blur: 0.4rem;
 
@@ -50,16 +38,44 @@ $txt-l-shadow-blur: 0.4rem;
     color: #ffffff;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+em {
+    font-style: normal;
+    font-weight: bold;
+}
+
+img {
+    max-width: 100%;
+}
+
+._wrapper {
+    margin: auto;
+    width: 90%;
+    max-width: 70rem;
+}
+
 @import 'glide/glide.scss';
 
 @import 'elements/site-admin-nav.scss';
 @import 'elements/site-body.scss';
+@import 'elements/site-maps-and-mods-tests.scss';
 @import 'elements/site-section.scss';
+@import 'elements/site-social-networks.scss';
+
+@import 'elements/site-section-news-articles.scss';
+
+@import 'elements/section-heading.scss';
 
 @import 'elements/header-nav.scss';
 
+@import 'elements/std-block-list.scss';
 @import 'elements/std-form.scss';
 @import 'elements/form-row.scss';
 
-@import 'elements/site-maps-and-mods-tests.scss';
-@import 'elements/site-social-networks.scss';
+
+@import 'elements/article-mosaic.scss';

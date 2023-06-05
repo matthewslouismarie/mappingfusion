@@ -2,9 +2,10 @@
 <html lang="fr">
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/public/style.css?{{ app.stylesheetVersion }}">
         <title>{% block title %}{% endblock %} - Mapping-Fusion</title>
         {% block resources %}{% endblock %}
@@ -39,7 +40,7 @@
         {% endif %}
 
         <header class="site-section -header">
-            <div class="wrapper">
+            <div class="_wrapper">
                 <a class="logo" href="/">
                     <img alt="Mapping-Fusion" class="img" src="/public/mapping-fusion-logo.png">
                 </a>
@@ -64,7 +65,7 @@
 
         <main class="site-section">
             {% block body %}
-            <div class="wrapper">
+            <div class="_wrapper">
                 {% block bodyContent %}{% endblock %}
             </div>
             {% endblock %}

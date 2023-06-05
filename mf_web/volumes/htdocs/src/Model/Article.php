@@ -89,6 +89,14 @@ class Article implements Entity
         return $this->coverFilename?->__toString();
     }
 
+    public function getCreationDateTime(): DateTimeImmutable {
+        return $this->creationDateTime;
+    }
+
+    public function getLastUpdateDateTime(): DateTimeImmutable {
+        return $this->lastUpdateDateTime;
+    }
+
     public function getReviewId(): ?int {
         return $this->reviewId?->toInt();
     }
