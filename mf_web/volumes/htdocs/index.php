@@ -8,6 +8,7 @@ use MF\Controller\AccountController;
 use MF\Controller\AdminArticleListController;
 use MF\Controller\AdminAuthorListController;
 use MF\Controller\AdminPlayableListController;
+use MF\Controller\AdminReviewListController;
 use MF\Controller\ArticleController;
 use MF\Controller\AuthorController;
 use MF\Controller\CategoryAdminController;
@@ -28,6 +29,7 @@ const ROUTES = [
     AdminArticleListController::ROUTE_ID => AdminArticleListController::class,
     AdminAuthorListController::ROUTE_ID => AdminAuthorListController::class,
     AdminPlayableListController::ROUTE_ID => AdminPlayableListController::class,
+    AdminReviewListController::ROUTE_ID => AdminReviewListController::class,
     ArticleController::ROUTE_ID => ArticleController::class,
     AuthorController::ROUTE_ID => AuthorController::class,
     CategoryAdminController::ROUTE_ID => CategoryAdminController::class,

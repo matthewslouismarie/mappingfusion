@@ -6,17 +6,12 @@
 <div class="wrapper">
     <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
         <div class="form-row">
-            <label class="label" for="p-id">ID du test (générée automatiquement)</label>
-            <input class="input" disabled id="p-id" name="p_id" value="{% if entity %}{{ entity['p_id'] }}{% endif %}">
-        </div>
-        <div class="form-row">
             <label class="label" for="p-playable-id">ID du jeu ou mod testé</label>
-            <input class="input" id="p-playable-id" list="playables" name="p_playable_id" required>
-            <datalist id="playables">
+            <select id="p-playable-id" name="p_playable_id" required>
                 {% for p in playables %}
-                <option label="{{ p.name }}" value="{{ p.id }}"{% if entity and entity['p_playable_id'] == p.id %} selected{% endif %}>
+                <option label="{{ p.name }}"{% if entity and entity['p_playable_id'] == p.id %} selected="selected"{% endif %} value="{{ p.id }}">
                 {% endfor %}
-            </datalist>
+            </select>
         </div>
         <div class="form-row">
             <label class="label" for="p-rating">Note (de 1 à 5)</label>

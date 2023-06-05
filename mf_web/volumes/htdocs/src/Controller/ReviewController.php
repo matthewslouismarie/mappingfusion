@@ -59,7 +59,8 @@ class ReviewController implements ControllerInterface
         return 1;
     }
 
-    private function retrieveEntityFromRequest(ServerRequestInterface $request, ?int $id): ?Review {
+    private function retrieveEntityFromRequest(ServerRequestInterface $request, ?string $id): ?Review {
+
         if ('POST' === $request->getMethod()) {
             return Review::fromArray($request->getParsedBody());
         } elseif (null !== $id) {

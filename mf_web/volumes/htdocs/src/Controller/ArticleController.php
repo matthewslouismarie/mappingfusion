@@ -79,11 +79,11 @@ class ArticleController implements ControllerInterface
                 $this->repo->updateArticle($request->getQueryParams()['id'], $article, $wasFileUploaded);
                 return $article;
             } else {
-                $article = Article::fromArray($data + [
+                $article = Article::fromArray([
                     'p_author_username' => $this->session->getCurrentMemberUsername(),
                     'p_creation_datetime' => "now",
                     'p_last_update_datetime' => "now",
-                ]);
+                ] + $data);
                 $this->repo->addNewArticle($article);
                 return $article;
             }

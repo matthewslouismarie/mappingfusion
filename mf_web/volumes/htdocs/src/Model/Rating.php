@@ -6,9 +6,9 @@ use DomainException;
 
 class Rating
 {
-    private int $rating;
+    private float $rating;
 
-    public function __construct(int $rating) {
+    public function __construct(float $rating) {
         if ($rating > 5 || $rating < 1) {
             throw new DomainException();
         }
@@ -16,7 +16,7 @@ class Rating
         $this->rating = $rating;
     }
 
-    public function toInt(): int {
+    public function toFloat(): float {
         return $this->rating;
     }
 }

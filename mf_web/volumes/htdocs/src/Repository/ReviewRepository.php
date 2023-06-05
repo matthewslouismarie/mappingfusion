@@ -18,7 +18,8 @@ class ReviewRepository
     public function add(Review $entity): Review {
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_review VALUES (NULL, ?, ?, ?, ?, ?);');
         $stmt->execute([$entity->getPlayableId(), $entity->getRating(), $entity->getBody(), $entity->getCons(), $entity->getPros()]);
-        return Review::fromArray($entity->toArray() + ['p_id' => $this->conn->getPdo()->lastInsertId()]);
+        $newId = $this->conn->getPdo()->lastInsertId();
+        return Review::fromArray(['p_id' => $newId] + $entity->toArray());
     }
 
     public function delete(int $id): void {
@@ -26,7 +27,7 @@ class ReviewRepository
         $stmt->execute([$id]);
     }
 
-    public function find(int $id): ?Review {
+    public function find(string $id): ?Review {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_review WHERE (p_id = ?) LIMIT 1;');
         $stmt->execute([$id]);
 
@@ -40,8 +41,17 @@ class ReviewRepository
         }
     }
 
+    public function findAll(): array {
+        $results = $this->conn->getPdo()->query('SELECT * FROM e_review;')->fetchAll();
+        $entities = [];
+        foreach ($results as $r) {
+            $entities[] = Review::fromArray($r);
+        }
+        return $entities;
+    }
+
     public function update(Review $entity): void {
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_review SET p_playable_id = :p_name, p_rating = :p_rating, p_body = :p_body, p_cons = :p_cons, p_pros = :p_pros WHERE p_id = :p_id;');
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_review SET p_playable_id = :p_playable_id, p_rating = :p_rating, p_body = :p_body, p_cons = :p_cons, p_pros = :p_pros WHERE p_id = :p_id;');
         $stmt->execute($entity->toArray());
     }
 }
