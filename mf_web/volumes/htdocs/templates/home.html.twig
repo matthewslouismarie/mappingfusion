@@ -39,21 +39,23 @@
     </a>
 </div>
 <section class="site-maps-and-mods-tests">
-    <hgroup class="section-heading">
-        <p class="p">
-            <img alt="Tests maps et mods" class="image" src="/public/tests_icon.svg">
-        </p>
-        <h2 class="title" >Tests maps et mods</h2>
-        <p class="p">proposés par l’équipe</p>
-    </hgroup>
-    <ul class="reviews">
-        {% for a in reviews %}
-        <li class="item">
-            <a class="link"></a>
-        </li>
-        {% endfor %}
-    </ul>
-    <a class="more">Voir plus de tests</a>
+    <div class="_wrapper">
+        <hgroup class="section-heading">
+            <p class="p">
+                <img alt="Tests maps et mods" class="image" src="/public/tests_icon.svg">
+            </p>
+            <h2 class="title" >Tests maps et mods</h2>
+            <p class="p">proposés par l’équipe</p>
+        </hgroup>
+        <ul class="reviews">
+            {% for a in reviews %}
+            <li class="item">
+                <a class="link"></a>
+            </li>
+            {% endfor %}
+        </ul>
+        <a class="std-white-button">Voir plus de tests</a>
+    </div>
 </section>
 <section class="site-section-news-articles">
     <div class="_wrapper">
@@ -67,9 +69,9 @@
         <ul class="std-block-list">
             {% for a in last_articles %}
             <li class="item">
-                <a class="article-mosaic" href="">
+                <a class="article-mosaic" href="{{ app.router.generateUrl('view_article', {id: a.id}) }}">
                     <div class="left" style="background-image: url('/public/uploaded/{{ a.coverFilename }}');">
-                        <em class="cat">Half-Life 2</em>
+                        <em class="cat">{{ a.category.name }}</em>
                     </div>
                     <div class="right">
                         <h3 class="title">{{ app.mk.getText(a.title) }}</h3>
@@ -82,6 +84,32 @@
             </li>
             {% endfor %}
         </ul>
+        
+        <a class="std-white-button">Voir plus de tests</a>
+    </div>
+</section>
+<section class="site-section-beginners">
+    <div class="_wrapper">
+        <hgroup class="left">
+            <h2 class="title">Nouveau et un peu perdu ?<br>Pas de panique !</h2>
+            <p class="text">Consulte dès à présent <em>tous nos dossiers explicatifs</em> pour bien <em>comprendre comment fonctionnent Half-Life et ses mods</em>.</p>
+        </hgroup>
+        <dl class="right">
+            <div class="item">
+                <dt class="subject">Fonctionnement Sven Co-op</dt>
+                <dd class="text">Guide d’installation, lancement de partie, création de serveurs, etc…</dd>
+                <dd>
+                    <a class="std-white-button" href="#">En savoir plus</a>
+                </dd>
+            </div>
+            <div class="item">
+                <dt class="subject">Installation de mods</dt>
+                <dd class="text">Installation des mods pour Half-Life et Half-Life 2</dd>
+                <dd>
+                    <a class="std-white-button" href="#">En savoir plus</a>
+                </dd>
+            </div>
+        </dl>
     </div>
 </section>
 {% endblock %}

@@ -9,6 +9,7 @@ use MF\Controller\AdminArticleListController;
 use MF\Controller\AdminAuthorListController;
 use MF\Controller\AdminPlayableListController;
 use MF\Controller\AdminReviewListController;
+use MF\Controller\AdminArticleController;
 use MF\Controller\ArticleController;
 use MF\Controller\AuthorController;
 use MF\Controller\CategoryAdminController;
@@ -26,6 +27,7 @@ const CLI_ID = 'cli';
 const ROUTES = [
     '' => HomeController::class,
     AccountController::ROUTE_ID=> AccountController::class,
+    AdminArticleController::ROUTE_ID => AdminArticleController::class,
     AdminArticleListController::ROUTE_ID => AdminArticleListController::class,
     AdminAuthorListController::ROUTE_ID => AdminAuthorListController::class,
     AdminPlayableListController::ROUTE_ID => AdminPlayableListController::class,

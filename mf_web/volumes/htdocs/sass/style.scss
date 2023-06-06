@@ -22,8 +22,9 @@ $txt-s-font-size: 0.8rem;
 $txt-l-shadow-blur: 0.4rem;
 
 @mixin button {
-    padding: $gap-s $gap-l;
     border-radius: $gap-s;
+    padding: $gap-s $gap-m;
+    text-decoration: none
 }
 
 @mixin white-button {
@@ -64,6 +65,7 @@ img {
 @import 'elements/site-admin-nav.scss';
 @import 'elements/site-body.scss';
 @import 'elements/site-maps-and-mods-tests.scss';
+@import 'elements/site-section-beginners.scss';
 @import 'elements/site-section.scss';
 @import 'elements/site-social-networks.scss';
 
@@ -75,6 +77,8 @@ img {
 
 @import 'elements/std-block-list.scss';
 @import 'elements/std-form.scss';
+@import 'elements/std-white-button.scss';
+
 @import 'elements/form-row.scss';
 
 

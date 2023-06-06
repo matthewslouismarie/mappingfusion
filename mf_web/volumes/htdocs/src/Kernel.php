@@ -4,7 +4,7 @@ namespace MF;
 
 use GuzzleHttp\Psr7\Response;
 use MF\Controller\AccountController;
-use MF\Controller\ArticleController;
+use MF\Controller\AdminArticleController;
 use MF\Controller\AuthController;
 use MF\Controller\ControllerInterface;
 use MF\Controller\HomeController;

@@ -1,0 +1,56 @@
+.site-section-beginners {
+    background-color: #22668c;
+    color: #ffffff;
+    padding: $gap-xl 0;
+
+    > ._wrapper,
+    > ._wrapper > .left,
+    > ._wrapper > .right {
+        display: flex;
+        flex-direction: column;
+        gap: $gap-l;
+    }
+
+    > ._wrapper {
+        > .left {
+            > .title,
+            > .text {
+                font-size: $txt-l-font-size;
+            }
+
+            > .title {
+                color: #45b0e9;
+                font-weight: normal;
+            }
+        }
+
+        > .right {
+            font-size: $txt-s-font-size;
+
+            > .item {
+                display: flex;
+                flex-direction: column;
+                gap: $gap-s;
+
+                > .subject {
+                    font-weight: bold;
+                }
+
+                > .text {
+                    color: #45b0e9;
+                }
+            }
+        }
+    }
+
+    @media (min-width: $screen-s-size) {
+        > ._wrapper {
+            flex-direction: row;
+
+            > .left,
+            > .right {
+                width: 50%;
+            }
+        }
+    }
+}

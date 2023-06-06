@@ -1,0 +1,5 @@
+.std-white-button {
+    @include white-button;
+    display: inline-block;
+    font-weight: bold;
+}

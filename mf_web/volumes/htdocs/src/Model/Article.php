@@ -10,7 +10,7 @@ class Article implements Entity
 
     private LongString $authorUsername;
 
-    private Slug $categoryId;
+    private Category|Slug $category;
 
     private string $content;
 
@@ -29,7 +29,7 @@ class Article implements Entity
     public function __construct(
         Slug $id,
         LongString $authorUsername,
-        Slug $categoryId,
+        Slug|Category $category,
         string $content,
         bool $isFeatured,
         LongString $title,
@@ -40,7 +40,7 @@ class Article implements Entity
     ) {
         $this->id = $id;
         $this->authorUsername = $authorUsername;
-        $this->categoryId = $categoryId;
+        $this->category = $category;
         $this->content = $content;
         $this->isFeatured = $isFeatured;
         $this->title = $title;
@@ -54,7 +54,7 @@ class Article implements Entity
         return new self(
             new Slug($data['p_id']),
             new LongString($data['p_author_username']),
-            new Slug($data['p_category_id']),
+            null !== $data['p_category_name'] ? new Category(new Slug($data['p_category_id']), new LongString($data['p_category_name'])) : new Slug($data['p_category_id']),
             $data['p_content'],
             $data['p_is_featured'],
             new LongString($data['p_title']),
@@ -73,8 +73,12 @@ class Article implements Entity
         return $this->authorUsername;
     }
 
+    public function getCategory(): ?Category {
+        return $this->category instanceof Category ? $this->category : null;
+    }
+
     public function getCategoryId(): Slug {
-        return $this->categoryId;
+        return $this->category instanceof Category ? $this->category->getId() : $this->category;
     }
 
     public function getContent(): string {
@@ -113,7 +117,8 @@ class Article implements Entity
         return [
             'p_id' => $this->id->__toString(),
             'p_author_username' => $this->authorUsername->__toString(),
-            'p_category_id' => $this->categoryId->__toString(),
+            'p_category_id' => $this->category->__toString(),
+            'p_category_name' => $this->category instanceof Category ? $this->category->getName() : null,
             'p_content' => $this->content,
             'p_is_featured' => $this->isFeatured,
             'p_title' => $this->title->__toString(),

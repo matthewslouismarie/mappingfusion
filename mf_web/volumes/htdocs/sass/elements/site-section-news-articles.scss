@@ -1,4 +1,17 @@
 .site-section-news-articles {
     background-color: #19577a;
     color: #ffffff;
+
+    padding: $gap-xl 0;
+
+    > ._wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: $gap-l;
+        align-items: center;
+
+        > .std-block-list {
+            width: 100%;
+        }
+    }
 }

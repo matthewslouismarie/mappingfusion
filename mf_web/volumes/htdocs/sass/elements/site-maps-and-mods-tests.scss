@@ -7,10 +7,9 @@
     flex-direction: column;
     align-items: center;
 
-    > .more {
-        display: block;
-        font-weight: bold;
-        font-size: $txt-s-font-size;
-        @include white-button;
+    > ._wrapper {
+        > .section-heading {
+            margin-bottom: $gap-l;
+        }
     }
 }

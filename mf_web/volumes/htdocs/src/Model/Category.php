@@ -20,12 +20,12 @@ class Category
         $this->name = $name;
     }
 
-    public function getId(): string {
-        return $this->id->__toString();
+    public function getId(): Slug {
+        return $this->id;
     }
 
-    public function getName(): string {
-        return $this->name->__toString();
+    public function getName(): LongString {
+        return $this->name;
     }
 
     public function toArray(): array {

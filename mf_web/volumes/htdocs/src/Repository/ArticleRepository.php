@@ -5,7 +5,7 @@ namespace MF\Repository;
 use MF\Database\Connection;
 use MF\HttpBridge\Session;
 use MF\Model\Article;
-use MF\Model\Uint;
+use OutOfBoundsException;
 use UnexpectedValueException;
 
 class ArticleRepository
@@ -40,6 +40,14 @@ class ArticleRepository
         }
     }
 
+    public function findOne(string $id): Article {
+        $article = $this->find($id);
+        if (null === $article) {
+            throw new OutOfBoundsException();
+        }
+        return $article;
+    }
+
     public function findAll(): array {
         $results = $this->conn->getPdo()->query('SELECT * FROM e_article;')->fetchAll();
         $entities = [];
@@ -59,7 +67,7 @@ class ArticleRepository
     }
 
     public function findLast(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM e_article ORDER BY p_last_update_datetime DESC LIMIT 8;');
+        $results = $this->conn->getPdo()->query('SELECT e_article.*, e_category.p_name AS p_category_name FROM e_article LEFT JOIN e_category ON p_category_id = e_category.p_id ORDER BY p_last_update_datetime DESC LIMIT 8;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = Article::fromArray($article);

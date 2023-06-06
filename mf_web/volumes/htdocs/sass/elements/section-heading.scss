@@ -1,13 +1,13 @@
 .section-heading {
     text-align: center;
 
+    > .img {
+        margin-bottom: $gap-s;
+    }
+
     > .title,
     > .p {
         font-size: $txt-l-font-size;
-    }
-
-    > .title {
-        padding: $gap-s;
     }
 
     &.-inline {
@@ -19,6 +19,10 @@
 
         > .p {
             font-weight: normal;
+        }
+
+        > .title {
+            padding-left: $gap-s;
         }
     }
 }
