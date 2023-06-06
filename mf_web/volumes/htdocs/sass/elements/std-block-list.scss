@@ -1,13 +1,15 @@
 .std-block-list {
     list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: $gap-m;
 
-    > .item {
-        display: inline-block;
-    }
-
-    @media (min-width: $screen-s-size) {
+    @media (min-width: $screen-m-size) {
+        flex-direction: row;
+        justify-content: space-between;
         > .item {
-            width: 50%;
+            flex-basis: 40%;
+            flex-grow: 1;
         }
     }
 }

@@ -1,19 +1,17 @@
 .article-mosaic {
     text-decoration: none;
-    display: flex;
-    gap: $gap-s;
 
     > .left,
     > .right {
         height: $img-xs-size;
-        width: 50%;
     }
 
     > .left {
-        flex-grow: 1;
+        float: left;
+        width: $img-s-size * 0.75;
         background-size: cover;
         background-position: center;
-        display: inline-flex;
+        display: flex;
         flex-wrap: wrap;
         align-content: flex-end;
 
@@ -32,6 +30,7 @@
     > .right {
         overflow: hidden;
         text-overflow: ellipsis;
+        padding-left: $gap-s;
 
         > .title {
             color: #ffffff;
@@ -59,6 +58,10 @@
         > .left,
         > .right {
             height: $img-xs-size * 1.5;
+        }
+
+        > .left {
+            width: $img-s-size;
         }
     }
 }
