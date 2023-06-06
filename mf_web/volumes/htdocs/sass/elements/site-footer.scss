@@ -1,0 +1,12 @@
+.site-footer {
+    background-color: #0b4b6e;
+    color: #ffffff;
+    padding: $gap-m 0;
+
+    > ._wrapper {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: $gap-m;
+    }
+}

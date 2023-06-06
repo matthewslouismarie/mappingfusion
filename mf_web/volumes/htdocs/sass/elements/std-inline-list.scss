@@ -1,0 +1,26 @@
+.std-inline-list {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: $txt-s-font-size;
+    gap: $gap-s * 2;
+    justify-content: center;
+    list-style-type: "-";
+
+    > .item {
+        padding-left: $gap-s;
+
+        > .link {
+            text-decoration: none;
+            color: #ffffff;
+
+            > .img {
+                height: $txt-s-font-size;
+            }
+        }
+
+        &:first-child,
+        &.-img {
+            list-style-type: none;
+        }
+    }
+}
