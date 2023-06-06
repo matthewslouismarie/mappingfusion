@@ -1,7 +1,7 @@
 .site-section-beginners {
     background-color: #22668c;
     color: #ffffff;
-    padding: $gap-xl 0;
+    padding: $gap-m 0;
 
     > ._wrapper,
     > ._wrapper > .left,
@@ -26,7 +26,6 @@
 
         > .right {
             font-size: $txt-s-font-size;
-
             > .item {
                 display: flex;
                 flex-direction: column;
@@ -49,7 +48,23 @@
 
             > .left,
             > .right {
+                padding: $gap-xl 0;
                 width: 50%;
+            }
+        }
+    }
+
+    @media (min-width: $screen-m-size) {
+        > ._wrapper {
+            > .left {   
+                background-image: url('/public/barney-transparent.svg');
+                background-position: right;
+                background-repeat: no-repeat;
+                background-size: contain;
+            }
+
+            > .right {
+                background: url('/public/munition-transparent.svg') no-repeat center right, url('/public/grenade-transparent.svg') no-repeat top;
             }
         }
     }

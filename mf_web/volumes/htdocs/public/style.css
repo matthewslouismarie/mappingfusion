@@ -98,10 +98,15 @@ img {
 .site-maps-and-mods-tests > ._wrapper > .section-heading {
   margin-bottom: 2rem;
 }
+@media (min-width: 768px) {
+  .site-maps-and-mods-tests > ._wrapper {
+    background: url("/public/headcrab-transparent.svg") no-repeat, url("/public/marine-transparent.svg") no-repeat right/contain;
+  }
+}
 .site-section-beginners {
   background-color: #22668c;
   color: #ffffff;
-  padding: 4rem 0;
+  padding: 1rem 0;
 }
 .site-section-beginners > ._wrapper, .site-section-beginners > ._wrapper > .left, .site-section-beginners > ._wrapper > .right {
   display: flex;
@@ -134,7 +139,19 @@ img {
     flex-direction: row;
   }
   .site-section-beginners > ._wrapper > .left, .site-section-beginners > ._wrapper > .right {
+    padding: 4rem 0;
     width: 50%;
+  }
+}
+@media (min-width: 768px) {
+  .site-section-beginners > ._wrapper > .left {
+    background-image: url("/public/barney-transparent.svg");
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  .site-section-beginners > ._wrapper > .right {
+    background: url("/public/munition-transparent.svg") no-repeat center right, url("/public/grenade-transparent.svg") no-repeat top;
   }
 }
 .site-section.-header > .wrapper {
@@ -208,6 +225,11 @@ img {
 }
 .site-section-news-articles > ._wrapper > .std-block-list {
   width: 100%;
+}
+@media (min-width: 768px) {
+  .site-section-news-articles > ._wrapper {
+    background: url("/public/crowbar-transparent.svg") no-repeat, url("/public/gauss-transparent.svg") no-repeat 6rem 3rem, url("/public/bullsquid-transparent.svg") no-repeat top right;
+  }
 }
 .section-heading {
   text-align: center;
