@@ -25,7 +25,7 @@ class Connection
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_category.sql'), LongString::MAX_LENGTH, Slug::REGEX));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_article.sql'), LongString::MAX_LENGTH, Slug::REGEX, SlugFilename::REGEX));
 
-        // $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_article.sql'));
+        $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_article.sql'));
     }
 
     public function getPdo(): PDO {
