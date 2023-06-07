@@ -3,6 +3,8 @@
 namespace MF\Model;
 
 use DateTimeImmutable;
+use OutOfBoundsException;
+use TypeError;
 
 class Article implements Entity
 {
@@ -10,7 +12,7 @@ class Article implements Entity
 
     private LongString $authorUsername;
 
-    private Category|Slug $category;
+    private Slug $categoryId;
 
     private string $content;
 
@@ -26,42 +28,62 @@ class Article implements Entity
 
     private ?Uint $reviewId;
 
+    private ?Category $storedCategory;
+
+    private ?Review $storedReview;
+
     public function __construct(
-        Slug $id,
-        LongString $authorUsername,
-        Slug|Category $category,
+        ?string $id,
+        string $authorUsername,
+        string $categoryId,
         string $content,
         bool $isFeatured,
-        LongString $title,
-        ?SlugFilename $coverFilename = null,
+        string $title,
+        ?string $coverFilename = null,
         DateTimeImmutable $creationDateTime = new DateTimeImmutable(),
         DateTimeImmutable $lastUpdateDateTime = new DateTimeImmutable(),
-        ?Uint $reviewId = null,
+        ?int $reviewId = null,
+        ?Category $storedCategory = null,
+        ?Review $storedReview = null,
     ) {
-        $this->id = $id;
-        $this->authorUsername = $authorUsername;
-        $this->category = $category;
+        $this->id = null !== $id ? new Slug($id) : new Slug($title, true);
+        $this->authorUsername = new LongString($authorUsername);
+        $this->categoryId = new Slug($categoryId);
         $this->content = $content;
         $this->isFeatured = $isFeatured;
-        $this->title = $title;
-        $this->coverFilename = $coverFilename;
+        $this->title = new LongString($title);
+        $this->coverFilename = new SlugFilename($coverFilename);
         $this->creationDateTime = $creationDateTime ?? new DateTimeImmutable();
         $this->lastUpdateDateTime = $lastUpdateDateTime ?? new DateTimeImmutable();
-        $this->reviewId = $reviewId;
+        $this->reviewId = $reviewId !== null ? new Uint($reviewId) : null;
+        $this->storedCategory = $storedCategory;
+        $this->storedReview = $storedReview;
     }
 
     public static function fromArray(array $data): self {
+        try {
+            $review = Review::fromArray($data);
+        } catch (OutOfBoundsException|TypeError $e) {
+            $review = null;
+        }
+        try {
+            $category = Category::fromArray($data);
+        } catch (OutOfBoundsException|TypeError $e) {
+            $category = null;
+        }
         return new self(
-            new Slug($data['article_id']),
-            new LongString($data['article_author_id']),
-            null !== $data['p_category_name'] ? new Category(new Slug($data['article_category_id']), new LongString($data['p_category_name'])) : new Slug($data['article_category_id']),
+            $data['article_id'],
+            $data['article_author_id'],
+            $data['article_category_id'],
             $data['article_body'],
             $data['article_is_featured'],
-            new LongString($data['article_title']),
-            $data['article_cover_filename'] !== null ? new SlugFileName($data['article_cover_filename']) : null,
+            $data['article_title'],
+            $data['article_cover_filename'],
             new DateTimeImmutable($data['article_creation_date_time']),
             new DateTimeImmutable($data['article_last_update_date_time']),
-            null !== $data['article_review_id'] ? new Uint($data['article_review_id']) : null,
+            $data['article_review_id'],
+            $category,
+            $review,
         );
     }
 
@@ -74,11 +96,11 @@ class Article implements Entity
     }
 
     public function getCategory(): ?Category {
-        return $this->category instanceof Category ? $this->category : null;
+        return $this->storedCategory;
     }
 
     public function getCategoryId(): Slug {
-        return $this->category instanceof Category ? $this->category->getId() : $this->category;
+        return $this->categoryId;
     }
 
     public function getContent(): string {
@@ -105,6 +127,10 @@ class Article implements Entity
         return $this->reviewId?->toInt();
     }
 
+    public function getStoredReview(): ?Review {
+        return $this->storedReview;
+    }
+
     public function isFeatured(): bool {
         return $this->isFeatured;
     }
@@ -114,11 +140,12 @@ class Article implements Entity
     }
 
     public function toArray(): array {
-        return [
+        $category = $this->storedCategory?->toArray() ?? [];
+        $review = $this->storedReview?->toArray() ?? [];
+        return $category + $review + [
             'article_id' => $this->id->__toString(),
             'article_author_id' => $this->authorUsername->__toString(),
-            'article_category_id' => $this->category->__toString(),
-            'p_category_name' => $this->category instanceof Category ? $this->category->getName() : null,
+            'article_category_id' => $this->categoryId->__toString(),
             'article_body' => $this->content,
             'article_is_featured' => $this->isFeatured,
             'article_title' => $this->title->__toString(),

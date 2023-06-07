@@ -15,14 +15,9 @@
         flex-wrap: wrap;
         align-content: flex-end;
 
-        > .cat {
-            display: inline-block;
+        > .std-badge {
             position: relative;
             top: $txt-m-font-size / 2;
-            background-color: #3D9CCE;
-            padding: $gap-xs;
-            color: #ffffff;
-            font-size: $txt-s-font-size;
             left: $gap-s;
         }
     }

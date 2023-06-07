@@ -13,12 +13,12 @@ class Slug implements Stringable
 
     public function __construct(string $value, bool $transform = false) {
         if ($transform) {
-            $this->value = new LongString(preg_replace('/[^a-z0-9\-]/', '', preg_replace('/[ _]/', '-', strtolower($value))));
+            $this->value = new LongString(substr(preg_replace('/[^a-z0-9\-]|(--)|(^-)|(-$)/', '', preg_replace('/[ _]|(--)/', '-', strtolower($value))), 0, LongString::MAX_LENGTH));
         } else {
             $this->value = new LongString($value);
         }
         if (0 === strlen($this->value) || 1 !== preg_match('/'.self::REGEX.'/', $this->value)) {
-            throw new UnexpectedValueException();
+            throw new UnexpectedValueException($this->value);
         }
     }
 

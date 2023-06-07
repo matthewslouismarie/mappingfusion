@@ -1,5 +1,19 @@
 <?php
 
+set_error_handler(function ($errNo, $errStr, $errFile, $errLine) {
+    $msg = "$errNo, $errStr in $errFile on line $errLine";
+    if (2 === $errNo) {
+        throw new OutOfBoundsException();
+    }
+    if ($errNo == E_NOTICE || $errNo == E_WARNING) {
+        throw new RuntimeException($msg, $errNo);
+    } else {
+        return false;
+    }
+});
+
+error_reporting(E_ALL);
+
 require_once './vendor/autoload.php';
 
 use DI\ContainerBuilder;

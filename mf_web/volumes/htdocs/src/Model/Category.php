@@ -2,7 +2,7 @@
 
 namespace MF\Model;
 
-class Category
+class Category implements EntityInterface
 {
     private Slug $id;
 
@@ -10,14 +10,14 @@ class Category
 
     static function fromArray(array $data): self {
         return new self(
-            null !== $data['category_id'] ? new Slug($data['category_id']) : null,
-            new LongString($data['category_name']),
+            $data['category_id'],
+            $data['category_name'],
         );
     }
 
-    public function __construct(?Slug $id, LongString $name) {
-        $this->id = $id ?? new Slug($name);
-        $this->name = $name;
+    public function __construct(?string $id, string $name) {
+        $this->id = null !== $id ? new Slug($id) : new Slug($name, true);
+        $this->name = new LongString($name);
     }
 
     public function getId(): Slug {

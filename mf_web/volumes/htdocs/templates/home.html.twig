@@ -47,13 +47,13 @@
             <h2 class="title" >Tests maps et mods</h2>
             <p class="p">proposés par l’équipe</p>
         </hgroup>
-        <ul class="reviews">
+        <ul class="std-block-list">
             {% for r in last_reviews %}
             <li class="item">
                 <a class="link">
                     <div>
-                        <mark>{{ r.title }}</mark>
-                        {# <i>{{ r.}} #}
+                        <mark>{{ r.storedReview.storedPlayable.name }}</mark>
+                        <i>{{ r.storedReview.storedPlayable.storedGame.name }}</i>
                     </div>
                 </a>
             </li>
@@ -76,7 +76,7 @@
             <li class="item">
                 <a class="article-mosaic" href="{{ app.router.generateUrl('view_article', {id: a.id}) }}">
                     <div class="left" style="background-image: url('/public/uploaded/{{ a.coverFilename }}');">
-                        <em class="cat">{{ a.category.name }}</em>
+                        <em class="std-badge">{{ a.category.name }}</em>
                     </div>
                     <div class="right">
                         <h3 class="title">{{ app.mk.getText(a.title) }}</h3>

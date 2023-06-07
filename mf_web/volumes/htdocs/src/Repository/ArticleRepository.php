@@ -17,8 +17,8 @@ class ArticleRepository
     }
 
     public function addNewArticle(Article $entity): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), NULL);');
-        $stmt->execute([$entity->getId(), $this->session->getCurrentMemberUsername(), $entity->getCategoryId(), $entity->getContent(), $entity->isFeatured() ? 1 : 0, $entity->getTitle(), $entity->getCoverFilename()]);
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?);');
+        $stmt->execute([$entity->getId(), $entity->getAuthorUsername(), $entity->getCategoryId(), $entity->getContent(), $entity->isFeatured() ? 1 : 0, $entity->getTitle(), $entity->getCoverFilename(), $entity->getReviewId()]);
     }
 
     public function deleteArticle(string $id): void {
@@ -67,8 +67,8 @@ class ArticleRepository
     }
 
     public function findLast(int $limit = 8, bool $onlyReviews = false): array {
-        $whereClause = $onlyReviews ? 'WHERE article_review_id != NULL' : '';
-        $results = $this->conn->getPdo()->query("SELECT e_article.*, e_category.category_name AS p_category_name FROM e_article LEFT JOIN e_category ON article_category_id = e_category.category_id LEFT JOIN e_review ON article_review_id = e_review.review_id {$whereClause} ORDER BY article_last_update_date_time DESC LIMIT {$limit};");
+        $whereClause = $onlyReviews ? 'WHERE article_review_id IS NOT NULL' : '';
+        $results = $this->conn->getPdo()->query("SELECT * FROM v_article {$whereClause} ORDER BY article_last_update_date_time DESC LIMIT {$limit};");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = Article::fromArray($article);
@@ -77,7 +77,12 @@ class ArticleRepository
     }
 
     public function findLastReviews(): array {
-        return $this->findLast(4, true);
+        $results = $this->conn->getPdo()->query("SELECT * FROM v_article ORDER BY article_last_update_date_time DESC LIMIT 4;");
+        $articles = [];
+        foreach ($results->fetchAll() as $article) {
+            $articles[] = Article::fromArray($article);
+        }
+        return $articles;
     }
 
     public function findReviews(): array {
