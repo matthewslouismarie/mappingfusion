@@ -7,7 +7,15 @@
 
     > .title,
     > .p {
-        font-size: $txt-l-font-size;
+        font-size: $txt-xl-font-size;
+    }
+
+    > .p {
+        font-weight: $txt-weight-regular;
+    }
+
+    > .title {
+        font-weight: $txt-weight-bold;
     }
 
     &.-inline {

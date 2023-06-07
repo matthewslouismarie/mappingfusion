@@ -68,9 +68,9 @@ class AdminArticleController implements ControllerInterface
             if ($wasFileUploaded) {
                 $filename = new SlugFilename($uploadedFile->getClientFilename());
                 $uploadedFile->moveTo(dirname(__FILE__) . "/../../public/uploaded/" . $filename->__toString());
-                $data['p_cover_filename'] = $filename->__toString();
+                $data['article_cover_filename'] = $filename->__toString();
             }
-            $data['p_is_featured'] = isset($data['p_is_featured']);
+            $data['article_is_featured'] = isset($data['article_is_featured']);
 
             if (isset($request->getQueryParams()['id'])) {
                 $article = Article::fromArray($data);
@@ -78,9 +78,9 @@ class AdminArticleController implements ControllerInterface
                 return $article;
             } else {
                 $article = Article::fromArray([
-                    'p_author_username' => $this->session->getCurrentMemberUsername(),
-                    'p_creation_datetime' => "now",
-                    'p_last_update_datetime' => "now",
+                    'article_author_id' => $this->session->getCurrentMemberUsername(),
+                    'article_creation_date_time' => "now",
+                    'article_last_update_date_time' => "now",
                 ] + $data);
                 $this->repo->addNewArticle($article);
                 return $article;

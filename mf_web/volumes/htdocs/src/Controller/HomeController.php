@@ -29,6 +29,7 @@ class HomeController implements ControllerInterface
             'featured_articles' => $this->articleRepo->findFeatured(),
             'reviews' => $this->articleRepo->findReviews(),
             'last_articles' => $this->articleRepo->findLast(),
+            'last_reviews' => $this->articleRepo->findLastReviews(),
         ]));
     }
 

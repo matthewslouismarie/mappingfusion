@@ -1,15 +1,15 @@
 CREATE TABLE IF NOT EXISTS e_article (
-    p_id VARCHAR(%1$s) PRIMARY KEY CHECK(p_id REGEXP '%2$s'),
-    p_author_username VARCHAR(%1$s) NOT NULL,
-    p_category_id VARCHAR(%1$s) NOT NULL,
-    p_content TEXT NOT NULL,
-    p_is_featured BOOLEAN NOT NULL,
-    p_title VARCHAR(%1$s) NOT NULL CHECK(p_title != ''),
-    p_cover_filename VARCHAR(%1$s) CHECK (p_cover_filename REGEXP '%3$s'),
-    p_creation_datetime TIMESTAMP NOT NULL DEFAULT NOW(),
-    p_last_update_datetime TIMESTAMP NOT NULL,
-    p_review_id SMALLINT UNSIGNED,
-    FOREIGN KEY (p_author_username) REFERENCES t_member (c_username),
-    FOREIGN KEY (p_category_id) REFERENCES e_category (p_id),
-    FOREIGN KEY (p_review_id) REFERENCES e_review (p_id)
+    article_id VARCHAR(%1$s) PRIMARY KEY CHECK(article_id REGEXP '%2$s'),
+    article_author_id VARCHAR(%1$s) NOT NULL,
+    article_category_id VARCHAR(%1$s) NOT NULL,
+    article_body TEXT NOT NULL,
+    article_is_featured BOOLEAN NOT NULL,
+    article_title VARCHAR(%1$s) NOT NULL CHECK(article_title != ''),
+    article_cover_filename VARCHAR(%1$s) CHECK (article_cover_filename REGEXP '%3$s'),
+    article_creation_date_time TIMESTAMP NOT NULL DEFAULT NOW(),
+    article_last_update_date_time TIMESTAMP NOT NULL,
+    article_review_id SMALLINT UNSIGNED,
+    FOREIGN KEY (article_author_id) REFERENCES t_member (member_username),
+    FOREIGN KEY (article_category_id) REFERENCES e_category (category_id),
+    FOREIGN KEY (article_review_id) REFERENCES e_review (review_id)
 )

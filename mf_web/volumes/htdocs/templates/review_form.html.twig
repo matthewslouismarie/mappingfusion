@@ -6,27 +6,27 @@
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
     <div class="form-row">
         <label class="label" for="p-playable-id">ID du jeu ou mod testé</label>
-        <select id="p-playable-id" name="p_playable_id" required>
+        <select id="p-playable-id" name="review_playable_id" required>
             {% for p in playables %}
-            <option label="{{ p.name }}"{% if entity and entity['p_playable_id'] == p.id %} selected="selected"{% endif %} value="{{ p.id }}">
+            <option label="{{ p.name }}"{% if entity and entity['review_playable_id'] == p.id %} selected="selected"{% endif %} value="{{ p.id }}">
             {% endfor %}
         </select>
     </div>
     <div class="form-row">
         <label class="label" for="p-rating">Note (de 1 à 5)</label>
-        <input class="input" id="p-rating" inputmode="decimal" min="1" max="5" name="p_rating" required step="0.1" type="number"{% if entity %} value="{{ entity['p_rating'] }}"{% endif %}>
+        <input class="input" id="p-rating" inputmode="decimal" min="1" max="5" name="review_rating" required step="0.1" type="number"{% if entity %} value="{{ entity['review_rating'] }}"{% endif %}>
     </div>
     <div class="form-row">
         <label class="label" for="p-body">Avis final</label>
-        <textarea class="input" id="p-body" name="p_body">{% if entity %}{{ entity['p_body'] }}{% endif %}</textarea>
+        <textarea class="input" id="p-body" name="review_body">{% if entity %}{{ entity['review_body'] }}{% endif %}</textarea>
     </div>
     <div class="form-row">
         <label class="label" for="p-cons">Points négatifs</label>
-        <textarea class="input" id="p-cons" name="p_cons">{% if entity %}{{ entity['p_cons'] }}{% endif %}</textarea>
+        <textarea class="input" id="p-cons" name="review_cons">{% if entity %}{{ entity['review_cons'] }}{% endif %}</textarea>
     </div>
     <div class="form-row">
         <label class="label" for="p-pros">Ponts positifs</label>
-        <textarea class="input" id="p-pros" name="p_pros">{% if entity %}{{ entity['p_pros'] }}{% endif %}</textarea>
+        <textarea class="input" id="p-pros" name="review_pros">{% if entity %}{{ entity['review_pros'] }}{% endif %}</textarea>
     </div>
     <button type="submit">Poster</button>
 </form>

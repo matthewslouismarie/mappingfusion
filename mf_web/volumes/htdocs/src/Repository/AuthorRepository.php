@@ -14,17 +14,17 @@ class AuthorRepository
     }
 
     public function add(Author $author): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_author VALUES (:p_id, :p_name);');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_author VALUES (:author_id, :author_name);');
         $stmt->execute($author->toArray());
     }
 
     public function delete(string $id): void {
-        $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_author WHERE p_id = ?;');
+        $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_author WHERE author_id = ?;');
         $stmt->execute([$id]);
     }
 
     public function find(string $id): ?Author {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_author WHERE (p_id = ?) LIMIT 1;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_author WHERE (author_id = ?) LIMIT 1;');
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
@@ -48,7 +48,7 @@ class AuthorRepository
 
     public function update(string $previousId, Author $author): void {
         if ($previousId === $author->getId()) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_author SET p_name = :p_name WHERE p_id = :p_id;');
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_author SET author_name = :author_name WHERE author_id = :author_id;');
             $stmt->execute($author->toArray());
         } else {
             $this->conn->getPdo()->beginTransaction();

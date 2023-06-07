@@ -54,7 +54,7 @@ class CategoryAdminController implements ControllerInterface
             }
         }
 
-        if (null !== $category && (!isset($request->getQueryParams()['id']) || $category->getId() !== $request->getQueryParams()['id'])) {
+        if (null !== $category && (!isset($request->getQueryParams()['id']) || $category->getId()->__toString() !== $request->getQueryParams()['id'])) {
             return $this->router->generateRedirect(self::ROUTE_ID, ['id' => $category->getId()]);
         }
 

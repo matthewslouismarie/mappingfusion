@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class RegistrationController implements ControllerInterface
 {
-    const ROUTE_ID = 'registration';
+    const ROUTE_ID = 'register';
 
     private TwigService $twig;
     private MemberRepository $repo;

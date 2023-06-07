@@ -4,6 +4,7 @@ namespace MF\Controller;
 
 use DomainException;
 use GuzzleHttp\Psr7\Response;
+use MF\Form;
 use MF\Model\Author;
 use MF\Repository\AuthorRepository;
 use MF\Router;
@@ -16,6 +17,7 @@ class AuthorController implements ControllerInterface
     const ROUTE_ID = 'manage_author';
 
     public function __construct(
+        private Form $form,
         private TwigService $twig,
         private Router $router,
         private AuthorRepository $repo,
@@ -37,10 +39,7 @@ class AuthorController implements ControllerInterface
 
     private function getAuthorFromRequest(ServerRequestInterface $request): ?Author {
         if ('POST' === $request->getMethod()) {
-            $data = $request->getParsedBody();
-            if ('' === $data['p_id']) {
-                $data['p_id'] = null;
-            }
+            $data = $this->form->nullifyEmptyStrings($request->getParsedBody());
 
             if (isset($request->getQueryParams()['id'])) {
                 $author = Author::fromArray($data);

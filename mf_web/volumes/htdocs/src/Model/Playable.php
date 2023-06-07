@@ -14,10 +14,10 @@ class Playable implements Entity
 
     static function fromArray(array $data): self {
         return new self(
-            $data['p_id'] !== null ? new Slug($data['p_id']) : null,
-            new LongString($data['p_name']),
-            null !== $data['p_author_id'] ? new Slug($data['p_author_id']) : null,
-            null !== $data['p_game_id'] ? new Slug($data['p_game_id']) : null,
+            $data['playable_id'] !== null ? new Slug($data['playable_id']) : null,
+            new LongString($data['playable_name']),
+            null !== $data['playable_author_id'] ? new Slug($data['playable_author_id']) : null,
+            null !== $data['playable_game_id'] ? new Slug($data['playable_game_id']) : null,
         );
     }
 
@@ -43,10 +43,10 @@ class Playable implements Entity
 
     public function toArray(): array {
         return [
-            'p_id' => $this->id->__toString(),
-            'p_name' => $this->name->__toString(),
-            'p_author_id' => $this->authorId?->__toString(),
-            'p_game_id' => $this->gameId?->__toString(),
+            'playable_id' => $this->id->__toString(),
+            'playable_name' => $this->name->__toString(),
+            'playable_author_id' => $this->authorId?->__toString(),
+            'playable_game_id' => $this->gameId?->__toString(),
         ];
     }
 }

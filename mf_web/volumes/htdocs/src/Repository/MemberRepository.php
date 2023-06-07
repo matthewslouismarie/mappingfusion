@@ -19,21 +19,21 @@ class MemberRepository
     }
 
     public function find(string $username): ?Member {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM t_member WHERE (c_username=:username) LIMIT 1');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM t_member WHERE (member_username=:username) LIMIT 1');
         $stmt->execute(['username' => $username]);
 
         $data = $stmt->fetchAll();
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return new Member($data[0]['c_password'], $data[0]['c_username']);
+            return new Member($data[0]['member_password'], $data[0]['member_username']);
         } else {
             throw new UnexpectedValueException();
         }
     }
 
     public function updateMember(Member $member): void {
-        $stmt = $this->conn->getPdo()->prepare('UPDATE t_member SET c_password = :password WHERE c_username = :username');
+        $stmt = $this->conn->getPdo()->prepare('UPDATE t_member SET member_password = :password WHERE member_username = :username');
         $stmt->execute(['password' => $member->getPasswordHash(), 'username' => $member->getUsername()]);
     }
 }

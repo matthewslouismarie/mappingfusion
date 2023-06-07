@@ -1,4 +1,4 @@
-$screen-s-size: 414px;
+$screen-s-size: 425px;
 $screen-m-size: 768px;
 $screen-l-size: 1024px;
 $border-xs: 1.5px;
@@ -17,9 +17,14 @@ $img-xxs-size: 3rem;
 $area-l-height: 16rem;
 $area-s-size: 3rem;
 $txt-l-font-size: 1.2rem;
+$txt-xl-font-size: 1.7rem;
 $txt-m-font-size: 1rem;
 $txt-s-font-size: 0.8rem;
 $txt-l-shadow-blur: 0.4rem;
+$txt-weight-light: 300;
+$txt-weight-regular: 400;
+$txt-weight-semi-bold: 600;
+$txt-weight-bold: 700;
 
 @mixin button {
     border-radius: $gap-s;

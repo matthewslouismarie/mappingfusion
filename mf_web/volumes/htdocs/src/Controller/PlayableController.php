@@ -4,6 +4,7 @@ namespace MF\Controller;
 
 use DomainException;
 use GuzzleHttp\Psr7\Response;
+use MF\Form;
 use MF\Model\Entity;
 use MF\Model\Playable;
 use MF\Repository\AuthorRepository;
@@ -19,6 +20,7 @@ class PlayableController implements ControllerInterface
 
     public function __construct(
         private AuthorRepository $authorRepo,
+        private Form $form,
         private TwigService $twig,
         private Router $router,
         private PlayableRepository $repo,
@@ -43,15 +45,7 @@ class PlayableController implements ControllerInterface
 
     private function getFromRequest(ServerRequestInterface $request): ?Entity {
         if ('POST' === $request->getMethod()) {
-            $data = $request->getParsedBody();
-            
-            if ('' === $data['p_id']) {
-                $data['p_id'] = null;
-            }
-            
-            if ('' === $data['p_game_id']) {
-                $data['p_game_id'] = null;
-            }
+            $data = $this->form->nullifyEmptyStrings($request->getParsedBody());
 
             if (isset($request->getQueryParams()['id'])) {
                 $entity = Playable::fromArray($data);

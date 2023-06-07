@@ -18,12 +18,12 @@ class Review
 
     static function fromArray(array $data): self {
         return new self(
-            null !== $data['p_id'] ? new Uint($data['p_id']) : null,
-            new Slug($data['p_playable_id']),
-            new Rating($data['p_rating']),
-            $data['p_body'],
-            $data['p_cons'],
-            $data['p_pros'],
+            null !== $data['review_id'] ? new Uint($data['review_id']) : null,
+            new Slug($data['review_playable_id']),
+            new Rating($data['review_rating']),
+            $data['review_body'],
+            $data['review_cons'],
+            $data['review_pros'],
         );
     }
 
@@ -69,12 +69,12 @@ class Review
 
     public function toArray(): array {
         return [
-            'p_id' => $this->id?->toInt(),
-            'p_playable_id' => $this->playableId->__toString(),
-            'p_rating' => $this->rating->toFloat(),
-            'p_body' => $this->body,
-            'p_cons' => $this->cons,
-            'p_pros' => $this->pros,
+            'review_id' => $this->id?->toInt(),
+            'review_playable_id' => $this->playableId->__toString(),
+            'review_rating' => $this->rating->toFloat(),
+            'review_body' => $this->body,
+            'review_cons' => $this->cons,
+            'review_pros' => $this->pros,
         ];
     }
 }

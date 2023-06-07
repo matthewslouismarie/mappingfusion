@@ -10,8 +10,8 @@ class Author implements Entity
 
     static function fromArray(array $data): self {
         return new self(
-            $data['p_id'] ?? null,
-            $data['p_name'],
+            $data['author_id'] ?? null,
+            $data['author_name'],
         );
     }
 
@@ -33,8 +33,8 @@ class Author implements Entity
 
     public function toArray(): array {
         return [
-            'p_id' => $this->id->__toString(),
-            'p_name' => $this->name->__toString(),
+            'author_id' => $this->id->__toString(),
+            'author_name' => $this->name->__toString(),
         ];
     }
 }

@@ -52,16 +52,16 @@ class Article implements Entity
 
     public static function fromArray(array $data): self {
         return new self(
-            new Slug($data['p_id']),
-            new LongString($data['p_author_username']),
-            null !== $data['p_category_name'] ? new Category(new Slug($data['p_category_id']), new LongString($data['p_category_name'])) : new Slug($data['p_category_id']),
-            $data['p_content'],
-            $data['p_is_featured'],
-            new LongString($data['p_title']),
-            $data['p_cover_filename'] !== null ? new SlugFileName($data['p_cover_filename']) : null,
-            new DateTimeImmutable($data['p_creation_datetime']),
-            new DateTimeImmutable($data['p_last_update_datetime']),
-            is_string($data['p_review_id']) ? intval($data['p_review_id']) : null,
+            new Slug($data['article_id']),
+            new LongString($data['article_author_id']),
+            null !== $data['p_category_name'] ? new Category(new Slug($data['article_category_id']), new LongString($data['p_category_name'])) : new Slug($data['article_category_id']),
+            $data['article_body'],
+            $data['article_is_featured'],
+            new LongString($data['article_title']),
+            $data['article_cover_filename'] !== null ? new SlugFileName($data['article_cover_filename']) : null,
+            new DateTimeImmutable($data['article_creation_date_time']),
+            new DateTimeImmutable($data['article_last_update_date_time']),
+            null !== $data['article_review_id'] ? new Uint($data['article_review_id']) : null,
         );
     }
 
@@ -115,17 +115,17 @@ class Article implements Entity
 
     public function toArray(): array {
         return [
-            'p_id' => $this->id->__toString(),
-            'p_author_username' => $this->authorUsername->__toString(),
-            'p_category_id' => $this->category->__toString(),
+            'article_id' => $this->id->__toString(),
+            'article_author_id' => $this->authorUsername->__toString(),
+            'article_category_id' => $this->category->__toString(),
             'p_category_name' => $this->category instanceof Category ? $this->category->getName() : null,
-            'p_content' => $this->content,
-            'p_is_featured' => $this->isFeatured,
-            'p_title' => $this->title->__toString(),
-            'p_cover_filename' => $this->coverFilename?->__toString(),
-            'p_creation_datetime' => $this->creationDateTime->format('Y-m-d H:m:s'),
-            'p_last_update_datetime' => $this->lastUpdateDateTime->format('Y-m-d H:m:s'),
-            'p_review_id' => $this->reviewId?->toInt(),
+            'article_body' => $this->content,
+            'article_is_featured' => $this->isFeatured,
+            'article_title' => $this->title->__toString(),
+            'article_cover_filename' => $this->coverFilename?->__toString(),
+            'article_creation_date_time' => $this->creationDateTime->format('Y-m-d H:m:s'),
+            'article_last_update_date_time' => $this->lastUpdateDateTime->format('Y-m-d H:m:s'),
+            'article_review_id' => $this->reviewId?->toInt(),
         ];
     }
 }

@@ -10,8 +10,8 @@ class Category
 
     static function fromArray(array $data): self {
         return new self(
-            null !== $data['p_id'] ? new Slug($data['p_id']) : null,
-            new LongString($data['p_name']),
+            null !== $data['category_id'] ? new Slug($data['category_id']) : null,
+            new LongString($data['category_name']),
         );
     }
 
@@ -30,8 +30,8 @@ class Category
 
     public function toArray(): array {
         return [
-            'p_id' => $this->id->__toString(),
-            'p_name' => $this->name->__toString(),
+            'category_id' => $this->id->__toString(),
+            'category_name' => $this->name->__toString(),
         ];
     }
 }

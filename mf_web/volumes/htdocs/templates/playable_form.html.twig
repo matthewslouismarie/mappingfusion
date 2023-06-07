@@ -6,27 +6,27 @@
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
     <div class="form-row">
         <label class="label" for="p-id">ID (générée automatiquement)</label>
-        <input class="input" id="p-id" name="p_id"{% if entity %} value="{{ entity['p_id'] }}"{% endif %}>
+        <input class="input" id="p-id" name="playable_id"{% if entity %} value="{{ entity['playable_id'] }}"{% endif %}>
     </div>
     <div class="form-row">
         <label class="label" for="p-name">Nom</label>
-        <input class="input" id="p-name" name="p_name" required{% if entity %} value="{{ entity['p_name'] }}"{% endif %}>
+        <input class="input" id="p-name" name="playable_name" required{% if entity %} value="{{ entity['playable_name'] }}"{% endif %}>
     </div>
     <div class="form-row">
         <label class="label" for="p-author-id">ID de l’auteur</label>
-        <select class="input" id="p-author-id" name="p_author_id" required{% if entity %} value="{{ entity['p_author_id'] }}"{% endif %}>
+        <select class="input" id="p-author-id" name="playable_author_id" required>
             {% for a in authors %}
-            <option label="{{ a.name }}" value="{{ a.id }}">
+            <option label="{{ a.name }}" value="{{ a.id }}" {% if entity and entity['playable_author_id'] == a.id %}selected="selected"{% endif %}>
             {% endfor %}
         </select>
     </div>
     <div class="form-row">
         <label class="label" for="p-game-id">Si mod ou map, ID du jeu (laisser vide si c’est un jeu stand-alone)</label>
-        <select class="input" id="p-game-id" name="p_game_id"{% if entity and entity['p_game_id'] %} value="{{ entity['p_game_id'] }}"{% endif %}>
+        <select class="input" id="p-game-id" name="playable_game_id"{% if entity and entity['playable_game_id'] %} value="{{ entity['playable_game_id'] }}"{% endif %}>
             <option value="">
             {% for p in playables %}
-            {% if entity is null or p.id != entity['p_id'] %}
-            <option label="{{ p.name }}" value="{{ p.id }}"{% if entity and entity['p_game_id'] == p.id %} selected{% endif %}>
+            {% if entity is null or p.id != entity['playable_id'] %}
+            <option label="{{ p.name }}" value="{{ p.id }}"{% if entity and entity['playable_game_id'] == p.id %} selected{% endif %}>
             {% endif %}
             {% endfor %}
         </select>

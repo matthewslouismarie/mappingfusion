@@ -15,17 +15,17 @@ class CategoryRepository
     }
 
     public function add(Category $category): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_category VALUES (:p_id, :p_name);');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_category VALUES (:category_id, :category_name);');
         $stmt->execute($category->toArray());
     }
 
     public function delete(string $id): void {
-        $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_category WHERE p_id = ?;');
+        $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_category WHERE category_id = ?;');
         $stmt->execute([$id]);
     }
 
     public function find(string $id): ?Category {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_category WHERE (p_id = ?) LIMIT 1;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_category WHERE category_id = ? LIMIT 1;');
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
@@ -49,7 +49,7 @@ class CategoryRepository
 
     public function update(string $previousId, Category $category): void {
         if ($previousId === $category->getId()) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_category SET p_name = :p_name WHERE p_id = :p_id;');
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_category SET category_name = :category_name WHERE category_id = :category_id;');
             $stmt->execute($category->toArray());
         } else {
             $this->conn->getPdo()->beginTransaction();

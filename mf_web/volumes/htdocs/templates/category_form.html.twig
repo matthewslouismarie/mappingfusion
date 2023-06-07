@@ -6,11 +6,11 @@
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
     <div class="form-row">
         <label class="label" for="p-id">ID de la catégorie (peut être laissé vide, généré automatiquement)</label>
-        <input class="input" id="p-id" name="p_id" value="{% if entity %}{{ entity['p_id'] }}{% endif %}">
+        <input class="input" id="p-id" name="category_id" value="{% if entity %}{{ entity['category_id'] }}{% endif %}">
     </div>
     <div class="form-row">
         <label class="label" for="p-name">Nom de la catégorie</label>
-        <input class="input" id="p-name" name="p_name" required{% if entity %} value="{{ entity['p_name'] }}"{% endif %}>
+        <input class="input" id="p-name" name="category_name" required{% if entity %} value="{{ entity['category_name'] }}"{% endif %}>
     </div>
     <button type="submit">Poster</button>
 </form>

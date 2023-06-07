@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article{% endblock %}
+
+{% block bodyContent %}
+<form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
+    <div class="form-row">
+        <label class="label" for="p-id">ID</label>
+        <input class="input" id="p-id" name="article_id" required value="{% if article %}{{ article['article_id'] }}{% endif %}">
+    </div>
+    <div class="form-row">
+        <label class="label" for="p-title">Titre</label>
+        <textarea class="input" id="p-title" name="article_title" required>{% if article %}{{ article['article_title'] }}{% endif %}</textarea>
+    </div>
+    <div class="form-row">
+        <label class="label" for="p-category-id">Catégorie</label>
+        <select id="p-category-id" name="article_category_id" required value="{% if article %}{{ article['article_category_id'] }}{% endif %}">
+            {% for c in categories %}
+            <option value="{{ c.id }}" label="{{ c.name }}">
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-row -singleimage">
+        <label class="label" for="p-cover-filename">Couverture</label>
+        <input accept="image/*" class="input" id="p-cover-filename" name="p_cover_uploaded_file" type="file">
+        {% if article and article['article_cover_filename'] %}
+        <p>Couverture actuelle : {{ article['article_cover_filename'] }}.</p>
+        <img alt="Image actuelle de couverture de l’article" class="image" src="/public/uploaded/{{ article['article_cover_filename'] }}">
+        {% endif %}
+    </div>
+    <div class="form-row -checkbox">
+        <input class="input" id="is-featured" name="article_is_featured" type="checkbox"{% if article %}{% if article['article_is_featured'] %} checked{% endif %}{% endif %}><label class="label" for="is-featured">Mettre à la une</label>
+    </div>
+    <div class="form-row">
+        <label class="label" for="review-id">ID du test lié</label>
+        <input class="input" id="review-id" name="article_review_id"{% if article %} value="{{ article['article_review_id'] }}"{% endif %}>
+    </div>
+    <div class="form-row">
+        <label class="label" for="p-content">Contenu de l’article</label>
+        <textarea class="input" id="p-content" name="article_body" required>{% if article %}{{ article['article_body'] }}{% endif %}</textarea>
+    </div>
+    <button type="submit">Poster</button>
+    {% if article %}
+    <input type="hidden" name="article_author_id" value="{{ article['article_author_id'] }}">
+    <input type="hidden" name="p_category_name" value="{{ article['p_category_name'] }}">
+    <input type="hidden" name="article_cover_filename" value="{{ article['article_cover_filename'] }}">
+    <input type="hidden" name="article_creation_date_time" value="{{ article['article_creation_date_time'] }}">
+    <input type="hidden" name="article_last_update_date_time" value="{{ article['article_last_update_date_time'] }}">
+    {% endif %}
+</form>
+{% endblock %}

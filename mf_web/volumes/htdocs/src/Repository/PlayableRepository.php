@@ -14,17 +14,17 @@ class PlayableRepository
     }
 
     public function add(Playable $playable): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:p_id, :p_name, :p_author_id, :p_game_id);');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:playable_id, :playable_name, :playable_author_id, :playable_game_id);');
         $stmt->execute($playable->toArray());
     }
 
     public function delete(string $id): void {
-        $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_playable WHERE p_id = ?;');
+        $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_playable WHERE playable_id = ?;');
         $stmt->execute([$id]);
     }
 
     public function find(string $id): ?Playable {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_playable WHERE (p_id = ?) LIMIT 1;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_playable WHERE (playable_id = ?) LIMIT 1;');
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
@@ -48,7 +48,7 @@ class PlayableRepository
 
     public function update(string $previousId, Playable $playable): void {
         if ($previousId === $playable->getId()) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET p_name = :p_name, p_author_id = :p_author_id, p_game_id = :p_game_id WHERE p_id = :p_id;');
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_name = :playable_name, playable_author_id = :playable_author_id, playable_game_id = :playable_game_id WHERE playable_id = :playable_id;');
             $stmt->execute($playable->toArray());
         } else {
             $this->conn->getPdo()->beginTransaction();

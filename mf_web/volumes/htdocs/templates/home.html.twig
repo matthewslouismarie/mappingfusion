@@ -48,9 +48,14 @@
             <p class="p">proposés par l’équipe</p>
         </hgroup>
         <ul class="reviews">
-            {% for a in reviews %}
+            {% for r in last_reviews %}
             <li class="item">
-                <a class="link"></a>
+                <a class="link">
+                    <div>
+                        <mark>{{ r.title }}</mark>
+                        {# <i>{{ r.}} #}
+                    </div>
+                </a>
             </li>
             {% endfor %}
         </ul>

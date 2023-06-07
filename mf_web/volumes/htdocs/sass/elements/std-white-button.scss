@@ -1,5 +1,6 @@
 .std-white-button {
     @include white-button;
     display: inline-block;
-    font-weight: bold;
+    font-weight: $txt-weight-semi-bold;
+    font-size: $txt-l-font-size;
 }
