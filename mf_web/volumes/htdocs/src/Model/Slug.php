@@ -11,9 +11,13 @@ class Slug implements Stringable
 
     private LongString $value;
 
-    public function __construct(string $value) {
-        $this->value = new LongString(preg_replace('/[^a-z0-9\-]/', '', preg_replace('/[ _]/', '-', strtolower($value))));
-        if (0 === strlen($this->value)) {
+    public function __construct(string $value, bool $transform = false) {
+        if ($transform) {
+            $this->value = new LongString(preg_replace('/[^a-z0-9\-]/', '', preg_replace('/[ _]/', '-', strtolower($value))));
+        } else {
+            $this->value = new LongString($value);
+        }
+        if (0 === strlen($this->value) || 1 !== preg_match('/'.self::REGEX.'/', $this->value)) {
             throw new UnexpectedValueException();
         }
     }

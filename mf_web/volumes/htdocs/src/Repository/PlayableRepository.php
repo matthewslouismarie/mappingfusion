@@ -14,7 +14,7 @@ class PlayableRepository
     }
 
     public function add(Playable $playable): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:playable_id, :playable_name, :playable_author_id, :playable_game_id);');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:playable_id, :playable_name, :playable_game_id);');
         $stmt->execute($playable->toArray());
     }
 
@@ -48,7 +48,7 @@ class PlayableRepository
 
     public function update(string $previousId, Playable $playable): void {
         if ($previousId === $playable->getId()) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_name = :playable_name, playable_author_id = :playable_author_id, playable_game_id = :playable_game_id WHERE playable_id = :playable_id;');
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_name = :playable_name, playable_game_id = :playable_game_id WHERE playable_id = :playable_id;');
             $stmt->execute($playable->toArray());
         } else {
             $this->conn->getPdo()->beginTransaction();

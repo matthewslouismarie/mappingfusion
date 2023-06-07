@@ -19,7 +19,7 @@ class Author implements Entity
         ?string $id,
         string $name,
     ) {
-        $this->id = $id !== null ? new Slug($id) : new Slug($name);
+        $this->id = $id !== null ? new Slug($id) : new Slug($name, true);
         $this->name = new LongString($name);
     }
 

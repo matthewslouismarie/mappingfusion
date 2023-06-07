@@ -4,37 +4,34 @@ namespace MF\Model;
 
 class Member implements Entity
 {
-    private LongString $passwordHash;
-    private LongString $username;
+    private LongString $id;
+
+    private PasswordHash $passwordHash;
 
     public function __construct(
-        string $passwordHash,
-        string $username,
+        string $id,
+        PasswordHash $passwordHash,
     ) {
-        $this->passwordHash = new LongString($passwordHash);
-        $this->username = new LongString($username);
+        $this->id = new LongString($id);
+        $this->passwordHash = $passwordHash;
     }
 
     public function getId(): string {
-        return $this->username;
+        return $this->id->__toString();
     }
 
-    public function getPasswordHash(): LongString {
+    public function getPasswordHash(): PasswordHash {
         return $this->passwordHash;
     }
 
-    public function getUsername(): LongString {
-        return $this->username;
-    }
-
-    public function setPasswordHash(string $passwordHash): Member {
-        return new Member($passwordHash, $this->username);
+    public function setPasswordHash(PasswordHash $passwordHash): Member {
+        return new Member($this->id, $passwordHash);
     }
 
     public function toArray(): array {
         return [
-            'p_username' => $this->username,
-            'p_password_hash' => $this->passwordHash,
+            'member_id' => $this->id->__toString(),
+            'member_password_hash' => $this->passwordHash->__toString(),
         ];
     }
 }

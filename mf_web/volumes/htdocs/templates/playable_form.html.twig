@@ -13,14 +13,6 @@
         <input class="input" id="p-name" name="playable_name" required{% if entity %} value="{{ entity['playable_name'] }}"{% endif %}>
     </div>
     <div class="form-row">
-        <label class="label" for="p-author-id">ID de l’auteur</label>
-        <select class="input" id="p-author-id" name="playable_author_id" required>
-            {% for a in authors %}
-            <option label="{{ a.name }}" value="{{ a.id }}" {% if entity and entity['playable_author_id'] == a.id %}selected="selected"{% endif %}>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="form-row">
         <label class="label" for="p-game-id">Si mod ou map, ID du jeu (laisser vide si c’est un jeu stand-alone)</label>
         <select class="input" id="p-game-id" name="playable_game_id"{% if entity and entity['playable_game_id'] %} value="{{ entity['playable_game_id'] }}"{% endif %}>
             <option value="">

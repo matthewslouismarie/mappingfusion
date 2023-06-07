@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un contributeur{% endblock %}
+
+{% block bodyContent %}
+<form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
+    <div class="form-row">
+        <label class="label" for="author-id">ID de l’auteur</label>
+        <select class="input" id="author-id" name="contribution_author_id" required>
+            {% for a in authors %}
+            <option label="{{ a.name }}" value="{{ a.id }}" {% if contribution and contribution['contribution_author_id'] == a.id %}selected="selected"{% endif %}>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-row -checkbox">
+        <input class="input" id="is-author" name="contribution_is_author" type="checkbox"{% if contribution %}{% if contribution['contribution_is_author'] %} checked{% endif %}{% endif %}><label class="label" for="is-author">Auteur du mod</label>
+    </div>
+    <div class="form-row">
+        <label class="label" for="summary">Contenu de l’article</label>
+        <textarea class="input" id="summary" name="contribution_summary">{% if article %}{{ article['contribution_summary'] }}{% endif %}</textarea>
+    </div>
+    <button type="submit">Poster</button>
+</form>
+{% endblock %}

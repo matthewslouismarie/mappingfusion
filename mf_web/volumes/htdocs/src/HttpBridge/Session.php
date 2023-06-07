@@ -8,9 +8,9 @@ class Session
 {
     const CURRENT_MEMBER_USERNAME = "cmu";
 
-    public function getCurrentMemberUsername(): ?LongString {
+    public function getCurrentMemberUsername(): ?string {
         if (isset($_SESSION[self::CURRENT_MEMBER_USERNAME]) && null !== $_SESSION[self::CURRENT_MEMBER_USERNAME]) {
-            return new LongString($_SESSION[self::CURRENT_MEMBER_USERNAME]);
+            return $_SESSION[self::CURRENT_MEMBER_USERNAME];
         } else {
             return null;
         }
@@ -20,7 +20,7 @@ class Session
         return isset($_SESSION[self::CURRENT_MEMBER_USERNAME]) && null !== $_SESSION[self::CURRENT_MEMBER_USERNAME];
     }
 
-    public function setCurrentMemberUsername(?LongString $username): void {
-        $_SESSION[self::CURRENT_MEMBER_USERNAME] = $username?->__toString();
+    public function setCurrentMemberUsername(?string $username): void {
+        $_SESSION[self::CURRENT_MEMBER_USERNAME] = $username;
     }
 }

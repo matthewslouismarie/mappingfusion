@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS e_article (
     article_creation_date_time TIMESTAMP NOT NULL DEFAULT NOW(),
     article_last_update_date_time TIMESTAMP NOT NULL,
     article_review_id SMALLINT UNSIGNED,
-    FOREIGN KEY (article_author_id) REFERENCES t_member (member_username),
+    FOREIGN KEY (article_author_id) REFERENCES e_member (member_id),
     FOREIGN KEY (article_category_id) REFERENCES e_category (category_id),
     FOREIGN KEY (article_review_id) REFERENCES e_review (review_id)
 )

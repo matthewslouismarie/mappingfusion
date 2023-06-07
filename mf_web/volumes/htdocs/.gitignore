@@ -1,3 +1,4 @@
-/cache
 /.env.json
+/cache
+/public/style.css
 /vendor
