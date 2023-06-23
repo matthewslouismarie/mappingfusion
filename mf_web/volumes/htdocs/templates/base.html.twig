@@ -6,16 +6,17 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/public/style.css?{{ app.stylesheetVersion }}">
+        <link rel="stylesheet" href="{{ app.resource('style.css') }}">
+        <link rel="icon" href="{{ app.resource('mapping-fusion-favicon.png') }}">
         <title>{% block title %}{% endblock %} - Mapping-Fusion</title>
         {% block resources %}{% endblock %}
     </head>
     <body class="site-body">
-        {% if session.currentMemberUsername %}
+        {% if app.session.currentMemberUsername %}
         <nav class="site-admin-nav">
             <ul class="list">
                 <li class="item">
-                    <a class="link" href="{{ app.router.generateUrl('manage_account') }}">{{ session.currentMemberUsername }}</a>
+                    <a class="link" href="{{ app.router.generateUrl('manage_account') }}">{{ app.session.currentMemberUsername }}</a>
                 </li>
                 <li class="item">
                     <a class="link" href="{{ app.router.generateUrl('admin_article_list') }}">Gérer les articles</a>
