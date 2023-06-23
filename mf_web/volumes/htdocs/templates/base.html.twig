@@ -47,9 +47,8 @@
                 </a>
                 <div class="text">
                     <p class="intro">Communauté francophone sur l’univers d’<strong>Half-Life et le modding pour Goldsource et Source</strong>.</p>
-                    <nav class="header-nav">
-                        <button></button>
-                        <ul class="list">
+                    <div class="header-nav">
+                        <ul class="header-menu" id="menu">
                             <li class="item">
                                 <input class="search" type="search" placeholder="Votre recherche">
                             </li>
@@ -60,10 +59,16 @@
                                 <a class="link">Comment installer un mod Half-Life</a>
                             </li>
                         </ul>
-                    </nav>
-                </div>
+                    </div>
+                </div>                
+                <button class="button" id="menu-button">
+                    <img alt="Menu" class="img" src="{{ app.resource('dropdown-menu-icon.svg') }}">
+                </button>
             </div>
         </header>
+
+        <div id="menu-container">
+        </div>
 
         <main class="site-section">
             {% block body %}
@@ -108,7 +113,13 @@
             </div>
         </footer>
 
-        {% block scriptInit %}{% endblock %}
+        {% block scriptInit %}
+        {% endblock %}
+        <script src="{{ app.resource('menu.js') }}"></script>
+        <script>
+            const menu = new Menu('menu-button', 'menu-container', 'menu');
+            menu.init();
+        </script>
     </body>
 </html>
 {% endapply %}

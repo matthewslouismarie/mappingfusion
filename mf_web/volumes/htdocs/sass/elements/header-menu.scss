@@ -1,14 +1,20 @@
-.header-nav {
-    > .list {
+.header-menu {
+    display: none;
+
+    &.-open {
+        display: block;
+    }
+
+    @media (min-width: $screen-s-size) {
         list-style-type: none;
         display: flex;
         gap: $gap-m;
         row-gap: $gap-xs;
         flex-wrap: wrap;
-
+    
         > .item {
             display: inline-block;
-
+    
             > .search,
             > .link {
                 display: block;
@@ -23,11 +29,11 @@
                 background-color: #f2f2f2;
                 border-color:#f2f2f2;
             }
-
+    
             > .link {
                 border-color: rgb(61, 156, 206);
                 color: rgb(32, 107, 150);
-
+    
             }
         }
     }
