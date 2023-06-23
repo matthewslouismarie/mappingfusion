@@ -71,7 +71,7 @@
             <p class="p">Les dernières</p>
             <h2 class="title">actualités</h2>
         </hgroup>
-        <ul class="std-block-list">
+        {# <ul class="std-block-list">
             {% for a in last_articles %}
             <li class="item">
                 <a class="article-mosaic" href="{{ app.router.generateUrl('view_article', {id: a.id}) }}">
@@ -88,7 +88,7 @@
                 </a>
             </li>
             {% endfor %}
-        </ul>
+        </ul> #}
         
         <a class="std-white-button">Voir plus de tests</a>
     </div>

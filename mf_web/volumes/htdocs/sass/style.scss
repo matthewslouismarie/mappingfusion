@@ -1,69 +1,37 @@
-$screen-s-size: 425px;
-$screen-m-size: 768px;
-$screen-l-size: 1024px;
-$border-xs: 1.5px;
-$border-s: 3px;
-$gap-xs: 0.3rem;
-$gap-s: 0.5rem;
-$gap-m: 1rem;
-$gap-l: 2rem;
-$gap-xl: 4rem;
-$block-padding-s: 0.3rem;
+$area-l-height: 16rem;
+$area-s-size: 3rem;
 $block-border: 0.5rem;
+$block-padding-s: 0.3rem;
+$border-s: 3px;
+$border-xs: 1.5px;
 $btn-l-height: 6rem;
+$gap-l: 2rem;
+$gap-m: 1rem;
+$gap-s: 0.5rem;
+$gap-xl: 4rem;
+$gap-xs: 0.3rem;
 $img-s-size: 16rem;
 $img-xs-size: 6rem;
 $img-xxs-size: 3rem;
-$area-l-height: 16rem;
-$area-s-size: 3rem;
+$screen-l-size: 1024px;
+$screen-m-size: 768px;
+$screen-s-size: 425px;
 $txt-l-font-size: 1.2rem;
-$txt-xl-font-size: 1.7rem;
+$txt-l-shadow-blur: 0.4rem;
 $txt-m-font-size: 1rem;
 $txt-s-font-size: 0.8rem;
-$txt-l-shadow-blur: 0.4rem;
+$txt-xs-font-size: 0.5rem;
+$txt-weight-bold: 700;
 $txt-weight-light: 300;
 $txt-weight-regular: 400;
 $txt-weight-semi-bold: 600;
-$txt-weight-bold: 700;
+$txt-xl-font-size: 1.7rem;
 
-@mixin button {
-    border-radius: $gap-s;
-    padding: $gap-s $gap-m;
-    text-decoration: none
-}
+@import 'reset.scss';
 
-@mixin white-button {
-    @include button;
-    background-color: #ffffff;
-    color: #0b4b6e;
-}
+@import 'mixins.scss';
 
-@mixin blue-button {
-    @include button;
-    background-color: #19577a;
-    color: #ffffff;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-em {
-    font-style: normal;
-    font-weight: bold;
-}
-
-img {
-    max-width: 100%;
-}
-
-._wrapper {
-    margin: auto;
-    width: 90%;
-    max-width: 70rem;
-}
+@import 'helpers/_wrapper.scss';
 
 @import 'glide/glide.scss';
 

@@ -1,11 +1,14 @@
 .glide {
+    overflow: hidden;
+    width: 100%;
+
     > .glide__bullets {
         display: flex;
         justify-content: center;
-        gap: $gap-m;
+        gap: $gap-s;
         position: relative;
         z-index: 2;
-        top: -$gap-l;
+        top: -($img-xs-size / 3 + $gap-xs);
         height: 0;
     
         > .glide__bullet {
@@ -17,8 +20,8 @@
                 font-size: 0;
                 background-size: cover;
                 background-position: center;
-                width: $img-xs-size;
-                height: $img-xs-size / 2;
+                width: $img-xs-size / 1.5;
+                height: $img-xs-size / 3;
             }
 
             &.glide__bullet--active {
@@ -41,6 +44,19 @@
             font-size: 2rem;
             text-shadow: 0 0 $txt-l-shadow-blur #000000;
             text-align: center;
+        }
+    }
+
+    @media (min-width: $screen-s-size) {
+        > .glide__bullets {
+            top: -($img-xs-size / 2 + $gap-s);
+
+            > .glide__bullet {
+                > .image {
+                    width: $img-xs-size;
+                    height: $img-xs-size / 2;
+                }
+            }
         }
     }
 }

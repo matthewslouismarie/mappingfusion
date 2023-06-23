@@ -1,24 +1,28 @@
 .site-section {
     &.-header {
-        > .wrapper {
+        > ._wrapper {
+            align-items: center;
             display: flex;
-            flex-wrap: wrap;
-            gap: $gap-l;
-            row-gap: $gap-xs;
+            gap: $gap-s;
+            flex-direction: column;
 
-            > .logo > .img {
-                height: $btn-l-height;
-                width: auto;
+            > .logo {
+                width: 10rem;
+
+                > .img {
+                    width: 100%;
+                    display: block;
+                }
             }
 
             > .text {
-                display: flex;
-                row-gap: $gap-xs;
-                flex-direction: column;
-                justify-content: center;
-
+                font-size: $txt-xs-font-size;
                 > .intro {
                     color: #19577a;
+                }
+
+                > .header-nav {
+                    display: none;
                 }
             }
         }
