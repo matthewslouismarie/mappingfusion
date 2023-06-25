@@ -1,20 +1,21 @@
 class Menu
 {
-    #buttonId;
-    #containerHtmlId;
-    #menuId;
+    #button;
+    #menu;
 
     constructor(buttonId, containerhtmlId, menuId) {
-        this.#containerHtmlId = containerhtmlId;
-        this.#buttonId = buttonId;
-        this.#menuId = menuId;
+        document.getElementById(containerhtmlId).classList.add('-js');
+        this.#button = document.getElementById(buttonId);
+        this.#menu = document.getElementById(menuId);
     }
 
     init() {
-        const btn = document.getElementById(this.#buttonId);
-        btn.style.display = 'block';
-        btn.onclick = (ev) => {
-            document.getElementById(this.#menuId).classList.add('-open');
+        this.#button.onclick = (ev) => {
+            if (this.#menu.classList.contains('-open')) {
+                this.#menu.classList.remove('-open');
+            } else {
+                this.#menu.classList.add('-open');
+            }
         };
     }
 }

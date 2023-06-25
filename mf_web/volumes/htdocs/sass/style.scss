@@ -1,7 +1,6 @@
 $area-l-height: 16rem;
 $area-s-size: 3rem;
-$block-border: 0.5rem;
-$block-padding-s: 0.3rem;
+$block-border-width: 0.5rem;
 $border-s: 3px;
 $border-xs: 1.5px;
 $btn-l-height: 6rem;
@@ -38,9 +37,9 @@ $txt-xl-font-size: 1.7rem;
 @import 'elements/site-admin-nav.scss';
 @import 'elements/site-body.scss';
 @import 'elements/site-footer.scss';
+@import 'elements/site-header.scss';
 @import 'elements/site-maps-and-mods-tests.scss';
 @import 'elements/site-section-beginners.scss';
-@import 'elements/site-section.scss';
 @import 'elements/site-social-networks.scss';
 
 @import 'elements/site-section-news-articles.scss';
@@ -54,6 +53,7 @@ $txt-xl-font-size: 1.7rem;
 @import 'elements/std-form.scss';
 @import 'elements/std-inline-list.scss';
 @import 'elements/std-review-mosaic.scss';
+@import 'elements/std-search-input.scss';
 @import 'elements/std-white-button.scss';
 
 @import 'elements/form-row.scss';

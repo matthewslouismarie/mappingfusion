@@ -1,0 +1,88 @@
+.site-header {
+    > ._wrapper {
+        align-items: center;
+        display: flex;
+        gap: $gap-s;
+        padding: $gap-s;
+
+        > .button {
+            background: none;
+            border: none;
+            display: none;
+
+            > .img {
+                display: block;
+            }
+        }
+
+        > .logo {
+            width: 10rem;
+
+            > .img {
+                width: 100%;
+                display: block;
+            }
+        }
+
+        > .text {
+            display: none;
+
+            > .intro {
+                color: #19577a;
+                display: none;
+                font-size: $txt-s-font-size;
+            }
+        }
+    }
+
+    @media (max-width: ($screen-s-size - 1)) {
+        > ._wrapper.-js {
+            flex-wrap: wrap;
+            justify-content: space-between;
+
+            > .button {
+                display: block;
+            }
+
+            > .text {
+                width: 100%;
+                order: 1;
+
+                &.-open {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    @media (min-width: $screen-s-size) {
+        > ._wrapper {
+            padding-left: 0;
+            padding-right: 0;
+
+            > .text {
+                display: block;
+            }
+        }
+    }
+
+    @media (min-width: $screen-m-size) {
+        > ._wrapper {
+            gap: $gap-l;
+        }
+    }
+
+    @media (min-width: $screen-l-size) {
+        > ._wrapper {
+            > .text {
+                display: flex;
+                flex-direction: column;
+                gap: $gap-s;
+
+                > .intro {
+                    display: block;
+                }
+            }
+        }
+    }
+}

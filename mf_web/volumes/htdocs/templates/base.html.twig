@@ -40,17 +40,17 @@
         </nav>
         {% endif %}
 
-        <header class="site-section -header">
-            <div class="_wrapper">
+        <header class="site-header">
+            <div class="_wrapper" id="menu-container">
                 <a class="logo" href="/">
                     <img alt="Mapping-Fusion" class="img" src="/public/mapping-fusion-logo.png">
                 </a>
-                <div class="text">
+                <div class="text" id="menu">
                     <p class="intro">Communauté francophone sur l’univers d’<strong>Half-Life et le modding pour Goldsource et Source</strong>.</p>
                     <div class="header-nav">
-                        <ul class="header-menu" id="menu">
-                            <li class="item">
-                                <input class="search" type="search" placeholder="Votre recherche">
+                        <ul class="header-menu">
+                            <li class="item -search">
+                                <input class="std-search-input" type="search" placeholder="Votre recherche">
                             </li>
                             <li class="item">
                                 <a class="link">Nouveau sur Sven Co-op ?</a>
@@ -66,9 +66,6 @@
                 </button>
             </div>
         </header>
-
-        <div id="menu-container">
-        </div>
 
         <main class="site-section">
             {% block body %}
