@@ -193,12 +193,12 @@ img {
 .site-section-beginners {
   background-color: #22668c;
   color: #ffffff;
-  padding: 1rem 0;
 }
 .site-section-beginners > ._wrapper, .site-section-beginners > ._wrapper > .left, .site-section-beginners > ._wrapper > .right {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  padding: 1rem 0.3rem;
 }
 .site-section-beginners > ._wrapper > .left > .title, .site-section-beginners > ._wrapper > .left > .text {
   font-size: 1.2rem;
@@ -224,6 +224,7 @@ img {
 @media (min-width: 425px) {
   .site-section-beginners > ._wrapper {
     flex-direction: row;
+    padding: 1rem 0;
   }
   .site-section-beginners > ._wrapper > .left, .site-section-beginners > ._wrapper > .right {
     padding: 4rem 0;

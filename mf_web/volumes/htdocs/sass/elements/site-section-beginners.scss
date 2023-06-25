@@ -1,7 +1,6 @@
 .site-section-beginners {
     background-color: #22668c;
     color: #ffffff;
-    padding: $gap-m 0;
 
     > ._wrapper,
     > ._wrapper > .left,
@@ -9,6 +8,7 @@
         display: flex;
         flex-direction: column;
         gap: $gap-l;
+        padding: $gap-m $gap-xs;
     }
 
     > ._wrapper {
@@ -45,6 +45,7 @@
     @media (min-width: $screen-s-size) {
         > ._wrapper {
             flex-direction: row;
+            padding: $gap-m 0;
 
             > .left,
             > .right {
