@@ -2,11 +2,11 @@
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    gap: $gap-m;
 
     @media (min-width: $screen-m-size) {
         flex-direction: row;
         justify-content: space-between;
+
         > .item {
             flex-basis: 40%;
             flex-grow: 1;

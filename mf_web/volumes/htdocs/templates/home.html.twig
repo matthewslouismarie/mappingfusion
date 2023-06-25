@@ -50,10 +50,10 @@
         <ul class="std-block-list">
             {% for r in last_reviews %}
             <li class="item">
-                <a class="link">
-                    <div>
-                        <mark>{{ r.storedReview.storedPlayable.name }}</mark>
-                        <i>{{ r.storedReview.storedPlayable.storedGame.name }}</i>
+                <a class="review-mosaic" style="background-image: url('{{ app.resource(r.coverFilename) }}');">
+                    <div class="content">
+                        <span class="playable">{{ r.storedReview.storedPlayable.name }}</span>
+                        <span class="game">{{ r.storedReview.storedPlayable.storedGame.name }}</span>
                     </div>
                 </a>
             </li>
@@ -71,7 +71,7 @@
             <p class="p">Les dernières</p>
             <h2 class="title">actualités</h2>
         </hgroup>
-        {# <ul class="std-block-list">
+        <ul class="std-block-list">
             {% for a in last_articles %}
             <li class="item">
                 <a class="article-mosaic" href="{{ app.router.generateUrl('view_article', {id: a.id}) }}">
@@ -88,7 +88,7 @@
                 </a>
             </li>
             {% endfor %}
-        </ul> #}
+        </ul>
         
         <a class="std-white-button">Voir plus de tests</a>
     </div>

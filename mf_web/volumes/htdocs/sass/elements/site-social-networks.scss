@@ -1,28 +1,28 @@
 .site-social-networks {
-    display: flex;
-    justify-content: center;
-    gap: $gap-l;
     background-color: #19577a;
     box-shadow: 0 (-$area-s-size / 2) $area-s-size ($area-s-size / 2) #19577a;
-    z-index: 1;
+    display: flex;
+    gap: $gap-l;
+    justify-content: center;
+    align-items: center;
     position: relative;
-    padding-top: $gap-l;
+    z-index: 1;
 
     > .link {
-        display: flex;
         align-items: center;
+        border: $border-xs solid #ffffff;
+        display: flex;
         gap: $gap-xs;
         justify-content: center;
         position: relative;
         top: 5vb;
-        border: $border-xs solid #ffffff;
 
         > .image {
             height: $img-xxs-size;
         }
 
         > .text {
-            text-align: center;
+            display: none;
         }
 
         &.-white {
@@ -31,6 +31,15 @@
 
         &.-blue {
             @include blue-button;
+        }
+    }
+
+    @media (min-width: $screen-s-size) {
+        > .link {
+            > .text {
+                text-align: center;
+                display: block;
+            }
         }
     }
 }

@@ -1,0 +1,33 @@
+.review-mosaic {
+    color: #ffffff;
+    display: block;
+
+    > .content {
+        align-items: center;
+        background-color: #00000099;
+        transition: background-color 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        gap: $gap-xs;
+        height: 8rem;
+        justify-content: center;
+
+        > .playable {
+            font-size: $txt-l-font-size;
+            font-weight: $txt-weight-semi-bold;
+        }
+
+        > .game {
+            font-size: $txt-m-font-size;
+            font-weight: $txt-weight-bold;
+            background-color: #3d9cce;
+            padding: $gap-xs;
+        }
+    }
+
+    &:hover {
+        > .content {
+            background-color: #00000066;
+        }
+    }
+}

@@ -8,7 +8,8 @@
     align-items: center;
 
     > ._wrapper {
-        > .section-heading {
+        > .section-heading,
+        > .std-block-list {
             margin-bottom: $gap-l;
         }
     }

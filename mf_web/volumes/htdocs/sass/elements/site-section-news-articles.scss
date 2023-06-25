@@ -12,6 +12,7 @@
 
         > .std-block-list {
             width: 100%;
+            gap: $gap-m;
         }
     }
 
@@ -21,6 +22,14 @@
                 url('/public/gauss-transparent.svg') no-repeat $img-xs-size ($img-xs-size / 2),
                 url('/public/bullsquid-transparent.svg') no-repeat top right
             ;
+
+            > .std-block-list {
+                flex-wrap: wrap;
+
+                > .item {
+                    width: 40%;
+                }
+            }
         }
     }
 }

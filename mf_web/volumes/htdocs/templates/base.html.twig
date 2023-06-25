@@ -6,8 +6,8 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="{{ app.resource('style.css') }}">
-        <link rel="icon" href="{{ app.resource('mapping-fusion-favicon.png') }}">
+        <link rel="stylesheet" href="{{ app.asset('style.css') }}">
+        <link rel="icon" href="{{ app.asset('mapping-fusion-favicon.png') }}">
         <title>{% block title %}{% endblock %} - Mapping-Fusion</title>
         {% block resources %}{% endblock %}
     </head>
@@ -62,7 +62,7 @@
                     </div>
                 </div>                
                 <button class="button" id="menu-button">
-                    <img alt="Menu" class="img" src="{{ app.resource('dropdown-menu-icon.svg') }}">
+                    <img alt="Menu" class="img" src="{{ app.asset('dropdown-menu-icon.svg') }}">
                 </button>
             </div>
         </header>
@@ -112,7 +112,7 @@
 
         {% block scriptInit %}
         {% endblock %}
-        <script src="{{ app.resource('menu.js') }}"></script>
+        <script src="{{ app.asset('menu.js') }}"></script>
         <script>
             const menu = new Menu('menu-button', 'menu-container', 'menu');
             menu.init();

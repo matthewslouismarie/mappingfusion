@@ -182,7 +182,7 @@ img {
   flex-direction: column;
   align-items: center;
 }
-.site-maps-and-mods-tests > ._wrapper > .section-heading {
+.site-maps-and-mods-tests > ._wrapper > .section-heading, .site-maps-and-mods-tests > ._wrapper > .std-block-list {
   margin-bottom: 2rem;
 }
 @media (min-width: 768px) {
@@ -242,29 +242,29 @@ img {
   }
 }
 .site-social-networks {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
   background-color: #19577a;
   box-shadow: 0 -1.5rem 3rem 1.5rem #19577a;
-  z-index: 1;
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  padding-top: 2rem;
+  z-index: 1;
 }
 .site-social-networks > .link {
-  display: flex;
   align-items: center;
+  border: 1.5px solid #ffffff;
+  display: flex;
   gap: 0.3rem;
   justify-content: center;
   position: relative;
   top: 5vb;
-  border: 1.5px solid #ffffff;
 }
 .site-social-networks > .link > .image {
   height: 3rem;
 }
 .site-social-networks > .link > .text {
-  text-align: center;
+  display: none;
 }
 .site-social-networks > .link.-white {
   border-radius: 0.5rem;
@@ -280,6 +280,12 @@ img {
   background-color: #19577a;
   color: #ffffff;
 }
+@media (min-width: 425px) {
+  .site-social-networks > .link > .text {
+    text-align: center;
+    display: block;
+  }
+}
 .site-section-news-articles {
   background-color: #19577a;
   color: #ffffff;
@@ -293,10 +299,17 @@ img {
 }
 .site-section-news-articles > ._wrapper > .std-block-list {
   width: 100%;
+  gap: 1rem;
 }
 @media (min-width: 768px) {
   .site-section-news-articles > ._wrapper {
     background: url("/public/crowbar-transparent.svg") no-repeat, url("/public/gauss-transparent.svg") no-repeat 6rem 3rem, url("/public/bullsquid-transparent.svg") no-repeat top right;
+  }
+  .site-section-news-articles > ._wrapper > .std-block-list {
+    flex-wrap: wrap;
+  }
+  .site-section-news-articles > ._wrapper > .std-block-list > .item {
+    width: 40%;
   }
 }
 .section-heading {
@@ -370,7 +383,6 @@ img {
   list-style-type: none;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
 @media (min-width: 768px) {
   .std-block-list {
@@ -498,4 +510,31 @@ img {
   .article-mosaic > .left {
     width: 16rem;
   }
+}
+.review-mosaic {
+  color: #ffffff;
+  display: block;
+}
+.review-mosaic > .content {
+  align-items: center;
+  background-color: #00000099;
+  transition: background-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  height: 8rem;
+  justify-content: center;
+}
+.review-mosaic > .content > .playable {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.review-mosaic > .content > .game {
+  font-size: 1rem;
+  font-weight: 700;
+  background-color: #3d9cce;
+  padding: 0.3rem;
+}
+.review-mosaic:hover > .content {
+  background-color: #00000066;
 }

@@ -15,13 +15,17 @@ class TemplateHelper
     ) {
     }
 
+    function getAsset(string $filename): string {
+        $version = filemtime(dirname(__FILE__) . '/../../public/' . $filename);
+        return "/public/$filename?version=$version";
+    }
+
     public function getMk(): MarkdownService {
         return $this->mk;
     }
 
     function getResource(string $filename): string {
-        $version = filemtime(dirname(__FILE__) . '/../../public/' . $filename);
-        return "/public/$filename?version=$version";
+        return "/public/uploaded/$filename";
     }
 
     public function getRouter(): Router {
