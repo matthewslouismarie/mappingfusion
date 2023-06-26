@@ -10,3 +10,7 @@ jobs:
         run: cp mf_web/volumes/htdocs/.env.json.dist mf_web/volumes/htdocs/.env.json
       - name: Run the Docker Compose script
         run: DOCKER_BUILDKIT=1 docker-compose up -d
+      - name: Install Composer dependencies
+        run: docker-compose exec mf_web composer install
+      - name: Generate style.css
+        run: docker-compose exec mf_web vendor/bin/pscss sass/style.scss public/style.css
