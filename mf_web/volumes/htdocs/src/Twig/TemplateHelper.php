@@ -2,6 +2,7 @@
 
 namespace MF\Twig;
 
+use MF\Configuration;
 use MF\HttpBridge\Session;
 use MF\MarkdownService;
 use MF\Router;
@@ -9,6 +10,7 @@ use MF\Router;
 class TemplateHelper
 {
     public function __construct(
+        private Configuration $config,
         private MarkdownService $mk,
         private Router $router,
         private Session $session,
@@ -16,16 +18,22 @@ class TemplateHelper
     }
 
     function getAsset(string $filename): string {
+        $publicUrl = $this->getPublicUrl();
         $version = filemtime(dirname(__FILE__) . '/../../public/' . $filename);
-        return "/public/$filename?version=$version";
+        return "$publicUrl/$filename?version=$version";
     }
 
     public function getMk(): MarkdownService {
         return $this->mk;
     }
 
+    public function getPublicUrl(): string {
+        return $this->config->getSetting('publicUrl');
+    }
+
     function getResource(string $filename): string {
-        return "/public/uploaded/$filename";
+        $publicUrl = $this->getPublicUrl();
+        return "$publicUrl/uploaded/$filename";
     }
 
     public function getRouter(): Router {
