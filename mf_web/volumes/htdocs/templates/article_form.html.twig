@@ -25,7 +25,7 @@
         <input accept="image/*" class="input" id="p-cover-filename" name="p_cover_uploaded_file" type="file">
         {% if article and article['article_cover_filename'] %}
         <p>Couverture actuelle : {{ article['article_cover_filename'] }}.</p>
-        <img alt="Image actuelle de couverture de l’article" class="image" src="/public/uploaded/{{ article['article_cover_filename'] }}">
+        <img alt="Image actuelle de couverture de l’article" class="image" src="{{ app.resource(article['article_cover_filename']) }}">
         {% endif %}
     </div>
     <div class="form-row -checkbox">
