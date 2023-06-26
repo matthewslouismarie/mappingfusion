@@ -16,7 +16,7 @@
 
     @media (min-width: $screen-m-size) {
         > ._wrapper {
-            background: url('/public/headcrab-transparent.svg') no-repeat, url('/public/marine-transparent.svg') no-repeat right/contain;
+            background: url(headcrab-transparent.svg') no-repeat, url(marine-transparent.svg') no-repeat right/contain;
         }
     }
 }
