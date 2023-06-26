@@ -14,3 +14,5 @@ jobs:
         run: docker-compose exec -T mf_web composer install
       - name: Generate style.css
         run: docker-compose exec -T mf_web vendor/bin/pscss sass/style.scss public/style.css
+      - name: Running basic tests
+        run: docker-compose exec -T mf_web php -f scripts/tests.php
