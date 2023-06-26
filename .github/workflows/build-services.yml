@@ -4,8 +4,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - name: Build the Docker images and start the containers
-        run:
-          - cp .env.dist .env
-          - cp mf_web/volumes/htdocs/.env.json.dist mf_web/volumes/htdocs/.env.json
-          - docker-compose up -d
+      - name: Create the Docker configuration file
+        run: cp .env.dist .env
+      - name: Create the web app configuration file
+        run: cp mf_web/volumes/htdocs/.env.json.dist mf_web/volumes/htdocs/.env.json
+      - name: Run the Docker Compose script
+        run: docker-compose up -d
