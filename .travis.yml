@@ -1,8 +1,0 @@
-services:
-    - docker
-before_install:
-    - cp .env.dist .env
-    - cp mf_web/volumes/htdocs/.env.json.dist mf_web/volumes/htdocs/.env.json
-    - docker-compose up -d
-script:
-    - docker-compose exec mf_web php -f index.php

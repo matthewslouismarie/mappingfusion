@@ -1,0 +1,6 @@
+on: [push]
+jobs:
+  build-services:
+    runs-on: ubuntu-22.04
+    steps:
+      - docker-compose up -d
