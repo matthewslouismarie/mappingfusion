@@ -13,7 +13,7 @@
         <ul class="glide__slides">
         {% for a in featured_articles %}
             <li class="glide__slide">
-                <a class="link" href="{{ app.router.generateUrl('article', {id: a.id}) }}" style="background-image: url(/public/uploaded/{{ a.coverFilename }});">
+                <a class="link" href="{{ app.router.generateUrl('article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.coverFilename) }});">
                     <div class="text">{{ app.mk.format(a.title)|raw }}</div>
                 </a>
             </li>
@@ -23,7 +23,7 @@
     <div class="glide__bullets" data-glide-el="controls[nav]">
         {% for a in featured_articles %}
         <button class="glide__bullet" data-glide-dir="={{ loop.index0 }}" type="button">
-            <div class="image" style="background-image: url('/public/uploaded/{{ featured_articles[loop.index0].coverFilename }}');">{{ featured_articles[loop.index0].title }}</div>
+            <div class="image" style="background-image: url('{{ app.resource(featured_articles[loop.index0].coverFilename) }}');">{{ featured_articles[loop.index0].title }}</div>
         </button>
         {% endfor %}
   </div>
@@ -75,7 +75,7 @@
             {% for a in last_articles %}
             <li class="item">
                 <a class="article-mosaic" href="{{ app.router.generateUrl('view_article', {id: a.id}) }}">
-                    <div class="left" style="background-image: url('/public/uploaded/{{ a.coverFilename }}');">
+                    <div class="left" style="background-image: url('{{ app.resource(a.coverFilename) }}');">
                         <em class="std-badge">{{ a.category.name }}</em>
                     </div>
                     <div class="right">
