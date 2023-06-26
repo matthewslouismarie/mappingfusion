@@ -16,8 +16,9 @@ class Connection
         Configuration $config,
     ) {
         $dbName = $config->getSetting('DB_NAME');
-        $dbPwd = $config->getSetting('DB_ROOT_PWD');
-        $this->pdo = new PDO("mysql:host=mf_db", 'root', $dbPwd, [PDO::ATTR_PERSISTENT => true]);
+        $dbPwd = $config->getSetting('DB_PASSWORD');
+        $dbUsername = $config->getSetting('DB_USERNAME');
+        $this->pdo = new PDO("mysql:host=mf_db", $dbUsername, $dbPwd, [PDO::ATTR_PERSISTENT => true]);
         $this->pdo->exec("CREATE DATABASE IF NOT EXISTS ${dbName}");
         $this->pdo->exec('USE ' . $dbName);
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_member.sql'), LongString::MAX_LENGTH));
