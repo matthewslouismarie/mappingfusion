@@ -18,9 +18,9 @@
 
     @media (min-width: $screen-m-size) {
         > ._wrapper {
-            background: url(crowbar-transparent.svg') no-repeat,
-                url(gauss-transparent.svg') no-repeat $img-xs-size ($img-xs-size / 2),
-                url(bullsquid-transparent.svg') no-repeat top right
+            background: url('crowbar-transparent.svg') no-repeat,
+                url('gauss-transparent.svg') no-repeat $img-xs-size ($img-xs-size / 2),
+                url('bullsquid-transparent.svg') no-repeat top right
             ;
 
             > .std-block-list {

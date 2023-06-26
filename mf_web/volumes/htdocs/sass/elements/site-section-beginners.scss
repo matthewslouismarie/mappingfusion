@@ -58,14 +58,14 @@
     @media (min-width: $screen-m-size) {
         > ._wrapper {
             > .left {   
-                background-image: url(barney-transparent.svg');
+                background-image: url('barney-transparent.svg');
                 background-position: right;
                 background-repeat: no-repeat;
                 background-size: contain;
             }
 
             > .right {
-                background: url(munition-transparent.svg') no-repeat center right, url(grenade-transparent.svg') no-repeat top;
+                background: url('munition-transparent.svg') no-repeat center right, url('grenade-transparent.svg') no-repeat top;
             }
         }
     }
