@@ -1,0 +1,23 @@
+.std-article {
+    > .imafraidijustbluemyself {
+        background-color: $color-blue-3;
+        height: $area-height-l * 2;
+    }
+
+    > .content {
+        margin-top: -$area-height-l;
+
+        h1,
+        h2,
+        h3 {
+            color: $color-blue-0;
+            margin-bottom: $gap-m;
+        }
+
+        p {
+            color: $color-white;
+            line-height: $txt-font-size-l;
+            margin-bottom: $gap-s;
+        }
+    }
+}

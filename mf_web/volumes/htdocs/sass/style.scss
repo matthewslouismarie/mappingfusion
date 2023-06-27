@@ -1,5 +1,10 @@
-$area-l-height: 16rem;
+$area-height-l: 40vh;
 $area-size-s: 3rem;
+$color-blue-0: #3d9cce;
+$color-blue-1: #428ab4;
+$color-blue-2: #19577a;
+$color-blue-3: #0c4b6e;
+$color-white: #ffffff;
 $block-border-width: 0.5rem;
 $border-s: 3px;
 $border-xs: 1.5px;
@@ -54,6 +59,7 @@ $txt-weight-semi-bold: 600;
 
 @import 'elements/header-menu.scss';
 
+@import 'elements/std-article.scss';
 @import 'elements/std-badge.scss';
 @import 'elements/std-block-list.scss';
 @import 'elements/std-button.scss';
@@ -64,6 +70,7 @@ $txt-weight-semi-bold: 600;
 @import 'elements/form-row.scss';
 
 
+@import 'elements/article-cover.scss';
 @import 'elements/article-mosaic.scss';
 
 @import 'elements/review-mosaic.scss';

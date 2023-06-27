@@ -13,7 +13,7 @@
         <ul class="glide__slides">
         {% for a in featured_articles %}
             <li class="glide__slide">
-                <a class="link" href="{{ app.router.generateUrl('article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.coverFilename) }});">
+                <a class="link" href="{{ app.router.generateUrl('view_article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.coverFilename) }});">
                     <div class="text">{{ app.mk.format(a.title)|raw }}</div>
                 </a>
             </li>

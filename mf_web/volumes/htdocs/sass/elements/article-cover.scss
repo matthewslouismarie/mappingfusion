@@ -1,0 +1,20 @@
+.article-cover {
+    background-size: cover;
+    background-position: center;
+
+    > .content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: $area-height-l;
+        background: url('blue-shadow.png') bottom repeat-x;
+        background-size: auto 50%;
+
+        > .title {
+            color: $color-white;
+            text-align: center;
+            font-weight: $txt-weight-semi-bold;
+            font-size: $txt-font-size-xl;
+        }
+    }
+}

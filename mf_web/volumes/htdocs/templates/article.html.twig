@@ -2,4 +2,19 @@
 
 {% block title %}{{ article.title }}{% endblock %}
 
-{% block bodyContent %}{{ article.content }}{% endblock %}
+{% block body %}
+<article class="std-article">
+    <div class="imafraidijustbluemyself">
+        <div class="article-cover" style="background-image: url('{{ app.resource(article.coverFilename) }}');">
+            <div class="content">
+                <h1 class="title">{{ article.title }}</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="content _wrapper">
+    {{ app.mk.format(article.content)|raw }}
+    </div>
+</article>
+
+{% endblock %}
