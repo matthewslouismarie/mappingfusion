@@ -8,7 +8,7 @@
         gap: $gap-s;
         position: relative;
         z-index: 2;
-        top: -($img-size-xs / 3 + $gap-xs);
+        top: -($img-size-xs / 2);
         height: 0;
     
         > .glide__bullet {
@@ -54,8 +54,6 @@
 
     @media (min-width: $screen-size-m) {
         > .glide__bullets {
-            top: -($img-size-xs / 2 + $gap-s);
-
             > .glide__bullet {
                 > .image {
                     width: $img-size-xs;
@@ -67,13 +65,12 @@
 
     @media (min-width: $screen-size-l) {
         > .glide__bullets {
-            top: -($img-size-s / 2 + $gap-s);
             gap: $gap-l;
 
             > .glide__bullet {
                 > .image {
-                    width: $img-size-s;
-                    height: $img-size-s / 2;
+                    width: $img-size-s / 1.75;
+                    height: $img-size-s / 3.5;
                 }
             }
         }
@@ -82,8 +79,21 @@
             .glide__slides {
                 .glide__slide {
                     > .link {
-                        padding-bottom: $gap-xl + $img-size-s / 2;
+                        padding-bottom: $gap-xl + $img-size-s / 3.5;
                     }
+                }
+            }
+        }
+    }
+
+    @media (min-width: $screen-size-xl) {
+        > .glide__bullets {
+            top: -($img-size-s / 2 + $gap-s);
+
+            > .glide__bullet {
+                > .image {
+                    width: $img-size-s;
+                    height: $img-size-s / 2;
                 }
             }
         }
