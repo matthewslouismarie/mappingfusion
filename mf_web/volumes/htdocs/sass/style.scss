@@ -1,30 +1,35 @@
 $area-l-height: 16rem;
-$area-s-size: 3rem;
+$area-size-s: 3rem;
 $block-border-width: 0.5rem;
 $border-s: 3px;
 $border-xs: 1.5px;
 $btn-l-height: 6rem;
-$gap-l: 2rem;
-$gap-m: 1rem;
-$gap-s: 0.5rem;
-$gap-xl: 4rem;
-$gap-xs: 0.3rem;
-$img-s-size: 16rem;
-$img-xs-size: 6rem;
-$img-xxs-size: 3rem;
-$screen-l-size: 1024px;
-$screen-m-size: 768px;
-$screen-s-size: 425px;
-$txt-l-font-size: 1.2rem;
-$txt-l-shadow-blur: 0.4rem;
-$txt-m-font-size: 1rem;
-$txt-s-font-size: 0.8rem;
-$txt-xs-font-size: 0.5rem;
+// @todo Gaps should be in another units, probably.
+$gap-l: 32px;
+$gap-m: 16px;
+$gap-s: 8px;
+$gap-xl: 64px;
+$gap-xl: 128px;
+$gap-xs: 4.8px;
+$icon-size-s: 16rem;
+$icon-size-xs: 6rem;
+$icon-size-xxs: 3rem;
+$img-size-s: 256px;
+$img-size-xs: 128px;
+$img-size-xxs: 64px;
+$screen-size-l: 1024px;
+$screen-size-m: 768px;
+$screen-size-s: 425px;
+$txt-font-size-l: 1.2rem;
+$txt-font-size-m: 1rem;
+$txt-font-size-s: 0.8rem;
+$txt-font-size-xl: 1.7rem;
+$txt-font-size-xs: 0.5rem;
+$txt-shadow-blur-l: 6.4px;
 $txt-weight-bold: 700;
 $txt-weight-light: 300;
 $txt-weight-regular: 400;
 $txt-weight-semi-bold: 600;
-$txt-xl-font-size: 1.7rem;
 
 @import 'reset.scss';
 
@@ -50,11 +55,10 @@ $txt-xl-font-size: 1.7rem;
 
 @import 'elements/std-badge.scss';
 @import 'elements/std-block-list.scss';
+@import 'elements/std-button.scss';
 @import 'elements/std-form.scss';
 @import 'elements/std-inline-list.scss';
-@import 'elements/std-review-mosaic.scss';
 @import 'elements/std-search-input.scss';
-@import 'elements/std-white-button.scss';
 
 @import 'elements/form-row.scss';
 

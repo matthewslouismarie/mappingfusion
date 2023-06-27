@@ -1,14 +1,14 @@
 .site-header {
     > ._wrapper {
-        align-items: center;
         display: flex;
+        align-items: stretch;
         gap: $gap-s;
         padding: $gap-s;
 
         > .button {
+            display: none;
             background: none;
             border: none;
-            display: none;
 
             > .img {
                 display: block;
@@ -16,7 +16,7 @@
         }
 
         > .logo {
-            width: 10rem;
+            width: 50%;
 
             > .img {
                 width: 100%;
@@ -28,14 +28,15 @@
             display: none;
 
             > .intro {
-                color: #19577a;
                 display: none;
-                font-size: $txt-s-font-size;
+                font-size: $txt-font-size-s;
+
+                color: #19577a;
             }
         }
     }
 
-    @media (max-width: ($screen-s-size - 1)) {
+    @media (max-width: ($screen-size-s - 1)) {
         > ._wrapper.-js {
             flex-wrap: wrap;
             justify-content: space-between;
@@ -55,32 +56,46 @@
         }
     }
 
-    @media (min-width: $screen-s-size) {
+    @media (min-width: $screen-size-s) {
         > ._wrapper {
             padding-left: 0;
             padding-right: 0;
 
+            > .logo {
+                width: 30%;
+            }
+
             > .text {
-                display: block;
+                display: flex;
+                justify-content: center;
             }
         }
     }
 
-    @media (min-width: $screen-m-size) {
+    @media (min-width: $screen-size-m) {
         > ._wrapper {
             gap: $gap-l;
+
+            > .logo {
+                width: 15%;
+            }
         }
     }
 
-    @media (min-width: $screen-l-size) {
+    @media (min-width: $screen-size-l) {
         > ._wrapper {
+            > .logo {
+                width: 10%;
+            }
+
             > .text {
                 display: flex;
                 flex-direction: column;
                 gap: $gap-s;
 
                 > .intro {
-                    display: block;
+                    display: block;                
+                    font-size: $txt-font-size-m;
                 }
             }
         }

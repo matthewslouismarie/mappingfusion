@@ -29,13 +29,13 @@
   </div>
 </div>
 <div class="site-social-networks">
-    <a class="link -white">
+    <a class="std-button -white -withicon">
         <img alt="Discord" class="image" src="{{ app.asset('discord_logo.svg') }}">
-        <div class="text">Rejoignez-nous<br><em>sur Discord</em></div>
+        <div class="text">Rejoignez-nous<br><span class="bold">sur Discord</span></div>
     </a>
-    <a class="link -blue">
+    <a class="std-button -blue -withicon">
         <img alt="Facebook" class="image" src="{{ app.asset('facebook_logo.svg') }}">
-        <div class="text">Rejoignez-nous<br><em>sur Facebook</em></div>
+        <div class="text">Rejoignez-nous<br><span class="bold">sur Facebook</span></div>
     </a>
 </div>
 <section class="site-maps-and-mods-tests">
@@ -59,7 +59,11 @@
             </li>
             {% endfor %}
         </ul>
-        <a class="std-white-button">Voir plus de tests</a>
+        <a class="std-button -white">
+            <div class="text">
+                <span class="bold">Voir plus de tests</span>
+            </div>
+        </a>
     </div>
 </section>
 <section class="site-section-news-articles">
@@ -71,7 +75,7 @@
             <p class="p">Les dernières</p>
             <h2 class="title">actualités</h2>
         </hgroup>
-        <ul class="std-block-list">
+        <ul class="std-block-list -small">
             {% for a in last_articles %}
             <li class="item">
                 <a class="article-mosaic" href="{{ app.router.generateUrl('view_article', {id: a.id}) }}">
@@ -90,7 +94,11 @@
             {% endfor %}
         </ul>
         
-        <a class="std-white-button">Voir plus de tests</a>
+        <a class="std-button -white">
+            <div class="text">
+                <span class="bold">Voir plus de tests</span>
+            </div>
+        </a>
     </div>
 </section>
 <section class="site-section-beginners">
@@ -104,14 +112,22 @@
                 <dt class="subject">Fonctionnement Sven Co-op</dt>
                 <dd class="text">Guide d’installation, lancement de partie, création de serveurs, etc…</dd>
                 <dd>
-                    <a class="std-white-button" href="#">En savoir plus</a>
+                    <a class="std-button -white" href="#">
+                        <div class="text">
+                            <span class="bold">Voir plus de tests</span>
+                        </div>
+                    </a>
                 </dd>
             </div>
             <div class="item">
                 <dt class="subject">Installation de mods</dt>
                 <dd class="text">Installation des mods pour Half-Life et Half-Life 2</dd>
                 <dd>
-                    <a class="std-white-button" href="#">En savoir plus</a>
+                    <a class="std-button -white" href="#">
+                        <div class="text">
+                            <span class="bold">Voir plus de tests</span>
+                        </div>
+                    </a>
                 </dd>
             </div>
         </dl>

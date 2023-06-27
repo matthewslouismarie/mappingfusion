@@ -1,7 +1,7 @@
 .std-inline-list {
     display: flex;
     flex-wrap: wrap;
-    font-size: $txt-s-font-size;
+    font-size: $txt-font-size-s;
     gap: $gap-s * 2;
     justify-content: center;
     list-style-type: "-";
@@ -14,7 +14,7 @@
             color: #ffffff;
 
             > .img {
-                height: $txt-s-font-size;
+                height: $txt-font-size-s;
             }
         }
 

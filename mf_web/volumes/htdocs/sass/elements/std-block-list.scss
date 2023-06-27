@@ -2,14 +2,28 @@
     list-style-type: none;
     display: flex;
     flex-direction: column;
+    gap: $gap-s;
 
-    @media (min-width: $screen-m-size) {
+    > .item {
+        flex-basis: auto;
+        flex-grow: 1;
+        height: 20vi;
+    }
+
+    @media (min-width: $screen-size-m) {
         flex-direction: row;
+        gap: 0;
         justify-content: space-between;
 
         > .item {
-            flex-basis: 40%;
-            flex-grow: 1;
+            height: 10vi;
+        }
+
+        &.-small {
+
+            > .item {
+                height: 7.5vi;
+            }
         }
     }
 }

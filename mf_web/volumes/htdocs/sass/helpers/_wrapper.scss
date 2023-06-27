@@ -1,11 +1,14 @@
 ._wrapper {
-    @media (min-width: $screen-s-size) {
+    @media (min-width: $screen-size-s) {
         width: 95%;
         margin: auto;
-        max-width: 70rem;
     }
 
-    @media (min-width: $screen-m-size) {
+    @media (min-width: $screen-size-m) {
         width: 90%;
+    }
+
+    @media (min-width: $screen-size-l) {
+        width: 85%;
     }
 }

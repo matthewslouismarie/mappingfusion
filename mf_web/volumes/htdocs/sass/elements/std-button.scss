@@ -1,0 +1,45 @@
+.std-button {
+    display: inline-flex;
+    align-items: center;
+    border-radius: $gap-s;
+    border: $border-xs solid #ffffff;
+    gap: $gap-s;
+    justify-content: center;
+    padding: $gap-xs;
+
+    text-decoration: none;
+
+    &.-blue {
+        background-color: #19577a;
+        color: #ffffff;
+    }
+
+    &.-white {
+        background-color: #ffffff;
+        color: #0b4b6e;
+    }
+
+    &.-withicon {
+        > .text {
+            display: none;
+        }
+    }
+
+    > .text {
+        text-align: center;
+
+        > .bold {
+            font-weight: $txt-weight-bold;
+        }
+    }
+
+    @media (min-width: $screen-size-s) {
+        padding: $gap-s;
+
+        &.-withicon {
+            > .text {
+                display: block;
+            }
+        }
+    }
+}

@@ -1,29 +1,25 @@
 .article-mosaic {
+    display: flex;
+    gap: $gap-s;
+    height: 100%;
     text-decoration: none;
 
-    > .left,
-    > .right {
-        height: $img-xs-size;
-    }
-
     > .left {
-        float: left;
-        width: $img-s-size * 0.5;
+        display: flex;
+        flex: 0 0 25%;
+        align-items: end;
+
         background-size: cover;
         background-position: center;
-        display: flex;
-        flex-wrap: wrap;
-        align-content: flex-end;
 
         > .std-badge {
             position: relative;
-            top: $txt-m-font-size / 2;
+            top: $txt-font-size-m / 2;
             left: $gap-s;
         }
     }
 
     > .right {
-        padding-left: $gap-s;
         overflow: hidden;
 
         > .date,
@@ -37,7 +33,7 @@
         > .title {
             color: #ffffff;
             font-weight: $txt-weight-semi-bold;
-            font-size: $txt-l-font-size;
+            font-size: $txt-font-size-l;
         }
 
         > .date {
@@ -51,25 +47,13 @@
         }
     }
 
-    @media (min-width: $screen-m-size) {
-        > .left,
-        > .right {
-            height: $img-xs-size * 1.25;
-        }
+    @media (min-width: $screen-size-m) {
 
-        > .left {        
-            width: $img-s-size * 0.75;
-        }
     }
 
-    @media (min-width: $screen-l-size) {
-        > .left,
-        > .right {
-            height: $img-xs-size * 1.5;
-        }
-
+    @media (min-width: $screen-size-l) {
         > .left {
-            width: $img-s-size;
+            flex: 0 0 35%;
         }
     }
 }
