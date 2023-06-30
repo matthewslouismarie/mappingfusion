@@ -1,4 +1,5 @@
 .glide {
+    $bullet-height: $img-size-xs / 3 + $border-s * 2;
     overflow: hidden;
     width: 100%;
 
@@ -8,7 +9,7 @@
         gap: $gap-s;
         position: relative;
         z-index: 2;
-        top: -($img-size-xs / 2);
+        top: -$bullet-height;
         height: 0;
     
         > .glide__bullet {
@@ -38,22 +39,31 @@
                     height: 60vh;
                     display: flex;
                     align-items: end;
-                    justify-content: center;
+                    justify-content: stretch;
                     font-size: 2rem;
-                    padding-bottom: $gap-xl;
+                    padding-bottom: $bullet-height + $gap-s;
         
                     background-position: center;
                     background-size: cover;
                     color: #ffffff;
                     text-decoration: none;
                     text-shadow: 0 0 $txt-shadow-blur-l #000000;
+
+                    > .text {
+                        flex-grow: 1;
+                        text-align: center;
+                    }
                 }
             }
         }
     }
 
-    @media (min-width: $screen-size-m) {
+    @media (min-width: $screen-size-m) {    
+        $bullet-height: $img-size-xs / 2 + $border-s * 2;
+        
         > .glide__bullets {
+            top: -$bullet-height;
+
             > .glide__bullet {
                 > .image {
                     width: $img-size-xs;
@@ -61,10 +71,23 @@
                 }
             }
         }
+
+        > .glide__track {
+            .glide__slides {
+                .glide__slide {
+                    > .link {
+                        padding-bottom: $bullet-height + $gap-s;
+                    }
+                }
+            }
+        }
     }
 
     @media (min-width: $screen-size-l) {
+        $bullet-height: $img-size-s / 3.5 + $border-s * 2;
+
         > .glide__bullets {
+            top: -$bullet-height;
             gap: $gap-l;
 
             > .glide__bullet {
@@ -79,21 +102,33 @@
             .glide__slides {
                 .glide__slide {
                     > .link {
-                        padding-bottom: $gap-xl + $img-size-s / 3.5;
+                        padding-bottom: $bullet-height + $gap-l;
                     }
                 }
             }
         }
     }
 
-    @media (min-width: $screen-size-xl) {
+    @media (min-width: $screen-size-xl) {    
+        $bullet-height: $img-size-s / 2 + $border-s * 2;
+        
         > .glide__bullets {
-            top: -($img-size-s / 2 + $gap-s);
+            top: -$bullet-height;
 
             > .glide__bullet {
                 > .image {
                     width: $img-size-s;
                     height: $img-size-s / 2;
+                }
+            }
+        }
+
+        > .glide__track {
+            .glide__slides {
+                .glide__slide {
+                    > .link {
+                        padding-bottom: $bullet-height + $gap-xl;
+                    }
                 }
             }
         }
