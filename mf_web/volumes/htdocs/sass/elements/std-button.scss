@@ -2,7 +2,7 @@
     display: inline-flex;
     align-items: center;
     border-radius: $gap-s;
-    border: $border-xs solid #ffffff;
+    border: $border-xs solid $color-white;
     gap: $gap-s;
     justify-content: center;
     padding: $gap-xs;
@@ -12,6 +12,18 @@
     &.-blue {
         background-color: #19577a;
         color: #ffffff;
+    }
+
+    &.-sm {
+        font-size: $txt-font-size-s;
+    }
+
+    &.-transparent {
+        color: $color-white;
+    }
+
+    &.-upper {
+        text-transform: uppercase;
     }
 
     &.-white {

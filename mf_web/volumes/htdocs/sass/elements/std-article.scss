@@ -1,23 +1,118 @@
 .std-article {
-    > .imafraidijustbluemyself {
-        background-color: $color-blue-3;
-        height: $area-height-l * 2;
+    display: flex;
+    flex-direction: column;
+    gap: $gap-xl;
+
+    > .blue {
+        height: 0;
+
+        > .imafraidijustbluemyself {
+            background-color: $color-blue-3;
+            height: $area-height-l * 2;
+        }
     }
 
-    > .content {
-        margin-top: -$area-height-l;
+    > .main {
+        max-width: 50em;
+        margin: auto;
+    
+        > .content {
 
-        h1,
-        h2,
-        h3 {
-            color: $color-blue-0;
-            margin-bottom: $gap-m;
+            h1,
+            h2,
+            h3 {
+                color: $color-blue-0;
+                margin-bottom: $gap-m;
+            }
+    
+            p {
+                color: $color-white;
+                line-height: $txt-font-size-l;
+                margin-bottom: $gap-s;
+            }
         }
 
-        p {
-            color: $color-white;
-            line-height: $txt-font-size-l;
-            margin-bottom: $gap-s;
+        > .nav {
+            display: none;
+        }
+    }
+
+    @media (min-width: $screen-size-m) {
+        > .main {
+            max-width: 70em;
+
+            display: flex;
+            flex-direction: row-reverse;
+            gap: $gap-xl;
+
+            > .content {
+                flex-grow: 4;
+            }
+            
+            > .nav {
+                display: flex;
+                flex-direction: column;
+                gap: $gap-m;
+                flex-grow: 1;
+                max-width: 20%;
+
+                > .frame {
+                    border: $border-xs solid $color-blue-1;
+                    padding: $gap-s;
+
+                    &.-articlenav {
+                        > .list {
+                            > .item {
+                                > .link {
+                                    display: block;
+                                    border-right: $border-m solid $color-blue-1;
+                                    color: $color-blue-1;
+                                    text-align: right;
+                                    padding: $gap-s;
+                                    font-weight: $txt-weight-semi-bold;
+
+                                    &.-active {
+                                        color: $color-white;
+                                        border-color: $color-white;
+                                        font-weight: $txt-weight-bold;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    &.-related {
+                        color: $color-white;
+
+                        > .heading {
+                            text-align: center;
+                            font-size: $txt-font-size-l;
+                        }
+
+                        > .list {
+                            display: flex;
+                            flex-direction: column;
+                            gap: $gap-s;
+
+                            > .item {
+                                > .link {
+                                    color: $color-white;
+                                    font-weight: $txt-weight-regular;
+                                    text-decoration: none;
+
+                                    > .image {
+                                        width: 100%;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    > .list {
+                        list-style-type: none;
+                    }
+                }
+            }
         }
     }
 }

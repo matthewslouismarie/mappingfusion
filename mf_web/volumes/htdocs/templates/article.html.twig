@@ -4,16 +4,59 @@
 
 {% block body %}
 <article class="std-article">
-    <div class="imafraidijustbluemyself">
-        <div class="article-cover" style="background-image: url('{{ app.resource(article.coverFilename) }}');">
-            <div class="content">
-                <h1 class="title">{{ article.title }}</h1>
-            </div>
+    <div class="blue">
+        <div class="imafraidijustbluemyself">
+        </div>
+    </div>
+    <div class="article-cover" style="background-image: url('{{ app.resource(article.coverFilename) }}');">
+        <div class="content">
+            <h1 class="title">{{ article.title }}</h1>
         </div>
     </div>
 
-    <div class="content _wrapper">
-    {{ app.mk.format(article.content)|raw }}
+    <div class="main _wrapper">
+        <nav class="nav">
+            <div class="frame -articlenav">
+                <ul class="list">
+                    <li class="item">
+                        <a class="link">Présentation</a>
+                    </li>
+                    <li class="item">
+                        <a class="link">Test explicatif</a>
+                    </li>
+                    <li class="item">
+                        <a class="link">Galerie d’images</a>
+                    </li>
+                    <li class="item">
+                        <a class="link">Résumé et notes</a>
+                    </li>
+                </ul>
+            </div>
+            <a href="#" class="std-button -upper -white">
+                <div class="text">
+                    <span class="bold">Comment installer un mod</span>
+                </div>
+            </a>
+            <div class="frame -related">
+                <h2 class="heading">Tests et articles similaires</h2>
+                <ul class="list">
+                    <li class="item">
+                        <a class="link" href="#">
+                            <img alt="{{ article.title }}" class="image" src="{{ app.resource(article.coverFilename) }}">
+                            {{ article.title }}
+                    </li>
+                    <li class="item">
+                        <a class="std-button -sm -transparent" href="#">Voir plus de tests</a>
+                    </li>
+                    <li class="item">
+                        <a class="std-button -sm -transparent" href="#">Voir plus d’actualité</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="content">
+            {{ app.mk.format(article.content)|raw }}
+        </div>
     </div>
 </article>
 
