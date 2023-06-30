@@ -1,8 +1,4 @@
 .std-article {
-    display: flex;
-    flex-direction: column;
-    gap: $gap-xl;
-
     > .blue {
         height: 0;
 
@@ -14,7 +10,7 @@
 
     > .main {
         max-width: 50em;
-        margin: auto;
+        margin: $gap-xl auto;
     
         > .content {
 
@@ -87,6 +83,7 @@
                         > .heading {
                             text-align: center;
                             font-size: $txt-font-size-l;
+                            margin-bottom: $gap-m;
                         }
 
                         > .list {
