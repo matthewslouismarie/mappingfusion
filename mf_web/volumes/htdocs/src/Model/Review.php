@@ -12,11 +12,11 @@ class Review
 
     private Rating $rating;
 
-    private ?string $body;
+    private string $body;
 
-    private ?string $cons;
+    private string $cons;
 
-    private ?string $pros;
+    private string $pros;
 
     private ?Playable $storedPlayable;
 
@@ -38,9 +38,9 @@ class Review
         ?int $id,
         string $playableId,
         float $rating,
-        ?string $body = null,
-        ?string $cons = null,
-        ?string $pros = null,
+        string $body,
+        string $cons,
+        string $pros,
         ?Playable $storedPlayable = null,
     ) {
         $this->id = null !== $id ? new Uint($id) : null;

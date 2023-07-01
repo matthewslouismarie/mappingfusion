@@ -45,11 +45,11 @@ class Fixture
         $this->repoAuthor->add($valve);
         $this->repoAuthor->add($loulimi);
         $this->repoAuthor->add($neophus);
-        $gs = new Playable(null, 'GoldSource', null);
-        $hl = new Playable(null, 'Half-Life', $gs->getId());
-        $hl2 = new Playable(null, 'Half-Life 2', $gs->getId());
-        $sc = new Playable(null, 'Sven Co-op', $gs->getId());
-        $crossedPaths = new Playable(null, 'Crossed Paths', $gs->getId());
+        $gs = new Playable(null, 'GoldSource', new DateTimeImmutable(), null);
+        $hl = new Playable(null, 'Half-Life', new DateTimeImmutable(), $gs->getId());
+        $hl2 = new Playable(null, 'Half-Life 2', new DateTimeImmutable(), $gs->getId());
+        $sc = new Playable(null, 'Sven Co-op', new DateTimeImmutable(), $gs->getId());
+        $crossedPaths = new Playable(null, 'Crossed Paths', new DateTimeImmutable(), $gs->getId());
         $this->repoPlayable->add($gs);
         $this->repoPlayable->add($hl);
         $this->repoPlayable->add($hl2);
@@ -62,10 +62,10 @@ class Fixture
         $this->repoContrib->add(new Contribution(null, $scteam->getId(), $sc->getId(), true));
         $cat = new Category(null, 'Tests');
         $this->repoCat->add($cat);
-        $review1 = $this->repoReview->add(new Review(null, $sc->getId(), 4));
-        $review2 = $this->repoReview->add(new Review(null, $sc->getId(), 5));
-        $review3 = $this->repoReview->add(new Review(null, $hl->getId(), 3.1));
-        $review4 = $this->repoReview->add(new Review(null, $hl2->getId(), 2.1));
+        $review1 = $this->repoReview->add(new Review(null, $sc->getId(), 4, '', '', ''));
+        $review2 = $this->repoReview->add(new Review(null, $sc->getId(), 5, '', '', ''));
+        $review3 = $this->repoReview->add(new Review(null, $hl->getId(), 3.1, '', '', ''));
+        $review4 = $this->repoReview->add(new Review(null, $hl2->getId(), 2.1, '', '', ''));
         $this->repoArticle->addNewArticle(new Article(
             null,
             $root->getId(),

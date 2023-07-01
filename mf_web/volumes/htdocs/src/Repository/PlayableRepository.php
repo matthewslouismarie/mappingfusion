@@ -14,7 +14,7 @@ class PlayableRepository
     }
 
     public function add(Playable $playable): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:playable_id, :playable_name, :playable_game_id, :playable_release_date_time);');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:playable_id, :playable_name, :playable_release_date_time, :playable_game_id);');
         $stmt->execute($playable->toArray());
     }
 
