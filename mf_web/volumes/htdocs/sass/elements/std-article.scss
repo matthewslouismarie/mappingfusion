@@ -9,15 +9,18 @@
     }
 
     > .main {
-        max-width: 50em;
-        margin: $gap-xl auto;
-    
         > .content {
+            max-width: 40em;
+            padding-bottom: $gap-l;
+            padding-top: $gap-l;
+
+            &.-review {
+                background-color: $color-blue-3;
+            }
 
             h1,
             h2,
             h3 {
-                color: $color-blue-0;
                 margin-bottom: $gap-m;
             }
     
@@ -35,22 +38,23 @@
 
     @media (min-width: $screen-size-m) {
         > .main {
-            max-width: 70em;
-
-            display: flex;
-            flex-direction: row-reverse;
-            gap: $gap-xl;
-
             > .content {
-                flex-grow: 4;
+                display: flex;
+                flex-direction: column;
+                gap: $gap-l;
+                max-width: unset;
+                padding-left: 5%;
+                padding-right: 30%;
             }
             
             > .nav {
                 display: flex;
                 flex-direction: column;
                 gap: $gap-m;
-                flex-grow: 1;
-                max-width: 20%;
+                padding-top: $gap-l;
+                position: absolute;
+                right: 5%;
+                width: 20%;
 
                 > .frame {
                     border: $border-xs solid $color-blue-1;
@@ -109,6 +113,40 @@
                         list-style-type: none;
                     }
                 }
+            }
+        }
+    }
+
+    @media (min-width: $screen-size-l) {
+        > .main {
+            > .content {
+                padding-right: 25%;
+            }
+            
+            > .nav {
+                display: flex;
+                flex-direction: column;
+                gap: $gap-m;
+                width: 15%;
+                position: absolute;
+                right: 5%;
+            }
+        }
+    }
+
+    @media (min-width: $screen-size-xl) {
+        > .main {
+            > .content {
+                padding-right: 20%;
+            }
+            
+            > .nav {
+                display: flex;
+                flex-direction: column;
+                gap: $gap-m;
+                width: 10%;
+                position: absolute;
+                right: 5%;
             }
         }
     }

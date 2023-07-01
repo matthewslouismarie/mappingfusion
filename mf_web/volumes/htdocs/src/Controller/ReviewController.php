@@ -60,9 +60,8 @@ class ReviewController implements ControllerInterface
     }
 
     private function retrieveEntityFromRequest(ServerRequestInterface $request, ?string $id): ?Review {
-
         if ('POST' === $request->getMethod()) {
-            return Review::fromArray($request->getParsedBody());
+            return Review::fromArray(['review_id' => $id ?? null] + $request->getParsedBody());
         } elseif (null !== $id) {
             $entity = $this->repo->find($id);
             if (null === $entity) {

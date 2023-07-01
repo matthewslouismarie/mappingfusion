@@ -60,17 +60,12 @@ class Article implements Entity
         $this->storedReview = $storedReview;
     }
 
+    // @todo Use prefix.
     public static function fromArray(array $data): self {
-        try {
-            $review = Review::fromArray($data);
-        } catch (OutOfBoundsException|TypeError $e) {
-            $review = null;
-        }
-        try {
-            $category = Category::fromArray($data);
-        } catch (OutOfBoundsException|TypeError $e) {
-            $category = null;
-        }
+        $review = isset($data['review_id']) ? Review::fromArray($data) : null;
+
+        $category = isset($data['category_id']) ? Category::fromArray($data) : null;
+
         return new self(
             $data['article_id'],
             $data['article_author_id'],

@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class="main _wrapper">
+    <div class="main">
         <nav class="nav">
             <div class="frame -articlenav">
                 <ul class="list">
@@ -54,6 +54,49 @@
                 </ul>
             </div>
         </nav>
+        <div class="content -review">
+            {% if article.isReview %}
+                <dl class="std-metadata">
+                    <div class="item">
+                        <dt class="term">Jeu :</dt>
+                        <dd class="def">{{ article.storedReview.storedPlayable.name }}</dd>
+                    </div>
+                    <div class="item">
+                        <dt class="term">Développeur :</dt>
+                        <dd class="def">{% for a in authors %}{{ a.name }}{% if not loop.last %}, {% endif %}{% endfor %}</dd>
+                    </div>
+                    <div class="item">
+                        <dt class="term">Date de sortie :</dt>
+                        <dd class="def">{{ article.storedReview.storedPlayable.releaseDateTime|date('Y') }}</dd>
+                    </div>
+                </dl>
+                <p class="p">{{ article.storedReview.body }}</p>
+                <div class="std-review">
+                    <div class="ratingcontainer">
+                        <strong class="rating">{{ article.storedReview.rating }}</strong>
+                    </div>
+                    <h2 class="heading">{{ article.storedReview.storedPlayable.name }} : l’avis de l’équipe</h2>
+                    <h3 class="subheading">Les plus</h3>
+                    <div class="markdown -pros">
+                        {% if article.storedReview.pros %}{{ app.mk.format(article.storedReview.pros)|raw }}{% else %}Rien à afficher.{% endif %}
+                    </div>
+                    <h3 class="subheading">Les moins</h3>
+                    <div class="markdown -cons">
+                        {% if article.storedReview.cons %}{{ app.mk.format(article.storedReview.cons)|raw }}{% else %}Rien à afficher.{% endif %}
+                    </div>
+                    <div class="relatedlinks">
+                        <a class="std-button -sm -white" href="#">
+                            <div class="text">
+                                <span class="bold">Page de téléchargement ModDB</span>
+                            </div>
+                        </a>
+                        <a class="std-button -sm -blue" href="#">
+                            <div class="text">Voir plus de tests</div>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
         <div class="content">
             {{ app.mk.format(article.content)|raw }}
         </div>

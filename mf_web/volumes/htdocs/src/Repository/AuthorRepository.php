@@ -24,7 +24,7 @@ class AuthorRepository
     }
 
     public function find(string $id): ?Author {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_author WHERE (author_id = ?) LIMIT 1;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_author WHERE author_id = ? LIMIT 1;');
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
@@ -44,6 +44,19 @@ class AuthorRepository
             $entities[] = Author::fromArray($r);
         }
         return $entities;
+    }
+
+    public function findAuthorsOf(string $playableId): array {
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_contribution LEFT JOIN e_author ON contribution_author_id = author_id WHERE contribution_playable_id = ? AND contribution_is_author;');
+        $stmt->execute([$playableId]);
+        $row = $stmt->fetch();
+        $authors = [];
+        while (false !== $row) {
+            $authors[] = Author::fromArray($row);
+            $row = $stmt->fetch();
+        }
+
+        return $authors;
     }
 
     public function update(string $previousId, Author $author): void {

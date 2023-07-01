@@ -1,0 +1,68 @@
+.std-review {
+    border: $border-m solid $color-white;
+    padding: $gap-m $gap-m 0 $gap-m;
+
+    > .ratingcontainer {
+        display: block;
+        float: right;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 8rem;
+        border: $border-m solid $color-white;
+        height: 8rem;
+
+        > .rating {
+            font-size: 6rem;
+            font-weight: $txt-weight-semi-bold;
+        }
+    }
+
+    > .heading,
+    > .subheading {
+        margin-bottom: $gap-l;
+    }
+
+    > .heading {
+        color: $color-white;
+    }
+
+    > .markdown {
+        margin-bottom: $gap-m;
+
+        > ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $gap-l;
+            list-style-type: none;
+
+            > li {
+                padding-left: $gap-l;
+                background: center left / $gap-m $gap-m no-repeat;
+            }
+        }
+
+        &.-pros {
+            > ul > li {
+                background-image: url('list-plus.svg');
+            }
+        }
+
+        &.-cons {
+            > ul > li {
+                background-image: url('list-minus.svg');
+            }
+        }
+    }
+
+    > .relatedlinks {
+        display: flex;
+        gap: $gap-m;
+        justify-content: center;
+
+        > .std-button {
+            transform: translateY(50%);
+        }
+    }
+}

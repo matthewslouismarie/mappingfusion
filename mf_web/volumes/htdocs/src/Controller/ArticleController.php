@@ -4,6 +4,7 @@ namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
 use MF\Repository\ArticleRepository;
+use MF\Repository\AuthorRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,6 +14,7 @@ class ArticleController implements ControllerInterface
     const ROUTE_ID = 'view_article';
 
     public function __construct(
+        private AuthorRepository $authorRepo,
         private ArticleRepository $repo,
         private TwigService $twig,
     ) {
@@ -23,6 +25,7 @@ class ArticleController implements ControllerInterface
         return new Response(
             body: $this->twig->render('article.html.twig', [
                 'article' => $article,
+                'authors' => $this->authorRepo->findAuthorsOf($article->getStoredReview()->getPlayableId()),
             ]),
         );
     }

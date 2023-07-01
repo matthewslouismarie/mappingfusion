@@ -1,0 +1,21 @@
+.std-metadata {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: $gap-l;
+
+    font-size: $txt-font-size-s;
+    font-weight: $txt-weight-semi-bold;
+
+    > .item {
+        > .def,
+        > .term {
+            display: inline-block;
+        }
+
+        > .term {
+            margin-right: $gap-s;
+
+            color: $color-blue-1;
+        }
+    }
+}

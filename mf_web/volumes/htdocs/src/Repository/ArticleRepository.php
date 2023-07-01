@@ -27,7 +27,7 @@ class ArticleRepository
     }
 
     public function find(string $id): ?Article {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_article WHERE article_id = ? LIMIT 1;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_article WHERE article_id = ? LIMIT 1;');
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
@@ -77,7 +77,7 @@ class ArticleRepository
     }
 
     public function findLastReviews(): array {
-        $results = $this->conn->getPdo()->query("SELECT * FROM v_article ORDER BY article_last_update_date_time DESC LIMIT 4;");
+        $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE article_review_id IS NOT NULL ORDER BY article_last_update_date_time DESC LIMIT 4;");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = Article::fromArray($article);

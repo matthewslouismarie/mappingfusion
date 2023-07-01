@@ -23,6 +23,10 @@
             {% endfor %}
         </select>
     </div>
+    <div class="form-row">
+        <label class="label" for="p-release-date-time">Date de publication (optionnel)</label>
+        <input class="input" id="p-release-date-time" name="playable_release_date_time" type="datetime-local" {% if entity %} value="{{ entity['playable_release_date_time'] }}"{% endif %}>
+    </div>
     <button type="submit">Poster</button>
 </form>
 {% endblock %}

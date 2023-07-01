@@ -21,11 +21,8 @@ class Review
     private ?Playable $storedPlayable;
 
     static function fromArray(array $data): self {
-        try {
-            $playable = Playable::fromArray($data);
-        } catch (OutOfBoundsException|TypeError $e) {
-            $playable = null;
-        }
+        $playable = isset($data['playable_id']) ? Playable::fromArray($data) : null;
+
         return new self(
             $data['review_id'],
             $data['review_playable_id'],
