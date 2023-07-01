@@ -1,0 +1,18 @@
+.article-advice {
+    display: flex;
+    align-items: stretch;
+    padding: $gap-m;
+    gap: $gap-m;
+
+    background-color: $color-blue-1;
+
+    > .img {
+        flex: 0 0;
+    }
+
+    > .text {
+        > .heading {
+            color: $color-white;
+        }
+    }
+}

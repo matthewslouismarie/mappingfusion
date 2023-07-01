@@ -1,0 +1,15 @@
+.page-article {
+    > .socialnetworks {
+        display: flex;
+        flex-direction: column;
+        gap: $gap-l;
+        margin: auto;
+        max-width: $txt-area-width-s;
+        padding: $gap-l 0;
+
+        > .text {
+            font-weight: $txt-weight-bold;
+            text-align: center;
+        }
+    }
+}

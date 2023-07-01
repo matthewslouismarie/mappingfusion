@@ -1,20 +1,20 @@
 $area-height-l: 40vh;
 $area-size-s: 3rem;
-$color-blue-0: #3d9cce;
-$color-blue-1: #428ab4;
-$color-blue-2: #19577a;
-$color-blue-3: #0c4b6e;
-$color-white: #ffffff;
 $block-border-width: 0.5rem;
 $border-m: 6px;
 $border-s: 3px;
 $border-xs: 1.5px;
 $btn-l-height: 6rem;
+$color-blue-0: #3d9cce;
+$color-blue-1: #428ab4;
+$color-blue-2: #19577a;
+$color-blue-3: #0c4b6e;
+$color-white: #ffffff;
 $gap-l: 32px;
 $gap-m: 16px;
 $gap-s: 8px;
-$gap-xl: 64px;
 $gap-xl: 128px;
+$gap-xl: 64px;
 $gap-xs: 4.8px;
 $icon-size-s: 16rem;
 $icon-size-xs: 6rem;
@@ -26,6 +26,7 @@ $screen-size-l: 1024px;
 $screen-size-m: 768px;
 $screen-size-s: 425px;
 $screen-size-xl: 2560px;
+$txt-area-width-s: 30rem;
 $txt-font-size-l: 1.2rem;
 $txt-font-size-m: 1rem;
 $txt-font-size-s: 0.8rem;
@@ -45,11 +46,15 @@ $txt-weight-semi-bold: 600;
 
 @import 'glide/glide.scss';
 
+@import 'elements/page-article.scss';
+@import 'elements/page-home.scss';
+
 @import 'elements/site-admin-nav.scss';
 @import 'elements/site-body.scss';
 @import 'elements/site-footer.scss';
 @import 'elements/site-header.scss';
 @import 'elements/site-maps-and-mods-tests.scss';
+@import 'elements/site-section-beginners-short.scss';
 @import 'elements/site-section-beginners.scss';
 @import 'elements/site-social-networks.scss';
 
@@ -65,6 +70,7 @@ $txt-weight-semi-bold: 600;
 @import 'elements/std-button.scss';
 @import 'elements/std-form.scss';
 @import 'elements/std-inline-list.scss';
+@import 'elements/std-markdown-container.scss';
 @import 'elements/std-metadata.scss';
 @import 'elements/std-review.scss';
 @import 'elements/std-search-input.scss';
@@ -72,6 +78,7 @@ $txt-weight-semi-bold: 600;
 @import 'elements/form-row.scss';
 
 
+@import 'elements/article-advice.scss';
 @import 'elements/article-cover.scss';
 @import 'elements/article-mosaic.scss';
 

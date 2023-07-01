@@ -1,0 +1,35 @@
+{% macro review(mk, review, variant) %}
+    <div class="std-review{% if variant %} {{ variant }}{% endif %}">
+        <div class="ratingcontainer">
+            <strong class="rating">{{ review.rating }}</strong>
+        </div>
+        <h2 class="heading">{{ review.storedPlayable.name }} : l’avis de l’équipe</h2>
+        {% if variant == '-summary' %}
+        {{ mk.format(review.body)|raw }}
+        {% endif %}
+        <div class="prosandcons">
+            <div class="part -pros">
+                <h3 class="subheading">Les plus</h3>
+                <div class="markdown -pros">
+                    {% if review.pros %}{{ mk.format(review.pros)|raw }}{% else %}Rien à afficher.{% endif %}
+                </div>
+            </div>
+            <div class="part -cons">
+                <h3 class="subheading">Les moins</h3>
+                <div class="markdown -cons">
+                    {% if review.cons %}{{ mk.format(review.cons)|raw }}{% else %}Rien à afficher.{% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="relatedlinks">
+            <a class="std-button -sm -white" href="#">
+                <div class="text">
+                    <span class="bold">Page de téléchargement ModDB</span>
+                </div>
+            </a>
+            <a class="std-button -sm -blue" href="#">
+                <div class="text">Voir plus de tests</div>
+            </a>
+        </div>
+    </div>
+{% endmacro %}

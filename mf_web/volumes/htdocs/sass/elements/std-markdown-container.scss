@@ -1,0 +1,12 @@
+.std-markdown-container {
+    img + em {
+        display: inline-block;
+        max-width: 50%;
+        padding: $gap-s;
+        transform: translateX(5%) translateY(-50%);
+
+        font-weight: $txt-weight-regular;
+        font-style: italic;
+        background-color: $color-blue-0;
+    }
+}

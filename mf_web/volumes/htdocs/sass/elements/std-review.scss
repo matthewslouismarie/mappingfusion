@@ -2,6 +2,15 @@
     border: $border-m solid $color-white;
     padding: $gap-m $gap-m 0 $gap-m;
 
+    &.-summary {
+        background-color: $color-blue-3;
+        border: none;
+
+        > .prosandcons {
+            display: flex;
+        }
+    }
+
     > .ratingcontainer {
         display: block;
         float: right;
@@ -19,39 +28,43 @@
         }
     }
 
-    > .heading,
-    > .subheading {
-        margin-bottom: $gap-l;
-    }
-
-    > .heading {
-        color: $color-white;
-    }
-
-    > .markdown {
-        margin-bottom: $gap-m;
-
-        > ul {
-            display: flex;
-            flex-wrap: wrap;
-            gap: $gap-l;
-            list-style-type: none;
-
-            > li {
-                padding-left: $gap-l;
-                background: center left / $gap-m $gap-m no-repeat;
+    > .prosandcons {
+        > .part {
+            > .heading,
+            > .subheading {
+                margin-bottom: $gap-l;
             }
-        }
-
-        &.-pros {
-            > ul > li {
-                background-image: url('list-plus.svg');
+        
+            > .heading {
+                color: $color-white;
             }
-        }
-
-        &.-cons {
-            > ul > li {
-                background-image: url('list-minus.svg');
+        
+            > .markdown {
+                margin-bottom: $gap-m;
+        
+                > ul {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: $gap-l;
+                    list-style-type: none;
+        
+                    > li {
+                        padding-left: $gap-l;
+                        background: center left / $gap-m $gap-m no-repeat;
+                    }
+                }
+        
+                &.-pros {
+                    > ul > li {
+                        background-image: url('list-plus.svg');
+                    }
+                }
+        
+                &.-cons {
+                    > ul > li {
+                        background-image: url('list-minus.svg');
+                    }
+                }
             }
         }
     }

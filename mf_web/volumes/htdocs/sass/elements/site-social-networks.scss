@@ -3,18 +3,8 @@
     align-items: center;
     gap: $gap-l;
     justify-content: center;
-    position: relative;
-    z-index: 1;
-
-    background-color: #19577a;
-    box-shadow: 0 (-$area-size-s / 2) $area-size-s ($area-size-s / 2) #19577a;
 
     > .std-button {
-        height: $img-size-xxs;
-        overflow: hidden;
-        position: relative;
-        top: $gap-s + $border-xs + $img-size-xxs / 2;
-
         > .image {
             height: 100%;
         }

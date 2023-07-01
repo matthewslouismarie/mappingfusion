@@ -1,106 +1,151 @@
 {% extends 'base.html.twig' %}
 
+{% from 'sections/review.html.twig' import review %}
+
+{% block resources %}
+<link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
+<script src="https://unpkg.com/@glidejs/glide@3.6.0/dist/glide.js"></script>
+{% endblock %}
+
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block body %}
-<article class="std-article">
-    <div class="blue">
-        <div class="imafraidijustbluemyself">
-        </div>
-    </div>
-    <div class="article-cover" style="background-image: url('{{ app.resource(article.coverFilename) }}');">
-        <div class="content">
-            <h1 class="title">{{ article.title }}</h1>
-        </div>
-    </div>
-
-    <div class="main">
-        <nav class="nav">
-            <div class="frame -articlenav">
-                <ul class="list">
-                    <li class="item">
-                        <a class="link">Présentation</a>
-                    </li>
-                    <li class="item">
-                        <a class="link">Test explicatif</a>
-                    </li>
-                    <li class="item">
-                        <a class="link">Galerie d’images</a>
-                    </li>
-                    <li class="item">
-                        <a class="link">Résumé et notes</a>
-                    </li>
-                </ul>
+<div class="page-article">
+    <article class="std-article">
+        <div class="blue">
+            <div class="imafraidijustbluemyself">
             </div>
-            <a href="#" class="std-button -upper -white">
-                <div class="text">
-                    <span class="bold">Comment installer un mod</span>
+        </div>
+        <div class="article-cover" style="background-image: url('{{ app.resource(article.coverFilename) }}');">
+            <div class="content">
+                <h1 class="title">{{ article.title }}</h1>
+            </div>
+        </div>
+
+        <div class="main">
+            <nav class="nav">
+                <div class="frame -articlenav">
+                    <ul class="list">
+                        <li class="item">
+                            <a class="link">Présentation</a>
+                        </li>
+                        <li class="item">
+                            <a class="link">Test explicatif</a>
+                        </li>
+                        <li class="item">
+                            <a class="link">Galerie d’images</a>
+                        </li>
+                        <li class="item">
+                            <a class="link">Résumé et notes</a>
+                        </li>
+                    </ul>
                 </div>
+                <a href="#" class="std-button -upper -white">
+                    <div class="text">
+                        <span class="bold">Comment installer un mod</span>
+                    </div>
+                </a>
+                <div class="frame -related">
+                    <h2 class="heading">Tests et articles similaires</h2>
+                    <ul class="list">
+                        <li class="item">
+                            <a class="link" href="#">
+                                <img alt="{{ article.title }}" class="image" src="{{ app.resource(article.coverFilename) }}">
+                                {{ article.title }}
+                        </li>
+                        <li class="item">
+                            <a class="std-button -sm -transparent" href="#">Voir plus de tests</a>
+                        </li>
+                        <li class="item">
+                            <a class="std-button -sm -transparent" href="#">Voir plus d’actualité</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="content -review">
+                {% if article.isReview %}
+                    <dl class="std-metadata">
+                        <div class="item">
+                            <dt class="term">Jeu :</dt>
+                            <dd class="def">{{ article.storedReview.storedPlayable.name }}</dd>
+                        </div>
+                        <div class="item">
+                            <dt class="term">Développeur :</dt>
+                            <dd class="def">{% for a in authors %}{{ a.name }}{% if not loop.last %}, {% endif %}{% endfor %}</dd>
+                        </div>
+                        <div class="item">
+                            <dt class="term">Date de sortie :</dt>
+                            <dd class="def">{{ article.storedReview.storedPlayable.releaseDateTime|date('Y') }}</dd>
+                        </div>
+                    </dl>
+                    <p class="p">{{ article.storedReview.body }}</p>
+                    {{ review(app.mk, article.storedReview) }}
+                {% endif %}
+            </div>
+
+            <div class="content">
+                <div class="std-markdown-container">
+                    {{ app.mk.format(article.content)|raw }}
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="glide -arrows">
+                    <div class="glide__track" data-glide-el="track">
+                        <ul class="glide__slides">
+                            <li class="glide__slide">
+                                <a class="link" href="{{ app.router.generateUrl('view_article', {id: article.id}) }}" style="background-image: url({{ app.resource(article.coverFilename) }});">
+                                    <div class="text">{{ app.mk.format(article.title)|raw }}</div>
+                                </a>
+                            </li>
+                            <li class="glide__slide">
+                                <a class="link" href="{{ app.router.generateUrl('view_article', {id: article.id}) }}" style="background-image: url({{ app.resource(article.coverFilename) }});">
+                                    <div class="text">{{ app.mk.format(article.title)|raw }}</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="controls" data-glide-el="controls">
+                        <button class="button -left" data-glide-dir="<"></button>
+                        <button class="button -right" data-glide-dir=">"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                {{ review(app.mk, article.storedReview, '-summary') }}
+            </div>
+
+            <div class="content">
+                <div class="article-advice">
+                    <img alt="Le conseil Mapping-Fusion" class="img" src="{{ app.asset('mapping-fusion-advice.svg') }}">
+                    <div class="text">
+                        <h2 class="heading">Le petit conseil pour les mappeurs de Mapping Fusion</h2>
+                        <p class="text">Le level design et l’éclairage étant très réussi, nous vous recommandons de jouer à ce MOD qui reste un très bonne source d’inspiration pour créer vos maps ! (structure, type de textures, mis en lumière etc...)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <aside class="socialnetworks">
+        <p class="text">Tu souhaites échanger autour de ce Mod avec la communauté ? Rejoins-nous dès à présent !</p>
+        {% include 'sections/social-networks.html.twig' %}
+    </aside>
+
+    <aside class="site-section-beginners-short">
+        <div class="content">
+            <p class="text">Consulte également <strong>tous nos dossiers explicatifs</strong> pour bien <strong>comprendre comment installer un Mod</strong></p>
+            <a class="std-button -white">
+                <div class="text"><span class="bold">Installation de Mods</span></div>
             </a>
-            <div class="frame -related">
-                <h2 class="heading">Tests et articles similaires</h2>
-                <ul class="list">
-                    <li class="item">
-                        <a class="link" href="#">
-                            <img alt="{{ article.title }}" class="image" src="{{ app.resource(article.coverFilename) }}">
-                            {{ article.title }}
-                    </li>
-                    <li class="item">
-                        <a class="std-button -sm -transparent" href="#">Voir plus de tests</a>
-                    </li>
-                    <li class="item">
-                        <a class="std-button -sm -transparent" href="#">Voir plus d’actualité</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <div class="content -review">
-            {% if article.isReview %}
-                <dl class="std-metadata">
-                    <div class="item">
-                        <dt class="term">Jeu :</dt>
-                        <dd class="def">{{ article.storedReview.storedPlayable.name }}</dd>
-                    </div>
-                    <div class="item">
-                        <dt class="term">Développeur :</dt>
-                        <dd class="def">{% for a in authors %}{{ a.name }}{% if not loop.last %}, {% endif %}{% endfor %}</dd>
-                    </div>
-                    <div class="item">
-                        <dt class="term">Date de sortie :</dt>
-                        <dd class="def">{{ article.storedReview.storedPlayable.releaseDateTime|date('Y') }}</dd>
-                    </div>
-                </dl>
-                <p class="p">{{ article.storedReview.body }}</p>
-                <div class="std-review">
-                    <div class="ratingcontainer">
-                        <strong class="rating">{{ article.storedReview.rating }}</strong>
-                    </div>
-                    <h2 class="heading">{{ article.storedReview.storedPlayable.name }} : l’avis de l’équipe</h2>
-                    <h3 class="subheading">Les plus</h3>
-                    <div class="markdown -pros">
-                        {% if article.storedReview.pros %}{{ app.mk.format(article.storedReview.pros)|raw }}{% else %}Rien à afficher.{% endif %}
-                    </div>
-                    <h3 class="subheading">Les moins</h3>
-                    <div class="markdown -cons">
-                        {% if article.storedReview.cons %}{{ app.mk.format(article.storedReview.cons)|raw }}{% else %}Rien à afficher.{% endif %}
-                    </div>
-                    <div class="relatedlinks">
-                        <a class="std-button -sm -white" href="#">
-                            <div class="text">
-                                <span class="bold">Page de téléchargement ModDB</span>
-                            </div>
-                        </a>
-                        <a class="std-button -sm -blue" href="#">
-                            <div class="text">Voir plus de tests</div>
-                        </a>
-                    </div>
-                </div>
-            {% endif %}
         </div>
-        <div class="content">
-            {{ app.mk.format(article.content)|raw }}
-        </div>
-    </div>
-</article>
+    </aside>
+</div>
+{% endblock %}
 
+{% block scriptInit %}
+<script>
+  new Glide('.glide', {gap: 0}).mount()
+</script>
 {% endblock %}

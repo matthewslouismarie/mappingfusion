@@ -1,7 +1,37 @@
 .glide {
     $bullet-height: $img-size-xs / 3 + $border-s * 2;
-    overflow: hidden;
     width: 100%;
+
+    &.-arrows {
+        > .controls {
+            display: flex;
+            z-index: 1;
+            justify-content: space-between;
+
+            .button {
+                display: block;
+                width: $bullet-height;
+                height: $bullet-height;
+                border-radius: 50%;
+                border: none;
+                background: center / 80% no-repeat;
+                background-color: $color-blue-0;
+                position: relative;
+                top: -$gap-xl;
+
+                &.-left {
+                    transform: translateX(-50%);
+                    background-image: url('arrow-left.svg');
+                }
+
+                &.-right {
+                    transform: translateX(50%);
+                    background-image: url('arrow-right.svg');
+                }
+            }
+        }
+    }
+
 
     > .glide__bullets {
         display: flex;

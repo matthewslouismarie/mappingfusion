@@ -8,131 +8,124 @@
 {% endblock %}
 
 {% block body %}
-<div class="glide">
-    <div class="glide__track" data-glide-el="track">
-        <ul class="glide__slides">
-        {% for a in featured_articles %}
-            <li class="glide__slide">
-                <a class="link" href="{{ app.router.generateUrl('view_article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.coverFilename) }});">
-                    <div class="text">{{ app.mk.format(a.title)|raw }}</div>
-                </a>
-            </li>
-        {% endfor %}
-        </ul>
-    </div>
-    <div class="glide__bullets" data-glide-el="controls[nav]">
-        {% for a in featured_articles %}
-        <button class="glide__bullet" data-glide-dir="={{ loop.index0 }}" type="button">
-            <div class="image" style="background-image: url('{{ app.resource(featured_articles[loop.index0].coverFilename) }}');">{{ featured_articles[loop.index0].title }}</div>
-        </button>
-        {% endfor %}
-  </div>
-</div>
-<div class="site-social-networks">
-    <a class="std-button -white -withicon">
-        <img alt="Discord" class="image" src="{{ app.asset('discord_logo.svg') }}">
-        <div class="text">Rejoignez-nous<br><span class="bold">sur Discord</span></div>
-    </a>
-    <a class="std-button -blue -withicon">
-        <img alt="Facebook" class="image" src="{{ app.asset('facebook_logo.svg') }}">
-        <div class="text">Rejoignez-nous<br><span class="bold">sur Facebook</span></div>
-    </a>
-</div>
-<section class="site-maps-and-mods-tests">
-    <div class="_wrapper">
-        <hgroup class="section-heading">
-            <p class="p">
-                <img alt="Tests maps et mods" class="image" src="{{ app.asset('tests_icon.svg') }}">
-            </p>
-            <h2 class="title" >Tests maps et mods</h2>
-            <p class="p">proposés par l’équipe</p>
-        </hgroup>
-        <ul class="std-block-list">
-            {% for r in last_reviews %}
-            <li class="item">
-                <a class="review-mosaic" style="background-image: url('{{ app.resource(r.coverFilename) }}');">
-                    <div class="content">
-                        <span class="playable">{{ r.storedReview.storedPlayable.name }}</span>
-                        <span class="game">{{ r.storedReview.storedPlayable.storedGame.name }}</span>
-                    </div>
-                </a>
-            </li>
+<div class="page-home">
+    <div class="glide">
+        <div class="glide__track" data-glide-el="track">
+            <ul class="glide__slides">
+            {% for a in featured_articles %}
+                <li class="glide__slide">
+                    <a class="link" href="{{ app.router.generateUrl('view_article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.coverFilename) }});">
+                        <div class="text">{{ app.mk.format(a.title)|raw }}</div>
+                    </a>
+                </li>
             {% endfor %}
-        </ul>
-        <a class="std-button -white">
-            <div class="text">
-                <span class="bold">Voir plus de tests</span>
-            </div>
-        </a>
-    </div>
-</section>
-<section class="site-section-news-articles">
-    <div class="_wrapper">
-        <hgroup class="section-heading -inline">
-            <p class="imgp">
-                <img alt="Tests maps et mods" class="image" src="{{ app.asset('news.svg') }}">
-            </p>
-            <p class="p">Les dernières</p>
-            <h2 class="title">actualités</h2>
-        </hgroup>
-        <ul class="std-block-list -small">
-            {% for a in last_articles %}
-            <li class="item">
-                <a class="article-mosaic" href="{{ app.router.generateUrl('view_article', {id: a.id}) }}">
-                    <div class="left" style="background-image: url('{{ app.resource(a.coverFilename) }}');">
-                        <em class="std-badge">{{ a.category.name }}</em>
-                    </div>
-                    <div class="right">
-                        <h3 class="title">{{ app.mk.getText(a.title) }}</h3>
-                        <p class="date">Le {{ a.lastUpdateDateTime.format('d/m/y') }}</p>
-                        <div class="excerpt">
-                            {{ app.mk.getText(a.content) }}
-                        </div>
-                    </div>
-                </a>
-            </li>
+            </ul>
+        </div>
+        <div class="glide__bullets" data-glide-el="controls[nav]">
+            {% for a in featured_articles %}
+            <button class="glide__bullet" data-glide-dir="={{ loop.index0 }}" type="button">
+                <div class="image" style="background-image: url('{{ app.resource(featured_articles[loop.index0].coverFilename) }}');">{{ featured_articles[loop.index0].title }}</div>
+            </button>
             {% endfor %}
-        </ul>
-        
-        <a class="std-button -white">
-            <div class="text">
-                <span class="bold">Voir plus de tests</span>
-            </div>
-        </a>
+        </div>
     </div>
-</section>
-<section class="site-section-beginners">
-    <div class="_wrapper">
-        <hgroup class="left">
-            <h2 class="title">Nouveau et un peu perdu ?<br>Pas de panique !</h2>
-            <p class="text">Consulte dès à présent <em>tous nos dossiers explicatifs</em> pour bien <em>comprendre comment fonctionnent Half-Life et ses mods</em>.</p>
-        </hgroup>
-        <dl class="right">
-            <div class="item">
-                <dt class="subject">Fonctionnement Sven Co-op</dt>
-                <dd class="text">Guide d’installation, lancement de partie, création de serveurs, etc…</dd>
-                <dd>
-                    <a class="std-button -white" href="#">
-                        <div class="text">
-                            <span class="bold">Voir plus de tests</span>
+    {% include 'sections/social-networks.html.twig' %}
+    <section class="site-maps-and-mods-tests">
+        <div class="_wrapper">
+            <hgroup class="section-heading">
+                <p class="p">
+                    <img alt="Tests maps et mods" class="image" src="{{ app.asset('tests_icon.svg') }}">
+                </p>
+                <h2 class="title" >Tests maps et mods</h2>
+                <p class="p">proposés par l’équipe</p>
+            </hgroup>
+            <ul class="std-block-list">
+                {% for r in last_reviews %}
+                <li class="item">
+                    <a class="review-mosaic" style="background-image: url('{{ app.resource(r.coverFilename) }}');">
+                        <div class="content">
+                            <span class="playable">{{ r.storedReview.storedPlayable.name }}</span>
+                            <span class="game">{{ r.storedReview.storedPlayable.storedGame.name }}</span>
                         </div>
                     </a>
-                </dd>
-            </div>
-            <div class="item">
-                <dt class="subject">Installation de mods</dt>
-                <dd class="text">Installation des mods pour Half-Life et Half-Life 2</dd>
-                <dd>
-                    <a class="std-button -white" href="#">
-                        <div class="text">
-                            <span class="bold">Voir plus de tests</span>
+                </li>
+                {% endfor %}
+            </ul>
+            <a class="std-button -white">
+                <div class="text">
+                    <span class="bold">Voir plus de tests</span>
+                </div>
+            </a>
+        </div>
+    </section>
+    <section class="site-section-news-articles">
+        <div class="_wrapper">
+            <hgroup class="section-heading -inline">
+                <p class="imgp">
+                    <img alt="Tests maps et mods" class="image" src="{{ app.asset('news.svg') }}">
+                </p>
+                <p class="p">Les dernières</p>
+                <h2 class="title">actualités</h2>
+            </hgroup>
+            <ul class="std-block-list -small">
+                {% for a in last_articles %}
+                <li class="item">
+                    <a class="article-mosaic" href="{{ app.router.generateUrl('view_article', {id: a.id}) }}">
+                        <div class="left" style="background-image: url('{{ app.resource(a.coverFilename) }}');">
+                            <em class="std-badge">{{ a.category.name }}</em>
+                        </div>
+                        <div class="right">
+                            <h3 class="title">{{ app.mk.getText(a.title) }}</h3>
+                            <p class="date">Le {{ a.lastUpdateDateTime.format('d/m/y') }}</p>
+                            <div class="excerpt">
+                                {{ app.mk.getText(a.content) }}
+                            </div>
                         </div>
                     </a>
-                </dd>
-            </div>
-        </dl>
-    </div>
-</section>
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <a class="std-button -white">
+                <div class="text">
+                    <span class="bold">Voir plus de tests</span>
+                </div>
+            </a>
+        </div>
+    </section>
+    <section class="site-section-beginners">
+        <div class="_wrapper">
+            <hgroup class="left">
+                <h2 class="title">Nouveau et un peu perdu ?<br>Pas de panique !</h2>
+                <p class="text">Consulte dès à présent <em>tous nos dossiers explicatifs</em> pour bien <em>comprendre comment fonctionnent Half-Life et ses mods</em>.</p>
+            </hgroup>
+            <dl class="right">
+                <div class="item">
+                    <dt class="subject">Fonctionnement Sven Co-op</dt>
+                    <dd class="text">Guide d’installation, lancement de partie, création de serveurs, etc…</dd>
+                    <dd>
+                        <a class="std-button -white" href="#">
+                            <div class="text">
+                                <span class="bold">Voir plus de tests</span>
+                            </div>
+                        </a>
+                    </dd>
+                </div>
+                <div class="item">
+                    <dt class="subject">Installation de mods</dt>
+                    <dd class="text">Installation des mods pour Half-Life et Half-Life 2</dd>
+                    <dd>
+                        <a class="std-button -white" href="#">
+                            <div class="text">
+                                <span class="bold">Voir plus de tests</span>
+                            </div>
+                        </a>
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </section>
+</div>
 {% endblock %}
 
 {% block scriptInit %}
