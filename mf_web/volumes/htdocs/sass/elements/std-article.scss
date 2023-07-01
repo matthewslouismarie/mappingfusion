@@ -32,7 +32,72 @@
         }
 
         > .nav {
-            display: none;
+            display: flex;
+            flex-direction: column;
+            gap: $gap-m;
+            
+            > .frame {
+                padding: $gap-s;
+                border: $border-xs solid $color-blue-1;
+                background-color: $color-blue-3;
+
+                &.-articlenav {
+                    > .list {
+                        > .item {
+                            > .link {
+                                display: block;
+                                border-right: $border-m solid $color-blue-1;
+                                color: $color-blue-1;
+                                text-align: right;
+                                padding: $gap-s;
+                                font-weight: $txt-weight-semi-bold;
+
+                                &.-active {
+                                    color: $color-white;
+                                    border-color: $color-white;
+                                    font-weight: $txt-weight-bold;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &.-related {
+                    text-align: center;
+                    color: $color-white;
+
+                    > .heading {
+                        text-align: center;
+                        font-size: $txt-font-size-l;
+                        margin-bottom: $gap-m;
+                    }
+
+                    > .list {
+                        display: flex;
+                        flex-direction: column;
+                        gap: $gap-s;
+
+                        > .item {
+                            > .link {
+                                color: $color-white;
+                                font-weight: $txt-weight-regular;
+                                text-decoration: none;
+
+                                > .image {
+                                    display: block;
+                                    margin: $gap-s auto;
+                                    max-width: $img-size-xs;
+                                    width: 100%;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                > .list {
+                    list-style-type: none;
+                }
+            }
         }
     }
 
@@ -48,69 +113,22 @@
             }
             
             > .nav {
-                display: flex;
-                flex-direction: column;
-                gap: $gap-m;
-                padding-top: $gap-l;
                 position: absolute;
                 right: 5%;
+                padding-top: $gap-l;
                 width: 20%;
 
                 > .frame {
-                    border: $border-xs solid $color-blue-1;
-                    padding: $gap-s;
-
-                    &.-articlenav {
-                        > .list {
-                            > .item {
-                                > .link {
-                                    display: block;
-                                    border-right: $border-m solid $color-blue-1;
-                                    color: $color-blue-1;
-                                    text-align: right;
-                                    padding: $gap-s;
-                                    font-weight: $txt-weight-semi-bold;
-
-                                    &.-active {
-                                        color: $color-white;
-                                        border-color: $color-white;
-                                        font-weight: $txt-weight-bold;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
                     &.-related {
-                        color: $color-white;
-
-                        > .heading {
-                            text-align: center;
-                            font-size: $txt-font-size-l;
-                            margin-bottom: $gap-m;
-                        }
-
                         > .list {
-                            display: flex;
-                            flex-direction: column;
-                            gap: $gap-s;
-
                             > .item {
                                 > .link {
-                                    color: $color-white;
-                                    font-weight: $txt-weight-regular;
-                                    text-decoration: none;
-
                                     > .image {
-                                        width: 100%;
+                                        max-width: 100%;
                                     }
                                 }
                             }
                         }
-                    }
-
-                    > .list {
-                        list-style-type: none;
                     }
                 }
             }
