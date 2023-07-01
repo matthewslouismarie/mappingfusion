@@ -1,4 +1,8 @@
 .std-markdown-container {
+    img {
+        display: block;
+    }
+
     img + em {
         display: inline-block;
         max-width: 50%;
