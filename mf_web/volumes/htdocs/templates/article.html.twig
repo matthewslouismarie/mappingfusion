@@ -12,10 +12,12 @@
 {% block body %}
 <div class="page-article">
     <article class="std-article">
+        {% if not article.isReview %}
         <div class="blue">
             <div class="imafraidijustbluemyself">
             </div>
         </div>
+        {% endif %}
         <div class="article-cover" style="background-image: url('{{ app.resource(article.coverFilename) }}');">
             <div class="content">
                 <h1 class="title">{{ article.title }}</h1>
@@ -23,7 +25,7 @@
         </div>
 
         <div class="main">
-            <nav class="nav">
+            <nav class="nav _section">
                 <div class="frame -articlenav">
                     <ul class="list">
                         <li class="item">
@@ -62,7 +64,7 @@
                     </ul>
                 </div>
             </nav>
-            <div class="content -review">
+            <div class="content -review _section">
                 {% if article.isReview %}
                     <dl class="std-metadata">
                         <div class="item">
@@ -83,14 +85,17 @@
                 {% endif %}
             </div>
 
-            <div class="content">
+            <div class="content _section">
                 <div class="std-markdown-container">
                     {{ app.mk.format(article.content)|raw }}
                 </div>
             </div>
 
-            <div class="content">
+            <div class="content _section">
                 <div class="glide -arrows">
+                    <div class="controls" data-glide-el="controls">
+                        <button class="button -left" data-glide-dir="<"></button>
+                    </div>
                     <div class="glide__track" data-glide-el="track">
                         <ul class="glide__slides">
                             <li class="glide__slide">
@@ -106,17 +111,16 @@
                         </ul>
                     </div>
                     <div class="controls" data-glide-el="controls">
-                        <button class="button -left" data-glide-dir="<"></button>
                         <button class="button -right" data-glide-dir=">"></button>
                     </div>
                 </div>
             </div>
 
-            <div class="content">
+            <div class="content _section">
                 {{ review(app.mk, article.storedReview, '-summary') }}
             </div>
 
-            <div class="content">
+            <div class="content _section">
                 <div class="article-advice">
                     <img alt="Le conseil Mapping-Fusion" class="img" src="{{ app.asset('mapping-fusion-advice.svg') }}">
                     <div class="text">
@@ -128,12 +132,12 @@
         </div>
     </article>
 
-    <aside class="socialnetworks">
+    <aside class="socialnetworks _section">
         <p class="text">Tu souhaites échanger autour de ce Mod avec la communauté ? Rejoins-nous dès à présent !</p>
         {% include 'sections/social-networks.html.twig' %}
     </aside>
 
-    <aside class="site-section-beginners-short">
+    <aside class="site-section-beginners-short _section">
         <div class="content">
             <p class="text">Consulte également <strong>tous nos dossiers explicatifs</strong> pour bien <strong>comprendre comment installer un Mod</strong></p>
             <a class="std-button -white">

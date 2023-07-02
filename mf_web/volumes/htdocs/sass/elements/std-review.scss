@@ -7,8 +7,10 @@
         border: none;
 
         > .prosandcons {
-            display: flex;
-            gap: $gap-m;
+            > .part > .markdown > ul {
+                flex-direction: column;
+                flex-wrap: nowrap;
+            }
         }
     }
 
@@ -32,8 +34,9 @@
     > .prosandcons {
         > .part {
             > .heading,
-            > .subheading {
-                margin-bottom: $gap-l;
+            > .subheading,
+            > .markdown {
+                margin-bottom: $gap-m;
             }
         
             > .heading {
@@ -41,12 +44,10 @@
             }
         
             > .markdown {
-                margin-bottom: $gap-m;
-        
                 > ul {
                     display: flex;
                     flex-wrap: wrap;
-                    gap: $gap-l;
+                    gap: $gap-m;
                     list-style-type: none;
         
                     > li {
@@ -77,6 +78,15 @@
 
         > .std-button {
             transform: translateY(50%);
+        }
+    }
+
+    @media (min-width: $screen-size-s) {
+        &.-summary {
+            > .prosandcons {
+                display: flex;
+                gap: $gap-m;
+            }
         }
     }
 }

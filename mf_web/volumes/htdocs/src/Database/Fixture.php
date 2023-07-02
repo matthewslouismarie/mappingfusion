@@ -62,7 +62,14 @@ class Fixture
         $this->repoContrib->add(new Contribution(null, $scteam->getId(), $sc->getId(), true));
         $cat = new Category(null, 'Tests');
         $this->repoCat->add($cat);
-        $review1 = $this->repoReview->add(new Review(null, $sc->getId(), 4, '', '', ''));
+        $review1 = $this->repoReview->add(new Review(
+            null,
+            $sc->getId(),
+            4,
+            'En somme, un jeu vraiment pas mal. Je recommande.',
+            file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
+            file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
+        ));
         $review2 = $this->repoReview->add(new Review(null, $sc->getId(), 5, '', '', ''));
         $review3 = $this->repoReview->add(new Review(null, $hl->getId(), 3.1, '', '', ''));
         $review4 = $this->repoReview->add(new Review(null, $hl2->getId(), 2.1, '', '', ''));
@@ -70,7 +77,7 @@ class Fixture
             null,
             $root->getId(),
             $cat->getId(),
-            'Nouvel article !',
+            file_get_contents(dirname(__FILE__) . '/../../fixtures/article.mk'),
             true,
             'Crossed Paths v3.8.8',
             '202111271344571.jpg',

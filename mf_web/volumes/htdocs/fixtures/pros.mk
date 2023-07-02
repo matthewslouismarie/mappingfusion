@@ -1,0 +1,4 @@
+ - Miam
+ - Gloups
+ - Les frites sont servies généreusement.
+ - Les burgers (hamburgers et cheeseburgers) ont un prix correct.

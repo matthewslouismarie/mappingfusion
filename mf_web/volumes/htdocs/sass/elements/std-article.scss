@@ -11,8 +11,6 @@
     > .main {
         > .content {
             max-width: 40em;
-            padding-bottom: $gap-l;
-            padding-top: $gap-l;
 
             &.-review {
                 background-color: $color-blue-3;
@@ -115,7 +113,6 @@
             > .nav {
                 position: absolute;
                 right: 5%;
-                padding-top: $gap-l;
                 width: 20%;
 
                 > .frame {

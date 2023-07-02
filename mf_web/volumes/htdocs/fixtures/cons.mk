@@ -1,0 +1,3 @@
+ - Les boissons sont vraiment trop chères. Ils doivent se faire un bénéfice de fou dessus, surtout qu’elles sont probablement frelatées.
+ - La clientèle… N’en parlons pas.
+ - Beurps
