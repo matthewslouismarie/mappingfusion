@@ -26,7 +26,7 @@
 
         <div class="main">
             <nav class="nav _section">
-                <div class="frame -articlenav">
+                <div class="frame -articlenav _padded -a -g">
                     <ul class="list">
                         <li class="item">
                             <a class="link">Présentation</a>
@@ -47,7 +47,7 @@
                         <span class="bold">Comment installer un mod</span>
                     </div>
                 </a>
-                <div class="frame -related">
+                <div class="frame -related _padded -a -g">
                     <h2 class="heading">Tests et articles similaires</h2>
                     <ul class="list">
                         <li class="item">
@@ -64,8 +64,9 @@
                     </ul>
                 </div>
             </nav>
+            {% if article.isReview %}
             <div class="content -review _section">
-                {% if article.isReview %}
+                <div class="_padded -a -g">
                     <dl class="std-metadata">
                         <div class="item">
                             <dt class="term">Jeu :</dt>
@@ -82,11 +83,12 @@
                     </dl>
                     <p class="p">{{ article.storedReview.body }}</p>
                     {{ review(app.mk, article.storedReview) }}
-                {% endif %}
+                </div>
             </div>
+            {% endif %}
 
-            <div class="content _section">
-                <div class="std-markdown-container">
+            <div class="content -articlebody _section">
+                <div class="std-markdown-container _padded -g">
                     {{ app.mk.format(article.content)|raw }}
                 </div>
             </div>
@@ -121,7 +123,7 @@
             </div>
 
             <div class="content _section">
-                <div class="article-advice">
+                <div class="article-advice _padded -a">
                     <img alt="Le conseil Mapping-Fusion" class="img" src="{{ app.asset('mapping-fusion-advice.svg') }}">
                     <div class="text">
                         <h2 class="heading">Le petit conseil pour les mappeurs de Mapping Fusion</h2>
@@ -150,6 +152,10 @@
 
 {% block scriptInit %}
 <script>
-  new Glide('.glide', {gap: 0}).mount()
+    const glide = new Glide('.glide', {gap: 0});
+    glide.on('mount.after', function () {
+        glide.update();
+    });
+    glide.mount();
 </script>
 {% endblock %}

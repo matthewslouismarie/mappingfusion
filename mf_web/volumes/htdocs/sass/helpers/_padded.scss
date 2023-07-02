@@ -1,3 +1,20 @@
 ._padded {
-    padding: $gap-m;
+    padding-left: $gap-m;
+    padding-right: $gap-m;
+
+    &.-a,
+    &.-t {
+        padding-top: $gap-m;
+    }
+
+    &.-a,
+    &.-b {
+        padding-bottom: $gap-m;
+    }
+
+    &.-g {
+        display: flex;
+        flex-direction: column;
+        gap: $gap-m;
+    }
 }

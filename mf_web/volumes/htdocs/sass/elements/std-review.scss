@@ -1,6 +1,6 @@
 .std-review {
     border: $border-m solid $color-white;
-    padding: $gap-m $gap-m 0 $gap-m;
+    padding-bottom: 0;
 
     &.-summary {
         background-color: $color-blue-3;
@@ -33,12 +33,6 @@
 
     > .prosandcons {
         > .part {
-            > .heading,
-            > .subheading,
-            > .markdown {
-                margin-bottom: $gap-m;
-            }
-        
             > .heading {
                 color: $color-white;
             }
