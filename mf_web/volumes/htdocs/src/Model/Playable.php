@@ -2,7 +2,10 @@
 
 namespace MF\Model;
 use DateTimeImmutable;
+use DomainException;
+use MF\Exception\InvalidEntityArrayException;
 use OutOfBoundsException;
+use TypeError;
 
 // @todo Separate date and time for release? In case time is unknown.
 class Playable implements Entity
@@ -12,24 +15,44 @@ class Playable implements Entity
     private LongString $name;
 
     private DateTimeImmutable $releaseDateTime;
-    
+
     private ?Slug $gameId;
 
     private ?array $storedAuthors;
 
     private ?Playable $storedGame;
 
-    static function fromArray(array $data, string $prefix = 'playable'): self {
-        $game = isset($data["{$prefix}_game_name"]) ? Playable::fromArray($data, "{$prefix}_game") : null;
+    private ?array $storedLinks;
 
-        return new self(
-            $data["{$prefix}_id"],
-            $data["{$prefix}_name"],
-            new DateTimeImmutable($data["{$prefix}_release_date_time"]),
-            $data["{$prefix}_game_id"],
-            null,
-            $game,
-        );
+    static function fromArray(array $data, string $prefix = 'playable'): self {
+        $gameId = $data["{$prefix}_game_id"] ?? null;
+        try {
+            $game = null !== $gameId ? Playable::fromArray($data, "{$prefix}_game") : null;
+        } catch (InvalidEntityArrayException $e) {
+            $game = null;
+        }
+
+        $links = null;
+        if (isset($data["{$prefix}_stored_links"]) && null !== $data["{$prefix}_stored_links"]) {
+            $links = [];
+            foreach ($data["{$prefix}_stored_links"] as $linkData) {
+                $links[] = PlayableLink::fromArray($linkData);
+            }
+        }
+
+        try {
+            return new self(
+                $data["{$prefix}_id"],
+                $data["{$prefix}_name"],
+                new DateTimeImmutable($data["{$prefix}_release_date_time"]),
+                $data["{$prefix}_game_id"],
+                null,
+                $game,
+                $links,
+            );
+        } catch (DomainException|OutOfBoundsException|TypeError $e) {
+            throw new InvalidEntityArrayException(Playable::class, $e);
+        }
     }
 
     public function __construct(
@@ -39,6 +62,7 @@ class Playable implements Entity
         ?string $gameId,
         ?array $storedAuthors = null,
         ?Playable $storedGame = null,
+        ?array $storedLinks = null,
     ) {
         $this->id = null !== $id ? new Slug($id) : new Slug($name, true);
         $this->name = new LongString($name);
@@ -46,6 +70,7 @@ class Playable implements Entity
         $this->gameId = null !== $gameId ? new Slug($gameId) : null;
         $this->storedAuthors = $storedAuthors;
         $this->storedGame = $storedGame;
+        $this->storedLinks = $storedLinks;
     }
 
     public function getId(): string {
@@ -68,12 +93,25 @@ class Playable implements Entity
         return $this->storedGame;
     }
 
+    public function getStoredLinks(): ?array {
+        return $this->storedLinks;
+    }
+
     public function toArray(string $prefix = 'playable'): array {
+        $links = null;
+        if (null !== $this->storedLinks) {
+            $links = [];
+            foreach ($this->storedLinks as $link) {
+                $links[] = $link->toArray();
+            }
+        }
+
         return [
             "{$prefix}_id" => $this->id->__toString(),
             "{$prefix}_name" => $this->name->__toString(),
             "{$prefix}_game_id" => $this->gameId?->__toString(),
             "{$prefix}_release_date_time" => $this->releaseDateTime->format('Y-m-d H:m:s'),
+            "{$prefix}_stored_links" => $links,
         ];
     }
 }

@@ -3,16 +3,10 @@
 namespace MF;
 
 use GuzzleHttp\Psr7\Response;
-use MF\Controller\AccountController;
-use MF\Controller\AdminArticleController;
-use MF\Controller\AuthController;
 use MF\Controller\ControllerInterface;
-use MF\Controller\HomeController;
 use MF\HttpBridge\Session;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-// @todo Move http bridge code away from the rest of the code, and call it in index.php?
 class Kernel
 {
     private TwigService $twig;

@@ -3,8 +3,9 @@
 namespace MF\Repository;
 
 use MF\Database\Connection;
+use MF\Exception\InvalidEntityArrayException;
 use MF\Model\Playable;
-use UnexpectedValueException;
+use MF\Model\PlayableLink;
 
 class PlayableRepository
 {
@@ -18,23 +19,42 @@ class PlayableRepository
         $stmt->execute($playable->toArray());
     }
 
+    public function addLink(PlayableLink $link): void {
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable_link VALUES (null, :link_playable_id, :link_name, :link_type, :link_url);');
+        $data = $link->toArray();
+        unset($data['link_id']);
+
+        $stmt->execute($data);
+    }
+
     public function delete(string $id): void {
         $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_playable WHERE playable_id = ?;');
         $stmt->execute([$id]);
     }
 
     public function find(string $id): ?Playable {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_playable WHERE (playable_id = ?) LIMIT 1;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_playable LEFT JOIN e_playable_link ON link_playable_id = playable_id WHERE (playable_id = ?);');
         $stmt->execute([$id]);
 
-        $data = $stmt->fetchAll();
-        if (0 === count($data)) {
+        if (0 === $stmt->rowCount()) {
             return null;
-        } elseif (1 === count($data)) {
-            return Playable::fromArray($data[0]);
-        } else {
-            throw new UnexpectedValueException();
         }
+        
+        $links = [];
+        $firstRow = $stmt->fetch();
+
+        try {
+            $row = $firstRow;
+            while (false !== $row) {
+                $links[] = $row;
+                $row = $stmt->fetch();
+            }
+        } catch (InvalidEntityArrayException $e) {
+        }
+
+        $playable = Playable::fromArray($firstRow + ['playable_stored_links' => $links]);
+
+        return $playable;
     }
 
     public function findAll(): array {

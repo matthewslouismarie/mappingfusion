@@ -2,7 +2,7 @@
 
 namespace MF\Model;
 
-use LengthException;
+use MF\Exception\InvalidStringException;
 use Stringable;
 
 class LongString implements Stringable
@@ -11,7 +11,7 @@ class LongString implements Stringable
 
     public function __construct(private string $value) {
         if (mb_strlen($this->value, "UTF-8") > self::MAX_LENGTH || 0 === mb_strlen($this->value, "UTF-8")) {
-            throw new LengthException();
+            throw new InvalidStringException();
         }
     }
 

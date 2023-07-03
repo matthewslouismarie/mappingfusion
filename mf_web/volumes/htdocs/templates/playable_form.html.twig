@@ -6,27 +6,47 @@
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
     <div class="form-row">
         <label class="label" for="p-id">ID (générée automatiquement)</label>
-        <input class="input" id="p-id" name="playable_id"{% if entity %} value="{{ entity['playable_id'] }}"{% endif %}>
+        <input class="input" id="p-id" name="playable_id"{% if data %} value="{{ data['playable_id'] }}"{% endif %}>
     </div>
     <div class="form-row">
         <label class="label" for="p-name">Nom</label>
-        <input class="input" id="p-name" name="playable_name" required{% if entity %} value="{{ entity['playable_name'] }}"{% endif %}>
+        <input class="input" id="p-name" name="playable_name" required{% if data %} value="{{ data['playable_name'] }}"{% endif %}>
     </div>
     <div class="form-row">
         <label class="label" for="p-game-id">Si mod ou map, ID du jeu (laisser vide si c’est un jeu stand-alone)</label>
-        <select class="input" id="p-game-id" name="playable_game_id"{% if entity and entity['playable_game_id'] %} value="{{ entity['playable_game_id'] }}"{% endif %}>
+        <select class="input" id="p-game-id" name="playable_game_id"{% if data and data['playable_game_id'] %} value="{{ data['playable_game_id'] }}"{% endif %}>
             <option value="">
             {% for p in playables %}
-            {% if entity is null or p.id != entity['playable_id'] %}
-            <option label="{{ p.name }}" value="{{ p.id }}"{% if entity and entity['playable_game_id'] == p.id %} selected{% endif %}>
+            {% if data is null or p.id != data['playable_id'] %}
+            <option label="{{ p.name }}" value="{{ p.id }}"{% if data and data['playable_game_id'] == p.id %} selected{% endif %}>
             {% endif %}
             {% endfor %}
         </select>
     </div>
     <div class="form-row">
         <label class="label" for="p-release-date-time">Date de publication (optionnel)</label>
-        <input class="input" id="p-release-date-time" name="playable_release_date_time" type="datetime-local" {% if entity %} value="{{ entity['playable_release_date_time'] }}"{% endif %}>
+        <input class="input" id="p-release-date-time" name="playable_release_date_time" type="datetime-local" {% if data %} value="{{ data['playable_release_date_time'] }}"{% endif %}>
     </div>
+    
+    {% for link in data['playable_stored_links'] %}
+        <div class="form-row">
+            <label class="label" for="link-{{ loop.index0 }}-name">Nom du lien</label>
+            <input class="input" id="link-{{ loop.index0 }}-name" name="link_{{ loop.index0 }}_name" value="{{ link['link_name'] }}">
+        </div>
+        <div class="form-row">
+            <label class="label" for="link-{{ loop.index0 }}-url">URL du lien</label>
+            <input class="input" id="link-{{ loop.index0 }}-url" name="link_{{ loop.index0 }}_url" value="{{ link['link_url'] }}">
+        </div>
+        <div class="form-row">
+            <label class="label" for="link-{{ loop.index0 }}-type">Type de lien</label>
+            <select class="input" id="link-{{ loop.index0 }}-type" name="link_{{ loop.index0 }}_type">
+                {% for t in linkTypes %}
+                <option label="{{ t.value }}" value="{{ t.value }}"{% if link['link_type'] == t.value %} selected{% endif %}>
+                {% endfor %}
+            </select>
+        </div>
+        <input class="input" name="link_{{ loop.index0 }}_id" type="hidden"{% if link['link_id'] %} value="{{ link['link_id'] }}"{% endif %}>
+    {% endfor %}
     <button type="submit">Poster</button>
 </form>
 {% endblock %}

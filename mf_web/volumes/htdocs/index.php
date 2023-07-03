@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 set_error_handler(function ($errNo, $errStr, $errFile, $errLine) {
     $msg = "$errNo, $errStr in $errFile on line $errLine";
     if (2 === $errNo) {

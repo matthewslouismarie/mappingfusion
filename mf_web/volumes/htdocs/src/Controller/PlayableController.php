@@ -4,9 +4,11 @@ namespace MF\Controller;
 
 use DomainException;
 use GuzzleHttp\Psr7\Response;
+use MF\Enum\LinkType;
 use MF\Form;
 use MF\Model\Entity;
 use MF\Model\Playable;
+use MF\Model\PlayableLink;
 use MF\Repository\AuthorRepository;
 use MF\Repository\PlayableRepository;
 use MF\Router;
@@ -28,23 +30,29 @@ class PlayableController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request): ResponseInterface {
-        $entity = $this->getFromRequest($request);
+        $data = $this->getEntityDataFromRequest($request);
 
-        if (null !== $entity && (!isset($request->getQueryParams()['id']) || $entity->getId() !== $request->getQueryParams()['id'])) {
-            return new Response(302, ['Location' => $this->router->generateUrl(self::ROUTE_ID, ['id' => strval($entity->getId())])]);
-        }
+        // update entity if post request
+
+        // @todo throw exception in getEntityDataFromRequest instead
+        // if (null === $entityData && isset($request->getQueryParams()['id'])) {
+        //     return new Response(302, ['Location' => $this->router->generateUrl(self::ROUTE_ID, ['id' => strval($entity->getId())])]);
+        // }
 
         return new Response(
             body: $this->twig->render('playable_form.html.twig', [
                 'authors' => $this->authorRepo->findAll(),
-                'entity' => $entity?->toArray(),
+                'data' => $data,
+                'linkTypes' => LinkType::cases(),
                 'playables' => $this->repo->findAll(),
-            ])
+            ]),
         );
     }
 
-    private function getFromRequest(ServerRequestInterface $request): ?Entity {
+    private function getEntityDataFromRequest(ServerRequestInterface $request): ?array {
         if ('POST' === $request->getMethod()) {
+            return $request->getParsedBody();
+
             $data = $this->form->nullifyEmptyStrings($request->getParsedBody());
 
             if (isset($request->getQueryParams()['id'])) {
@@ -62,7 +70,7 @@ class PlayableController implements ControllerInterface
             if (null === $entity) {
                 throw new DomainException();
             }
-            return $entity;
+            return $entity->toArray();
         } else {
             return null;
         }

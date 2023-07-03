@@ -4,6 +4,7 @@ namespace MF\Database;
 
 use DateTimeImmutable;
 use MF\Configuration;
+use MF\Enum\LinkType;
 use MF\Model\Article;
 use MF\Model\Author;
 use MF\Model\Category;
@@ -11,6 +12,7 @@ use MF\Model\Contribution;
 use MF\Model\Member;
 use MF\Model\PasswordHash;
 use MF\Model\Playable;
+use MF\Model\PlayableLink;
 use MF\Model\Review;
 use MF\Repository\ArticleRepository;
 use MF\Repository\AuthorRepository;
@@ -55,6 +57,8 @@ class Fixture
         $this->repoPlayable->add($hl2);
         $this->repoPlayable->add($sc);
         $this->repoPlayable->add($crossedPaths);
+        $this->repoPlayable->addLink(new PlayableLink(null, $sc->getId(), 'Homepage', LinkType::HomePage, 'https://svencoop.com'));
+        $this->repoPlayable->addLink(new PlayableLink(null, $sc->getId(), 'Download', LinkType::Download, 'https://store.steampowered.com/agecheck/app/225840/'));
         $this->repoContrib->add(new Contribution(null, $loulimi->getId(), $crossedPaths->getId(), true));
         $this->repoContrib->add(new Contribution(null, $neophus->getId(), $crossedPaths->getId(), true));
         $this->repoContrib->add(new Contribution(null, $valve->getId(), $hl->getId(), true));

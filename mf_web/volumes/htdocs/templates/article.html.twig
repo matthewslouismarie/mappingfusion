@@ -25,7 +25,7 @@
         </div>
 
         <div class="main">
-            <nav class="nav _section">
+            <nav class="nav _sectionpadded">
                 <div class="frame -articlenav _padded -a -g">
                     <ul class="list">
                         <li class="item">
@@ -65,7 +65,7 @@
                 </div>
             </nav>
             {% if article.isReview %}
-            <div class="content -review _section">
+            <div class="content -review _sectionpadded">
                 <div class="_padded -a -g">
                     <dl class="std-metadata">
                         <div class="item">
@@ -87,13 +87,13 @@
             </div>
             {% endif %}
 
-            <div class="content -articlebody _section">
+            <div class="content -articlebody _sectionpadded">
                 <div class="std-markdown-container _padded -g">
                     {{ app.mk.format(article.content)|raw }}
                 </div>
             </div>
 
-            <div class="content _section">
+            <div class="content">
                 <div class="glide -arrows">
                     <div class="controls" data-glide-el="controls">
                         <button class="button -left" data-glide-dir="<"></button>
@@ -118,11 +118,11 @@
                 </div>
             </div>
 
-            <div class="content _section">
+            <div class="content _sectionpadded">
                 {{ review(app.mk, article.storedReview, '-summary') }}
             </div>
 
-            <div class="content _section">
+            <div class="content _sectionpadded">
                 <div class="article-advice _padded -a">
                     <img alt="Le conseil Mapping-Fusion" class="img" src="{{ app.asset('mapping-fusion-advice.svg') }}">
                     <div class="text">
@@ -134,12 +134,12 @@
         </div>
     </article>
 
-    <aside class="socialnetworks _section">
+    <aside class="socialnetworks _sectionpadded">
         <p class="text">Tu souhaites échanger autour de ce Mod avec la communauté ? Rejoins-nous dès à présent !</p>
         {% include 'sections/social-networks.html.twig' %}
     </aside>
 
-    <aside class="site-section-beginners-short _section">
+    <aside class="site-section-beginners-short _sectionpadded">
         <div class="content">
             <p class="text">Consulte également <strong>tous nos dossiers explicatifs</strong> pour bien <strong>comprendre comment installer un Mod</strong></p>
             <a class="std-button -white">
