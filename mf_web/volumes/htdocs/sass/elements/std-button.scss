@@ -46,8 +46,6 @@
     }
 
     @media (min-width: $screen-size-s) {
-        padding: $gap-s;
-
         &.-withicon {
             > .text {
                 display: block;

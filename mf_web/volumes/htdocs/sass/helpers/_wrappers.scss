@@ -1,0 +1,14 @@
+._wrappers {
+    @media (min-width: $screen-size-s) {
+        width: 60%;
+        margin: auto;
+    }
+
+    @media (min-width: $screen-size-m) {
+        width: 50%;
+    }
+
+    @media (min-width: $screen-size-l) {
+        width: 40%;
+    }
+}

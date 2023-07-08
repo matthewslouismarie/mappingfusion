@@ -1,0 +1,16 @@
+._flex {
+    display: flex;
+    flex-direction: column;
+
+    &.-centered {
+        align-items: center;
+    }
+
+    &.-gap {
+        gap: $gap-m;
+    }
+
+    &.-gaps {
+        gap: $gap-s;
+    }
+}

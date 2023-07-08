@@ -67,10 +67,12 @@
             </div>
         </header>
 
-        <main class="site-section">
+        <main class="site-main">
             {% block body %}
-            <div class="_wrapper">
-                {% block bodyContent %}{% endblock %}
+            <div class="_padded -a">
+                <div class="_wrappers">
+                    {% block bodyContent %}{% endblock %}
+                </div>
             </div>
             {% endblock %}
         </main>
