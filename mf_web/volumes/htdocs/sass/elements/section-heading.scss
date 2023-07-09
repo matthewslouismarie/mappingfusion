@@ -1,6 +1,12 @@
 .section-heading {
     text-align: center;
 
+    &.-white {
+        > .title {
+            color: $color-white;
+        }
+    }
+
     > .img {
         margin-bottom: $gap-s;
     }

@@ -3,6 +3,7 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
+use MF\Enum\Clearance;
 use MF\Model\Review;
 use MF\Repository\PlayableRepository;
 use MF\Repository\ReviewRepository;
@@ -76,8 +77,8 @@ class ReviewController implements ControllerInterface
         ]));
     }
 
-    public function getAccessControl(): int {
-        return 1;
+    public function getAccessControl(): Clearance {
+        return Clearance::ADMINS;
     }
 
     private function retrieveEntityFromRequest(ServerRequestInterface $request, ?string $id): ?Review {

@@ -3,6 +3,7 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
+use MF\Enum\Clearance;
 use MF\Repository\ArticleRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
@@ -33,7 +34,7 @@ class HomeController implements ControllerInterface
         ]));
     }
 
-    public function getAccessControl(): int {
-        return 0;
+    public function getAccessControl(): Clearance {
+        return Clearance::ALL;
     }
 }

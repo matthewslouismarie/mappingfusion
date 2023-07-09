@@ -4,6 +4,7 @@ namespace MF;
 
 use GuzzleHttp\Psr7\Response;
 use MF\Controller\ControllerInterface;
+use MF\Enum\Clearance;
 use MF\HttpBridge\Session;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -22,7 +23,7 @@ class Kernel
     }
 
     public function generateResponse(ControllerInterface $controller, ServerRequestInterface $requestInterface): Response {
-        if (-1 === $controller->getAccessControl() && $this->session->isUserLoggedIn()) {
+        if (Clearance::VISITORS === $controller->getAccessControl() && $this->session->isUserLoggedIn()) {
             return new Response(
                 status: 403,
                 body: $this->twig->render('error.html.twig', [
@@ -30,7 +31,7 @@ class Kernel
                     'title' => 'Accès non autorisé',
                 ]),
             );
-        } elseif (1 === $controller->getAccessControl() && !$this->session->isUserLoggedIn()) {
+        } elseif (Clearance::ADMINS === $controller->getAccessControl() && !$this->session->isUserLoggedIn()) {
             return new Response(
                 status: 403,
                 body: $this->twig->render('error.html.twig', [

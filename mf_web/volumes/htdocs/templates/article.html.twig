@@ -118,9 +118,11 @@
                 </div>
             </div>
 
+            {% if article.isReview %}
             <div class="content _sectionpadded">
                 {{ review(app.mk, article.storedReview, '-summary') }}
             </div>
+            {% endif %}
 
             <div class="content _sectionpadded">
                 <div class="article-advice _padded -a">
@@ -134,19 +136,9 @@
         </div>
     </article>
 
-    <aside class="socialnetworks _sectionpadded">
-        <p class="text">Tu souhaites échanger autour de ce Mod avec la communauté ? Rejoins-nous dès à présent !</p>
-        {% include 'sections/social-networks.html.twig' %}
-    </aside>
+    {% include 'sections/social-medias-all.html.twig' %}
 
-    <aside class="site-section-beginners-short _sectionpadded">
-        <div class="content">
-            <p class="text">Consulte également <strong>tous nos dossiers explicatifs</strong> pour bien <strong>comprendre comment installer un Mod</strong></p>
-            <a class="std-button -white">
-                <div class="text"><span class="bold">Installation de Mods</span></div>
-            </a>
-        </div>
-    </aside>
+    {% include 'sections/beginners-all.html.twig' %}
 </div>
 {% endblock %}
 

@@ -3,6 +3,7 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
+use MF\Enum\Clearance;
 use MF\Model\Contribution;
 use MF\Repository\AuthorRepository;
 use MF\TwigService;
@@ -36,7 +37,7 @@ class AdminContributionController implements ControllerInterface
         }
     }
 
-    public function getAccessControl(): int {
-        return 1;
+    public function getAccessControl(): Clearance {
+        return Clearance::ADMINS;
     }
 }

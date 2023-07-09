@@ -3,6 +3,7 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
+use MF\Enum\Clearance;
 use MF\Repository\PlayableRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
@@ -30,7 +31,7 @@ class AdminPlayableListController implements ControllerInterface
         ]));
     }
 
-    public function getAccessControl(): int {
-        return 1;
+    public function getAccessControl(): Clearance {
+        return Clearance::ADMINS;
     }
 }

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% from 'macros/article_mosaic.html.twig' import articleMosaic %}
+
+{% block title %}Liste des articles{% endblock %}
+
+{% block body %}
+<div class="_sectionpadded -a">
+    <div class="_wrapper _flex -gapl">
+    
+        <hgroup class="section-heading -inline -white">
+            <p class="imgp">
+                <img alt="Liste des actualités" class="image" src="{{ app.asset('news.svg') }}">
+            </p>
+            <p class="p">Liste des</p>
+            <h2 class="title">actualités</h2>
+        </hgroup>
+
+        <ul class="article-list">
+            {% for a in articles %}
+            <li class="item">{{ articleMosaic(a, app) }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% include 'sections/social-medias-all.html.twig' %}
+
+{% include 'sections/beginners-all.html.twig' %}
+
+
+{% endblock %}

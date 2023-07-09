@@ -49,7 +49,7 @@ class ArticleRepository
     }
 
     public function findAll(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM e_article;')->fetchAll();
+        $results = $this->conn->getPdo()->query('SELECT * FROM v_article;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
             $entities[] = Article::fromArray($r);

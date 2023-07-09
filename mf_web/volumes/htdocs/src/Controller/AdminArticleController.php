@@ -2,6 +2,7 @@
 
 namespace MF\Controller;
 use DomainException;
+use MF\Enum\Clearance;
 use MF\Form;
 use MF\Model\SlugFilename;
 use MF\Repository\ArticleRepository;
@@ -96,7 +97,7 @@ class AdminArticleController implements ControllerInterface
         }
     }
 
-    public function getAccessControl(): int {
-        return 1;
+    public function getAccessControl(): Clearance {
+        return Clearance::ADMINS;
     }
 }

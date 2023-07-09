@@ -4,6 +4,7 @@ namespace MF\Controller;
 
 use DomainException;
 use GuzzleHttp\Psr7\Response;
+use MF\Enum\Clearance;
 use MF\Form;
 use MF\Model\Author;
 use MF\Repository\AuthorRepository;
@@ -61,7 +62,7 @@ class AuthorController implements ControllerInterface
         }
     }
 
-    public function getAccessControl(): int {
-        return 1;
+    public function getAccessControl(): Clearance {
+        return Clearance::ADMINS;
     }
 }

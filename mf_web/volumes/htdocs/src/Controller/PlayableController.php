@@ -4,6 +4,7 @@ namespace MF\Controller;
 
 use DomainException;
 use GuzzleHttp\Psr7\Response;
+use MF\Enum\Clearance;
 use MF\Enum\LinkType;
 use MF\Form;
 use MF\Model\Entity;
@@ -80,7 +81,7 @@ class PlayableController implements ControllerInterface
         }
     }
 
-    public function getAccessControl(): int {
-        return 1;
+    public function getAccessControl(): Clearance {
+        return Clearance::ADMINS;
     }
 }

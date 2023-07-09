@@ -2,6 +2,7 @@
 
 namespace MF\Controller;
 
+use MF\Enum\Clearance;
 use MF\HttpBridge\Session;
 use MF\ModelFactory\FormMemberFactory;
 use MF\Repository\MemberRepository;
@@ -43,7 +44,7 @@ class LogoutController implements ControllerInterface
         return new Response(body: $this->twig->render('logout.html.twig'));
     }
 
-    public function getAccessControl(): int {
-        return 1;
+    public function getAccessControl(): Clearance {
+        return Clearance::ADMINS;
     }
 }

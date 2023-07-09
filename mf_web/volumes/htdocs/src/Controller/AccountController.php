@@ -2,6 +2,7 @@
 
 namespace MF\Controller;
 
+use MF\Enum\Clearance;
 use MF\HttpBridge\Session;
 use MF\Repository\MemberRepository;
 use GuzzleHttp\Psr7\Response;
@@ -39,7 +40,7 @@ class AccountController implements ControllerInterface
         return new Response(body: $this->twig->render('account.html.twig', ['success' => $success]));
     }
 
-    public function getAccessControl(): int {
-        return 1;
+    public function getAccessControl(): Clearance {
+        return Clearance::ADMINS;
     }
 }

@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% from 'macros/article_mosaic.html.twig' import articleMosaic %}
+
 {% block title %}Acceuil{% endblock %}
 
 {% block resources %}
@@ -69,26 +71,13 @@
             </hgroup>
             <ul class="std-block-list -small">
                 {% for a in last_articles %}
-                <li class="item">
-                    <a class="article-mosaic" href="{{ app.router.generateUrl('view_article', {id: a.id}) }}">
-                        <div class="left" style="background-image: url('{{ app.resource(a.coverFilename) }}');">
-                            <em class="std-badge">{{ a.category.name }}</em>
-                        </div>
-                        <div class="right">
-                            <h3 class="title">{{ app.mk.getText(a.title) }}</h3>
-                            <p class="date">Le {{ a.lastUpdateDateTime.format('d/m/y') }}</p>
-                            <div class="excerpt">
-                                {{ app.mk.getText(a.content) }}
-                            </div>
-                        </div>
-                    </a>
-                </li>
+                <li class="item">{{ articleMosaic(a, app) }}</li>
                 {% endfor %}
             </ul>
             
-            <a class="std-button -white">
+            <a class="std-button -white" href="{{ app.router.generateUrl('articles') }}">
                 <div class="text">
-                    <span class="bold">Voir plus de tests</span>
+                    <span class="bold">Voir plus d’articles</span>
                 </div>
             </a>
         </div>

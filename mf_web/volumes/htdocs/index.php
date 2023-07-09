@@ -21,13 +21,14 @@ require_once './vendor/autoload.php';
 use DI\ContainerBuilder;
 use GuzzleHttp\Psr7\ServerRequest;
 use MF\Controller\AccountController;
+use MF\Controller\AdminArticleController;
 use MF\Controller\AdminArticleListController;
 use MF\Controller\AdminAuthorListController;
 use MF\Controller\AdminContributionController;
 use MF\Controller\AdminPlayableListController;
 use MF\Controller\AdminReviewListController;
-use MF\Controller\AdminArticleController;
 use MF\Controller\ArticleController;
+use MF\Controller\ArticleListController;
 use MF\Controller\AuthorController;
 use MF\Controller\CategoryAdminController;
 use MF\Controller\CategoryListAdminController;
@@ -51,6 +52,7 @@ const ROUTES = [
     AdminPlayableListController::ROUTE_ID => AdminPlayableListController::class,
     AdminReviewListController::ROUTE_ID => AdminReviewListController::class,
     ArticleController::ROUTE_ID => ArticleController::class,
+    ArticleListController::ROUTE_ID => ArticleListController::class,
     AuthorController::ROUTE_ID => AuthorController::class,
     CategoryAdminController::ROUTE_ID => CategoryAdminController::class,
     CategoryListAdminController::ROUTE_ID => CategoryListAdminController::class,
