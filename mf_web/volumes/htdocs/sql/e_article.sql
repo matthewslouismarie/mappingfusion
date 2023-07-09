@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS e_article (
     article_review_id SMALLINT UNSIGNED,
     FOREIGN KEY (article_author_id) REFERENCES e_member (member_id),
     FOREIGN KEY (article_category_id) REFERENCES e_category (category_id),
-    FOREIGN KEY (article_review_id) REFERENCES e_review (review_id)
+    FOREIGN KEY (article_review_id) REFERENCES e_review (review_id) ON DELETE SET NULL ON UPDATE CASCADE
 )

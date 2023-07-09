@@ -38,6 +38,27 @@ class ReviewController implements ControllerInterface
 
     public function generateResponse(ServerRequestInterface $request): ResponseInterface {
         $id = $request->getQueryParams()['id'] ?? null;
+
+
+        if ('POST' === $request->getMethod()) {
+            $data = $request->getParsedBody();
+            if (isset($data['delete-review'])) {
+                if ('supprimer' === $data['delete-review']) {
+                    $this->repo->delete($id);
+        
+                    return new Response(body: $this->twig->render('success.html.twig', [
+                        'title' => 'Test supprimé',
+                        'message' => 'Le test a bien été supprimé.',
+                    ]));
+                } else {
+                    return new Response(body: $this->twig->render('error.html.twig', [
+                        'title' => 'Erreur',
+                        'message' => 'Le texte rentré n’est pas correct.',
+                    ]));
+                }
+            }
+        }
+    
         $entity = $this->retrieveEntityFromRequest($request, $id);
 
         if ('POST' === $request->getMethod()) {

@@ -3,31 +3,43 @@
 {% block title %}Nouveau test{% endblock %}
 
 {% block bodyContent %}
-<form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
-    <div class="form-row">
-        <label class="label" for="p-playable-id">ID du jeu ou mod testé</label>
-        <select id="p-playable-id" name="review_playable_id" required>
-            {% for p in playables %}
-            <option label="{{ p.name }}"{% if entity and entity['review_playable_id'] == p.id %} selected="selected"{% endif %} value="{{ p.id }}">
-            {% endfor %}
-        </select>
-    </div>
-    <div class="form-row">
-        <label class="label" for="p-rating">Note (de 1 à 5)</label>
-        <input class="input" id="p-rating" inputmode="decimal" min="1" max="5" name="review_rating" required step="0.1" type="number"{% if entity %} value="{{ entity['review_rating'] }}"{% endif %}>
-    </div>
-    <div class="form-row">
-        <label class="label" for="p-body">Avis final</label>
-        <textarea class="input" id="p-body" name="review_body">{% if entity %}{{ entity['review_body'] }}{% endif %}</textarea>
-    </div>
-    <div class="form-row">
-        <label class="label" for="p-cons">Points négatifs</label>
-        <textarea class="input" id="p-cons" name="review_cons">{% if entity %}{{ entity['review_cons'] }}{% endif %}</textarea>
-    </div>
-    <div class="form-row">
-        <label class="label" for="p-pros">Ponts positifs</label>
-        <textarea class="input" id="p-pros" name="review_pros">{% if entity %}{{ entity['review_pros'] }}{% endif %}</textarea>
-    </div>
-    <button type="submit">Poster</button>
-</form>
+<div class="_flex -gapl">
+    <form autocomplete="on" class="std-form _flex -gap" enctype="multipart/form-data" method="post">
+        <h1>Édition de test</h1>
+        <div class="form-row">
+            <label class="label" for="p-playable-id">ID du jeu ou mod testé</label>
+            <select id="p-playable-id" name="review_playable_id" required>
+                {% for p in playables %}
+                <option label="{{ p.name }}"{% if entity and entity['review_playable_id'] == p.id %} selected="selected"{% endif %} value="{{ p.id }}">
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-row">
+            <label class="label" for="p-rating">Note (de 1 à 5)</label>
+            <input class="input" id="p-rating" inputmode="decimal" min="1" max="5" name="review_rating" required step="0.1" type="number"{% if entity %} value="{{ entity['review_rating'] }}"{% endif %}>
+        </div>
+        <div class="form-row">
+            <label class="label" for="p-body">Avis final</label>
+            <textarea class="input" id="p-body" name="review_body">{% if entity %}{{ entity['review_body'] }}{% endif %}</textarea>
+        </div>
+        <div class="form-row">
+            <label class="label" for="p-cons">Points négatifs</label>
+            <textarea class="input" id="p-cons" name="review_cons">{% if entity %}{{ entity['review_cons'] }}{% endif %}</textarea>
+        </div>
+        <div class="form-row">
+            <label class="label" for="p-pros">Ponts positifs</label>
+            <textarea class="input" id="p-pros" name="review_pros">{% if entity %}{{ entity['review_pros'] }}{% endif %}</textarea>
+        </div>
+        <button type="submit">Poster</button>
+    </form>
+
+    <form class="std-form" enctype="multipart/form-data" method="post">
+        <h2>Supprimer le test</h2>
+        <div class="form-row">
+            <label class="label" for="delete-review">Confirmez en écrivant « supprimer » (sans les guillements, bien évidemment)</label>
+            <input class="input" id="delete-review" name="delete-review" pattern="^supprimer$" required>
+        </div>
+        <button type="submit">Poster</button>
+    </form>
+</div>
 {% endblock %}
