@@ -15,13 +15,13 @@ class PlayableLink implements EntityInterface
 
     private Url $url;
 
-    public static function fromArray(array $data, string $prefix = 'link'): self {
-        return new self(
-            $data["{$prefix}_id"],
-            $data["{$prefix}_playable_id"],
-            $data["{$prefix}_name"],
-            LinkType::fromString($data["{$prefix}_type"]),
-            $data["{$prefix}_url"],
+    public static function fromArray(array $data, string $prefix = 'link_'): self {
+            return new self(
+            $data["{$prefix}id"] ?? null,
+            $data["{$prefix}playable_id"],
+            $data["{$prefix}name"],
+            LinkType::fromString($data["{$prefix}type"]),
+            $data["{$prefix}url"],
         );
     }
 
@@ -39,13 +39,17 @@ class PlayableLink implements EntityInterface
         $this->url = new Url($url);
     }
 
-    public function toArray(string $prefix = 'link'): array {
+    public function getId(): ?int {
+        return $this->id?->toInt();
+    }
+
+    public function toArray(string $prefix = 'link_'): array {
         return [
-            "{$prefix}_id" => $this->id?->toInt(),
-            "{$prefix}_playable_id" => $this->playableId->__toString(),
-            "{$prefix}_name" => $this->name->__toString(),
-            "{$prefix}_type" => $this->type->value,
-            "{$prefix}_url" => $this->url->__toString(),
+            "{$prefix}id" => $this->id?->toInt(),
+            "{$prefix}playable_id" => $this->playableId->__toString(),
+            "{$prefix}name" => $this->name->__toString(),
+            "{$prefix}type" => $this->type->value,
+            "{$prefix}url" => $this->url->__toString(),
         ];
     }
 }

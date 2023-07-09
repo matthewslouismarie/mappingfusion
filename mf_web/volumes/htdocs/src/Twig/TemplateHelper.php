@@ -3,6 +3,7 @@
 namespace MF\Twig;
 
 use MF\Configuration;
+use MF\Enum\LinkType;
 use MF\HttpBridge\Session;
 use MF\MarkdownService;
 use MF\Router;
@@ -21,6 +22,10 @@ class TemplateHelper
         $publicUrl = $this->getPublicUrl();
         $version = filemtime(dirname(__FILE__) . '/../../public/' . $filename);
         return "$publicUrl/$filename?version=$version";
+    }
+
+    public function getLinkTypes(): array {
+        return LinkType::cases();
     }
 
     public function getMk(): MarkdownService {

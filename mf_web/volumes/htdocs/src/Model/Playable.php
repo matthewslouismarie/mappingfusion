@@ -24,28 +24,31 @@ class Playable implements Entity
 
     private ?array $storedLinks;
 
-    static function fromArray(array $data, string $prefix = 'playable'): self {
-        $gameId = $data["{$prefix}_game_id"] ?? null;
+    /**
+     * @todo Stored game should be read from stored_game prefix or something like that.
+     */
+    static function fromArray(array $data, string $prefix = 'playable_', string $linkPrefix = 'link_'): self {
+        $gameId = $data["{$prefix}game_id"] ?? null;
         try {
-            $game = null !== $gameId ? Playable::fromArray($data, "{$prefix}_game") : null;
+            $game = null !== $gameId ? Playable::fromArray($data, "{$prefix}game_") : null;
         } catch (InvalidEntityArrayException $e) {
             $game = null;
         }
 
         $links = null;
-        if (isset($data["{$prefix}_stored_links"]) && null !== $data["{$prefix}_stored_links"]) {
+        if (isset($data["{$prefix}stored_links"]) && null !== $data["{$prefix}stored_links"]) {
             $links = [];
-            foreach ($data["{$prefix}_stored_links"] as $linkData) {
-                $links[] = PlayableLink::fromArray($linkData);
+            foreach ($data["{$prefix}stored_links"] as $linkData) {
+                $links[] = PlayableLink::fromArray($linkData, $linkPrefix);
             }
         }
 
         try {
             return new self(
-                $data["{$prefix}_id"],
-                $data["{$prefix}_name"],
-                new DateTimeImmutable($data["{$prefix}_release_date_time"]),
-                $data["{$prefix}_game_id"],
+                $data["{$prefix}id"],
+                $data["{$prefix}name"],
+                new DateTimeImmutable($data["{$prefix}release_date_time"]),
+                $data["{$prefix}game_id"],
                 null,
                 $game,
                 $links,
@@ -97,21 +100,21 @@ class Playable implements Entity
         return $this->storedLinks;
     }
 
-    public function toArray(string $prefix = 'playable'): array {
+    public function toArray(string $prefix = 'playable_', ?string $linkPrefix = null): array {
         $links = null;
         if (null !== $this->storedLinks) {
             $links = [];
             foreach ($this->storedLinks as $link) {
-                $links[] = $link->toArray();
+                $links[] = null !== $linkPrefix ? $link->toArray($linkPrefix) : $link->toArray();
             }
         }
 
         return [
-            "{$prefix}_id" => $this->id->__toString(),
-            "{$prefix}_name" => $this->name->__toString(),
-            "{$prefix}_game_id" => $this->gameId?->__toString(),
-            "{$prefix}_release_date_time" => $this->releaseDateTime->format('Y-m-d H:m:s'),
-            "{$prefix}_stored_links" => $links,
+            "{$prefix}id" => $this->id->__toString(),
+            "{$prefix}name" => $this->name->__toString(),
+            "{$prefix}game_id" => $this->gameId?->__toString(),
+            "{$prefix}release_date_time" => $this->releaseDateTime->format('Y-m-d H:m:s'),
+            "{$prefix}stored_links" => $links,
         ];
     }
 }

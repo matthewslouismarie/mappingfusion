@@ -30,7 +30,8 @@ class PlayableController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request): ResponseInterface {
-        $data = $this->getEntityDataFromRequest($request);
+        $playableId = $request->getQueryParams()['id'] ?? null;
+        $data = $this->getEntityDataFromRequest($request, $playableId);
 
         // update entity if post request
 
@@ -44,33 +45,36 @@ class PlayableController implements ControllerInterface
                 'authors' => $this->authorRepo->findAll(),
                 'data' => $data,
                 'linkTypes' => LinkType::cases(),
+                'playableId' => $playableId,
                 'playables' => $this->repo->findAll(),
             ]),
         );
     }
 
-    private function getEntityDataFromRequest(ServerRequestInterface $request): ?array {
+    private function getEntityDataFromRequest(ServerRequestInterface $request, ?string $playableId): ?array {
         if ('POST' === $request->getMethod()) {
-            return $request->getParsedBody();
+            $data = $request->getParsedBody();
 
-            $data = $this->form->nullifyEmptyStrings($request->getParsedBody());
-
-            if (isset($request->getQueryParams()['id'])) {
-                $entity = Playable::fromArray($data);
-                $this->repo->update($request->getQueryParams()['id'], $entity);
-
-                return $entity;
-            } else {
-                $entity = Playable::fromArray($data);
-                $this->repo->add($entity);
-                return $entity;
+            if (key_exists('playable_stored_links', $data)) {
+                for ($i = 0; $i < count($data['playable_stored_links']); $i++) {
+                    $data['playable_stored_links'][$i]['playable_id'] = $request->getQueryParams()['id'] ?? null;
+                }
             }
-        } elseif (isset($request->getQueryParams()['id'])) {
-            $entity = $this->repo->find($request->getQueryParams()['id']);
+
+            $entity = Playable::fromArray($data, linkPrefix: '');
+            if (null !== $playableId) {
+                $this->repo->update($playableId, $entity, false, $data['links-to-remove'] ?? []);
+            } else {
+                $this->repo->add($entity);
+            }
+            
+            return $data;
+        } elseif (null !== $playableId) {
+            $entity = $this->repo->find($playableId);
             if (null === $entity) {
                 throw new DomainException();
             }
-            return $entity->toArray();
+            return $entity->toArray(linkPrefix: '');
         } else {
             return null;
         }

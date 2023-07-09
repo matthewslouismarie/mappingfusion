@@ -1,52 +1,87 @@
 {% extends 'base.html.twig' %}
 
+{% macro index(i) %}{{ i ?? '${index}' }}{% endmacro %}
+
+{% macro linkForm(linkTypes, link, i) %}
+<div class="_flex -gaps" data-link-form-id="link-form" id="link-form-{{ _self.index(i) }}">
+    <div class="form-row">
+        <label class="label" for="link-{{ _self.index(i) }}-name">Nom du lien</label>
+        <input class="input" id="link-{{ _self.index(i) }}-name" name="playable_stored_links[{{ _self.index(i) }}][name]"{% if link %} value="{{ link['name'] }}"{% endif %}>
+    </div>
+    <div class="form-row">
+        <label class="label" for="link-{{ _self.index(i) }}-url">URL du lien</label>
+        <input class="input" id="link-{{ _self.index(i) }}-url" name="playable_stored_links[{{ _self.index(i) }}][url]"{% if link %} value="{{ link['url'] }}"{% endif %}>
+    </div>
+    <div class="form-row">
+        <label class="label" for="link-{{ _self.index(i) }}-type">Type de lien</label>
+        <select class="input" id="link-{{ _self.index(i) }}-type" name="playable_stored_links[{{ _self.index(i) }}][type]">
+            {% for t in linkTypes %}
+            <option label="{{ t.value }}" value="{{ t.value }}"{% if link and link['type'] == t.value %} selected{% endif %}>
+            {% endfor %}
+        </select>
+    </div>
+    <button class="stb-button" type="button" data-type="delete-link-button" data-form-id="link-form-{{ _self.index(i) }}" {% if  link['id'] is defined %}data-link-id="{{ link['id'] }}" data-template-id="link-to-remove-template"{% endif %}>Supprimer le lien</button>
+    {% if link and link['id'] is defined %}
+    <input class="input" name="playable_stored_links[{{ _self.index(i) }}][id]" type="hidden" value="{{ link['id'] }}">
+    {% endif %}
+</div>
+{% endmacro %}
+
 {% block title %}Édition d’auteur{% endblock %}
 
 {% block bodyContent %}
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
-    <div class="form-row">
-        <label class="label" for="p-id">ID (générée automatiquement)</label>
-        <input class="input" id="p-id" name="playable_id"{% if data %} value="{{ data['playable_id'] }}"{% endif %}>
-    </div>
-    <div class="form-row">
-        <label class="label" for="p-name">Nom</label>
-        <input class="input" id="p-name" name="playable_name" required{% if data %} value="{{ data['playable_name'] }}"{% endif %}>
-    </div>
-    <div class="form-row">
-        <label class="label" for="p-game-id">Si mod ou map, ID du jeu (laisser vide si c’est un jeu stand-alone)</label>
-        <select class="input" id="p-game-id" name="playable_game_id"{% if data and data['playable_game_id'] %} value="{{ data['playable_game_id'] }}"{% endif %}>
-            <option value="">
-            {% for p in playables %}
-            {% if data is null or p.id != data['playable_id'] %}
-            <option label="{{ p.name }}" value="{{ p.id }}"{% if data and data['playable_game_id'] == p.id %} selected{% endif %}>
-            {% endif %}
-            {% endfor %}
-        </select>
-    </div>
-    <div class="form-row">
-        <label class="label" for="p-release-date-time">Date de publication (optionnel)</label>
-        <input class="input" id="p-release-date-time" name="playable_release_date_time" type="datetime-local" {% if data %} value="{{ data['playable_release_date_time'] }}"{% endif %}>
-    </div>
-    
-    {% for link in data['playable_stored_links'] %}
+    <h1>{% if playableId %}Édition de {{ data['playable_name'] }}{% else %}Nouveau jeu{% endif %}</h1>
+    <div class="_flex -gaps">
         <div class="form-row">
-            <label class="label" for="link-{{ loop.index0 }}-name">Nom du lien</label>
-            <input class="input" id="link-{{ loop.index0 }}-name" name="link_{{ loop.index0 }}_name" value="{{ link['link_name'] }}">
+            <label class="label" for="p-id">ID (générée automatiquement)</label>
+            <input class="input" id="p-id" name="playable_id"{% if data %} value="{{ data['playable_id'] }}"{% endif %}>
         </div>
         <div class="form-row">
-            <label class="label" for="link-{{ loop.index0 }}-url">URL du lien</label>
-            <input class="input" id="link-{{ loop.index0 }}-url" name="link_{{ loop.index0 }}_url" value="{{ link['link_url'] }}">
+            <label class="label" for="p-name">Nom</label>
+            <input class="input" id="p-name" name="playable_name" required{% if data %} value="{{ data['playable_name'] }}"{% endif %}>
         </div>
         <div class="form-row">
-            <label class="label" for="link-{{ loop.index0 }}-type">Type de lien</label>
-            <select class="input" id="link-{{ loop.index0 }}-type" name="link_{{ loop.index0 }}_type">
-                {% for t in linkTypes %}
-                <option label="{{ t.value }}" value="{{ t.value }}"{% if link['link_type'] == t.value %} selected{% endif %}>
+            <label class="label" for="p-game-id">Si mod ou map, ID du jeu (laisser vide si c’est un jeu stand-alone)</label>
+            <select class="input" id="p-game-id" name="playable_game_id"{% if data and data['playable_game_id'] %} value="{{ data['playable_game_id'] }}"{% endif %}>
+                <option value="">
+                {% for p in playables %}
+                {% if data is null or p.id != data['playable_id'] %}
+                <option label="{{ p.name }}" value="{{ p.id }}"{% if data and data['playable_game_id'] == p.id %} selected{% endif %}>
+                {% endif %}
                 {% endfor %}
             </select>
         </div>
-        <input class="input" name="link_{{ loop.index0 }}_id" type="hidden"{% if link['link_id'] %} value="{{ link['link_id'] }}"{% endif %}>
+        <div class="form-row">
+            <label class="label" for="p-release-date-time">Date de publication (optionnel)</label>
+            <input class="input" id="p-release-date-time" name="playable_release_date_time" type="datetime-local" {% if data %} value="{{ data['playable_release_date_time'] }}"{% endif %}>
+        </div>
+    </div>
+    
+    {% if data['playable_stored_links'] is defined %}
+    {% for link in data['playable_stored_links'] %}
+    {{ _self.linkForm(app.linkTypes, link, loop.index0) }}
     {% endfor %}
-    <button type="submit">Poster</button>
+    {% endif %}
+    <button class="std-button" id="link-form-button" data-type="add-link-form-button" data-location-target="link-form-button" data-template="link-form-template" type="button">Ajouter un lien</button>
+
+    <div class="_text -textcentered">
+        <button class="std-button" type="submit">Poster</button>
+    </div>
 </form>
+
+<template id="link-form-template">
+{{ _self.linkForm(app.linkTypes) }}
+</template>
+
+<template id="link-to-remove-template">
+    <input type="hidden" name="links-to-remove[]" value="${linkId}">
+</template>
+{% endblock %}
+
+{% block scriptInit %}
+<script src="{{ app.asset('link-form.js') }}"></script>
+<script>
+const linkFormBtn = new LinkFormButton('link-form-button');
+</script>
 {% endblock %}

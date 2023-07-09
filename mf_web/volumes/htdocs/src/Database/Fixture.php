@@ -19,6 +19,7 @@ use MF\Repository\AuthorRepository;
 use MF\Repository\CategoryRepository;
 use MF\Repository\ContributionRepository;
 use MF\Repository\MemberRepository;
+use MF\Repository\PlayableLinkRepository;
 use MF\Repository\PlayableRepository;
 use MF\Repository\ReviewRepository;
 
@@ -26,17 +27,20 @@ class Fixture
 {
     public function __construct(
         private Configuration $config,
+        private Connection $conn,
         private ArticleRepository $repoArticle,
         private AuthorRepository $repoAuthor,
         private CategoryRepository $repoCat,
         private ContributionRepository $repoContrib,
         private MemberRepository $repoMember,
+        private PlayableLinkRepository $linkRepo,
         private PlayableRepository $repoPlayable,
         private ReviewRepository $repoReview,
     ) {
     }
 
     public function load(): void {
+        $this->conn->getPdo()->beginTransaction();
         $root = new Member('root', new PasswordHash(clear: $this->config->getSetting('rootMemberPwd')));
         $this->repoMember->add($root);
         $loulimi = new Author(null, 'Loulimi');
@@ -57,8 +61,8 @@ class Fixture
         $this->repoPlayable->add($hl2);
         $this->repoPlayable->add($sc);
         $this->repoPlayable->add($crossedPaths);
-        $this->repoPlayable->addLink(new PlayableLink(null, $sc->getId(), 'Homepage', LinkType::HomePage, 'https://svencoop.com'));
-        $this->repoPlayable->addLink(new PlayableLink(null, $sc->getId(), 'Download', LinkType::Download, 'https://store.steampowered.com/agecheck/app/225840/'));
+        $this->linkRepo->add(new PlayableLink(null, $sc->getId(), 'Homepage', LinkType::HomePage, 'https://svencoop.com'));
+        $this->linkRepo->add(new PlayableLink(null, $sc->getId(), 'Download', LinkType::Download, 'https://store.steampowered.com/agecheck/app/225840/'));
         $this->repoContrib->add(new Contribution(null, $loulimi->getId(), $crossedPaths->getId(), true));
         $this->repoContrib->add(new Contribution(null, $neophus->getId(), $crossedPaths->getId(), true));
         $this->repoContrib->add(new Contribution(null, $valve->getId(), $hl->getId(), true));
@@ -125,5 +129,6 @@ class Fixture
             new DateTimeImmutable(),
             $review3->getId(),
         ));
+        $this->conn->getPdo()->commit();
     }
 }

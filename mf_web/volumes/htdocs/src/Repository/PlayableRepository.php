@@ -3,28 +3,23 @@
 namespace MF\Repository;
 
 use MF\Database\Connection;
-use MF\Exception\InvalidEntityArrayException;
 use MF\Model\Playable;
-use MF\Model\PlayableLink;
 
 class PlayableRepository
 {
     public function __construct(
         private Connection $conn,
+        private PlayableLinkRepository $linkRepo,
     ) {
     }
 
-    public function add(Playable $playable): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:playable_id, :playable_name, :playable_release_date_time, :playable_game_id);');
-        $stmt->execute($playable->toArray());
-    }
-
-    public function addLink(PlayableLink $link): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable_link VALUES (null, :link_playable_id, :link_name, :link_type, :link_url);');
-        $data = $link->toArray();
-        unset($data['link_id']);
-
-        $stmt->execute($data);
+    public function add(Playable $playable, bool $ignoreLinks = true): void {
+        if ($ignoreLinks) {
+            $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:playable_id, :playable_name, :playable_release_date_time, :playable_game_id);');
+            $data = $playable->toArray();
+            unset($data['playable_stored_links']);
+            $stmt->execute($data);
+        }
     }
 
     public function delete(string $id): void {
@@ -33,7 +28,7 @@ class PlayableRepository
     }
 
     public function find(string $id): ?Playable {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_playable LEFT JOIN e_playable_link ON link_playable_id = playable_id WHERE (playable_id = ?);');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_playable LEFT JOIN e_playable_link ON playable_id = link_playable_id WHERE (playable_id = ?);');
         $stmt->execute([$id]);
 
         if (0 === $stmt->rowCount()) {
@@ -43,13 +38,12 @@ class PlayableRepository
         $links = [];
         $firstRow = $stmt->fetch();
 
-        try {
-            $row = $firstRow;
-            while (false !== $row) {
+        $row = $firstRow;
+        while (false !== $row) {
+            if (null !== $row['link_playable_id']) {
                 $links[] = $row;
-                $row = $stmt->fetch();
             }
-        } catch (InvalidEntityArrayException $e) {
+            $row = $stmt->fetch();
         }
 
         $playable = Playable::fromArray($firstRow + ['playable_stored_links' => $links]);
@@ -66,10 +60,32 @@ class PlayableRepository
         return $playables;
     }
 
-    public function update(string $previousId, Playable $playable): void {
+    public function update(string $previousId, Playable $playable, bool $ignoreLinks = false, array $linksToRemove = []): void {
         if ($previousId === $playable->getId()) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_name = :playable_name, playable_game_id = :playable_game_id, playable_release_date_time = :playable_release_date_time WHERE playable_id = :playable_id;');
-            $stmt->execute($playable->toArray());
+            $data = $playable->toArray();
+            unset($data['playable_stored_links']);
+
+            if ($ignoreLinks) {
+                $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_name = :playable_name, playable_game_id = :playable_game_id, playable_release_date_time = :playable_release_date_time WHERE playable_id = :playable_id;');
+                $stmt->execute($data);
+            } else {
+                $this->conn->getPdo()->beginTransaction();
+                foreach ($linksToRemove as $linkId) {
+                    $this->linkRepo->remove($linkId);
+                }
+                if (null !== $playable->getStoredLinks()) {
+                    foreach ($playable->getStoredLinks() as $link) {
+                        if (null === $link->getId()) {
+                            $this->linkRepo->add($link);
+                        } else {
+                            $this->linkRepo->update($link);
+                        }
+                    }
+                }
+                $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_name = :playable_name, playable_game_id = :playable_game_id, playable_release_date_time = :playable_release_date_time WHERE playable_id = :playable_id;');
+                $stmt->execute($data);
+                $this->conn->getPdo()->commit();
+            }
         } else {
             $this->conn->getPdo()->beginTransaction();
             $this->add($playable);
