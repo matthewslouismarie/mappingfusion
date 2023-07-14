@@ -26,7 +26,7 @@ class ArticleController implements ControllerInterface
         return new Response(
             body: $this->twig->render('article.html.twig', [
                 'article' => $article,
-                'authors' => null !== $article->getReviewId() ? $this->authorRepo->findAuthorsOf($article->getStoredReview()->getPlayableId()) : null,
+                'authors' => null !== $article->getStoredReview() ? $this->authorRepo->findAuthorsOf($article->getStoredReview()->getPlayableId()) : null,
             ]),
         );
     }

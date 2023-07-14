@@ -1,12 +1,12 @@
 <?php
 
 namespace MF\Model;
-use OutOfBoundsException;
-use TypeError;
 
 class Review
 {
     private ?Uint $id;
+
+    private Slug $articleId;
 
     private Slug $playableId;
 
@@ -25,6 +25,7 @@ class Review
 
         return new self(
             $data['review_id'],
+            $data['review_article_id'],
             $data['review_playable_id'],
             $data['review_rating'],
             $data['review_body'],
@@ -36,6 +37,7 @@ class Review
 
     public function __construct(
         ?int $id,
+        string $articleId,
         string $playableId,
         float $rating,
         string $body,
@@ -44,6 +46,7 @@ class Review
         ?Playable $storedPlayable = null,
     ) {
         $this->id = null !== $id ? new Uint($id) : null;
+        $this->articleId = new Slug($articleId);
         $this->playableId = new Slug($playableId);
         $this->rating = new Rating($rating);
         $this->body = $body;
@@ -54,6 +57,10 @@ class Review
 
     public function getId(): ?int {
         return $this->id?->toInt();
+    }
+
+    public function getArticleId(): string {
+        return $this->articleId->__toString();
     }
 
     public function getPlayableId(): string {
@@ -84,6 +91,7 @@ class Review
         $playable = $this->storedPlayable?->toArray() ?? [];
         return $playable + [
             'review_id' => $this->id?->toInt(),
+            'review_article_id' => $this->articleId->__toString(),
             'review_playable_id' => $this->playableId->__toString(),
             'review_rating' => $this->rating->toFloat(),
             'review_body' => $this->body,

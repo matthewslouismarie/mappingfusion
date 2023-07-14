@@ -16,8 +16,8 @@ class ReviewRepository
     }
 
     public function add(Review $entity): Review {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_review VALUES (NULL, ?, ?, ?, ?, ?);');
-        $stmt->execute([$entity->getPlayableId(), $entity->getRating(), $entity->getBody(), $entity->getCons(), $entity->getPros()]);
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_review VALUES (NULL, ?, ?, ?, ?, ?, ?);');
+        $stmt->execute([$entity->getArticleId(), $entity->getPlayableId(), $entity->getRating(), $entity->getBody(), $entity->getCons(), $entity->getPros()]);
         $newId = $this->conn->getPdo()->lastInsertId();
         return Review::fromArray(['review_id' => $newId] + $entity->toArray());
     }
@@ -51,7 +51,7 @@ class ReviewRepository
     }
 
     public function update(Review $entity): void {
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_review SET review_playable_id = :review_playable_id, review_rating = :review_rating, review_body = :review_body, review_cons = :review_cons, review_pros = :review_pros WHERE review_id = :review_id;');
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_review SET review_article_id = :review_article_id, review_playable_id = :review_playable_id, review_rating = :review_rating, review_body = :review_body, review_cons = :review_cons, review_pros = :review_pros WHERE review_id = :review_id;');
         $stmt->execute($entity->toArray());
     }
 }

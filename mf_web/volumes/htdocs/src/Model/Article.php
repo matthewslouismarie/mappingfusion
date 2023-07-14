@@ -26,8 +26,6 @@ class Article implements Entity
 
     private DateTimeImmutable $lastUpdateDateTime;
 
-    private ?Uint $reviewId;
-
     private ?Category $storedCategory;
 
     private ?Review $storedReview;
@@ -42,7 +40,6 @@ class Article implements Entity
         ?string $coverFilename = null,
         DateTimeImmutable $creationDateTime = new DateTimeImmutable(),
         DateTimeImmutable $lastUpdateDateTime = new DateTimeImmutable(),
-        ?int $reviewId = null,
         ?Category $storedCategory = null,
         ?Review $storedReview = null,
     ) {
@@ -55,7 +52,6 @@ class Article implements Entity
         $this->coverFilename = new SlugFilename($coverFilename);
         $this->creationDateTime = $creationDateTime ?? new DateTimeImmutable();
         $this->lastUpdateDateTime = $lastUpdateDateTime ?? new DateTimeImmutable();
-        $this->reviewId = $reviewId !== null ? new Uint($reviewId) : null;
         $this->storedCategory = $storedCategory;
         $this->storedReview = $storedReview;
     }
@@ -76,7 +72,6 @@ class Article implements Entity
             $data['article_cover_filename'],
             new DateTimeImmutable($data['article_creation_date_time']),
             new DateTimeImmutable($data['article_last_update_date_time']),
-            $data['article_review_id'],
             $category,
             $review,
         );
@@ -118,20 +113,12 @@ class Article implements Entity
         return $this->lastUpdateDateTime;
     }
 
-    public function getReviewId(): ?int {
-        return $this->reviewId?->toInt();
-    }
-
     public function getStoredReview(): ?Review {
         return $this->storedReview;
     }
 
     public function isFeatured(): bool {
         return $this->isFeatured;
-    }
-
-    public function isReview(): bool {
-        return null !== $this->reviewId;
     }
 
     public function toArray(): array {
@@ -147,7 +134,6 @@ class Article implements Entity
             'article_cover_filename' => $this->coverFilename?->__toString(),
             'article_creation_date_time' => $this->creationDateTime->format('Y-m-d H:m:s'),
             'article_last_update_date_time' => $this->lastUpdateDateTime->format('Y-m-d H:m:s'),
-            'article_review_id' => $this->reviewId?->toInt(),
         ];
     }
 }

@@ -12,7 +12,7 @@
 {% block body %}
 <div class="page-article">
     <article class="std-article">
-        {% if not article.isReview %}
+        {% if article.storedReview is null %}
         <div class="blue">
             <div class="imafraidijustbluemyself">
             </div>
@@ -64,7 +64,7 @@
                     </ul>
                 </div>
             </nav>
-            {% if article.isReview %}
+            {% if article.storedReview is not null %}
             <div class="content -review _sectionpadded">
                 <div class="_padded -a -g">
                     <dl class="std-metadata">
@@ -118,7 +118,7 @@
                 </div>
             </div>
 
-            {% if article.isReview %}
+            {% if article.storedReview is not null %}
             <div class="content _sectionpadded">
                 {{ review(app.mk, article.storedReview, '-summary') }}
             </div>

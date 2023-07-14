@@ -70,18 +70,8 @@ class Fixture
         $this->repoContrib->add(new Contribution(null, $scteam->getId(), $sc->getId(), true));
         $cat = new Category(null, 'Tests');
         $this->repoCat->add($cat);
-        $review1 = $this->repoReview->add(new Review(
-            null,
-            $sc->getId(),
-            4,
-            'En somme, un jeu vraiment pas mal. Je recommande.',
-            file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
-            file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
-        ));
-        $review2 = $this->repoReview->add(new Review(null, $sc->getId(), 5, '', '', ''));
-        $review3 = $this->repoReview->add(new Review(null, $hl->getId(), 3.1, '', '', ''));
-        $review4 = $this->repoReview->add(new Review(null, $hl2->getId(), 2.1, '', '', ''));
-        $this->repoArticle->addNewArticle(new Article(
+
+        $article0 = new Article(
             null,
             $root->getId(),
             $cat->getId(),
@@ -91,9 +81,10 @@ class Fixture
             '202111271344571.jpg',
             new DateTimeImmutable(),
             new DateTimeImmutable(),
-            $review1->getId(),
-        ));
-        $this->repoArticle->addNewArticle(new Article(
+        );
+        $this->repoArticle->addNewArticle($article0);
+
+        $article1 = new Article(
             null,
             $root->getId(),
             $cat->getId(),
@@ -103,9 +94,10 @@ class Fixture
             '202111271344571.jpg',
             new DateTimeImmutable(),
             new DateTimeImmutable(),
-            $review2->getId(),
-        ));
-        $this->repoArticle->addNewArticle(new Article(
+        );
+        $this->repoArticle->addNewArticle($article1);
+
+        $article2 = new Article(
             null,
             $root->getId(),
             $cat->getId(),
@@ -115,9 +107,10 @@ class Fixture
             '202201051906201.jpg',
             new DateTimeImmutable(),
             new DateTimeImmutable(),
-            $review3->getId(),
-        ));
-        $this->repoArticle->addNewArticle(new Article(
+        );
+        $this->repoArticle->addNewArticle($article2);
+
+        $article3 = new Article(
             null,
             $root->getId(),
             $cat->getId(),
@@ -127,8 +120,21 @@ class Fixture
             '202111271348081.jpg',
             new DateTimeImmutable(),
             new DateTimeImmutable(),
-            $review3->getId(),
+        );
+        $this->repoArticle->addNewArticle($article3);
+
+        $this->repoReview->add(new Review(
+            null,
+            $article0->getId(),
+            $sc->getId(),
+            4,
+            'En somme, un jeu vraiment pas mal. Je recommande.',
+            file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
+            file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
         ));
+        $this->repoReview->add(new Review(null, $article1->getId(), $sc->getId(), 5, '', '', ''));
+        $this->repoReview->add(new Review(null, $article2->getId(), $hl->getId(), 3.1, '', '', ''));
+        $this->repoReview->add(new Review(null, $article3->getId(), $hl2->getId(), 2.1, '', '', ''));
         $this->conn->getPdo()->commit();
     }
 }

@@ -38,6 +38,7 @@ use MF\Controller\LogoutController;
 use MF\Controller\PlayableController;
 use MF\Controller\RegistrationController;
 use MF\Controller\ReviewController;
+use MF\Controller\ReviewListController;
 use MF\Kernel;
 
 const CLI_ID = 'cli';
@@ -62,6 +63,7 @@ const ROUTES = [
     PlayableController::ROUTE_ID => PlayableController::class,
     RegistrationController::ROUTE_ID => RegistrationController::class,
     ReviewController::ROUTE_ID => ReviewController::class,
+    ReviewListController::ROUTE_ID => ReviewListController::class,
 ];
 
 $container = (new ContainerBuilder())->build();

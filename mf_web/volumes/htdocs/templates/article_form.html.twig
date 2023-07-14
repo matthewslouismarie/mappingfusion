@@ -32,10 +32,6 @@
         <input class="input" id="is-featured" name="article_is_featured" type="checkbox"{% if article %}{% if article['article_is_featured'] %} checked{% endif %}{% endif %}><label class="label" for="is-featured">Mettre à la une</label>
     </div>
     <div class="form-row">
-        <label class="label" for="review-id">ID du test lié</label>
-        <input class="input" id="review-id" name="article_review_id"{% if article %} value="{{ article['article_review_id'] }}"{% endif %}>
-    </div>
-    <div class="form-row">
         <label class="label" for="p-content">Contenu de l’article</label>
         <textarea class="input" id="p-content" name="article_body" required>{% if article %}{{ article['article_body'] }}{% endif %}</textarea>
     </div>

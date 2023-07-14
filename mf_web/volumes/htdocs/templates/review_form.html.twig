@@ -15,6 +15,17 @@
             </select>
         </div>
         <div class="form-row">
+            <label class="label" for="parent-article">ID de l’article parent</label>
+            <select id="parent-article-id" name="review_article_id" required>
+                {% if entity and entity['review_article_id'] %}
+                <option label="{{ entity['review_stored_article']['title'] ?? entity['review_article_id'] }}" selected="selected" value="{{ entity['review_article_id'] }}">
+                {% endif %}
+                {% for a in availableArticles %}
+                <option label="{{ a.title }}"{% if entity and entity['review_article_id'] == a.id %} selected="selected"{% endif %} value="{{ a.id }}">
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-row">
             <label class="label" for="p-rating">Note (de 1 à 5)</label>
             <input class="input" id="p-rating" inputmode="decimal" min="1" max="5" name="review_rating" required step="0.1" type="number"{% if entity %} value="{{ entity['review_rating'] }}"{% endif %}>
         </div>

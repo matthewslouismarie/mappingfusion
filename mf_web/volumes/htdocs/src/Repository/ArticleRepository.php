@@ -17,8 +17,8 @@ class ArticleRepository
     }
 
     public function addNewArticle(Article $entity): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?);');
-        $stmt->execute([$entity->getId(), $entity->getAuthorUsername(), $entity->getCategoryId(), $entity->getContent(), $entity->isFeatured() ? 1 : 0, $entity->getTitle(), $entity->getCoverFilename(), $entity->getReviewId()]);
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW());');
+        $stmt->execute([$entity->getId(), $entity->getAuthorUsername(), $entity->getCategoryId(), $entity->getContent(), $entity->isFeatured() ? 1 : 0, $entity->getTitle(), $entity->getCoverFilename()]);
     }
 
     public function deleteArticle(string $id): void {
@@ -38,6 +38,15 @@ class ArticleRepository
         } else {
             throw new UnexpectedValueException();
         }
+    }
+
+    public function findAvailableArticles(): array {
+        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NULL;')->fetchAll();
+        $entities = [];
+        foreach ($results as $r) {
+            $entities[] = Article::fromArray($r);
+        }
+        return $entities;
     }
 
     public function findOne(string $id): Article {
@@ -77,7 +86,7 @@ class ArticleRepository
     }
 
     public function findLastReviews(): array {
-        $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE article_review_id IS NOT NULL ORDER BY article_last_update_date_time DESC LIMIT 4;");
+        $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE review_id IS NOT NULL ORDER BY article_last_update_date_time DESC LIMIT 4;");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = Article::fromArray($article);
@@ -86,7 +95,7 @@ class ArticleRepository
     }
 
     public function findReviews(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM e_article WHERE article_review_id != NULL;');
+        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = Article::fromArray($article);
@@ -96,8 +105,8 @@ class ArticleRepository
 
     public function updateArticle(string $previousId, Article $article, bool $updateCoverFilename = true): void {
         if ($previousId === $article->getId()) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_category_id = ?, article_body = ?, article_is_featured = ?, article_review_id = ?, article_title = ?, ' . ($updateCoverFilename ? 'article_cover_filename = ?, ' : '') . 'article_last_update_date_time = NOW() WHERE article_id = ?;');
-            $parameters = [$article->getCategoryId(), $article->getContent(), $article->isFeatured() ? 1 : 0, $article->getReviewId(), $article->getTitle()];
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_category_id = ?, article_body = ?, article_is_featured = ?, article_title = ?, ' . ($updateCoverFilename ? 'article_cover_filename = ?, ' : '') . 'article_last_update_date_time = NOW() WHERE article_id = ?;');
+            $parameters = [$article->getCategoryId(), $article->getContent(), $article->isFeatured() ? 1 : 0, $article->getTitle()];
             if ($updateCoverFilename) {
                 $parameters[] = $article->getCoverFilename();
             }

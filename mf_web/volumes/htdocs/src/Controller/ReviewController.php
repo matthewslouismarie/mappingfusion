@@ -5,6 +5,7 @@ namespace MF\Controller;
 use GuzzleHttp\Psr7\Response;
 use MF\Enum\Clearance;
 use MF\Model\Review;
+use MF\Repository\ArticleRepository;
 use MF\Repository\PlayableRepository;
 use MF\Repository\ReviewRepository;
 use MF\Router;
@@ -17,6 +18,8 @@ class ReviewController implements ControllerInterface
 {
     const ROUTE_ID = 'manage_review';
 
+    private ArticleRepository $articleRepo;
+
     private PlayableRepository $playableRepo;
 
     private ReviewRepository $repo;
@@ -26,11 +29,13 @@ class ReviewController implements ControllerInterface
     private TwigService $twig;
 
     public function __construct(
+        ArticleRepository $articleRepo,
         PlayableRepository $playableRepo,
         ReviewRepository $repo,
         Router $router,
         TwigService $twig,
     ) {
+        $this->articleRepo = $articleRepo;
         $this->playableRepo = $playableRepo;
         $this->repo = $repo;
         $this->router = $router;
@@ -74,6 +79,7 @@ class ReviewController implements ControllerInterface
         return new Response(body: $this->twig->render('review_form.html.twig', [
             'entity' => $entity?->toArray(),
             'playables' => $this->playableRepo->findAll(),
+            'availableArticles' => $this->articleRepo->findAvailableArticles(),
         ]));
     }
 
