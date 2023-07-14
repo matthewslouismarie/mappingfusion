@@ -2,7 +2,29 @@
 
 {% block title %}Derniers tests{% endblock %}
 
-{% block bodyContent %}
-<div class="_flex -gapl">
+{% block body %}
+<div class="_sectionpadded -a">
+    <div class="_wrapper _flex -gapl">
+    
+        <hgroup class="section-heading -inline -white">
+            <p class="imgp">
+                <img alt="Liste des tests" class="image" src="{{ app.asset('news.svg') }}">
+            </p>
+            <h2 class="title">Tests maps et mods</h2>
+            <p class="p">proposés par l’équipe</p>
+        </hgroup>
+
+        <ul class="article-list">
+            {% for r in reviews %}
+                <a>
+                    <img src="{{ app.resource(r.storedArticle.coverFilename) }}">
+                </a>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
+
+{% include 'sections/social-medias-all.html.twig' %}
+
+{% include 'sections/beginners-all.html.twig' %}
 {% endblock %}

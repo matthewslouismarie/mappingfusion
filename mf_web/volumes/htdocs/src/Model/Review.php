@@ -18,9 +18,12 @@ class Review
 
     private string $pros;
 
+    private ?Article $storedArticle;
+
     private ?Playable $storedPlayable;
 
     static function fromArray(array $data): self {
+        $article = isset($data['article_id']) ? Article::fromArray($data) : null;
         $playable = isset($data['playable_id']) ? Playable::fromArray($data) : null;
 
         return new self(
@@ -31,6 +34,7 @@ class Review
             $data['review_body'],
             $data['review_cons'],
             $data['review_pros'],
+            $article,
             $playable,
         );
     }
@@ -43,6 +47,7 @@ class Review
         string $body,
         string $cons,
         string $pros,
+        ?Article $storedArticle = null,
         ?Playable $storedPlayable = null,
     ) {
         $this->id = null !== $id ? new Uint($id) : null;
@@ -52,6 +57,7 @@ class Review
         $this->body = $body;
         $this->cons = $cons;
         $this->pros = $pros;
+        $this->storedArticle = $storedArticle;
         $this->storedPlayable = $storedPlayable;
     }
 
@@ -83,13 +89,18 @@ class Review
         return $this->pros;
     }
 
+    public function getStoredArticle(): ?Article {
+        return $this->storedArticle;
+    }
+
     public function getStoredPlayable(): ?Playable {
         return $this->storedPlayable;
     }
 
     public function toArray(): array {
+        $article = $this->storedArticle?->toArray() ?? [];
         $playable = $this->storedPlayable?->toArray() ?? [];
-        return $playable + [
+        return $article + $playable + [
             'review_id' => $this->id?->toInt(),
             'review_article_id' => $this->articleId->__toString(),
             'review_playable_id' => $this->playableId->__toString(),

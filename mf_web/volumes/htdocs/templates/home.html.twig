@@ -53,7 +53,7 @@
                 </li>
                 {% endfor %}
             </ul>
-            <a class="std-button -white">
+            <a class="std-button -white" href="{{ app.router.generateUrl('reviews') }}">
                 <div class="text">
                     <span class="bold">Voir plus de tests</span>
                 </div>
@@ -93,7 +93,7 @@
                     <dt class="subject">Fonctionnement Sven Co-op</dt>
                     <dd class="text">Guide d’installation, lancement de partie, création de serveurs, etc…</dd>
                     <dd>
-                        <a class="std-button -white" href="#">
+                        <a class="std-button -white" href="{{ app.router.generateUrl('reviews') }}">
                             <div class="text">
                                 <span class="bold">Voir plus de tests</span>
                             </div>

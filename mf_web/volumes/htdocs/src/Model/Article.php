@@ -30,6 +30,8 @@ class Article implements Entity
 
     private ?Review $storedReview;
 
+    private array $rawData;
+
     public function __construct(
         ?string $id,
         string $authorUsername,
@@ -41,7 +43,7 @@ class Article implements Entity
         DateTimeImmutable $creationDateTime = new DateTimeImmutable(),
         DateTimeImmutable $lastUpdateDateTime = new DateTimeImmutable(),
         ?Category $storedCategory = null,
-        ?Review $storedReview = null,
+        array $rawData = [],
     ) {
         $this->id = null !== $id ? new Slug($id) : new Slug($title, true);
         $this->authorUsername = new LongString($authorUsername);
@@ -53,13 +55,12 @@ class Article implements Entity
         $this->creationDateTime = $creationDateTime ?? new DateTimeImmutable();
         $this->lastUpdateDateTime = $lastUpdateDateTime ?? new DateTimeImmutable();
         $this->storedCategory = $storedCategory;
-        $this->storedReview = $storedReview;
+        $this->storedReview = null;
+        $this->rawData = $rawData;
     }
 
     // @todo Use prefix.
     public static function fromArray(array $data): self {
-        $review = isset($data['review_id']) ? Review::fromArray($data) : null;
-
         $category = isset($data['category_id']) ? Category::fromArray($data) : null;
 
         return new self(
@@ -73,7 +74,7 @@ class Article implements Entity
             new DateTimeImmutable($data['article_creation_date_time']),
             new DateTimeImmutable($data['article_last_update_date_time']),
             $category,
-            $review,
+            $data,
         );
     }
 
@@ -114,6 +115,9 @@ class Article implements Entity
     }
 
     public function getStoredReview(): ?Review {
+        if (null === $this->storedReview) {
+            $this->storedReview = $this->rawData['review_id'] !== null ? Review::fromArray($this->rawData) : null;
+        }
         return $this->storedReview;
     }
 

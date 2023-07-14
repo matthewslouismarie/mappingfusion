@@ -42,7 +42,7 @@ class ReviewRepository
     }
 
     public function findAll(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM e_review;')->fetchAll();
+        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
             $entities[] = Review::fromArray($r);
