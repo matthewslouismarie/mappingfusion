@@ -78,6 +78,8 @@ $txt-weight-semi-bold: 600;
 @import 'elements/std-inline-list.scss';
 @import 'elements/std-markdown-container.scss';
 @import 'elements/std-metadata.scss';
+@import 'elements/std-mosaic-list.scss';
+@import 'elements/std-rating-container.scss';
 @import 'elements/std-review.scss';
 @import 'elements/std-search-input.scss';
 
@@ -86,7 +88,7 @@ $txt-weight-semi-bold: 600;
 
 @import 'elements/article-advice.scss';
 @import 'elements/article-cover.scss';
-@import 'elements/article-list.scss';
 @import 'elements/article-mosaic.scss';
 
 @import 'elements/review-mosaic.scss';
+@import 'elements/review-mosaic-bare.scss';

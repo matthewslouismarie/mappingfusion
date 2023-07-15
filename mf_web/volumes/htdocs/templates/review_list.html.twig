@@ -1,3 +1,5 @@
+{% from 'macros/review_mosaic.html.twig' import reviewMosaic %}
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Derniers tests{% endblock %}
@@ -14,11 +16,11 @@
             <p class="p">proposés par l’équipe</p>
         </hgroup>
 
-        <ul class="article-list">
+        <ul class="std-mosaic-list">
             {% for r in reviews %}
-                <a>
-                    <img src="{{ app.resource(r.storedArticle.coverFilename) }}">
-                </a>
+                <li class="item">
+                    {{ reviewMosaic(r, app) }}
+                </li>
             {% endfor %}
         </ul>
     </div>

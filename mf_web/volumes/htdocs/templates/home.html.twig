@@ -44,7 +44,7 @@
             <ul class="std-block-list">
                 {% for r in last_reviews %}
                 <li class="item">
-                    <a class="review-mosaic" style="background-image: url('{{ app.resource(r.coverFilename) }}');">
+                    <a class="review-mosaic-bare" style="background-image: url('{{ app.resource(r.coverFilename) }}');">
                         <div class="content">
                             <span class="playable">{{ r.storedReview.storedPlayable.name }}</span>
                             <span class="game">{{ r.storedReview.storedPlayable.storedGame.name }}</span>

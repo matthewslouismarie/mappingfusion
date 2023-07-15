@@ -1,0 +1,16 @@
+{% macro reviewMosaic(r, app) %}
+<a class="review-mosaic" href="{{ app.router.generateUrl('view_article', {id: r.storedArticle.id}) }}">
+    <div class="img" style="background-image: url('{{ app.resource(r.storedArticle.coverFilename) }}');">
+        <em class="std-badge">{{ r.storedPlayable.name }}</em>
+    </div>
+    <div class="text">
+        <div class="left">
+            <h3 class="title">{{ r.storedPlayable.name }}</h3>
+            <p class="date">Le {{ r.storedArticle.lastUpdateDateTime.format('d/m/y') }}</p>
+        </div>
+        <div class="std-rating-container -sm">
+            <div class="rating">{{ r.rating }}</div>
+        </div>
+    </div>
+</a>
+{% endmacro %}

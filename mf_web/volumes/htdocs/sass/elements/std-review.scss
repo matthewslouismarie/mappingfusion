@@ -14,21 +14,8 @@
         }
     }
 
-    > .ratingcontainer {
-        display: block;
+    > .rating-container {
         float: right;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 8rem;
-        border: $border-m solid $color-white;
-        height: 8rem;
-
-        > .rating {
-            font-size: 6rem;
-            font-weight: $txt-weight-semi-bold;
-        }
     }
 
     > .prosandcons {
