@@ -25,6 +25,7 @@ use MF\Controller\AdminArticleController;
 use MF\Controller\AdminArticleListController;
 use MF\Controller\AdminAuthorListController;
 use MF\Controller\AdminContributionController;
+use MF\Controller\AdminPlayableController;
 use MF\Controller\AdminPlayableListController;
 use MF\Controller\AdminReviewListController;
 use MF\Controller\ArticleController;
@@ -39,6 +40,7 @@ use MF\Controller\PlayableController;
 use MF\Controller\RegistrationController;
 use MF\Controller\ReviewController;
 use MF\Controller\ReviewListController;
+use MF\Controller\SearchController;
 use MF\Kernel;
 
 const CLI_ID = 'cli';
@@ -50,6 +52,7 @@ const ROUTES = [
     AdminArticleListController::ROUTE_ID => AdminArticleListController::class,
     AdminAuthorListController::ROUTE_ID => AdminAuthorListController::class,
     AdminContributionController::ROUTE_ID => AdminContributionController::class,
+    AdminPlayableController::ROUTE_ID => AdminPlayableController::class,
     AdminPlayableListController::ROUTE_ID => AdminPlayableListController::class,
     AdminReviewListController::ROUTE_ID => AdminReviewListController::class,
     ArticleController::ROUTE_ID => ArticleController::class,
@@ -64,6 +67,7 @@ const ROUTES = [
     RegistrationController::ROUTE_ID => RegistrationController::class,
     ReviewController::ROUTE_ID => ReviewController::class,
     ReviewListController::ROUTE_ID => ReviewListController::class,
+    SearchController::ROUTE_ID => SearchController::class,
 ];
 
 $container = (new ContainerBuilder())->build();

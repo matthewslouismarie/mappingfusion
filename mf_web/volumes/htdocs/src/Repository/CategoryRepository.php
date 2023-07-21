@@ -2,7 +2,7 @@
 
 namespace MF\Repository;
 
-use MF\Database\Connection;
+use MF\Database\DatabaseManager;
 use MF\Model\Author;
 use MF\Model\Category;
 use UnexpectedValueException;
@@ -10,7 +10,7 @@ use UnexpectedValueException;
 class CategoryRepository
 {
     public function __construct(
-        private Connection $conn,
+        private DatabaseManager $conn,
     ) {
     }
 

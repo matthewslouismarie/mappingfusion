@@ -2,7 +2,7 @@
 
 namespace MF\Repository;
 
-use MF\Database\Connection;
+use MF\Database\DatabaseManager;
 use MF\HttpBridge\Session;
 use MF\Model\Article;
 use OutOfBoundsException;
@@ -11,7 +11,7 @@ use UnexpectedValueException;
 class ArticleRepository
 {
     public function __construct(
-        private Connection $conn,
+        private DatabaseManager $conn,
         private Session $session,
     ) {
     }

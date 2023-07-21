@@ -11,7 +11,7 @@
             width: 100%;
         }
 
-        > .std-search-input,
+        > .form > .std-search-input,
         > .link {
             border-radius: $block-border-width;
             border-style: solid;
@@ -21,7 +21,7 @@
             padding: $gap-xs;
         }
 
-        > .std-search-input {
+        > .form > .std-search-input {
             width: 100%;
         }
 
@@ -40,7 +40,7 @@
                 width: auto;
             }
 
-            > .std-search-input,
+            > .form > .std-search-input,
             > .link {
                 font-size: $txt-font-size-m;
             }

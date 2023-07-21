@@ -2,7 +2,7 @@
 
 namespace MF\Repository;
 
-use MF\Database\Connection;
+use MF\Database\DatabaseManager;
 use MF\HttpBridge\Session;
 use MF\Model\Review;
 use UnexpectedValueException;
@@ -10,7 +10,7 @@ use UnexpectedValueException;
 class ReviewRepository
 {
     public function __construct(
-        private Connection $conn,
+        private DatabaseManager $conn,
         private Session $session,
     ) {
     }

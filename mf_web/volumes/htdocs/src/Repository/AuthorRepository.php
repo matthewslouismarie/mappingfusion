@@ -2,14 +2,14 @@
 
 namespace MF\Repository;
 
-use MF\Database\Connection;
+use MF\Database\DatabaseManager;
 use MF\Model\Author;
 use UnexpectedValueException;
 
 class AuthorRepository
 {
     public function __construct(
-        private Connection $conn,
+        private DatabaseManager $conn,
     ) {
     }
 

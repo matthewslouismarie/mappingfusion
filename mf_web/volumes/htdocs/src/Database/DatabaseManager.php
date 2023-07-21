@@ -10,7 +10,7 @@ use MF\Model\SlugFilename;
 use MF\Model\Url;
 use PDO;
 
-class Connection
+class DatabaseManager
 {
     private PDO $pdo;
 
@@ -37,6 +37,7 @@ class Connection
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_playable_link.sql'), LongString::MAX_LENGTH, Url::MAX_LENGTH, LinkType::Download->value, LinkType::HomePage->value, LinkType::Other->value));
 
         $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_article.sql'));
+        $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_playable.sql'));
     }
 
     public function getPdo(): PDO {

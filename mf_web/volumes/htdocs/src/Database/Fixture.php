@@ -27,7 +27,7 @@ class Fixture
 {
     public function __construct(
         private Configuration $config,
-        private Connection $conn,
+        private DatabaseManager $conn,
         private ArticleRepository $repoArticle,
         private AuthorRepository $repoAuthor,
         private CategoryRepository $repoCat,

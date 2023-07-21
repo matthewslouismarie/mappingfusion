@@ -50,7 +50,9 @@
                     <div class="header-nav">
                         <ul class="header-menu">
                             <li class="item -search">
-                                <input class="std-search-input" type="search" placeholder="Votre recherche">
+                                <form class="form" rel="search" action="{{ app.router.generateUrl('search')}}" method="get">
+                                    <input class="std-search-input" name="gsc.query" type="search" placeholder="Votre recherche">
+                                </form>
                             </li>
                             <li class="item">
                                 <a class="link">Nouveau sur Sven Co-op ?</a>

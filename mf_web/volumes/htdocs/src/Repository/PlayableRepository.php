@@ -2,13 +2,13 @@
 
 namespace MF\Repository;
 
-use MF\Database\Connection;
+use MF\Database\DatabaseManager;
 use MF\Model\Playable;
 
 class PlayableRepository
 {
     public function __construct(
-        private Connection $conn,
+        private DatabaseManager $conn,
         private PlayableLinkRepository $linkRepo,
     ) {
     }
@@ -28,7 +28,7 @@ class PlayableRepository
     }
 
     public function find(string $id): ?Playable {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_playable LEFT JOIN e_playable_link ON playable_id = link_playable_id WHERE (playable_id = ?);');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_playable WHERE playable_id = ?;');
         $stmt->execute([$id]);
 
         if (0 === $stmt->rowCount()) {

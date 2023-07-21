@@ -43,6 +43,10 @@ class PlayableLink implements EntityInterface
         return $this->id?->toInt();
     }
 
+    public function getUrl(): string {
+        return $this->url;
+    }
+
     public function toArray(string $prefix = 'link_'): array {
         return [
             "{$prefix}id" => $this->id?->toInt(),

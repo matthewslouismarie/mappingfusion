@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ playable.name }}{% endblock %}
+
+{% block body %}
+<div class="_paddedsection">
+    <div class="_wrapper">
+        <h1>{{ playable.name }}</h1>
+        <dl>
+            {% if playable.releaseDateTime %}
+            <dt>Date de sortie</dt>
+            <dd>Le {{ playable.releaseDateTime.format('d/m/y') }}</dd>
+            {% endif %}
+        </dl>
+        {% for l in playable.storedLinks %}
+            {{ l.url }}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
