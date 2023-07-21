@@ -12,10 +12,16 @@ class Router
     ) {
     }
 
-    public function generateUrl(string $routeId, array $parameters = []): string {
+    public function generateUrl(string $routeId, array $parameters = [], string $paramStart = '?', string $hash = ''): string {
         $url = "/$routeId";
-        foreach ($parameters as $key => $value) {
-            $url .= "&$key=$value";
+        if ('' !== $hash) {
+            $url .= "#$hash";
+        }
+        if (0 !== count($parameters)) {
+            $url .= $paramStart;
+            foreach ($parameters as $key => $value) {
+                $url .= "&$key=$value";
+            }
         }
         return $this->config->getSetting('homeUrl') . $url;
     }

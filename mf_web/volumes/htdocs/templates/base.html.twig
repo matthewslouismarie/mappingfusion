@@ -50,8 +50,8 @@
                     <div class="header-nav">
                         <ul class="header-menu">
                             <li class="item -search">
-                                <form class="form" rel="search" action="{{ app.router.generateUrl('search')}}" method="get">
-                                    <input class="std-search-input" name="gsc.query" type="search" placeholder="Votre recherche">
+                                <form class="form" rel="search" id="search-form" data-form-action="{{ app.router.generateUrl('search') }}" method="post">
+                                    <input class="std-search-input" name="search-query" type="search" placeholder="Votre recherche" value="{{ searchQuery ?? "" }}" data-type="search-field">
                                 </form>
                             </li>
                             <li class="item">
@@ -118,7 +118,7 @@
         {% endblock %}
         <script src="{{ app.asset('menu.js') }}"></script>
         <script>
-            const menu = new Menu('menu-button', 'menu-container', 'menu');
+            const menu = new Menu('menu-button', 'menu-container', 'menu', 'search-form');
             menu.init();
         </script>
     </body>

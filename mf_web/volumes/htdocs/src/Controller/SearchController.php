@@ -16,9 +16,9 @@ class SearchController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request): Response {
-        $query = $request->getQueryParams()['gsc.q'] ?? null;
+        $query = $request->getParsedBody()['search-query'] ?? null;
         return new Response(body: $this->twig->render('search_results_list.html.twig', [
-            'query' => $query,
+            'searchQuery' => $query,
         ]));
     }
 

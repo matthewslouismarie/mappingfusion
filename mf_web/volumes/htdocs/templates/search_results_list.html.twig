@@ -1,11 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ query ?? 'Nouvelle recherche' }}{% endblock %}
+{% block title %}{{ searchQuery ?? 'Nouvelle recherche' }}{% endblock %}
 
 {% block body %}
-<div class="_paddedsection">
-    <script async src="https://cse.google.com/cse.js?cx=a30c7537205384c3a">
-    </script>
-    <div class="gcse-searchresults-only"></div>
+<div class="_paddedsection -a">
+    <div class="_wrapper">
+        <div class="gcse-searchresults-only"></div>
+    </div>
 </div>
+{% endblock %}
+
+{% block scriptInit %}
+<script async src="https://cse.google.com/cse.js?cx=a30c7537205384c3a">
+</script>
 {% endblock %}
