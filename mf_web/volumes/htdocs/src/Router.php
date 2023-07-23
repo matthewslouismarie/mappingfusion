@@ -18,9 +18,8 @@ class Router
             $url .= "#$hash";
         }
         if (0 !== count($parameters)) {
-            $url .= $paramStart;
-            foreach ($parameters as $key => $value) {
-                $url .= "&$key=$value";
+            foreach ($parameters as $param) {
+                $url .= "/$param";
             }
         }
         return $this->config->getSetting('homeUrl') . $url;

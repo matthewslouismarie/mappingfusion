@@ -101,12 +101,12 @@
                     <div class="glide__track" data-glide-el="track">
                         <ul class="glide__slides">
                             <li class="glide__slide">
-                                <a class="link" href="{{ app.router.generateUrl('view_article', {id: article.id}) }}" style="background-image: url({{ app.resource(article.coverFilename) }});">
+                                <a class="link" href="{{ app.router.generateUrl('view-article', {id: article.id}) }}" style="background-image: url({{ app.resource(article.coverFilename) }});">
                                     <div class="text">{{ app.mk.format(article.title)|raw }}</div>
                                 </a>
                             </li>
                             <li class="glide__slide">
-                                <a class="link" href="{{ app.router.generateUrl('view_article', {id: article.id}) }}" style="background-image: url({{ app.resource(article.coverFilename) }});">
+                                <a class="link" href="{{ app.router.generateUrl('view-article', {id: article.id}) }}" style="background-image: url({{ app.resource(article.coverFilename) }});">
                                     <div class="text">{{ app.mk.format(article.title)|raw }}</div>
                                 </a>
                             </li>

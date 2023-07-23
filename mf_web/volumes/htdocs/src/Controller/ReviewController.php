@@ -42,7 +42,7 @@ class ReviewController implements ControllerInterface
         $this->twig = $twig;
     }    
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $id = $request->getQueryParams()['id'] ?? null;
 
 

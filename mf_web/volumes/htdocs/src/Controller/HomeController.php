@@ -25,7 +25,7 @@ class HomeController implements ControllerInterface
         $this->twig = $twig;
     }
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         return new Response(body: $this->twig->render('home.html.twig', [
             'featured_articles' => $this->articleRepo->findFeatured(),
             'reviews' => $this->articleRepo->findReviews(),

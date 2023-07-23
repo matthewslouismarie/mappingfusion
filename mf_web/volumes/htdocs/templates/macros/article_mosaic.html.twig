@@ -1,5 +1,5 @@
 {% macro articleMosaic(a, app) %}
-<a class="article-mosaic" href="{{ app.router.generateUrl('view_article', {id: a.id}) }}">
+<a class="article-mosaic" href="{{ app.router.generateUrl('view-article', {id: a.id}) }}">
     <div class="left" style="background-image: url('{{ app.resource(a.coverFilename) }}');">
         <em class="std-badge">{{ a.category.name }}</em>
     </div>

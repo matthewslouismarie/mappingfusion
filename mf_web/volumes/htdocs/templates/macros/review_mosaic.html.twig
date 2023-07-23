@@ -1,5 +1,5 @@
 {% macro reviewMosaic(r, app) %}
-<a class="review-mosaic" href="{{ app.router.generateUrl('view_article', {id: r.storedArticle.id}) }}">
+<a class="review-mosaic" href="{{ app.router.generateUrl('view-article', {id: r.storedArticle.id}) }}">
     <div class="img" style="background-image: url('{{ app.resource(r.storedArticle.coverFilename) }}');">
         <em class="std-badge">{{ r.storedPlayable.name }}</em>
     </div>

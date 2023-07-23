@@ -24,7 +24,7 @@ class AuthorController implements ControllerInterface
         private AuthorRepository $repo,
     ) {
     }
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $author = $this->getAuthorFromRequest($request);
 
         if (null !== $author && (!isset($request->getQueryParams()['id']) || $author->getId() !== $request->getQueryParams()['id'])) {

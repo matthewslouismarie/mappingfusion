@@ -18,7 +18,7 @@ class PlayableController implements ControllerInterface
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request): Response {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): Response {
         $id = $request->getQueryParams()['id'];
         $playable = $this->repo->find($id);
     

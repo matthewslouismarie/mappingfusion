@@ -29,7 +29,7 @@ class AccountController implements ControllerInterface
         $this->twig = $twig;
     }    
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $member = $this->repo->find($this->session->getCurrentMemberUsername());
         $success = null;
         if ('POST' === $request->getMethod()) {

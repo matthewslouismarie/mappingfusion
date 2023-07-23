@@ -25,7 +25,7 @@ class AdminPlayableListController implements ControllerInterface
         $this->twig = $twig;
     }
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {    
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
         return new Response(body: $this->twig->render('admin_playable_list.html.twig', [
             'playables' => $this->repo->findAll(),
         ]));

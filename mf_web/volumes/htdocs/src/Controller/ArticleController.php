@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ArticleController implements ControllerInterface
 {
-    const ROUTE_ID = 'view_article';
+    const ROUTE_ID = 'view-article';
 
     public function __construct(
         private AuthorRepository $authorRepo,
@@ -21,8 +21,8 @@ class ArticleController implements ControllerInterface
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {
-        $article = $this->repo->findOne($request->getQueryParams()['id']);
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+        $article = $this->repo->findOne($routeParams[1]);
         return new Response(
             body: $this->twig->render('article.html.twig', [
                 'article' => $article,

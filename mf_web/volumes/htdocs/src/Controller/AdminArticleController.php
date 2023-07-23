@@ -17,7 +17,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminArticleController implements ControllerInterface
 {
-    const ROUTE_ID = 'manage_article';
+    const ROUTE_ID = 'manage-article';
 
     private CategoryRepository $catRepo;
 
@@ -47,7 +47,7 @@ class AdminArticleController implements ControllerInterface
         $this->twig = $twig;
     }
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {    
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
         $article = $this->getEntityFromRequest($request);
 
         if (null !== $article && (!isset($request->getQueryParams()['id']) || $article->getId() !== $request->getQueryParams()['id'])) {

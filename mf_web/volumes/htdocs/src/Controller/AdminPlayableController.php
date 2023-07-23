@@ -28,7 +28,7 @@ class AdminPlayableController implements ControllerInterface
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $playableId = $request->getQueryParams()['id'] ?? null;
         $data = $this->getEntityDataFromRequest($request, $playableId);
 

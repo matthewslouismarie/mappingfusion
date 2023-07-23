@@ -25,7 +25,7 @@ class CategoryListAdminController implements ControllerInterface
         $this->twig = $twig;
     }
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {    
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
         return new Response(body: $this->twig->render('admin_category_list.html.twig', [
             'categories' => $this->repo->findAll(),
         ]));

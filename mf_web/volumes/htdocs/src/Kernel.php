@@ -22,7 +22,11 @@ class Kernel
         $this->twig = $twig;
     }
 
-    public function generateResponse(ControllerInterface $controller, ServerRequestInterface $requestInterface): Response {
+    public function extractRouteParams(ServerRequestInterface $request): array {
+        return explode('/', $request->getQueryParams()['route_params']);
+    }
+
+    public function generateResponse(ControllerInterface $controller, ServerRequestInterface $request): Response {
         if (Clearance::VISITORS === $controller->getAccessControl() && $this->session->isUserLoggedIn()) {
             return new Response(
                 status: 403,
@@ -40,6 +44,6 @@ class Kernel
                 ]),
             );
         }
-        return $controller->generateResponse($requestInterface);
+        return $controller->generateResponse($request, $this->extractRouteParams($request));
     }
 }

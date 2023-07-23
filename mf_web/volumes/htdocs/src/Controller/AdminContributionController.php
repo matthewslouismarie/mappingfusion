@@ -20,7 +20,7 @@ class AdminContributionController implements ControllerInterface
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $contribution = $this->getContributionFromRequest($request);
         return new Response(body: $this->twig->render('contribution_form.html.twig', [
             'contribution' => $contribution?->toArray(),

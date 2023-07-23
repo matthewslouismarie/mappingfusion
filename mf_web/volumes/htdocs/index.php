@@ -46,7 +46,6 @@ use MF\Kernel;
 const CLI_ID = 'cli';
 
 const ROUTES = [
-    '' => HomeController::class,
     AccountController::ROUTE_ID=> AccountController::class,
     AdminArticleController::ROUTE_ID => AdminArticleController::class,
     AdminArticleListController::ROUTE_ID => AdminArticleListController::class,
@@ -80,10 +79,12 @@ if (CLI_ID === php_sapi_name()) {
     session_start();
     
     $requestManager = $container->get(Kernel::class);
+
+    $routeParams = $requestManager->extractRouteParams($request);
+
+    $routeId = $routeParams[0];
     
-    $routeId = isset($request->getQueryParams()['route_id']) ? $request->getQueryParams()['route_id'] : '';
-    
-    $response = $requestManager->generateResponse($container->get(ROUTES[$routeId]), $request);
+    $response = $requestManager->generateResponse($container->get(ROUTES[$routeId] ?? ROUTES[HomeController::ROUTE_ID]), $request);
     
     if (302 === $response->getStatusCode()) {
         header('Location: ' . $response->getHeaderLine('Location'));

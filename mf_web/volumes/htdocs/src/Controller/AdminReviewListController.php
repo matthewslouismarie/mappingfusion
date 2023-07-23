@@ -25,7 +25,7 @@ class AdminReviewListController implements ControllerInterface
         $this->twig = $twig;
     }
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {    
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
         return new Response(body: $this->twig->render('admin_review_list.html.twig', [
             'reviews' => $this->repo->findAll(),
         ]));

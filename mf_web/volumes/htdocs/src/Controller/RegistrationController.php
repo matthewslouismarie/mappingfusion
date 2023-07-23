@@ -30,7 +30,7 @@ class RegistrationController implements ControllerInterface
         $this->session = $session;
     }
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         if ('POST' === $request->getMethod()) {
             $member = (new FormMemberFactory())->createFromRequest($request->getParsedBody());
             $this->repo->add($member);

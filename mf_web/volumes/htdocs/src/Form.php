@@ -34,7 +34,6 @@ class Form
             $isNumber = ctype_digit($parts[$i]);
             
             if ($isNumber) {
-                var_dump($parts[$i]);
                 if (!isset($data[$prefix])) {
                     $data[$prefix] = [];
                 } elseif (!is_array($data[$prefix])) {

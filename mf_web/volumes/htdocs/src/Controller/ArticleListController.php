@@ -19,7 +19,7 @@ class ArticleListController implements ControllerInterface
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         return new Response(
             body: $this->twig->render('article_list.html.twig', [
                 'articles' => $this->repo->findAll(),

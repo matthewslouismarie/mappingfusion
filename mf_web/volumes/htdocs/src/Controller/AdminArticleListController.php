@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminArticleListController implements ControllerInterface
 {
-    const ROUTE_ID = 'admin_article_list';
+    const ROUTE_ID = 'admin-article-list';
 
     private ArticleRepository $repo;
 
@@ -25,7 +25,7 @@ class AdminArticleListController implements ControllerInterface
         $this->twig = $twig;
     }
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {    
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
         return new Response(body: $this->twig->render('admin_article_list.html.twig', [
             'articles' => $this->repo->findAll(),
         ]));

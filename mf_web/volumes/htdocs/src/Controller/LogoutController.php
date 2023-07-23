@@ -30,7 +30,7 @@ class LogoutController implements ControllerInterface
         $this->session = $session;
     }
 
-    public function generateResponse(ServerRequestInterface $request): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $formError = null;
         if ('POST' === $request->getMethod()) {
             $this->session->setCurrentMemberUsername(null);
