@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminAuthorListController implements ControllerInterface
 {
-    const ROUTE_ID = 'admin_author_list';
+    const ROUTE_ID = 'admin-author-list';
 
     private AuthorRepository $repo;
 
@@ -26,7 +26,7 @@ class AdminAuthorListController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
-        return new Response(body: $this->twig->render('admin_author_list.html.twig', [
+        return new Response(body: $this->twig->render('admin-author-list.html.twig', [
             'authors' => $this->repo->findAll(),
         ]));
     }

@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminPlayableListController implements ControllerInterface
 {
-    const ROUTE_ID = 'admin_playable_list';
+    const ROUTE_ID = 'admin-playable-list';
 
     private PlayableRepository $repo;
 

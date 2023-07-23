@@ -33,9 +33,9 @@
     </div>
     <div class="form-row">
         <label class="label" for="p-content">Contenu de l’article</label>
-        <textarea class="input" id="p-content" name="article_body" required>{% if article %}{{ article['article_body'] }}{% endif %}</textarea>
+        <textarea class="input -textarea" id="p-content" name="article_body" required>{% if article %}{{ article['article_body'] }}{% endif %}</textarea>
     </div>
-    <button type="submit">Poster</button>
+    <button class="std-button" type="submit">Poster</button>
     {% if article %}
     <input type="hidden" name="article_author_id" value="{{ article['article_author_id'] }}">
     <input type="hidden" name="article_cover_filename" value="{{ article['article_cover_filename'] }}">

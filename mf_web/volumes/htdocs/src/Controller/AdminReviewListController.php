@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminReviewListController implements ControllerInterface
 {
-    const ROUTE_ID = 'admin_review_list';
+    const ROUTE_ID = 'admin-review-list';
 
     private ReviewRepository $repo;
 

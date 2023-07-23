@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des images{% endblock %}
+
+{% block bodyContent %}
+{% for s in successes %}
+<p>{{ s }}</p>
+{% endfor %}
+<form class="std-form" method="post" enctype="multipart/form-data">
+    <div class="form-row">
+        <input class="file" name="images[]" type="file" accept="image/*" multiple>
+    </div>
+    <div class="form-row">
+        <button class="std-button">Mettre en ligne</button>
+    </div>
+</form>
+<ul class="std-mosaic-list">
+    {% for i in images %}
+    <li class="item">
+        <img class="img" src="{{ app.resource(i) }}">
+        <em>{{ i }}</em>
+        <form method="post">
+            <input name="image-to-delete" type="hidden" value="{{ i }}">
+            <button class="std-button">Supprimer</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

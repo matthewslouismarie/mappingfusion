@@ -34,6 +34,7 @@ use MF\Controller\AuthorController;
 use MF\Controller\CategoryAdminController;
 use MF\Controller\CategoryListAdminController;
 use MF\Controller\HomeController;
+use MF\Controller\ImageManagementController;
 use MF\Controller\LoginController;
 use MF\Controller\LogoutController;
 use MF\Controller\PlayableController;
@@ -46,6 +47,7 @@ use MF\Kernel;
 const CLI_ID = 'cli';
 
 const ROUTES = [
+    '' => HomeController::class,
     AccountController::ROUTE_ID=> AccountController::class,
     AdminArticleController::ROUTE_ID => AdminArticleController::class,
     AdminArticleListController::ROUTE_ID => AdminArticleListController::class,
@@ -60,6 +62,7 @@ const ROUTES = [
     CategoryAdminController::ROUTE_ID => CategoryAdminController::class,
     CategoryListAdminController::ROUTE_ID => CategoryListAdminController::class,
     HomeController::ROUTE_ID => HomeController::class,
+    ImageManagementController::ROUTE_ID => ImageManagementController::class,
     LoginController::ROUTE_ID => LoginController::class,
     LogoutController::ROUTE_ID => LogoutController::class,
     PlayableController::ROUTE_ID => PlayableController::class,
@@ -84,7 +87,7 @@ if (CLI_ID === php_sapi_name()) {
 
     $routeId = $routeParams[0];
     
-    $response = $requestManager->generateResponse($container->get(ROUTES[$routeId] ?? ROUTES[HomeController::ROUTE_ID]), $request);
+    $response = $requestManager->generateResponse($container->get(ROUTES[$routeId]), $request);
     
     if (302 === $response->getStatusCode()) {
         header('Location: ' . $response->getHeaderLine('Location'));

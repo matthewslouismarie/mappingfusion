@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class CategoryListAdminController implements ControllerInterface
 {
-    const ROUTE_ID = 'admin_category_list';
+    const ROUTE_ID = 'admin-category-list';
 
     private CategoryRepository $repo;
 

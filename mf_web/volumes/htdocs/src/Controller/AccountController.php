@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AccountController implements ControllerInterface
 {
-    const ROUTE_ID = 'manage_account';
+    const ROUTE_ID = 'manage-account';
 
     private MemberRepository $repo;
     private Session $session;
