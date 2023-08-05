@@ -5,7 +5,7 @@ declare(strict_types=1);
 set_error_handler(function ($errNo, $errStr, $errFile, $errLine) {
     $msg = "$errNo, $errStr in $errFile on line $errLine";
     if (2 === $errNo) {
-        throw new OutOfBoundsException();
+        throw new OutOfBoundsException($msg);
     }
     if ($errNo == E_NOTICE || $errNo == E_WARNING) {
         throw new RuntimeException($msg, $errNo);
@@ -28,6 +28,7 @@ use MF\Controller\AdminContributionController;
 use MF\Controller\AdminPlayableController;
 use MF\Controller\AdminPlayableListController;
 use MF\Controller\AdminReviewListController;
+use MF\Controller\AdminTestController;
 use MF\Controller\ArticleController;
 use MF\Controller\ArticleListController;
 use MF\Controller\AuthorController;
@@ -56,6 +57,7 @@ const ROUTES = [
     AdminPlayableController::ROUTE_ID => AdminPlayableController::class,
     AdminPlayableListController::ROUTE_ID => AdminPlayableListController::class,
     AdminReviewListController::ROUTE_ID => AdminReviewListController::class,
+    AdminTestController::ROUTE_ID => AdminTestController::class,
     ArticleController::ROUTE_ID => ArticleController::class,
     ArticleListController::ROUTE_ID => ArticleListController::class,
     AuthorController::ROUTE_ID => AuthorController::class,

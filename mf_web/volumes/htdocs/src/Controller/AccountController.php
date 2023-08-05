@@ -3,7 +3,7 @@
 namespace MF\Controller;
 
 use MF\Enum\Clearance;
-use MF\HttpBridge\Session;
+use MF\Http\SessionManager;
 use MF\Repository\MemberRepository;
 use GuzzleHttp\Psr7\Response;
 use MF\TwigService;
@@ -15,13 +15,13 @@ class AccountController implements ControllerInterface
     const ROUTE_ID = 'manage-account';
 
     private MemberRepository $repo;
-    private Session $session;
+    private SessionManager $session;
 
     private TwigService $twig;
 
     public function __construct(
         MemberRepository $repo,
-        Session $session,
+        SessionManager $session,
         TwigService $twig,
     ) {
         $this->repo = $repo;

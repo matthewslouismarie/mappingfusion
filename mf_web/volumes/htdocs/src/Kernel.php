@@ -5,17 +5,17 @@ namespace MF;
 use GuzzleHttp\Psr7\Response;
 use MF\Controller\ControllerInterface;
 use MF\Enum\Clearance;
-use MF\HttpBridge\Session;
+use MF\Http\SessionManager;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Kernel
 {
     private TwigService $twig;
 
-    private Session $session;
+    private SessionManager $session;
 
     public function __construct(
-        Session $session,
+        SessionManager $session,
         TwigService $twig,
     ) {
         $this->session = $session;

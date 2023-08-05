@@ -19,6 +19,9 @@ class ImageManagementController implements ControllerInterface
         $this->uploaded = dirname(__FILE__) . '/../../public/uploaded/';
     }
 
+    /**
+     * @todo Unified upload system. (including accepted files)
+     */
     public function generateResponse(ServerRequestInterface $request, array $routeParams): Response {
         $successes = [];
         if ('POST' === $request->getMethod()) {

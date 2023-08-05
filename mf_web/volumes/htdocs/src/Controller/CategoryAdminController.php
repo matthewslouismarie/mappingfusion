@@ -1,14 +1,12 @@
 <?php
 
 namespace MF\Controller;
+
 use DomainException;
 use MF\Enum\Clearance;
 use MF\Form;
 use MF\Model\Category;
-use MF\Model\SlugFilename;
-use MF\Repository\ArticleRepository;
-use MF\HttpBridge\Session;
-use MF\Model\Article;
+use MF\Http\SessionManager;
 use GuzzleHttp\Psr7\Response;
 use MF\Repository\CategoryRepository;
 use MF\Router;
@@ -26,7 +24,7 @@ class CategoryAdminController implements ControllerInterface
 
     private Router $router;
 
-    private Session $session;
+    private SessionManager $session;
 
     private TwigService $twig;
 
@@ -34,7 +32,7 @@ class CategoryAdminController implements ControllerInterface
         Form $form,
         CategoryRepository $repo,
         Router $router,
-        Session $session,
+        SessionManager $session,
         TwigService $twig,
     ) {
         $this->form = $form;

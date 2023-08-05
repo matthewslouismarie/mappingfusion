@@ -1,13 +1,13 @@
 {% macro articleMosaic(a, app) %}
 <a class="article-mosaic" href="{{ app.router.generateUrl('view-article', {id: a.id}) }}">
-    <div class="left" style="background-image: url('{{ app.resource(a.coverFilename) }}');">
-        <em class="std-badge">{{ a.category.name }}</em>
+    <div class="left"{% if a.coverFilename %} style="background-image: url('{{ app.resource(a.coverFilename) }}');"{% endif %}>
+        <em class="std-badge">{{ a.storedCategory.name }}</em>
     </div>
     <div class="right">
         <h3 class="title">{{ app.mk.getText(a.title) }}</h3>
         <p class="date">Le {{ a.lastUpdateDateTime.format('d/m/y') }}</p>
         <div class="excerpt">
-            {{ app.mk.getText(a.content) }}
+            {{ app.mk.getText(a.body) }}
         </div>
     </div>
 </a>

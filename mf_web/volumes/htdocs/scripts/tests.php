@@ -1,6 +1,9 @@
 <?php
 
 use MF\Controller\HomeController;
+use MF\Entity\DbEntityManager;
+use MF\Model\ArticleDefinition;
+use MF\Model\KeyName;
 use MF\Router;
 use MF\Twig\TemplateHelper;
 
@@ -8,6 +11,19 @@ $container = require_once(dirname(__FILE__) . '/../index.php');
 
 $router = $container->get(Router::class);
 $tplHelper = $container->get(TemplateHelper::class);
+
+
+$data = json_decode(file_get_contents('data.json', true), true);
+$container->get(DbEntityManager::class)->toAppArray(
+    $data,
+    $container->get(ArticleDefinition::class),
+    'article_',
+);
+
+
+/**
+ * HTTP requests
+ */
 
 $urls = [
     $router->generateUrl(HomeController::ROUTE_ID),
@@ -27,4 +43,16 @@ foreach ($urls as $url) {
         echo "HTTP response code is $httpResponseCode, should contain 200 OK.";
         exit(1);
     }
+}
+
+$keyName0 = new KeyName('Hello !');
+if ('hello' !== $keyName0->__toString()) {
+    echo "$keyName0 should be equal to 'hello'.";
+    exit(1);
+}
+
+$keyName1 = new KeyName('myArticle');
+if ('my_article' !== $keyName1->__toString()) {
+    echo "$keyName1 should be equal to 'my_article'.";
+    exit(1);
 }

@@ -1,0 +1,3 @@
+{% macro csrf(csrfInput, csrfValue) %}
+<input name="{{ csrfInput.name }}" type="hidden" value="{{ csrfValue }}">
+{% endmacro %}

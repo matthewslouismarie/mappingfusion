@@ -16,7 +16,7 @@
             <ul class="glide__slides">
             {% for a in featured_articles %}
                 <li class="glide__slide">
-                    <a class="link" href="{{ app.router.generateUrl('view-article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.coverFilename) }});">
+                    <a class="link" href="{{ app.router.generateUrl('view-article', {id: a.id}) }}" style="background-image: url({{ app.resource(a['cover_filename']) }});">
                         <div class="text">{{ app.mk.format(a.title)|raw }}</div>
                     </a>
                 </li>
@@ -26,7 +26,7 @@
         <div class="glide__bullets" data-glide-el="controls[nav]">
             {% for a in featured_articles %}
             <button class="glide__bullet" data-glide-dir="={{ loop.index0 }}" type="button">
-                <div class="image" style="background-image: url('{{ app.resource(featured_articles[loop.index0].coverFilename) }}');">{{ featured_articles[loop.index0].title }}</div>
+                <div class="image" style="background-image: url('{{ app.resource(featured_articles[loop.index0]['cover_filename']) }}');">{{ featured_articles[loop.index0].title }}</div>
             </button>
             {% endfor %}
         </div>
@@ -44,10 +44,10 @@
             <ul class="std-block-list">
                 {% for r in last_reviews %}
                 <li class="item">
-                    <a class="review-mosaic-bare" style="background-image: url('{{ app.resource(r.coverFilename) }}');">
+                    <a class="review-mosaic-bare"{% if r.coverFilename is not null %} style="background-image: url('{{ app.resource(r['cover_filename']) }}');"{% endif %}>
                         <div class="content">
-                            <span class="playable">{{ r.storedReview.storedPlayable.name }}</span>
-                            <span class="game">{{ r.storedReview.storedPlayable.storedGame.name }}</span>
+                            <span class="playable">{{ r.storedPlayable.name }}</span>
+                            <span class="game">{{ r.storedGame.name }}</span>
                         </div>
                     </a>
                 </li>
@@ -64,7 +64,7 @@
         <div class="_wrapper">
             <hgroup class="section-heading -inline">
                 <p class="imgp">
-                    <img alt="Tests maps et mods" class="image" src="{{ app.asset('news.svg') }}">
+                    {# <img alt="Tests maps et mods" class="image" src="{{ app.asset('news.svg') }}"> #}
                 </p>
                 <p class="p">Les dernières</p>
                 <h2 class="title">actualités</h2>
@@ -82,6 +82,7 @@
             </a>
         </div>
     </section>
+    {#
     <section class="site-section-beginners">
         <div class="_wrapper">
             <hgroup class="left">
@@ -112,7 +113,7 @@
                     </dd>
                 </div>
             </dl>
-        </div>
+        </div> #}
     </section>
 </div>
 {% endblock %}

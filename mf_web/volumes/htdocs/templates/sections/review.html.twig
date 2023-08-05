@@ -1,9 +1,9 @@
-{% macro review(mk, review, variant) %}
+{% macro review(mk, playable, review, variant) %}
     <div class="std-review{% if variant %} {{ variant }}{% endif %} _padded -g -t">
         <div class="rating-container">
             <strong class="rating">{{ review.rating }}</strong>
         </div>
-        <h2 class="heading">{{ review.storedPlayable.name }} : l’avis de l’équipe</h2>
+        <h2 class="heading">{{ playable.name }} : l’avis de l’équipe</h2>
         {% if variant == '-summary' %}
         {{ mk.format(review.body)|raw }}
         {% endif %}

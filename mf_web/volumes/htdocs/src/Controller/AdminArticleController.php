@@ -1,17 +1,23 @@
 <?php
 
 namespace MF\Controller;
-use DomainException;
+
+use MF\Entity\DbEntityManager;
 use MF\Enum\Clearance;
+use MF\Exception\Http\NotFoundException;
 use MF\Form;
-use MF\Model\SlugFilename;
+use MF\Form\FormManager;
+use MF\Form\FormObjectManager;
+use MF\Model\ArticleDefinition;
 use MF\Repository\ArticleRepository;
-use MF\HttpBridge\Session;
-use MF\Model\Article;
+use MF\Http\SessionManager;
 use GuzzleHttp\Psr7\Response;
 use MF\Repository\CategoryRepository;
 use MF\Router;
+use MF\Twig\TemplateHelper;
 use MF\TwigService;
+use OutOfBoundsException;
+use PDOException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -19,82 +25,66 @@ class AdminArticleController implements ControllerInterface
 {
     const ROUTE_ID = 'manage-article';
 
-    private CategoryRepository $catRepo;
-
-    private Form $form;
-
-    private ArticleRepository $repo;
-
-    private Router $router;
-
-    private Session $session;
-
-    private TwigService $twig;
-
     public function __construct(
-        CategoryRepository $catRepo,
-        Form $form,
-        ArticleRepository $repo,
-        Router $router,
-        Session $session,
-        TwigService $twig,
+        private ArticleDefinition $articleDefinition,
+        private ArticleRepository $repo,
+        private CategoryRepository $catRepo,
+        private DbEntityManager $em,
+        private Form $form,
+        private FormManager $formManager,
+        private FormObjectManager $fOManager,
+        private Router $router,
+        private SessionManager $session,
+        private TemplateHelper $templateHelper,
+        private TwigService $twig,
     ) {
-        $this->catRepo = $catRepo;
-        $this->form = $form;
-        $this->repo = $repo;
-        $this->router = $router;
-        $this->session = $session;
-        $this->twig = $twig;
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
-        $article = $this->getEntityFromRequest($request);
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+        $article = null;
+        $errorMessages = [];
+        try {
+            $article = isset($routeParams[1]) ? $this->repo->findOne($routeParams[1]) : null;
+        } catch (OutOfBoundsException $e) {
+            throw new NotFoundException($e);
+        }
 
-        if (null !== $article && (!isset($request->getQueryParams()['id']) || $article->getId() !== $request->getQueryParams()['id'])) {
-            return new Response(302, ['Location' => $this->router->generateUrl(self::ROUTE_ID, ['id' => strval($article->getId())])]);
+        $form = $this->formManager->createFormDefinition(
+            $this->articleDefinition,
+            formConfig: ['cover_filename' => ['required' => null === $article]],
+        );
+
+        $formData = null;
+        if ('POST' === $request->getMethod()) {
+            $formData = $form->extractSubmittedValue($request);
+
+            if (0 === count($formData->getErrors())) {
+                $entityValue = $this->fOManager->toAppArray($formData, $this->articleDefinition, $article);
+    
+                try {
+                    if (null === $article) {
+                        $this->repo->addNewArticle($this->em->toAppArray($entityValue, $this->articleDefinition));
+                        return $this->router->generateRedirect(self::ROUTE_ID, [$entityValue['id']]);
+                    } else {
+                        $this->repo->updateArticle($article['id'], $entityValue);
+                    }
+                } catch (PDOException $e) {
+                    if ('23000' === $e->getCode()) {
+                        $errorMessages[] = 'Il existe déjà un article avec le même ID.';
+                    } else {
+                        throw $e;
+                    }
+                }
+            }
+        } else {
+            $formData = $form->generateFormValue($article ?? []);
         }
 
         return new Response(body: $this->twig->render('article_form.html.twig', [
-            'article' => $article?->toArray(),
             'categories' => $this->catRepo->findAll(),
+            'article' => $formData,
+            'errorMessages' => $errorMessages,
         ]));
-    }
-
-    private function getEntityFromRequest(ServerRequestInterface $request): ?Article {
-        if ('POST' === $request->getMethod()) {
-            $data = $this->form->nullifyEmptyStrings($request->getParsedBody());
-    
-            $uploadedFile = $request->getUploadedFiles()['p_cover_uploaded_file'];
-            $wasFileUploaded = null !== $uploadedFile->getSize() && $uploadedFile->getSize() > 0;
-            if ($wasFileUploaded) {
-                $filename = new SlugFilename($uploadedFile->getClientFilename());
-                $uploadedFile->moveTo(dirname(__FILE__) . "/../../public/uploaded/" . $filename->__toString());
-                $data['article_cover_filename'] = $filename->__toString();
-            }
-            $data['article_is_featured'] = isset($data['article_is_featured']);
-
-            if (isset($request->getQueryParams()['id'])) {
-                $article = Article::fromArray($data);
-                $this->repo->updateArticle($request->getQueryParams()['id'], $article, $wasFileUploaded);
-                return $article;
-            } else {
-                $article = Article::fromArray([
-                    'article_author_id' => $this->session->getCurrentMemberUsername(),
-                    'article_creation_date_time' => "now",
-                    'article_last_update_date_time' => "now",
-                ] + $data);
-                $this->repo->addNewArticle($article);
-                return $article;
-            }
-        } elseif (isset($request->getQueryParams()['id'])) {
-            $article = $this->repo->find($request->getQueryParams()['id']);
-            if (null === $article) {
-                throw new DomainException();
-            }
-            return $article;
-        } else {
-            return null;
-        }
     }
 
     public function getAccessControl(): Clearance {

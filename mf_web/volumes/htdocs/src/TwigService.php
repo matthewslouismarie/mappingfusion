@@ -5,6 +5,7 @@ namespace MF;
 use InvalidArgumentException;
 use MF\Twig\TemplateHelper;
 use Twig\Environment;
+use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 
 class TwigService
@@ -19,11 +20,15 @@ class TwigService
     ) {
         $this->templateHelper = $templateHelper;
         $twigLoader = new FilesystemLoader('templates');
+        $dev = $twigConfig->getSetting('dev');
         $this->twig = new Environment($twigLoader, [
-            'debug' => $twigConfig->getSetting('dev') ? true : false,
-            'cache' => $twigConfig->getSetting('dev') ? false : 'cache',
+            'debug' => $dev ? true : false,
+            'cache' => $dev ? false : 'cache',
             'strict_variables' => true,
         ]);
+        if ($dev) {
+            $this->twig->addExtension(new DebugExtension());
+        }
     }
 
     public function render(string $filename, array $parameters = []): string {

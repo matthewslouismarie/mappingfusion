@@ -3,7 +3,7 @@
 namespace MF\Controller;
 
 use MF\Enum\Clearance;
-use MF\HttpBridge\Session;
+use MF\Http\SessionManager;
 use MF\ModelFactory\FormMemberFactory;
 use MF\Repository\MemberRepository;
 use GuzzleHttp\Psr7\Response;
@@ -18,11 +18,11 @@ class RegistrationController implements ControllerInterface
     private TwigService $twig;
     private MemberRepository $repo;
 
-    private Session $session;
+    private SessionManager $session;
 
     public function __construct(
         MemberRepository $repo,
-        Session $session,
+        SessionManager $session,
         TwigService $twigService,
     ) {
         $this->twig = $twigService;

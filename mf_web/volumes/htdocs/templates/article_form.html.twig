@@ -1,46 +1,47 @@
 {% extends 'base.html.twig' %}
 
+{% from 'macros/csrf_input.html.twig' import csrf %}
+{% from 'macros/form_error.html.twig' import formErrors %}
+
 {% block title %}Article{% endblock %}
 
 {% block bodyContent %}
-<form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
-    <div class="form-row">
-        <label class="label" for="p-id">ID</label>
-        <input class="input" id="p-id" name="article_id" required value="{% if article %}{{ article['article_id'] }}{% endif %}">
-    </div>
+<form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post" {% if app.isDev %}novalidate{% endif %}>
+    {{ formErrors(errorMessages) }}
     <div class="form-row">
         <label class="label" for="p-title">Titre</label>
-        <textarea class="input" id="p-title" name="article_title" required>{% if article %}{{ article['article_title'] }}{% endif %}</textarea>
+        <textarea class="input" id="p-title" name="title" required>{{ article.value['title'].stringValue }}</textarea>
+        {{ formErrors(article.value['title'].errors) }}
     </div>
     <div class="form-row">
-        <label class="label" for="p-category-id">Catégorie</label>
-        <select id="p-category-id" name="article_category_id" required value="{% if article %}{{ article['article_category_id'] }}{% endif %}">
+        <label class="label" for="category-id">Catégorie</label>
+        <select id="category-id" name="category_id" required>
             {% for c in categories %}
-            <option value="{{ c.id }}" label="{{ c.name }}">
+            <option value="{{ c.id }}"{% if c.id == article.value['category_id'].stringValue %} selected{% endif %}>{{ c.name }}</option>
             {% endfor %}
         </select>
+        {{ formErrors(article.value['category_id'].errors) }}
     </div>
     <div class="form-row -singleimage">
         <label class="label" for="p-cover-filename">Couverture</label>
-        <input accept="image/*" class="input" id="p-cover-filename" name="p_cover_uploaded_file" type="file">
-        {% if article and article['article_cover_filename'] %}
-        <p>Couverture actuelle : {{ article['article_cover_filename'] }}.</p>
-        <img alt="Image actuelle de couverture de l’article" class="image" src="{{ app.resource(article['article_cover_filename']) }}">
+        <input accept="image/*" class="input" id="p-cover-filename" name="cover_filename" type="file">
+        {% if article.value['cover_filename'].stringValue %}
+        <p>Couverture actuelle : {{ article.value['cover_filename'].stringValue }}.</p>
+        <img alt="Image actuelle de couverture de l’article" class="image" src="{{ app.resource(article.value['cover_filename'].stringValue) }}">
         {% endif %}
+        {{ formErrors(article.value['cover_filename'].errors) }}
     </div>
     <div class="form-row -checkbox">
-        <input class="input" id="is-featured" name="article_is_featured" type="checkbox"{% if article %}{% if article['article_is_featured'] %} checked{% endif %}{% endif %}><label class="label" for="is-featured">Mettre à la une</label>
+        <input class="input" id="is-featured" name="is_featured" type="checkbox"{% if article.value['is_featured'].boolValue %} checked{% endif %}>
+        <label class="label" for="is-featured">Mettre à la une</label>
+        {{ formErrors(article.value['is_featured'].errors) }}
     </div>
     <div class="form-row">
         <label class="label" for="p-content">Contenu de l’article</label>
-        <textarea class="input -textarea" id="p-content" name="article_body" required>{% if article %}{{ article['article_body'] }}{% endif %}</textarea>
+        <textarea class="input -textarea" id="p-content" name="body" required>{{ article.value['body'].stringValue }}</textarea>
+        {{ formErrors(article.value['body'].errors) }}
     </div>
     <button class="std-button" type="submit">Poster</button>
-    {% if article %}
-    <input type="hidden" name="article_author_id" value="{{ article['article_author_id'] }}">
-    <input type="hidden" name="article_cover_filename" value="{{ article['article_cover_filename'] }}">
-    <input type="hidden" name="article_creation_date_time" value="{{ article['article_creation_date_time'] }}">
-    <input type="hidden" name="article_last_update_date_time" value="{{ article['article_last_update_date_time'] }}">
-    {% endif %}
+    {{ csrf(app.csrfFormElement, app.session.csrf) }}
 </form>
 {% endblock %}

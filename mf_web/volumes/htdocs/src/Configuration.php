@@ -13,4 +13,8 @@ class Configuration
     public function getSetting(string $key): string {
         return $this->env[$key];
     }
+
+    public function getBoolSetting(string $key): bool {
+        return $this->env[$key];
+    }
 }

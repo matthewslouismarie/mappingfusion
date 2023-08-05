@@ -12,13 +12,13 @@
 {% block body %}
 <div class="page-article">
     <article class="std-article">
-        {% if article.storedReview is null %}
+        {% if article.storedReview is defined %}
         <div class="blue">
             <div class="imafraidijustbluemyself">
             </div>
         </div>
         {% endif %}
-        <div class="article-cover" style="background-image: url('{{ app.resource(article.coverFilename) }}');">
+        <div class="article-cover"{% if article.coverFilename is defined %} style="background-image: url('{{ app.resource(article.coverFilename) }}');"{% endif %}>
             <div class="content">
                 <h1 class="title">{{ article.title }}</h1>
             </div>
@@ -52,7 +52,7 @@
                     <ul class="list">
                         <li class="item">
                             <a class="link" href="#">
-                                <img alt="{{ article.title }}" class="image" src="{{ app.resource(article.coverFilename) }}">
+                                <img alt="{{ article.title }}" class="image"{% if article.coverFilename is defined %} src="{{ app.resource(article.coverFilename) }}"{% endif %}>
                                 {{ article.title }}
                         </li>
                         <li class="item">
@@ -64,13 +64,13 @@
                     </ul>
                 </div>
             </nav>
-            {% if article.storedReview is not null %}
+            {% if article.storedReview is defined %}
             <div class="content -review _sectionpadded">
                 <div class="_padded -a -g">
                     <dl class="std-metadata">
                         <div class="item">
                             <dt class="term">Jeu :</dt>
-                            <dd class="def">{{ article.storedReview.storedPlayable.name }}</dd>
+                            <dd class="def">{{ article.storedPlayable.name }}</dd>
                         </div>
                         <div class="item">
                             <dt class="term">Développeur :</dt>
@@ -78,18 +78,18 @@
                         </div>
                         <div class="item">
                             <dt class="term">Date de sortie :</dt>
-                            <dd class="def">{{ article.storedReview.storedPlayable.releaseDateTime|date('Y') }}</dd>
+                            <dd class="def">{{ article.storedPlayable.releaseDateTime|date('Y') }}</dd>
                         </div>
                     </dl>
                     <p class="p">{{ article.storedReview.body }}</p>
-                    {{ review(app.mk, article.storedReview) }}
+                    {{ review(app.mk, article.storedPlayable, article.storedReview) }}
                 </div>
             </div>
             {% endif %}
 
             <div class="content -articlebody _sectionpadded">
                 <div class="std-markdown-container _padded -g">
-                    {{ app.mk.format(article.content)|raw }}
+                    {{ app.mk.format(article.body)|raw }}
                 </div>
             </div>
 
@@ -101,12 +101,12 @@
                     <div class="glide__track" data-glide-el="track">
                         <ul class="glide__slides">
                             <li class="glide__slide">
-                                <a class="link" href="{{ app.router.generateUrl('view-article', {id: article.id}) }}" style="background-image: url({{ app.resource(article.coverFilename) }});">
+                                <a class="link" href="{{ app.router.generateUrl('view-article', {id: article.id}) }}"{% if article.coverFilename is defined %} style="background-image: url({{ app.resource(article.coverFilename) }});"{% endif %}>
                                     <div class="text">{{ app.mk.format(article.title)|raw }}</div>
                                 </a>
                             </li>
                             <li class="glide__slide">
-                                <a class="link" href="{{ app.router.generateUrl('view-article', {id: article.id}) }}" style="background-image: url({{ app.resource(article.coverFilename) }});">
+                                <a class="link" href="{{ app.router.generateUrl('view-article', {id: article.id}) }}"{% if article.coverFilename is defined %} style="background-image: url({{ app.resource(article.coverFilename) }});"{% endif %}>
                                     <div class="text">{{ app.mk.format(article.title)|raw }}</div>
                                 </a>
                             </li>
@@ -117,12 +117,12 @@
                     </div>
                 </div>
             </div>
-
+{# 
             {% if article.storedReview is not null %}
             <div class="content _sectionpadded">
-                {{ review(app.mk, article.storedReview, '-summary') }}
+                {{ review(app.mk, article.storedPlayable, article.storedReview, '-summary') }}
             </div>
-            {% endif %}
+            {% endif %} #}
 
             <div class="content _sectionpadded">
                 <div class="article-advice _padded -a">

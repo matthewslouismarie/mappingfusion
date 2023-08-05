@@ -3,19 +3,24 @@
 namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
+use MF\DataStructure\AppObject;
+use MF\Entity\DbEntityManager;
 use MF\Model\Author;
+use MF\Model\AuthorDefinition;
 use UnexpectedValueException;
 
 class AuthorRepository
 {
     public function __construct(
         private DatabaseManager $conn,
+        private AuthorDefinition $def,
+        private DbEntityManager $em,
     ) {
     }
 
-    public function add(Author $author): void {
+    public function add(AppObject $author): void {
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_author VALUES (:author_id, :author_name);');
-        $stmt->execute($author->toArray());
+        $stmt->execute($this->em->toDbArray($author, $this->def));
     }
 
     public function delete(string $id): void {
@@ -23,7 +28,7 @@ class AuthorRepository
         $stmt->execute([$id]);
     }
 
-    public function find(string $id): ?Author {
+    public function find(string $id): ?AppObject {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_author WHERE author_id = ? LIMIT 1;');
         $stmt->execute([$id]);
 
@@ -31,7 +36,7 @@ class AuthorRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return Author::fromArray($data[0]);
+            return $this->em->toAppArray($data[0], $this->def);
         } else {
             throw new UnexpectedValueException();
         }
@@ -41,7 +46,7 @@ class AuthorRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM e_author;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = Author::fromArray($r);
+            $entities[] = $this->em->toAppArray($r, $this->def);
         }
         return $entities;
     }
@@ -52,17 +57,17 @@ class AuthorRepository
         $row = $stmt->fetch();
         $authors = [];
         while (false !== $row) {
-            $authors[] = Author::fromArray($row);
+            $authors[] = $this->em->toAppArray($row, $this->def);
             $row = $stmt->fetch();
         }
 
         return $authors;
     }
 
-    public function update(string $previousId, Author $author): void {
-        if ($previousId === $author->getId()) {
+    public function update(string $previousId, AppObject $author): void {
+        if ($previousId === $author->id) {
             $stmt = $this->conn->getPdo()->prepare('UPDATE e_author SET author_name = :author_name WHERE author_id = :author_id;');
-            $stmt->execute($author->toArray());
+            $stmt->execute($this->em->toDbArray($author, $this->def));
         } else {
             $this->conn->getPdo()->beginTransaction();
             $this->add($author);
