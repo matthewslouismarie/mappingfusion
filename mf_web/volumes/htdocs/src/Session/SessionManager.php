@@ -1,6 +1,6 @@
 <?php
 
-namespace MF\Http;
+namespace MF\Session;
 
 class SessionManager
 {

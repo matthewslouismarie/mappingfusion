@@ -34,10 +34,4 @@ class PlayableDefinition implements ModelDefinition
             ),
         ];
     }
-
-    public function getStoredData(): array {
-        return [
-            'stored_game' => self::class,
-        ];
-    }
 }

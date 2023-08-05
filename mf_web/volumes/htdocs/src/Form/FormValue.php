@@ -6,7 +6,7 @@ namespace MF\Form;
  * @todo Rename and remove "value" from name? Like FormRow?
  * @todo Create a separate class for form array and form value?
  */
-class FormValue
+class FormValue implements IFormData
 {
     public function __construct(
         private mixed $value,
@@ -14,7 +14,7 @@ class FormValue
     ) {
     }
 
-    public function getValue(): mixed {
+    public function getData(): mixed {
         return $this->value;
     }
 
@@ -32,6 +32,10 @@ class FormValue
 
     public function getErrors(): array {
         return $this->errors;
+    }
+
+    public function hasErrors(): bool {
+        return count($this->errors) > 0;
     }
 
     public function isNull(): bool {

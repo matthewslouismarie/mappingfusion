@@ -5,12 +5,12 @@
 {% block bodyContent %}
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
     <div class="form-row">
-        <label class="label" for="p-id">ID (générée automatiquement)</label>
-        <input class="input" id="p-id" name="author_id"{% if author %} value="{{ author['author_id'] }}"{% endif %}>
+        <label class="label" for="id">ID (générée automatiquement)</label>
+        <input class="input" id="id" name="id" value="{{ author.data.id }}">
     </div>
     <div class="form-row">
-        <label class="label" for="p-name">Nom</label>
-        <input class="input" id="p-name" name="author_name" required{% if author %} value="{{ author['author_name'] }}"{% endif %}>
+        <label class="label" for="name">Nom</label>
+        <input class="input" id="name" name="name" required value="{{ author.data.name }}">
     </div>
     <button type="submit">Poster</button>
 </form>

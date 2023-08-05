@@ -3,7 +3,7 @@
 namespace MF\Controller;
 
 use MF\Enum\Clearance;
-use MF\Http\SessionManager;
+use MF\Session\SessionManager;
 use MF\Repository\MemberRepository;
 use GuzzleHttp\Psr7\Response;
 use MF\TwigService;

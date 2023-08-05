@@ -9,11 +9,14 @@ use MF\Form\Transformer\DateTimeTransformer;
 use MF\Form\Transformer\FileTransformer;
 use MF\Form\Transformer\FormTransformer;
 use MF\Form\Transformer\StringTransformer;
-use MF\Model\ArticleDefinition;
+use MF\Model\ModelDefinition;
 use MF\Model\ModelProperty;
 use UnexpectedValueException;
 
-class FormManager
+/**
+ * Automatically creates a Form object from a model definition.
+ */
+class FormFactory
 {
     public function __construct(
         private CheckboxTransformer $checkboxTransformer,
@@ -23,12 +26,12 @@ class FormManager
     ) {
     }
 
-    public function createFormDefinition(
-        ArticleDefinition $definition,
+    public function createForm(
+        ModelDefinition $definition,
         string $prefix = '',
         array $defaultData = null,
         array $formConfig = [],
-    ): FormDefinition {
+    ): Form {
         $htmlFormElements = [];
 
         foreach ($definition->getProperties() as $property) {
@@ -44,7 +47,7 @@ class FormManager
                 );
             }
         }
-        return new FormDefinition($htmlFormElements, $defaultData);
+        return new Form($htmlFormElements, $defaultData);
     }
 
     private function getTransformer(ModelProperty $property): FormTransformer {

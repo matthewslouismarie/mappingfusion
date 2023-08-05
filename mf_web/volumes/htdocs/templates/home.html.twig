@@ -44,10 +44,10 @@
             <ul class="std-block-list">
                 {% for r in last_reviews %}
                 <li class="item">
-                    <a class="review-mosaic-bare"{% if r.coverFilename is not null %} style="background-image: url('{{ app.resource(r['cover_filename']) }}');"{% endif %}>
+                    <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.resource(r['cover_filename']) }}');"{% endif %}>
                         <div class="content">
-                            <span class="playable">{{ r.storedPlayable.name }}</span>
-                            <span class="game">{{ r.storedGame.name }}</span>
+                            <span class="playable">{{ r.stored_playable.name }}</span>
+                            <span class="game">{{ r.stored_game.name }}</span>
                         </div>
                     </a>
                 </li>
@@ -64,7 +64,7 @@
         <div class="_wrapper">
             <hgroup class="section-heading -inline">
                 <p class="imgp">
-                    {# <img alt="Tests maps et mods" class="image" src="{{ app.asset('news.svg') }}"> #}
+                    <img alt="Tests maps et mods" class="image" src="{{ app.asset('news.svg') }}">
                 </p>
                 <p class="p">Les dernières</p>
                 <h2 class="title">actualités</h2>
@@ -82,7 +82,7 @@
             </a>
         </div>
     </section>
-    {#
+    
     <section class="site-section-beginners">
         <div class="_wrapper">
             <hgroup class="left">
@@ -113,7 +113,7 @@
                     </dd>
                 </div>
             </dl>
-        </div> #}
+        </div>
     </section>
 </div>
 {% endblock %}

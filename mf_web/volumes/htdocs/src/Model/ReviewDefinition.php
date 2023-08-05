@@ -29,8 +29,4 @@ class ReviewDefinition implements ModelDefinition
             new ModelProperty('pros', ModelPropertyType::TEXT),
         ];
     }
-
-    public function getStoredData(): array {
-        return [];
-    }
 }

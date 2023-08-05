@@ -3,8 +3,9 @@
 namespace MF\Controller;
 
 use MF\Enum\Clearance;
-use MF\Http\SessionManager;
-use MF\ModelFactory\FormMemberFactory;
+use MF\Session\SessionManager;
+use MF\Model\Member;
+use MF\Model\PasswordHash;
 use MF\Repository\MemberRepository;
 use GuzzleHttp\Psr7\Response;
 use MF\TwigService;
@@ -32,7 +33,8 @@ class RegistrationController implements ControllerInterface
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         if ('POST' === $request->getMethod()) {
-            $member = (new FormMemberFactory())->createFromRequest($request->getParsedBody());
+            $formData = $request->getParsedBody();
+            $member = new Member($formData['username'], new PasswordHash(clear: $formData['password']));
             $this->repo->add($member);
         }
         return new Response(body: $this->twig->render('register.html.twig'));

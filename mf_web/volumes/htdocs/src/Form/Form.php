@@ -4,17 +4,21 @@ namespace MF\Form;
 
 use MF\Form\FormValue;
 use Psr\Http\Message\ServerRequestInterface;
-use RuntimeException;
 
 /**
- * Defines a submittable whose value is only defined by its children.
+ * Extracts a FormArray from HTTP requests, and converts arrays into FormArray-s.
+ * It is
  */
-class FormDefinition implements Submittable
+class Form implements Submittable
 {
     private array $children;
 
     private ?array $defaultValue;
 
+    /**
+     * @param FormElement[] $children An array of child form elements.
+     * @param array defaultValue A default value for the form data.
+     */
     public function __construct(
         array $children = [],
         mixed $defaultValue = null,
@@ -23,13 +27,13 @@ class FormDefinition implements Submittable
         $this->defaultValue = $defaultValue;
     }
 
-    public function extractSubmittedValue(ServerRequestInterface $request): FormArray {
+    public function extractFormData(ServerRequestInterface $request): FormArray {
         $formArray = [];
         foreach ($this->children as $child) {
             if (isset($model[$child->getName()])) {
                 throw new RuntimeException();
             }
-            $formArray[$child->getName()] = $child->extractSubmittedValue($request);
+            $formArray[$child->getName()] = $child->extractFormData($request);
         }
         return new FormArray($formArray);
     }
@@ -51,11 +55,13 @@ class FormDefinition implements Submittable
         return $this->defaultValue;
     }
 
-    public function generateFormValue(array $appArray): FormValue {
+    public function generateFormData(array $data, bool $validate = true): FormArray {
         $formData = [];
         foreach ($this->children as $c) {
-            $formData[$c->getName()] = new FormValue($appArray[$c->getName()] ?? null);
+            $childData = $data[$c->getName()] ?? null;
+            $childErrors = $validate ? $c->validate($childData) : [];
+            $formData[$c->getName()] = new FormValue($childData, $childErrors);
         }
-        return new FormValue($formData);
+        return new FormArray($formData);
     }
 }

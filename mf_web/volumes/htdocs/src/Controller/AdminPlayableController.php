@@ -6,7 +6,6 @@ use DomainException;
 use GuzzleHttp\Psr7\Response;
 use MF\Enum\Clearance;
 use MF\Enum\LinkType;
-use MF\Form;
 use MF\Model\Playable;
 use MF\Repository\AuthorRepository;
 use MF\Repository\PlayableRepository;
@@ -21,7 +20,6 @@ class AdminPlayableController implements ControllerInterface
 
     public function __construct(
         private AuthorRepository $authorRepo,
-        private Form $form,
         private TwigService $twig,
         private Router $router,
         private PlayableRepository $repo,

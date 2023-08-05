@@ -7,7 +7,7 @@ use MF\Enum\LinkType;
 use MF\Form\StdFormElement;
 use MF\Form\Submittable;
 use MF\Form\Transformer\CsrfTransformer;
-use MF\Http\SessionManager;
+use MF\Session\SessionManager;
 use MF\MarkdownService;
 use MF\Router;
 

@@ -21,8 +21,4 @@ class AuthorDefinition implements ModelDefinition
             new ModelProperty('name', ModelPropertyType::VARCHAR),
         ];
     }
-
-    public function getStoredData(): array {
-        return [];
-    }
 }

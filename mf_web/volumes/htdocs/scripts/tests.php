@@ -1,7 +1,7 @@
 <?php
 
 use MF\Controller\HomeController;
-use MF\Entity\DbEntityManager;
+use MF\Database\DbEntityManager;
 use MF\Model\ArticleDefinition;
 use MF\Model\KeyName;
 use MF\Router;
@@ -14,7 +14,7 @@ $tplHelper = $container->get(TemplateHelper::class);
 
 
 $data = json_decode(file_get_contents('data.json', true), true);
-$container->get(DbEntityManager::class)->toAppArray(
+$container->get(DbEntityManager::class)->toAppObject(
     $data,
     $container->get(ArticleDefinition::class),
     'article_',

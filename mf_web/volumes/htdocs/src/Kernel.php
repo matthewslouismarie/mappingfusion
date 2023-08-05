@@ -5,7 +5,7 @@ namespace MF;
 use GuzzleHttp\Psr7\Response;
 use MF\Controller\ControllerInterface;
 use MF\Enum\Clearance;
-use MF\Http\SessionManager;
+use MF\Session\SessionManager;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Kernel

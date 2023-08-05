@@ -4,9 +4,8 @@ namespace MF\Controller;
 
 use DomainException;
 use MF\Enum\Clearance;
-use MF\Form;
 use MF\Model\Category;
-use MF\Http\SessionManager;
+use MF\Session\SessionManager;
 use GuzzleHttp\Psr7\Response;
 use MF\Repository\CategoryRepository;
 use MF\Router;
@@ -17,8 +16,6 @@ use Psr\Http\Message\ServerRequestInterface;
 class CategoryAdminController implements ControllerInterface
 {
     const ROUTE_ID = 'manage_category';
-
-    private Form $form;
 
     private CategoryRepository $repo;
 

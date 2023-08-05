@@ -10,36 +10,36 @@
     {{ formErrors(errorMessages) }}
     <div class="form-row">
         <label class="label" for="p-title">Titre</label>
-        <textarea class="input" id="p-title" name="title" required>{{ article.value['title'].stringValue }}</textarea>
-        {{ formErrors(article.value['title'].errors) }}
+        <textarea class="input" id="p-title" name="title" required>{{ article.data.title }}</textarea>
+        {{ formErrors(article.errors.title) }}
     </div>
     <div class="form-row">
         <label class="label" for="category-id">Catégorie</label>
         <select id="category-id" name="category_id" required>
             {% for c in categories %}
-            <option value="{{ c.id }}"{% if c.id == article.value['category_id'].stringValue %} selected{% endif %}>{{ c.name }}</option>
+            <option value="{{ c.id }}"{% if c.id == article.data.category_id %} selected{% endif %}>{{ c.name }}</option>
             {% endfor %}
         </select>
-        {{ formErrors(article.value['category_id'].errors) }}
+        {{ formErrors(article.errors.category_id) }}
     </div>
     <div class="form-row -singleimage">
         <label class="label" for="p-cover-filename">Couverture</label>
         <input accept="image/*" class="input" id="p-cover-filename" name="cover_filename" type="file">
-        {% if article.value['cover_filename'].stringValue %}
-        <p>Couverture actuelle : {{ article.value['cover_filename'].stringValue }}.</p>
-        <img alt="Image actuelle de couverture de l’article" class="image" src="{{ app.resource(article.value['cover_filename'].stringValue) }}">
+        {% if article.data.cover_filename %}
+        <p>Couverture actuelle : {{ article.data.cover_filename }}.</p>
+        <img alt="Image actuelle de couverture de l’article" class="image" src="{{ app.resource(article.data.cover_filename) }}">
         {% endif %}
-        {{ formErrors(article.value['cover_filename'].errors) }}
+        {{ formErrors(article.errors.cover_filename) }}
     </div>
     <div class="form-row -checkbox">
-        <input class="input" id="is-featured" name="is_featured" type="checkbox"{% if article.value['is_featured'].boolValue %} checked{% endif %}>
+        <input class="input" id="is-featured" name="is_featured" type="checkbox"{% if article.data.is_featured %} checked{% endif %}>
         <label class="label" for="is-featured">Mettre à la une</label>
-        {{ formErrors(article.value['is_featured'].errors) }}
+        {{ formErrors(article.errors.is_featured) }}
     </div>
     <div class="form-row">
         <label class="label" for="p-content">Contenu de l’article</label>
-        <textarea class="input -textarea" id="p-content" name="body" required>{{ article.value['body'].stringValue }}</textarea>
-        {{ formErrors(article.value['body'].errors) }}
+        <textarea class="input -textarea" id="p-content" name="body" required>{{ article.data.body }}</textarea>
+        {{ formErrors(article.errors.body) }}
     </div>
     <button class="std-button" type="submit">Poster</button>
     {{ csrf(app.csrfFormElement, app.session.csrf) }}

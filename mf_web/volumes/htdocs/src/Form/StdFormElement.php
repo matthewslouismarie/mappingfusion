@@ -32,18 +32,13 @@ class StdFormElement implements FormElement
         $this->validators = $validators;
     }
 
-    public function extractSubmittedValue(ServerRequestInterface $request): FormValue {
-        $errors = [];
-
+    public function extractFormData(ServerRequestInterface $request): FormValue {
         try {
-            $transformedValue = $this->transformer->extractValueFromRequest($request, $this) ?? $this->defaultValue;
-            if (null === $transformedValue && $this->isRequired) {
-                $errors[] = 'Ce champ est requis.';
-            }
-            foreach ($this->validators as $v) {
-                $errors += $v->validate($transformedValue);
-            }
-            return new FormValue($transformedValue, $errors);
+            $transformedData = $this->transformer->extractValueFromRequest($request, $this) ?? $this->defaultValue;
+
+            $errors = $this->validate($transformedData);
+            
+            return new FormValue($transformedData, $errors);
         } catch (InvalidInputException $e) {
             $errors[] = 'Une erreur est arrivé.';
             return new FormValue(null, $errors);
@@ -64,5 +59,16 @@ class StdFormElement implements FormElement
 
     public function isRequired(): bool {
         return $this->isRequired;
+    }
+    
+    public function validate(mixed $transformedData): array {
+        $errors = [];
+        if (null === $transformedData && $this->isRequired) {
+            $errors[] = 'Ce champ est requis.';
+        }
+        foreach ($this->validators as $v) {
+            $errors += $v->validate($transformedData);
+        }
+        return $errors;
     }
 }

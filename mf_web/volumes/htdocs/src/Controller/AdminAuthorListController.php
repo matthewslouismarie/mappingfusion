@@ -26,7 +26,7 @@ class AdminAuthorListController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
-        return new Response(body: $this->twig->render('admin-author-list.html.twig', [
+        return new Response(body: $this->twig->render('admin_author_list.html.twig', [
             'authors' => $this->repo->findAll(),
         ]));
     }

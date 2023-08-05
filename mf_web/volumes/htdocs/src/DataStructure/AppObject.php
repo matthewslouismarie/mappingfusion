@@ -5,7 +5,6 @@ namespace MF\DataStructure;
 use ArrayAccess;
 use BadMethodCallException;
 use MF\Model\KeyName;
-use OutOfBoundsException;
 
 /**
  * @todo Validate input app array from a given definition.
@@ -45,5 +44,9 @@ class AppObject implements ArrayAccess
 
     public function set(string $offet, mixed $value): self {
         return new self([$offet => $value] + $this->data);
+    }
+
+    public function toArray(): array {
+        return $this->data;
     }
 }

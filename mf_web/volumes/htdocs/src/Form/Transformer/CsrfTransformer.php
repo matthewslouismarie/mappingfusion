@@ -4,7 +4,7 @@ namespace MF\Form\Transformer;
 
 use MF\Exception\InvalidFormException\MissingInputException;
 use MF\Form\FormElement;
-use MF\Http\SessionManager;
+use MF\Session\SessionManager;
 use Psr\Http\Message\ServerRequestInterface;
 
 class CsrfTransformer implements FormTransformer

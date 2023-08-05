@@ -1,6 +1,6 @@
 <?php
 
-namespace MF\Entity;
+namespace MF\Database;
 
 use ArrayAccess;
 use DateTimeImmutable;
@@ -17,7 +17,7 @@ class DbEntityManager
     ) {
     }
 
-    public function toAppArray(
+    public function toAppObject(
         array $entity,
         ModelDefinition $definition,
         string $prefix = '',
@@ -41,7 +41,7 @@ class DbEntityManager
             }
         }
         foreach ($childrenToProcess as $childId => $childDef) {
-            $data[$childId] = $this->toAppArray($entity, $childDef, $childDef->getName() . '_', $definition);
+            $data[$childId] = $this->toAppObject($entity, $childDef, $childDef->getName() . '_', $definition);
         }
         return new AppObject($data);
     }

@@ -4,9 +4,13 @@ namespace MF\Controller;
 
 use DomainException;
 use GuzzleHttp\Psr7\Response;
+use MF\DataStructure\AppObject;
 use MF\Enum\Clearance;
-use MF\Form;
+use MF\Form\FormFactory;
+use MF\Form\FormObjectManager;
 use MF\Model\Author;
+use MF\Model\AuthorDefinition;
+use MF\Model\Slug;
 use MF\Repository\AuthorRepository;
 use MF\Router;
 use MF\TwigService;
@@ -18,45 +22,54 @@ class AuthorController implements ControllerInterface
     const ROUTE_ID = 'manage_author';
 
     public function __construct(
-        private Form $form,
-        private TwigService $twig,
-        private Router $router,
+        private AuthorDefinition $def,
         private AuthorRepository $repo,
+        private FormFactory $FormFactory,
+        private FormObjectManager $formObjectManager,
+        private Router $router,
+        private TwigService $twig,
     ) {
     }
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $author = $this->getAuthorFromRequest($request);
+        $author = $this->getAuthorFromRequest($routeParams);
 
-        if (null !== $author && (!isset($request->getQueryParams()['id']) || $author->getId() !== $request->getQueryParams()['id'])) {
-            return new Response(302, ['Location' => $this->router->generateUrl('manage_author', ['id' => strval($author->getId())])]);
+        $form = $this->FormFactory->createForm($this->def, formConfig: [
+            'id' => [
+                'required' => false,
+            ]
+        ]);
+
+        $formData = null;
+        if ('POST' === $request->getMethod()) {
+            $formData = $form->extractFormData($request);
+            if (!$formData->hasErrors()) {
+                $data = $formData->getData();
+                $data['id'] = $data['id'] !== null ? $data['id'] : (new Slug($data['name'], true))->__toString();
+                $newAuthor = $this->formObjectManager->toAppObject($data, $this->def);
+                if (null === $author) {
+                    $newId = $this->repo->add($newAuthor);
+                    return $this->router->generateRedirect(self::ROUTE_ID, [$newId]);
+                } else {
+                    $this->repo->update($author->id, $newAuthor);
+                    if ($author->id !== $newAuthor->id) {
+                        return $this->router->generateRedirect(self::ROUTE_ID, [$newAuthor->id]);
+                    }
+                }
+            }
+        } else {
+            $formData = $form->generateFormData($author?->toArray() ?? [], false);
         }
 
         return new Response(
             body: $this->twig->render('author_form.html.twig', [
-                'author' => $author?->toArray(),
+                'author' => $formData,
             ])
         );
     }
 
-    private function getAuthorFromRequest(ServerRequestInterface $request): ?Author {
-        if ('POST' === $request->getMethod()) {
-            $data = $this->form->nullifyEmptyStrings($request->getParsedBody());
-
-            if (isset($request->getQueryParams()['id'])) {
-                $author = Author::fromArray($data);
-                $this->repo->update($request->getQueryParams()['id'], $author);
-                return $author;
-            } else {
-                $author = Author::fromArray($data);
-                $this->repo->add($author);
-                return $author;
-            }
-        } elseif (isset($request->getQueryParams()['id'])) {
-            $author = $this->repo->find($request->getQueryParams()['id']);
-            if (null === $author) {
-                throw new DomainException();
-            }
-            return $author;
+    private function getAuthorFromRequest(array $routeParams): ?AppObject {
+        if (isset($routeParams[1])) {
+            return $this->repo->findOne($routeParams[1]);
         } else {
             return null;
         }

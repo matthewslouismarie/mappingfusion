@@ -2,15 +2,16 @@
 
 namespace MF\Controller;
 
-use MF\Entity\DbEntityManager;
+use DateTimeImmutable;
+use MF\Database\DbEntityManager;
 use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
-use MF\Form;
-use MF\Form\FormManager;
+use MF\Form\FormFactory;
 use MF\Form\FormObjectManager;
 use MF\Model\ArticleDefinition;
+use MF\Model\Slug;
 use MF\Repository\ArticleRepository;
-use MF\Http\SessionManager;
+use MF\Session\SessionManager;
 use GuzzleHttp\Psr7\Response;
 use MF\Repository\CategoryRepository;
 use MF\Router;
@@ -30,8 +31,7 @@ class AdminArticleController implements ControllerInterface
         private ArticleRepository $repo,
         private CategoryRepository $catRepo,
         private DbEntityManager $em,
-        private Form $form,
-        private FormManager $formManager,
+        private FormFactory $FormFactory,
         private FormObjectManager $fOManager,
         private Router $router,
         private SessionManager $session,
@@ -43,30 +43,42 @@ class AdminArticleController implements ControllerInterface
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $article = null;
         $errorMessages = [];
+
         try {
             $article = isset($routeParams[1]) ? $this->repo->findOne($routeParams[1]) : null;
         } catch (OutOfBoundsException $e) {
             throw new NotFoundException($e);
         }
 
-        $form = $this->formManager->createFormDefinition(
+        $form = $this->FormFactory->createForm(
             $this->articleDefinition,
             formConfig: ['cover_filename' => ['required' => null === $article]],
         );
 
         $formData = null;
         if ('POST' === $request->getMethod()) {
-            $formData = $form->extractSubmittedValue($request);
+            $formData = $form->extractFormData($request);
+            if (!$formData->hasErrors()) {
 
-            if (0 === count($formData->getErrors())) {
-                $entityValue = $this->fOManager->toAppArray($formData, $this->articleDefinition, $article);
+                $data = $formData->getData();
+
+                $data['id'] = $article->id ?? (new Slug($data['title'], true))->__toString();
+                $data['author_id'] = $this->session->getCurrentMemberUsername();
+                $data['cover_filename'] = $data['cover_filename'] ?? $article->coverFilename;
+                $data['creation_date_time'] = $article->creationDateTime ?? new DateTimeImmutable();
+                $data['last_update_date_time'] = new DateTimeImmutable();
+
+                $appEntity = $this->fOManager->toAppObject($data, $this->articleDefinition);
     
                 try {
                     if (null === $article) {
-                        $this->repo->addNewArticle($this->em->toAppArray($entityValue, $this->articleDefinition));
-                        return $this->router->generateRedirect(self::ROUTE_ID, [$entityValue['id']]);
+                        $this->repo->addNewArticle($appEntity);
+                        return $this->router->generateRedirect(self::ROUTE_ID, [$appEntity['id']]);
                     } else {
-                        $this->repo->updateArticle($article['id'], $entityValue);
+                        $this->repo->updateArticle($article->id, $appEntity);
+                        if ($article->id !== $appEntity->id) {
+                            return $this->router->generateRedirect(self::ROUTE_ID, [$appEntity['id']]);
+                        }
                     }
                 } catch (PDOException $e) {
                     if ('23000' === $e->getCode()) {
@@ -77,7 +89,7 @@ class AdminArticleController implements ControllerInterface
                 }
             }
         } else {
-            $formData = $form->generateFormValue($article ?? []);
+            $formData = $form->generateFormData($article?->toArray() ?? [], false);
         }
 
         return new Response(body: $this->twig->render('article_form.html.twig', [

@@ -4,8 +4,8 @@ namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
 use MF\DataStructure\AppObject;
-use MF\Entity\DbEntityManager;
-use MF\Http\SessionManager;
+use MF\Database\DbEntityManager;
+use MF\Session\SessionManager;
 use MF\Model\ArticleDefinition;
 use MF\Model\PlayableDefinition;
 use MF\Model\Review;
@@ -42,7 +42,7 @@ class ReviewRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toAppArray($data[0], new ReviewDefinition());
+            return $this->em->toAppObject($data[0], new ReviewDefinition());
         } else {
             throw new UnexpectedValueException();
         }
@@ -52,7 +52,7 @@ class ReviewRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppArray($r, $this->def, 'review_', childrenToProcess: [
+            $entities[] = $this->em->toAppObject($r, $this->def, 'review_', childrenToProcess: [
                 'stored_article' => new ArticleDefinition($this->session),
                 'stored_playable' => new PlayableDefinition(),
             ]);

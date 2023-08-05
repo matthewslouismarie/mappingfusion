@@ -4,8 +4,8 @@ namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
 use MF\DataStructure\AppObject;
-use MF\Entity\DbEntityManager;
-use MF\Http\SessionManager;
+use MF\Database\DbEntityManager;
+use MF\Session\SessionManager;
 use MF\Model\ArticleDefinition;
 use MF\Model\CategoryDefinition;
 use MF\Model\ModelDefinition;
@@ -47,7 +47,7 @@ class ArticleRepository
                 'stored_review' => new ReviewDefinition(),
                 'stored_playable' => new PlayableDefinition(),
             ];
-            return $this->em->toAppArray(
+            return $this->em->toAppObject(
                 $data[0],
                 $this->def,
                 'article_',
@@ -62,7 +62,7 @@ class ArticleRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NULL;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppArray($r, $this->def, 'article_');
+            $entities[] = $this->em->toAppObject($r, $this->def, 'article_');
         }
         return $entities;
     }
@@ -79,7 +79,7 @@ class ArticleRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppArray($r, $this->def, 'article_', childrenToProcess: [
+            $entities[] = $this->em->toAppObject($r, $this->def, 'article_', childrenToProcess: [
                 'stored_category' => new CategoryDefinition(),
             ]);
         }
@@ -90,7 +90,7 @@ class ArticleRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM e_article WHERE article_is_featured = 1;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppArray($article, $this->def, 'article_');
+            $articles[] = $this->em->toAppObject($article, $this->def, 'article_');
         }
         return $articles;
     }
@@ -100,7 +100,7 @@ class ArticleRepository
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article {$whereClause} ORDER BY article_last_update_date_time DESC LIMIT {$limit};");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppArray($article, $this->def, 'article_', childrenToProcess: [
+            $articles[] = $this->em->toAppObject($article, $this->def, 'article_', childrenToProcess: [
                 'stored_category' => new CategoryDefinition('category'),
             ]);
         }
@@ -111,7 +111,7 @@ class ArticleRepository
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE review_id IS NOT NULL ORDER BY article_last_update_date_time DESC LIMIT 4;");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppArray($article, $this->def, 'article_', childrenToProcess: [
+            $articles[] = $this->em->toAppObject($article, $this->def, 'article_', childrenToProcess: [
                 'stored_playable' => new PlayableDefinition('playable'),
                 'stored_game' => new PlayableDefinition('playable_game'),
             ]);
@@ -123,7 +123,7 @@ class ArticleRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppArray($article, $this->def, 'article_', childrenToProcess: [
+            $articles[] = $this->em->toAppObject($article, $this->def, 'article_', childrenToProcess: [
                 'stored_playable' => new PlayableDefinition('playable'),
                 'stored_review' => new ReviewDefinition(),
             ]);
