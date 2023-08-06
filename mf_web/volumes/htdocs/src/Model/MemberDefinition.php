@@ -3,11 +3,12 @@
 namespace MF\Model;
 
 use MF\Enum\ModelPropertyType;
+use MF\Model\ModelProperty;
 
-class AuthorDefinition implements IModelDefinition
+class MemberDefinition implements IModelDefinition
 {
     public function __construct(
-        private string $name = 'author',
+        private string $name = 'member',
     ) {
     }
 
@@ -18,7 +19,7 @@ class AuthorDefinition implements IModelDefinition
     public function getProperties(): array {
         return [
             new ModelProperty('id', ModelPropertyType::VARCHAR),
-            new ModelProperty('name', ModelPropertyType::VARCHAR),
+            new ModelProperty('password_hash', ModelPropertyType::VARCHAR, isGenerated: true),
         ];
     }
 }

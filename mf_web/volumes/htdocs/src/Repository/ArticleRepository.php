@@ -8,7 +8,7 @@ use MF\Database\DbEntityManager;
 use MF\Session\SessionManager;
 use MF\Model\ArticleDefinition;
 use MF\Model\CategoryDefinition;
-use MF\Model\ModelDefinition;
+use MF\Model\IModelDefinition;
 use MF\Model\PlayableDefinition;
 use MF\Model\ReviewDefinition;
 use OutOfBoundsException;
@@ -26,8 +26,8 @@ class ArticleRepository
 
     public function addNewArticle(AppObject $appObject): void {
         $dbArray = $this->em->toDbArray($appObject, $this->def);
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW());');
-        $stmt->execute([$dbArray['id'], $dbArray['author_id'], $dbArray['category_id'], $dbArray['body'], $dbArray['is_featured'], $dbArray['title'], $dbArray['cover_filename']]);
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW());');
+        $stmt->execute([$dbArray['id'], $dbArray['author_id'], $dbArray['category_id'], $dbArray['body'], $dbArray['is_featured'], $dbArray['title'], $dbArray['sub_title'], $dbArray['cover_filename']]);
     }
 
     public function deleteArticle(string $id): void {
@@ -131,19 +131,20 @@ class ArticleRepository
         return $articles;
     }
 
-    public function getDefinition(): ModelDefinition {
+    public function getDefinition(): IModelDefinition {
         return $this->def;
     }
 
     public function updateArticle(string $previousId, AppObject $appObject, bool $updateCoverFilename = true): void {
         $dbArray = $this->em->toDbArray($appObject, $this->def);
         if ($previousId === $dbArray['id']) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_category_id = ?, article_body = ?, article_is_featured = ?, article_title = ?, ' . ($updateCoverFilename ? 'article_cover_filename = ?, ' : '') . 'article_last_update_date_time = NOW() WHERE article_id = ?;');
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_category_id = ?, article_body = ?, article_is_featured = ?, article_title = ?, artiicle_sub_title = ?, ' . ($updateCoverFilename ? 'article_cover_filename = ?, ' : '') . 'article_last_update_date_time = NOW() WHERE article_id = ?;');
             $parameters = [
                 $dbArray['category_id'],
                 $dbArray['body'],
                 $dbArray['is_featured'],
                 $dbArray['title'],
+                $dbArray['sub_title'],
                 $dbArray['cover_filename'],
                 $dbArray['id'],
             ];

@@ -4,7 +4,7 @@ namespace MF\Model;
 
 use MF\Enum\ModelPropertyType;
 
-class ReviewDefinition implements ModelDefinition
+class ReviewDefinition implements IModelDefinition
 {
     public function getName(): string {
         return 'review';

@@ -2,7 +2,6 @@
 
 namespace MF\Form;
 
-use MF\Exception\InvalidFormException\InvalidInputException;
 use MF\Form\Transformer\FormTransformer;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -33,16 +32,11 @@ class StdFormElement implements FormElement
     }
 
     public function extractFormData(ServerRequestInterface $request): FormValue {
-        try {
-            $transformedData = $this->transformer->extractValueFromRequest($request, $this) ?? $this->defaultValue;
+        $transformedData = $this->transformer->extractValueFromRequest($request, $this) ?? $this->defaultValue;
 
-            $errors = $this->validate($transformedData);
-            
-            return new FormValue($transformedData, $errors);
-        } catch (InvalidInputException $e) {
-            $errors[] = 'Une erreur est arrivé.';
-            return new FormValue(null, $errors);
-        }
+        $errors = $this->validate($transformedData);
+        
+        return new FormValue($transformedData, $errors);
     }
 
     public function getName(): string {

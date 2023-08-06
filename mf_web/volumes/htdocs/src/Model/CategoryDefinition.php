@@ -3,7 +3,7 @@
 namespace MF\Model;
 use MF\Enum\ModelPropertyType;
 
-class CategoryDefinition implements ModelDefinition
+class CategoryDefinition implements IModelDefinition
 {
     public function __construct(
         private string $name = 'category',

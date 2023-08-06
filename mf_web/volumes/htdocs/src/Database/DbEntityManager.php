@@ -7,7 +7,7 @@ use DateTimeImmutable;
 use DI\Container;
 use MF\DataStructure\AppObject;
 use MF\Enum\ModelPropertyType;;
-use MF\Model\ModelDefinition;
+use MF\Model\IModelDefinition;
 use MF\Exception\InvalidEntityArrayException;
 
 class DbEntityManager
@@ -19,15 +19,15 @@ class DbEntityManager
 
     public function toAppObject(
         array $entity,
-        ModelDefinition $definition,
+        IModelDefinition $definition,
         string $prefix = '',
-        ?ModelDefinition $origin = null,
+        ?IModelDefinition $origin = null,
         array $childrenToProcess = [],
     ): ArrayAccess {
         $data = [];
         foreach ($definition->getProperties() as $p) {
             $pName = $prefix . $p->getName();
-            $pParentName = null !== $origin && null !== $p->getAlternateName($origin) ? $origin->getName() . '_' . $p->getAlternateName($origin): null;
+            $pParentName = null !== $origin && null !== $p->getReferenceName($origin) ? $origin->getName() . '_' . $p->getReferenceName($origin): null;
             $dbArrayKey = $pParentName ?? $pName;
             if (!array_key_exists($dbArrayKey, $entity)) {
                 throw new InvalidEntityArrayException(get_class($definition), property: $pName);
@@ -46,7 +46,7 @@ class DbEntityManager
         return new AppObject($data);
     }
 
-    public function toDbArray(AppObject $appObject, ModelDefinition $def, string $prefix = ''): array {
+    public function toDbArray(AppObject $appObject, IModelDefinition $def, string $prefix = ''): array {
         $obObject = [];
         foreach ($def->getProperties() as $p) {
             if (ModelPropertyType::BOOL === $p->getType()) {

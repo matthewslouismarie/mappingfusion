@@ -4,7 +4,7 @@ namespace MF\Form;
 
 use InvalidArgumentException;
 use MF\DataStructure\AppObject;
-use MF\Model\ModelDefinition;
+use MF\Model\IModelDefinition;
 
 class FormObjectManager
 {
@@ -15,7 +15,7 @@ class FormObjectManager
      */
     public function toAppObject(
         array $data,
-        ModelDefinition $def,
+        IModelDefinition $def,
         string $prefix = '',
     ): AppObject {
         $appArray = [];

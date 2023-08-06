@@ -3,7 +3,7 @@
 namespace MF\Model;
 use MF\Enum\ModelPropertyType;
 
-class PlayableDefinition implements ModelDefinition
+class PlayableDefinition implements IModelDefinition
 {
     public function __construct(
         private string $name = 'playable',

@@ -4,6 +4,9 @@ namespace MF\Exception\InvalidFormException;
 
 use InvalidArgumentException;
 
+/**
+ * Thrown when the submittable could not find any value from the request.
+ */
 class MissingInputException extends InvalidArgumentException implements InvalidFormException
 {
     public function __construct($message = "", $code = 0, $previous = null) {

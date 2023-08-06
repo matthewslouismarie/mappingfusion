@@ -9,9 +9,14 @@
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post" {% if app.isDev %}novalidate{% endif %}>
     {{ formErrors(errorMessages) }}
     <div class="form-row">
-        <label class="label" for="p-title">Titre</label>
-        <textarea class="input" id="p-title" name="title" required>{{ article.data.title }}</textarea>
+        <label class="label" for="title">Titre</label>
+        <input class="input" id="title" name="title" required value="{{ article.data.title }}">
         {{ formErrors(article.errors.title) }}
+    </div>
+    <div class="form-row">
+        <label class="label" for="subtitle">Sous-titre</label>
+        <input class="input" id="subtitle" name="subtitle" value="{{ article.data.subtitle }}">
+        {{ formErrors(article.errors.subtitle) }}
     </div>
     <div class="form-row">
         <label class="label" for="category-id">Catégorie</label>
