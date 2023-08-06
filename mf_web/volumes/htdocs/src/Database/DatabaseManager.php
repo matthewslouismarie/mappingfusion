@@ -3,10 +3,10 @@
 namespace MF\Database;
 
 use MF\Configuration;
+use MF\Constraint\IFileConstraint;
+use MF\Constraint\LongStringConstraint;
+use MF\Constraint\SlugConstraint;
 use MF\Enum\LinkType;
-use MF\Model\LongString;
-use MF\Model\Slug;
-use MF\Model\SlugFilename;
 use MF\Model\Url;
 use PDO;
 
@@ -27,14 +27,14 @@ class DatabaseManager
         ]);
         $this->pdo->exec("CREATE DATABASE IF NOT EXISTS ${dbName}");
         $this->pdo->exec('USE ' . $dbName);
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_member.sql'), LongString::MAX_LENGTH));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_author.sql'), LongString::MAX_LENGTH));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_playable.sql'), LongString::MAX_LENGTH));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_contribution.sql'), LongString::MAX_LENGTH));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_review.sql'), LongString::MAX_LENGTH));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_category.sql'), LongString::MAX_LENGTH, Slug::REGEX));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_article.sql'), LongString::MAX_LENGTH, Slug::REGEX, SlugFilename::REGEX));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_playable_link.sql'), LongString::MAX_LENGTH, Url::MAX_LENGTH, LinkType::Download->value, LinkType::HomePage->value, LinkType::Other->value));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_member.sql'), LongStringConstraint::MAX_LENGTH));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_author.sql'), LongStringConstraint::MAX_LENGTH));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_playable.sql'), LongStringConstraint::MAX_LENGTH));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_contribution.sql'), LongStringConstraint::MAX_LENGTH));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_review.sql'), LongStringConstraint::MAX_LENGTH));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_category.sql'), LongStringConstraint::MAX_LENGTH, SlugConstraint::REGEX_DASHES));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_article.sql'), LongStringConstraint::MAX_LENGTH, SlugConstraint::REGEX_DASHES, IFileConstraint::FILENAME_REGEX));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_playable_link.sql'), LongStringConstraint::MAX_LENGTH, Url::MAX_LENGTH, LinkType::Download->value, LinkType::HomePage->value, LinkType::Other->value));
 
         $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_article.sql'));
         $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_playable.sql'));

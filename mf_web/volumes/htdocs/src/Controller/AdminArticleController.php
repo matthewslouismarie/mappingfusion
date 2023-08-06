@@ -8,7 +8,7 @@ use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
 use MF\Form\FormFactory;
 use MF\Form\FormObjectManager;
-use MF\Model\ArticleDefinition;
+use MF\Model\ArticleModel;
 use MF\Model\Slug;
 use MF\Repository\ArticleRepository;
 use MF\Session\SessionManager;
@@ -27,7 +27,7 @@ class AdminArticleController implements ControllerInterface
     const ROUTE_ID = 'manage-article';
 
     public function __construct(
-        private ArticleDefinition $articleDefinition,
+        private ArticleModel $articleDefinition,
         private ArticleRepository $repo,
         private CategoryRepository $catRepo,
         private DbEntityManager $em,

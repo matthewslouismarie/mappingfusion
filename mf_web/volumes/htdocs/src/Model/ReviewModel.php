@@ -2,9 +2,10 @@
 
 namespace MF\Model;
 
+use MF\Constraint\IModel;
 use MF\Enum\ModelPropertyType;
 
-class ReviewDefinition implements IModelDefinition
+class ReviewModel implements IModel
 {
     public function getName(): string {
         return 'review';
@@ -20,7 +21,7 @@ class ReviewDefinition implements IModelDefinition
             new ModelProperty(
                 'article_id',
                 ModelPropertyType::VARCHAR,
-                alternateLocations: [ArticleDefinition::class => 'id'],
+                alternateLocations: [ArticleModel::class => 'id'],
             ),
             new ModelProperty('playable_id', ModelPropertyType::VARCHAR),
             new ModelProperty('rating', Rating::class),

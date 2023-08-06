@@ -3,19 +3,31 @@
 namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
+use MF\Database\DbEntityManager;
+use MF\DataStructure\AppObject;
 use MF\Model\PlayableLink;
+use MF\Model\PlayableLinkModel;
 
-class PlayableLinkRepository
+class PlayableLinkRepository implements IRepository
 {
     public function __construct(
         private DatabaseManager $conn,
+        private PlayableLinkModel $model,
+        private DbEntityManager $em,
     ) {
     }
 
-    public function add(PlayableLink $link): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable_link VALUES (null, ?, ?, ?, ?);');
-        $data = $link->toArray('');
-        $stmt->execute([$data['playable_id'], $data['name'], $data['type'], $data['url']]);
+    public function add(AppObject $link): void {
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable_link VALUES (:id, :playable_id, :name, :type, :url);');
+        $dbArray = $this->em->toDbArray($link, $this->model);
+        $stmt->execute($dbArray);
+    }
+
+    public function find(string $id): ?AppObject {
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_playable_link WHERE link_id = :?;');
+        $stmt->execute([$id]);
+        $data = $stmt->fetch();
+        return null !== $data ? $this->em->toAppObject($data, $this->model, 'link_') : null;
     }
 
     public function remove(string $id): void {

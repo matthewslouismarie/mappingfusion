@@ -1,9 +1,12 @@
 <?php
 
 namespace MF\Model;
-use MF\Enum\ModelPropertyType;
 
-class CategoryDefinition implements IModelDefinition
+use MF\Constraint\IModel;
+use MF\Constraint\LongStringConstraint;
+use MF\Constraint\SlugConstraint;
+
+class CategoryModel implements IModel
 {
     public function __construct(
         private string $name = 'category',
@@ -16,8 +19,8 @@ class CategoryDefinition implements IModelDefinition
 
     public function getProperties(): array {
         return [
-            new ModelProperty('id', ModelPropertyType::VARCHAR),
-            new ModelProperty('name', ModelPropertyType::VARCHAR),
+            new ModelProperty('id', new SlugConstraint()),
+            new ModelProperty('name', new LongStringConstraint()),
         ];
     }
 }

@@ -2,9 +2,11 @@
 
 namespace MF\Model;
 
-use MF\Enum\ModelPropertyType;
+use MF\Constraint\IModel;
+use MF\Constraint\LongStringConstraint;
+use MF\Constraint\SlugConstraint;
 
-class AuthorDefinition implements IModelDefinition
+class AuthorModel implements IModel
 {
     public function __construct(
         private string $name = 'author',
@@ -17,8 +19,8 @@ class AuthorDefinition implements IModelDefinition
 
     public function getProperties(): array {
         return [
-            new ModelProperty('id', ModelPropertyType::VARCHAR),
-            new ModelProperty('name', ModelPropertyType::VARCHAR),
+            new ModelProperty('id', new SlugConstraint()),
+            new ModelProperty('name', new LongStringConstraint()),
         ];
     }
 }

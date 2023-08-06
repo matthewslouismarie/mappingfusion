@@ -1,8 +1,6 @@
 <?php
 
 use MF\Controller\HomeController;
-use MF\Database\DbEntityManager;
-use MF\Model\ArticleDefinition;
 use MF\Model\KeyName;
 use MF\Router;
 use MF\Twig\TemplateHelper;
@@ -11,15 +9,6 @@ $container = require_once(dirname(__FILE__) . '/../index.php');
 
 $router = $container->get(Router::class);
 $tplHelper = $container->get(TemplateHelper::class);
-
-
-$data = json_decode(file_get_contents('data.json', true), true);
-$container->get(DbEntityManager::class)->toAppObject(
-    $data,
-    $container->get(ArticleDefinition::class),
-    'article_',
-);
-
 
 /**
  * HTTP requests

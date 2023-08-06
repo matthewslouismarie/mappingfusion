@@ -2,6 +2,7 @@
 
 namespace MF\Form;
 
+use MF\Constraint\IModel;
 use MF\Enum\ModelPropertyType;
 use MF\Form\StdFormElement;
 use MF\Form\Transformer\CheckboxTransformer;
@@ -9,7 +10,6 @@ use MF\Form\Transformer\DateTimeTransformer;
 use MF\Form\Transformer\FileTransformer;
 use MF\Form\Transformer\FormTransformer;
 use MF\Form\Transformer\StringTransformer;
-use MF\Model\IModelDefinition;
 use MF\Model\IModelProperty;
 use UnexpectedValueException;
 
@@ -27,7 +27,7 @@ class FormFactory
     }
 
     public function createForm(
-        IModelDefinition $definition,
+        IModel $definition,
         string $prefix = '',
         array $defaultData = null,
         array $formConfig = [],

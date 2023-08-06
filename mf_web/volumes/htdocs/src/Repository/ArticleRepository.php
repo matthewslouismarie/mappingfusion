@@ -2,22 +2,22 @@
 
 namespace MF\Repository;
 
+use MF\Constraint\IModel;
 use MF\Database\DatabaseManager;
 use MF\DataStructure\AppObject;
 use MF\Database\DbEntityManager;
 use MF\Session\SessionManager;
-use MF\Model\ArticleDefinition;
-use MF\Model\CategoryDefinition;
-use MF\Model\IModelDefinition;
-use MF\Model\PlayableDefinition;
-use MF\Model\ReviewDefinition;
+use MF\Model\ArticleModel;
+use MF\Model\CategoryModel;
+use MF\Model\PlayableModel;
+use MF\Model\ReviewModel;
 use OutOfBoundsException;
 use UnexpectedValueException;
 
-class ArticleRepository
+class ArticleRepository implements IRepository
 {
     public function __construct(
-        private ArticleDefinition $def,
+        private ArticleModel $def,
         private DatabaseManager $conn,
         private DbEntityManager $em,
         private SessionManager $session,
@@ -44,8 +44,8 @@ class ArticleRepository
             return null;
         } elseif (1 === count($data)) {
             $stored = null === $data[0]['review_id'] ? [] : [
-                'stored_review' => new ReviewDefinition(),
-                'stored_playable' => new PlayableDefinition(),
+                'stored_review' => new ReviewModel(),
+                'stored_playable' => new PlayableModel(),
             ];
             return $this->em->toAppObject(
                 $data[0],
@@ -80,7 +80,7 @@ class ArticleRepository
         $entities = [];
         foreach ($results as $r) {
             $entities[] = $this->em->toAppObject($r, $this->def, 'article_', childrenToProcess: [
-                'stored_category' => new CategoryDefinition(),
+                'stored_category' => new CategoryModel(),
             ]);
         }
         return $entities;
@@ -101,7 +101,7 @@ class ArticleRepository
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = $this->em->toAppObject($article, $this->def, 'article_', childrenToProcess: [
-                'stored_category' => new CategoryDefinition('category'),
+                'stored_category' => new CategoryModel('category'),
             ]);
         }
         return $articles;
@@ -112,8 +112,8 @@ class ArticleRepository
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = $this->em->toAppObject($article, $this->def, 'article_', childrenToProcess: [
-                'stored_playable' => new PlayableDefinition('playable'),
-                'stored_game' => new PlayableDefinition('playable_game'),
+                'stored_playable' => new PlayableModel('playable'),
+                'stored_game' => new PlayableModel('playable_game'),
             ]);
         }
         return $articles;
@@ -124,14 +124,14 @@ class ArticleRepository
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = $this->em->toAppObject($article, $this->def, 'article_', childrenToProcess: [
-                'stored_playable' => new PlayableDefinition('playable'),
-                'stored_review' => new ReviewDefinition(),
+                'stored_playable' => new PlayableModel('playable'),
+                'stored_review' => new ReviewModel(),
             ]);
         }
         return $articles;
     }
 
-    public function getDefinition(): IModelDefinition {
+    public function getDefinition(): IModel {
         return $this->def;
     }
 

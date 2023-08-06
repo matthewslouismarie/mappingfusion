@@ -2,9 +2,8 @@
 
 namespace MF\Form;
 
-use InvalidArgumentException;
+use MF\Constraint\IModel;
 use MF\DataStructure\AppObject;
-use MF\Model\IModelDefinition;
 
 class FormObjectManager
 {
@@ -12,17 +11,18 @@ class FormObjectManager
      * @return mixed[] An app array created from the given definition, and populated with corresponding values from the
      * form object. For any particular property, if no corresponding value is found in the given form object, an
      * exception is thrown.
+     * @todo Make it return a scalar array.
      */
     public function toAppObject(
-        array $data,
-        IModelDefinition $def,
+        array $scalarArray,
+        IModel $def,
         string $prefix = '',
     ): AppObject {
         $appArray = [];
         foreach ($def->getProperties() as $p) {
-            $formValue = $data[$prefix . $p->getName()];
+            $formValue = $scalarArray[$prefix . $p->getName()];
             $appArray[$p->getName()] = $formValue;
         }
-        return new AppObject($appArray);
+        return new AppObject($appArray, $def);
     }
 }

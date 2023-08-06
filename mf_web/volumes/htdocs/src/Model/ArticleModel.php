@@ -1,0 +1,41 @@
+<?php
+
+namespace MF\Model;
+
+use MF\Constraint\BoolConstraint;
+use MF\Constraint\FileConstraint;
+use MF\Constraint\IDateTimeConstraint;
+use MF\Constraint\IModel;
+use MF\Constraint\SlugConstraint;
+use MF\Constraint\TextConstraint;
+
+
+class ArticleModel implements IModel
+{
+    const TITLE_MIN = 1;
+
+    const TITLE_MAX = 128;
+
+    public function getName(): string {
+        return 'article';
+    }
+
+    public function getProperties(): array {
+        return [
+            new ModelProperty(
+                'id',
+                new SlugConstraint(),
+                isGenerated: true,
+            ),
+            new ModelProperty('author_id', new SlugConstraint(), isGenerated: true),
+            new ModelProperty('category_id', new SlugConstraint),
+            new ModelProperty('body', new TextConstraint()),
+            new ModelProperty('is_featured', new BoolConstraint()),
+            new ModelProperty('title', new TextConstraint(self::TITLE_MAX, self::TITLE_MIN)),
+            new ModelProperty('sub_title', new TextConstraint(self::TITLE_MAX, self::TITLE_MIN), isRequired: false),
+            new ModelProperty('cover_filename', new FileConstraint()),
+            new ModelProperty('creation_date_time', new class implements IDateTimeConstraint {}, isGenerated: true),
+            new ModelProperty('last_update_date_time', new class implements IDateTimeConstraint {}, isGenerated: true),
+        ];
+    }
+}

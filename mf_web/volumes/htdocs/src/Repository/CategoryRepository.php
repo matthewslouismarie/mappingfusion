@@ -3,20 +3,24 @@
 namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
-use MF\Model\Author;
+use MF\Database\DbEntityManager;
+use MF\DataStructure\AppObject;
 use MF\Model\Category;
+use MF\Model\CategoryModel;
 use UnexpectedValueException;
 
-class CategoryRepository
+class CategoryRepository implements IRepository
 {
     public function __construct(
+        private CategoryModel $model,
         private DatabaseManager $conn,
+        private DbEntityManager $em,
     ) {
     }
 
-    public function add(Category $category): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_category VALUES (:category_id, :category_name);');
-        $stmt->execute($category->toArray());
+    public function add(AppObject $category): void {
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_category VALUES (:id, :name);');
+        $stmt->execute($this->em->toDbArray($category, $this->model));
     }
 
     public function delete(string $id): void {
@@ -24,7 +28,7 @@ class CategoryRepository
         $stmt->execute([$id]);
     }
 
-    public function find(string $id): ?Category {
+    public function find(string $id): ?AppObject {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_category WHERE category_id = ? LIMIT 1;');
         $stmt->execute([$id]);
 
@@ -32,7 +36,7 @@ class CategoryRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return Category::fromArray($data[0]);
+            return $this->em->toAppObject($data[0], $this->model, 'category_');
         } else {
             throw new UnexpectedValueException();
         }

@@ -3,23 +3,25 @@
 namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
-use MF\Model\Playable;
+use MF\Database\DbEntityManager;
+use MF\DataStructure\AppObject;
+use MF\Model\PlayableModel;
+use RuntimeException;
 
-class PlayableRepository
+class PlayableRepository implements IRepository
 {
     public function __construct(
         private DatabaseManager $conn,
+        private PlayableModel $model,
+        private DbEntityManager $em,
         private PlayableLinkRepository $linkRepo,
     ) {
     }
 
-    public function add(Playable $playable, bool $ignoreLinks = true): void {
-        if ($ignoreLinks) {
-            $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:playable_id, :playable_name, :playable_release_date_time, :playable_game_id);');
-            $data = $playable->toArray();
-            unset($data['playable_stored_links']);
-            $stmt->execute($data);
-        }
+    public function add(AppObject $playable): void {
+        $dbArray = $this->em->toDbArray($playable, $this->model, 'playable_');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:playable_id, :playable_name, :playable_release_date_time, :playable_game_id);');
+        $stmt->execute($dbArray);
     }
 
     public function delete(string $id): void {
@@ -27,7 +29,7 @@ class PlayableRepository
         $stmt->execute([$id]);
     }
 
-    public function find(string $id): ?Playable {
+    public function find(string $id): ?AppObject {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_playable WHERE playable_id = ?;');
         $stmt->execute([$id]);
 
@@ -46,7 +48,7 @@ class PlayableRepository
             $row = $stmt->fetch();
         }
 
-        $playable = Playable::fromArray($firstRow + ['playable_stored_links' => $links]);
+        $playable = $this->em->toAppObject($firstRow + ['playable_stored_links' => $links], $this->model, ['playable_' => null]);
 
         return $playable;
     }
@@ -60,9 +62,9 @@ class PlayableRepository
         return $playables;
     }
 
-    public function update(string $previousId, Playable $playable, bool $ignoreLinks = false, array $linksToRemove = []): void {
-        if ($previousId === $playable->getId()) {
-            $data = $playable->toArray();
+    public function update(string $previousId, AppObject $playable, bool $ignoreLinks = false, array $linksToRemove = []): void {
+        if ($previousId === $playable->id) {
+            $data = $this->em->toDbArray($playable, $this->model, 'playable');
             unset($data['playable_stored_links']);
 
             if ($ignoreLinks) {
@@ -73,8 +75,8 @@ class PlayableRepository
                 foreach ($linksToRemove as $linkId) {
                     $this->linkRepo->remove($linkId);
                 }
-                if (null !== $playable->getStoredLinks()) {
-                    foreach ($playable->getStoredLinks() as $link) {
+                if (isset($playable->storedLinks)) {
+                    foreach ($playable->storedLinks as $link) {
                         if (null === $link->getId()) {
                             $this->linkRepo->add($link);
                         } else {

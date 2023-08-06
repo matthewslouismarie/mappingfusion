@@ -4,16 +4,15 @@ namespace MF\Database;
 
 use DateTimeImmutable;
 use MF\Configuration;
+use MF\DataStructure\AppObject;
 use MF\Enum\LinkType;
-use MF\Model\Article;
-use MF\Model\Author;
-use MF\Model\Category;
-use MF\Model\Contribution;
-use MF\Model\Member;
+use MF\Model\AuthorModel;
+use MF\Model\CategoryModel;
+use MF\Model\ContributionModel;
+use MF\Model\MemberModel;
 use MF\Model\PasswordHash;
-use MF\Model\Playable;
-use MF\Model\PlayableLink;
-use MF\Model\Review;
+use MF\Model\PlayableLinkModel;
+use MF\Model\PlayableModel;
 use MF\Repository\ArticleRepository;
 use MF\Repository\AuthorRepository;
 use MF\Repository\CategoryRepository;
@@ -41,100 +40,162 @@ class Fixture
 
     public function load(): void {
         $this->conn->getPdo()->beginTransaction();
-        $root = new Member('root', new PasswordHash(clear: $this->config->getSetting('rootMemberPwd')));
+    
+        $memberModel = new MemberModel();
+        $root = new AppObject(
+            [
+                'id' => 'root',
+                'password_hash' => (new PasswordHash(clear: $this->config->getSetting('rootMemberPwd')))->__toString(),
+            ],
+            $memberModel,
+        );
         $this->repoMember->add($root);
-        $loulimi = new Author(null, 'Loulimi');
-        $neophus = new Author(null, 'Neophus');
-        $scteam = new Author(null, 'The Sven Co-op Team');
-        $valve = new Author(null, 'Valve');
-        $this->repoAuthor->add($scteam);
-        $this->repoAuthor->add($valve);
+
+        $authorModel = new AuthorModel();
+        $loulimi = new AppObject(['id' => 'loulimi', 'name' => 'Loulimi'], $authorModel);
+        $valve = new AppObject(['id' => 'valve', 'name' => 'Valve'], $authorModel);
+        $scTeam = new AppObject(['id' => 'sven-co-op-team', 'name' => 'The Sven Co-op Team'], $authorModel);
+        $neophus = new AppObject(['id' => 'neophus', 'name' => 'Neophus'], $authorModel);
         $this->repoAuthor->add($loulimi);
+        $this->repoAuthor->add($valve);
+        $this->repoAuthor->add($scTeam);
         $this->repoAuthor->add($neophus);
-        $gs = new Playable(null, 'GoldSource', new DateTimeImmutable(), null);
-        $hl = new Playable(null, 'Half-Life', new DateTimeImmutable(), $gs->getId());
-        $hl2 = new Playable(null, 'Half-Life 2', new DateTimeImmutable(), $gs->getId());
-        $sc = new Playable(null, 'Sven Co-op', new DateTimeImmutable(), $gs->getId());
-        $crossedPaths = new Playable(null, 'Crossed Paths', new DateTimeImmutable(), $gs->getId());
+
+        $playableModel = new PlayableModel();
+        $gs = new AppObject(['id' => 'goldsource', 'name' => 'GoldSource', 'release_date_time' => new DateTimeImmutable(), 'game_id' => null], $playableModel);
+        $hl = new AppObject(['id' => 'half-life', 'name' => 'Half-Life', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'goldsource'], $playableModel);
+        $hl2 = new AppObject(['id' => 'half-life-2', 'name' => 'Half-Life 2', 'release_date_time' => new DateTimeImmutable(), 'game_id' => null], $playableModel);
+        $sc = new AppObject(['id' => 'sven-co-op', 'name' => 'Sven Co-op', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'goldsource'], $playableModel);
+        $cp = new AppObject(['id' => 'crossed-paths', 'name' => 'Crossed Paths', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'sven-co-op'], $playableModel);
         $this->repoPlayable->add($gs);
         $this->repoPlayable->add($hl);
         $this->repoPlayable->add($hl2);
         $this->repoPlayable->add($sc);
-        $this->repoPlayable->add($crossedPaths);
-        $this->linkRepo->add(new PlayableLink(null, $sc->getId(), 'Homepage', LinkType::HomePage, 'https://svencoop.com'));
-        $this->linkRepo->add(new PlayableLink(null, $sc->getId(), 'Download', LinkType::Download, 'https://store.steampowered.com/agecheck/app/225840/'));
-        $this->repoContrib->add(new Contribution(null, $loulimi->getId(), $crossedPaths->getId(), true));
-        $this->repoContrib->add(new Contribution(null, $neophus->getId(), $crossedPaths->getId(), true));
-        $this->repoContrib->add(new Contribution(null, $valve->getId(), $hl->getId(), true));
-        $this->repoContrib->add(new Contribution(null, $valve->getId(), $hl2->getId(), true));
-        $this->repoContrib->add(new Contribution(null, $scteam->getId(), $sc->getId(), true));
-        $cat = new Category(null, 'Tests');
-        $this->repoCat->add($cat);
+        $this->repoPlayable->add($cp);
 
-        $article0 = new Article(
-            null,
-            $root->getId(),
-            $cat->getId(),
-            file_get_contents(dirname(__FILE__) . '/../../fixtures/article.mk'),
-            true,
-            'Crossed Paths v3.8.8',
-            '202111271344571.jpg',
-            new DateTimeImmutable(),
-            new DateTimeImmutable(),
-        );
-        $this->repoArticle->addNewArticle($article0);
+        $linkModel = new PlayableLinkModel();
+        $this->linkRepo->add(new AppObject([
+           'id' => null,
+           'playable_id' => $sc->id,
+           'name' => 'Homepage',
+           'type' => LinkType::HomePage->name,
+           'url' => 'https://svencoop.com',
+        ], $linkModel));
+        $this->linkRepo->add(new AppObject([
+           'id' => null,
+           'playable_id' => $sc->id,
+           'name' => 'Download',
+           'type' => LinkType::Download->name,
+           'url' => 'https://store.steampowered.com/agecheck/app/225840/',
+        ], $linkModel));
 
-        $article1 = new Article(
-            null,
-            $root->getId(),
-            $cat->getId(),
-            'The Crystal Mission a reçu une nouvelle mise à jour, et franchement elle vaut le coup de rejouer à la map.',
-            true,
-            'Nouvelle version  \nTCM v387823.3223.1',
-            '202111271344571.jpg',
-            new DateTimeImmutable(),
-            new DateTimeImmutable(),
-        );
-        $this->repoArticle->addNewArticle($article1);
+        $contribModel = new ContributionModel();
+        $this->repoContrib->add(new AppObject([
+            'id' => null,
+            'author_id' => $loulimi->id,
+            'playable_id' => $cp->id,
+            'is_author' => true,
+            'summary' => null,
+        ], $contribModel));
+        $this->repoContrib->add(new AppObject([
+            'id' => null,
+            'author_id' => $loulimi->id,
+            'playable_id' => $cp->id,
+            'is_author' => true,
+            'summary' => null,
+        ], $contribModel));
+        $this->repoContrib->add(new AppObject([
+            'id' => null,
+            'author_id' => $valve->id,
+            'playable_id' => $hl->id,
+            'is_author' => true,
+            'summary' => null,
+        ], $contribModel));
+        $this->repoContrib->add(new AppObject([
+            'id' => null,
+            'author_id' => $valve->id,
+            'playable_id' => $hl2->id,
+            'is_author' => true,
+            'summary' => null,
+        ], $contribModel));
+        $this->repoContrib->add(new AppObject([
+            'id' => null,
+            'author_id' => $scTeam->id,
+            'playable_id' => $sc->id,
+            'is_author' => true,
+            'summary' => null,
+        ], $contribModel));
 
-        $article2 = new Article(
-            null,
-            $root->getId(),
-            $cat->getId(),
-            'The Crystal Mission a reçu une nouvelle mise à jour, et franchement elle vaut le coup de rejouer à la map.',
-            true,
-            'Un autre test',
-            '202201051906201.jpg',
-            new DateTimeImmutable(),
-            new DateTimeImmutable(),
-        );
-        $this->repoArticle->addNewArticle($article2);
+        $catModel = new CategoryModel();
+        $this->repoCat->add(new AppObject([
+            'id' => 'cat',
+            'name' => 'Une catégorie',
+        ], $catModel));
 
-        $article3 = new Article(
-            null,
-            $root->getId(),
-            $cat->getId(),
-            'The Crystal Mission a reçu une nouvelle mise à jour, et franchement elle vaut le coup de rejouer à la map.',
-            true,
-            'En avant !',
-            '202111271348081.jpg',
-            new DateTimeImmutable(),
-            new DateTimeImmutable(),
-        );
-        $this->repoArticle->addNewArticle($article3);
+        // $article0 = new Article(
+        //     null,
+        //     $root->getId(),
+        //     $cat->getId(),
+        //     file_get_contents(dirname(__FILE__) . '/../../fixtures/article.mk'),
+        //     true,
+        //     'Crossed Paths v3.8.8',
+        //     '202111271344571.jpg',
+        //     new DateTimeImmutable(),
+        //     new DateTimeImmutable(),
+        // );
+        // $this->repoArticle->addNewArticle($article0);
 
-        $this->repoReview->add(new Review(
-            null,
-            $article0->getId(),
-            $sc->getId(),
-            4,
-            'En somme, un jeu vraiment pas mal. Je recommande.',
-            file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
-            file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
-        ));
-        $this->repoReview->add(new Review(null, $article1->getId(), $sc->getId(), 5, '', '', ''));
-        $this->repoReview->add(new Review(null, $article2->getId(), $hl->getId(), 3.1, '', '', ''));
-        $this->repoReview->add(new Review(null, $article3->getId(), $hl2->getId(), 2.1, '', '', ''));
+        // $article1 = new Article(
+        //     null,
+        //     $root->getId(),
+        //     $cat->getId(),
+        //     'The Crystal Mission a reçu une nouvelle mise à jour, et franchement elle vaut le coup de rejouer à la map.',
+        //     true,
+        //     'Nouvelle version  \nTCM v387823.3223.1',
+        //     '202111271344571.jpg',
+        //     new DateTimeImmutable(),
+        //     new DateTimeImmutable(),
+        // );
+        // $this->repoArticle->addNewArticle($article1);
+
+        // $article2 = new Article(
+        //     null,
+        //     $root->getId(),
+        //     $cat->getId(),
+        //     'The Crystal Mission a reçu une nouvelle mise à jour, et franchement elle vaut le coup de rejouer à la map.',
+        //     true,
+        //     'Un autre test',
+        //     '202201051906201.jpg',
+        //     new DateTimeImmutable(),
+        //     new DateTimeImmutable(),
+        // );
+        // $this->repoArticle->addNewArticle($article2);
+
+        // $article3 = new Article(
+        //     null,
+        //     $root->getId(),
+        //     $cat->getId(),
+        //     'The Crystal Mission a reçu une nouvelle mise à jour, et franchement elle vaut le coup de rejouer à la map.',
+        //     true,
+        //     'En avant !',
+        //     '202111271348081.jpg',
+        //     new DateTimeImmutable(),
+        //     new DateTimeImmutable(),
+        // );
+        // $this->repoArticle->addNewArticle($article3);
+
+        // $this->repoReview->add(new Review(
+        //     null,
+        //     $article0->getId(),
+        //     $sc->getId(),
+        //     4,
+        //     'En somme, un jeu vraiment pas mal. Je recommande.',
+        //     file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
+        //     file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
+        // ));
+        // $this->repoReview->add(new Review(null, $article1->getId(), $sc->getId(), 5, '', '', ''));
+        // $this->repoReview->add(new Review(null, $article2->getId(), $hl->getId(), 3.1, '', '', ''));
+        // $this->repoReview->add(new Review(null, $article3->getId(), $hl2->getId(), 2.1, '', '', ''));
         $this->conn->getPdo()->commit();
     }
 }

@@ -9,7 +9,7 @@ use MF\Enum\Clearance;
 use MF\Form\FormFactory;
 use MF\Form\FormObjectManager;
 use MF\Model\Author;
-use MF\Model\AuthorDefinition;
+use MF\Model\AuthorModel;
 use MF\Model\Slug;
 use MF\Repository\AuthorRepository;
 use MF\Router;
@@ -22,7 +22,7 @@ class AuthorController implements ControllerInterface
     const ROUTE_ID = 'manage_author';
 
     public function __construct(
-        private AuthorDefinition $def,
+        private AuthorModel $def,
         private AuthorRepository $repo,
         private FormFactory $FormFactory,
         private FormObjectManager $formObjectManager,
