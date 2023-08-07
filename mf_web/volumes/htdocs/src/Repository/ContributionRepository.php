@@ -16,9 +16,9 @@ class ContributionRepository implements IRepository
     ) {
     }
 
-    public function add(AppObject $contribution): void {
+    public function add(array $contribScalarArray): void {
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_contribution VALUES (:id, :author_id, :playable_id, :is_author, :summary);');
-        $stmt->execute($this->em->toDbArray($contribution, $this->model));
+        $stmt->execute($this->em->toDbValue($contribScalarArray));
     }
 
     public function delete(int $id): void {
@@ -30,6 +30,6 @@ class ContributionRepository implements IRepository
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_contribution WHERE contribution_id = :?;');
         $stmt->execute([$id]);
         $data = $stmt->fetch();
-        return null !== $data ? $this->em->toAppObject($data, $this->model, ['contribution_' => null]) : null;
+        return null !== $data ? $this->em->toScalarArray($data, 'contribution') : null;
     }
 }

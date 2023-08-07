@@ -2,8 +2,11 @@
 
 namespace MF\Model;
 
+use MF\Constraint\DecimalConstraint;
 use MF\Constraint\IModel;
-use MF\Enum\ModelPropertyType;
+use MF\Constraint\SlugConstraint;
+use MF\Constraint\TextConstraint;
+use MF\Constraint\UintConstraint;
 
 class ReviewModel implements IModel
 {
@@ -13,21 +16,14 @@ class ReviewModel implements IModel
 
     public function getProperties(): array {
         return [
-            new ModelProperty(
-                'id',
-                ModelPropertyType::UINT,
-                true,
-            ),
-            new ModelProperty(
-                'article_id',
-                ModelPropertyType::VARCHAR,
-                alternateLocations: [ArticleModel::class => 'id'],
-            ),
-            new ModelProperty('playable_id', ModelPropertyType::VARCHAR),
-            new ModelProperty('rating', Rating::class),
-            new ModelProperty('body', ModelPropertyType::TEXT),
-            new ModelProperty('cons', ModelPropertyType::TEXT),
-            new ModelProperty('pros', ModelPropertyType::TEXT),
+            new ModelProperty('id', new UintConstraint(), isGenerated: true, isRequired: false),
+            new ModelProperty('article_id', new SlugConstraint()),
+            new ModelProperty('playable_id', new SlugConstraint()),
+            new ModelProperty('rating', new DecimalConstraint(max: 5, min: 1)),
+            new ModelProperty('body', new TextConstraint()),
+            new ModelProperty('cons', new TextConstraint()),
+            new ModelProperty('pros', new TextConstraint()),
+            new ModelProperty('playable', new PlayableModel(), isRequired: false),
         ];
     }
 }

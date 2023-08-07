@@ -16,7 +16,7 @@ class Tester
         $expectedType = gettype($expected);
         $actualType = gettype($actual);
         if ($expected !== $actual) {
-            $errors[] = new AssertionFailure(
+            $this->errors[] = new AssertionFailure(
                 "Equality assertion between $expectedType and $actualType failed.",
                 "Expected : " . var_export($expected, true) . "\n" .
                 "Got : " . var_export($actual, true)

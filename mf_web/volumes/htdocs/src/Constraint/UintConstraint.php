@@ -2,10 +2,11 @@
 
 namespace MF\Constraint;
 
-class UintConstraint implements INumberConstraint
+class UintConstraint implements IDecimalConstraint
 {
     public function __construct(
         private ?int $max = null,
+        private ?int $min = 0,
     ) {
     }
 
@@ -14,6 +15,10 @@ class UintConstraint implements INumberConstraint
     }
 
     public function getMin(): int {
+        return $this->min;
+    }
+
+    public function getDecimalPower(): int {
         return 0;
     }
 }

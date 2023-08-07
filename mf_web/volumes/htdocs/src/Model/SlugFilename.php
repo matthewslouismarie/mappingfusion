@@ -1,6 +1,7 @@
 <?php
 
 namespace MF\Model;
+
 use InvalidArgumentException;
 use MF\Constraint\IFileConstraint;
 use Stringable;
@@ -15,7 +16,7 @@ class SlugFilename implements Stringable
         } else {
             $this->value = new LongString($value);
         }
-        if (1 !== preg_match(IFileConstraint::FILENAME_REGEX, $this->value)) {
+        if (1 !== preg_match('/' . IFileConstraint::FILENAME_REGEX . '/', $this->value)) {
             throw new InvalidArgumentException();
         }
     }

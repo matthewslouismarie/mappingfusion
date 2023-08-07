@@ -17,12 +17,12 @@ class MemberRepository implements IRepository
     ) {
     }
 
-    public function add(AppObject $member): void {
+    public function add(array $member): void {
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_member VALUES (:id, :password_hash)');
-        $stmt->execute($this->em->toDbArray($member, $this->model));
+        $stmt->execute($this->em->toDbValue($member));
     }
 
-    public function find(string $username): ?AppObject {
+    public function find(string $username): ?array {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_member WHERE (member_id=:id) LIMIT 1');
         $stmt->execute(['username' => $username]);
 
@@ -30,7 +30,7 @@ class MemberRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toAppObject($data[0], $this->model, ['member_' => null]);
+            return $this->em->toScalarArray($data[0], 'member');
         } else {
             throw new UnexpectedValueException();
         }
@@ -38,6 +38,6 @@ class MemberRepository implements IRepository
 
     public function updateMember(AppObject $member): void {
         $stmt = $this->conn->getPdo()->prepare('UPDATE e_member SET member_password = :password_hash WHERE member_id = :id');
-        $stmt->execute($this->em->toDbArray($member, $this->model));
+        $stmt->execute($this->em->toDbValue($member));
     }
 }

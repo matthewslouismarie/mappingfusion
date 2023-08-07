@@ -21,11 +21,10 @@ class ReviewRepository implements IRepository
     ) {
     }
 
-    public function add(AppObject $entity): AppObject {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_review VALUES (NULL, ?, ?, ?, ?, ?, ?);');
-        $stmt->execute($this->em->toDbArray($entity, new ReviewModel()));
-        $newId = $this->conn->getPdo()->lastInsertId();
-        return $entity->set('id', $newId);
+    public function add(array $reviewScalarArray): string {
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_review VALUES (:id, :article_id, :playable_id, :rating, :body, :cons, :pros);');
+        $stmt->execute($this->em->toDbValue($reviewScalarArray));
+        return $this->conn->getPdo()->lastInsertId();
     }
 
     public function delete(int $id): void {
@@ -33,7 +32,7 @@ class ReviewRepository implements IRepository
         $stmt->execute([$id]);
     }
 
-    public function find(string $id): ?AppObject {
+    public function find(string $id): ?array {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_review WHERE (review_id = ?) LIMIT 1;');
         $stmt->execute([$id]);
 
@@ -41,7 +40,7 @@ class ReviewRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toAppObject($data[0], new ReviewModel());
+            return $this->em->toScalarArray($data[0], 'review');
         } else {
             throw new UnexpectedValueException();
         }
@@ -51,16 +50,13 @@ class ReviewRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppObject($r, $this->def, 'review_', childrenToProcess: [
-                'stored_article' => new ArticleModel($this->session),
-                'stored_playable' => new PlayableModel(),
-            ]);
+            $entities[] = $this->em->toScalarArray($r, 'review');
         }
         return $entities;
     }
 
     public function update(AppObject $entity): void {
         $stmt = $this->conn->getPdo()->prepare('UPDATE e_review SET review_article_id = :review_article_id, review_playable_id = :review_playable_id, review_rating = :review_rating, review_body = :review_body, review_cons = :review_cons, review_pros = :review_pros WHERE review_id = :review_id;');
-        $stmt->execute($this->em->toDbArray($entity, new ReviewModel()));
+        $stmt->execute($this->em->toDbValue($entity));
     }
 }

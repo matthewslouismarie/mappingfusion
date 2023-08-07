@@ -2,13 +2,11 @@
 
 namespace MF\Repository;
 
-use MF\Constraint\IModel;
 use MF\Database\DatabaseManager;
-use MF\DataStructure\AppObject;
 use MF\Database\DbEntityManager;
+use MF\DataStructure\AppObject;
 use MF\Session\SessionManager;
 use MF\Model\ArticleModel;
-use MF\Model\CategoryModel;
 use MF\Model\PlayableModel;
 use MF\Model\ReviewModel;
 use OutOfBoundsException;
@@ -16,18 +14,21 @@ use UnexpectedValueException;
 
 class ArticleRepository implements IRepository
 {
+    const GROUPS = ['category', 'review', ['playable', ['review', 'playable']]];
+
     public function __construct(
-        private ArticleModel $def,
+        private ArticleModel $model,
         private DatabaseManager $conn,
         private DbEntityManager $em,
         private SessionManager $session,
     ) {
+        $this->model = new ArticleModel(new ReviewModel());
     }
 
-    public function addNewArticle(AppObject $appObject): void {
-        $dbArray = $this->em->toDbArray($appObject, $this->def);
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW());');
-        $stmt->execute([$dbArray['id'], $dbArray['author_id'], $dbArray['category_id'], $dbArray['body'], $dbArray['is_featured'], $dbArray['title'], $dbArray['sub_title'], $dbArray['cover_filename']]);
+    public function add(array $articleScalarArray): void {
+        $dbArray = $this->em->toDbValue($articleScalarArray);
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (:id, :author_id, :category_id, :body, :is_featured, :sub_title, :title, :cover_filename, :creation_date_time, :last_update_date_time);');
+        $stmt->execute($dbArray);
     }
 
     public function deleteArticle(string $id): void {
@@ -47,12 +48,11 @@ class ArticleRepository implements IRepository
                 'stored_review' => new ReviewModel(),
                 'stored_playable' => new PlayableModel(),
             ];
-            return $this->em->toAppObject(
+            return new AppObject($this->em->toScalarArray(
                 $data[0],
-                $this->def,
-                'article_',
-                childrenToProcess: $stored,
-            );
+                'article',
+                self::GROUPS,
+            ), $this->model);
         } else {
             throw new UnexpectedValueException();
         }
@@ -62,7 +62,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NULL;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppObject($r, $this->def, 'article_');
+            $entities[] = new AppObject($this->em->toScalarArray($r, 'article', self::GROUPS), $this->model);
         }
         return $entities;
     }
@@ -79,18 +79,16 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppObject($r, $this->def, 'article_', childrenToProcess: [
-                'stored_category' => new CategoryModel(),
-            ]);
+            $entities[] = new AppObject($this->em->toScalarArray($r, 'article', self::GROUPS), $this->model);
         }
         return $entities;
     }
 
     public function findFeatured(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM e_article WHERE article_is_featured = 1;');
+        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE article_is_featured = 1;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppObject($article, $this->def, 'article_');
+            $articles[] = new AppObject($this->em->toScalarArray($article, 'article', self::GROUPS), $this->model);
         }
         return $articles;
     }
@@ -100,9 +98,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article {$whereClause} ORDER BY article_last_update_date_time DESC LIMIT {$limit};");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppObject($article, $this->def, 'article_', childrenToProcess: [
-                'stored_category' => new CategoryModel('category'),
-            ]);
+            $articles[] = new AppObject($this->em->toScalarArray($article, 'article', self::GROUPS), $this->model);
         }
         return $articles;
     }
@@ -111,10 +107,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE review_id IS NOT NULL ORDER BY article_last_update_date_time DESC LIMIT 4;");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppObject($article, $this->def, 'article_', childrenToProcess: [
-                'stored_playable' => new PlayableModel('playable'),
-                'stored_game' => new PlayableModel('playable_game'),
-            ]);
+            $articles[] = new AppObject($this->em->toScalarArray($article, 'article', self::GROUPS), $this->model);
         }
         return $articles;
     }
@@ -123,20 +116,13 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppObject($article, $this->def, 'article_', childrenToProcess: [
-                'stored_playable' => new PlayableModel('playable'),
-                'stored_review' => new ReviewModel(),
-            ]);
+            $articles[] = new AppObject($this->em->toScalarArray($article, 'article', self::GROUPS), $this->model);
         }
         return $articles;
     }
 
-    public function getDefinition(): IModel {
-        return $this->def;
-    }
-
-    public function updateArticle(string $previousId, AppObject $appObject, bool $updateCoverFilename = true): void {
-        $dbArray = $this->em->toDbArray($appObject, $this->def);
+    public function updateArticle(string $previousId, array $appArray, bool $updateCoverFilename = true): void {
+        $dbArray = $this->em->toDbValue($appArray);
         if ($previousId === $dbArray['id']) {
             $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_category_id = ?, article_body = ?, article_is_featured = ?, article_title = ?, artiicle_sub_title = ?, ' . ($updateCoverFilename ? 'article_cover_filename = ?, ' : '') . 'article_last_update_date_time = NOW() WHERE article_id = ?;');
             $parameters = [
@@ -152,7 +138,7 @@ class ArticleRepository implements IRepository
             $stmt->execute($parameters);
         } else {
             $this->conn->getPdo()->beginTransaction();
-            $this->addNewArticle($appObject);
+            $this->add($appArray);
             $this->deleteArticle($previousId);
             $this->conn->getPdo()->commit();
         }

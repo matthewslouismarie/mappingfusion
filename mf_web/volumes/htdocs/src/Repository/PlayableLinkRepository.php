@@ -17,9 +17,9 @@ class PlayableLinkRepository implements IRepository
     ) {
     }
 
-    public function add(AppObject $link): void {
+    public function add(array $linkScalarArray): void {
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable_link VALUES (:id, :playable_id, :name, :type, :url);');
-        $dbArray = $this->em->toDbArray($link, $this->model);
+        $dbArray = $this->em->toDbValue($linkScalarArray);
         $stmt->execute($dbArray);
     }
 
@@ -27,7 +27,7 @@ class PlayableLinkRepository implements IRepository
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_playable_link WHERE link_id = :?;');
         $stmt->execute([$id]);
         $data = $stmt->fetch();
-        return null !== $data ? $this->em->toAppObject($data, $this->model, 'link_') : null;
+        return null !== $data ? $this->em->toScalarArray($data, 'link') : null;
     }
 
     public function remove(string $id): void {

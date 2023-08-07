@@ -17,9 +17,9 @@ class AuthorRepository implements IRepository
     ) {
     }
 
-    public function add(AppObject $author): string {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_author VALUES (:author_id, :author_name);');
-        $stmt->execute($this->em->toDbArray($author, $this->model, 'author_'));
+    public function add(array $authorAppArray): string {
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_author VALUES (:id, :name);');
+        $stmt->execute($this->em->toDbValue($authorAppArray));
         return $this->conn->getPdo()->lastInsertId();
     }
 
@@ -28,7 +28,7 @@ class AuthorRepository implements IRepository
         $stmt->execute([$id]);
     }
 
-    public function find(string $id): ?AppObject {
+    public function find(string $id): ?array {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_author WHERE author_id = ? LIMIT 1;');
         $stmt->execute([$id]);
 
@@ -36,7 +36,7 @@ class AuthorRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toAppObject($data[0], $this->model, ['author_' => null]);
+            return $this->em->toScalarArray($data[0], 'author');
         } else {
             throw new UnexpectedValueException();
         }
@@ -46,7 +46,7 @@ class AuthorRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM e_author;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppObject($r, $this->model, ['author_' => null]);
+            $entities[] = $this->em->toScalarArray($r, 'author');
         }
         return $entities;
     }
@@ -57,24 +57,24 @@ class AuthorRepository implements IRepository
         $row = $stmt->fetch();
         $authors = [];
         while (false !== $row) {
-            $authors[] = $this->em->toAppObject($row, $this->model, ['author_' => null]);
+            $authors[] = $this->em->toScalarArray($row, 'author');
             $row = $stmt->fetch();
         }
 
         return $authors;
     }
 
-    public function findOne(string $id): AppObject {
+    public function findOne(string $id): array {
         return $this->find($id);
     }
 
-    public function update(string $previousId, AppObject $author): void {
-        if ($previousId === $author->id) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_author SET author_name = :author_name WHERE author_id = :author_id;');
-            $stmt->execute($this->em->toDbArray($author, $this->model, 'author_'));
+    public function update(string $previousId, array $authorAppArray): void {
+        if ($previousId === $authorAppArray['id']) {
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_author SET author_name = :name WHERE author_id = :id;');
+            $stmt->execute($this->em->toDbValue($authorAppArray));
         } else {
             $this->conn->getPdo()->beginTransaction();
-            $this->add($author);
+            $this->add($authorAppArray);
             $this->delete($previousId);
             $this->conn->getPdo()->commit();
         }

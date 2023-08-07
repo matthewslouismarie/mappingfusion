@@ -84,7 +84,7 @@ $tester->assertNoException(
     ),
 );
 
-$playableDef = new PlayableModel(gameDef: new PlayableModel(), playableLinkDef: new PlayableLinkModel());
+$playableDef = new PlayableModel(gameModel: new PlayableModel(), playableLinkModel: new PlayableLinkModel());
 
 $playableData = [
     'id' => 'un-jeu',

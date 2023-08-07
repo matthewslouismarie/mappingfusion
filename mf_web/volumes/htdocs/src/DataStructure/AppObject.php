@@ -4,11 +4,11 @@ namespace MF\DataStructure;
 
 use ArrayAccess;
 use BadMethodCallException;
+use DateTimeImmutable;
 use MF\Constraint\IArrayConstraint;
+use MF\Constraint\IDateTimeConstraint;
 use MF\Constraint\IModel;
-use MF\Exception\Entity\EntityValidationException;
 use MF\Model\KeyName;
-use MF\Validator\ValidatorFactory;
 
 /**
  * @todo Validate input app array from a given definition.
@@ -20,6 +20,7 @@ class AppObject implements ArrayAccess
     private IModel $model;
 
     /**
+     * Treats missing properties and present properties with null values indifferently.
      * @param mixed[] $scalarArray A scalar array.
      * @param IModel $model The entity model.
      * @todo Add back validation?
@@ -27,17 +28,23 @@ class AppObject implements ArrayAccess
     public function __construct(array $scalarArray, IModel $model) {
         $this->data = [];
         foreach ($model->getProperties() as $p) {
-            if ($p->getType() instanceof IModel) {
-                $this->data[$p->getName()] = new self($scalarArray[$p->getName()], $p->getType());
+            $scalarValue = $scalarArray[$p->getName()] ?? null;
+            if (null === $scalarValue) {
+                $this->data[$p->getName()] = $scalarValue;
+            } elseif ($p->getType() instanceof IModel) {
+                $this->data[$p->getName()] = new self($scalarValue, $p->getType());
             } elseif ($p->getType() instanceof IArrayConstraint && $p->getType()->getElementType() instanceof IModel) {
                 $this->data[$p->getName()] = [];
-                foreach ($scalarArray[$p->getName()] as $element) {
+                foreach ($scalarValue as $element) {
                     $this->data[$p->getName()][] = new self($element, $p->getType()->getElementType());
                 }
+            } elseif ($p->getType() instanceof IDateTimeConstraint) {
+                $this->data[$p->getName()] = new DateTimeImmutable($scalarValue);
             } else {
-                $this->data[$p->getName()] = $scalarArray[$p->getName()];
+                $this->data[$p->getName()] = $scalarValue;
             }
         }
+
     }
 
     public function __get(string $name): mixed {
@@ -67,9 +74,5 @@ class AppObject implements ArrayAccess
 
     public function set(string $offet, mixed $value): self {
         return new self([$offet => $value] + $this->data, $this->model);
-    }
-
-    public function toArray(): array {
-        return $this->data;
     }
 }

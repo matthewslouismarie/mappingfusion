@@ -72,7 +72,7 @@ class AdminArticleController implements ControllerInterface
     
                 try {
                     if (null === $article) {
-                        $this->repo->addNewArticle($appEntity);
+                        $this->repo->add($appEntity);
                         return $this->router->generateRedirect(self::ROUTE_ID, [$appEntity['id']]);
                     } else {
                         $this->repo->updateArticle($article->id, $appEntity);

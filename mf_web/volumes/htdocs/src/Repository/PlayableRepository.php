@@ -18,9 +18,9 @@ class PlayableRepository implements IRepository
     ) {
     }
 
-    public function add(AppObject $playable): void {
-        $dbArray = $this->em->toDbArray($playable, $this->model, 'playable_');
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:playable_id, :playable_name, :playable_release_date_time, :playable_game_id);');
+    public function add(array $playableScalarArray): void {
+        $dbArray = $this->em->toDbValue($playableScalarArray);
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:id, :name, :release_date_time, :game_id);');
         $stmt->execute($dbArray);
     }
 
@@ -29,7 +29,7 @@ class PlayableRepository implements IRepository
         $stmt->execute([$id]);
     }
 
-    public function find(string $id): ?AppObject {
+    public function find(string $id): ?array {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_playable WHERE playable_id = ?;');
         $stmt->execute([$id]);
 
@@ -48,7 +48,7 @@ class PlayableRepository implements IRepository
             $row = $stmt->fetch();
         }
 
-        $playable = $this->em->toAppObject($firstRow + ['playable_stored_links' => $links], $this->model, ['playable_' => null]);
+        $playable = $this->em->toScalarArray($firstRow + ['playable_stored_links' => $links], 'playable');
 
         return $playable;
     }
@@ -64,11 +64,11 @@ class PlayableRepository implements IRepository
 
     public function update(string $previousId, AppObject $playable, bool $ignoreLinks = false, array $linksToRemove = []): void {
         if ($previousId === $playable->id) {
-            $data = $this->em->toDbArray($playable, $this->model, 'playable');
-            unset($data['playable_stored_links']);
+            $data = $this->em->toDbValue($playable);
+            unset($data['stored_links']);
 
             if ($ignoreLinks) {
-                $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_name = :playable_name, playable_game_id = :playable_game_id, playable_release_date_time = :playable_release_date_time WHERE playable_id = :playable_id;');
+                $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_name = :name, playable_game_id = :game_id, playable_release_date_time = :release_date_time WHERE playable_id = :id;');
                 $stmt->execute($data);
             } else {
                 $this->conn->getPdo()->beginTransaction();
@@ -84,7 +84,7 @@ class PlayableRepository implements IRepository
                         }
                     }
                 }
-                $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_name = :playable_name, playable_game_id = :playable_game_id, playable_release_date_time = :playable_release_date_time WHERE playable_id = :playable_id;');
+                $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_name = :name, playable_game_id = :game_id, playable_release_date_time = :release_date_time WHERE playable_id = :id;');
                 $stmt->execute($data);
                 $this->conn->getPdo()->commit();
             }

@@ -10,15 +10,15 @@ use MF\Constraint\IDateTimeConstraint;
 use MF\Constraint\IEnumConstraint;
 use MF\Constraint\IModel;
 use MF\Constraint\INotNullableConstraint;
-use MF\Constraint\INumberConstraint;
+use MF\Constraint\IDecimalConstraint;
 use MF\Constraint\IStringConstraint;
 use MF\Exception\Validation\ValidationException;
 
 class ValidatorFactory
 {
     public function createValidator(IConstraint $constraint): IValidator {
-        if ($constraint instanceof INumberConstraint) {
-            return new IntegerValidator($constraint);
+        if ($constraint instanceof IDecimalConstraint) {
+            return new DecimalNumberValidator($constraint);
         }
         if ($constraint instanceof IStringConstraint) {
             return new StringValidator($constraint);
