@@ -22,15 +22,15 @@ class MemberRepository implements IRepository
         $stmt->execute($this->em->toDbValue($member));
     }
 
-    public function find(string $username): ?array {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_member WHERE (member_id=:id) LIMIT 1');
-        $stmt->execute(['username' => $username]);
+    public function find(string $username): ?AppObject {
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_member WHERE (member_id=?) LIMIT 1');
+        $stmt->execute([$username]);
 
         $data = $stmt->fetchAll();
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toScalarArray($data[0], 'member');
+            return new AppObject($this->em->toScalarArray($data[0], 'member'), $this->model);
         } else {
             throw new UnexpectedValueException();
         }

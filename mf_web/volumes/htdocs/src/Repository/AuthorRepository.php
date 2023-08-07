@@ -3,8 +3,8 @@
 namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
-use MF\DataStructure\AppObject;
 use MF\Database\DbEntityManager;
+use MF\DataStructure\AppObject;
 use MF\Model\AuthorModel;
 use UnexpectedValueException;
 
@@ -28,7 +28,7 @@ class AuthorRepository implements IRepository
         $stmt->execute([$id]);
     }
 
-    public function find(string $id): ?array {
+    public function find(string $id): ?AppObject {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_author WHERE author_id = ? LIMIT 1;');
         $stmt->execute([$id]);
 
@@ -36,7 +36,7 @@ class AuthorRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toScalarArray($data[0], 'author');
+            return new AppObject($this->em->toScalarArray($data[0], 'author'), $this->model);
         } else {
             throw new UnexpectedValueException();
         }
@@ -46,7 +46,7 @@ class AuthorRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM e_author;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toScalarArray($r, 'author');
+            $entities[] = new AppObject($this->em->toScalarArray($r, 'author'), $this->model);
         }
         return $entities;
     }
@@ -57,14 +57,14 @@ class AuthorRepository implements IRepository
         $row = $stmt->fetch();
         $authors = [];
         while (false !== $row) {
-            $authors[] = $this->em->toScalarArray($row, 'author');
+            $authors[] = new AppObject($this->em->toScalarArray($row, 'author'), $this->model);
             $row = $stmt->fetch();
         }
 
         return $authors;
     }
 
-    public function findOne(string $id): array {
+    public function findOne(string $id): AppObject {
         return $this->find($id);
     }
 

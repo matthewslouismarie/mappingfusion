@@ -12,7 +12,7 @@
 {% block body %}
 <div class="page-article">
     <article class="std-article">
-        {% if article.stored_review is defined %}
+        {% if article.review.id is not null %}
         <div class="blue">
             <div class="imafraidijustbluemyself">
             </div>
@@ -64,13 +64,13 @@
                     </ul>
                 </div>
             </nav>
-            {% if article.stored_review is defined %}
+            {% if article.review.id is not null %}
             <div class="content -review _sectionpadded">
                 <div class="_padded -a -g">
                     <dl class="std-metadata">
                         <div class="item">
                             <dt class="term">Jeu :</dt>
-                            <dd class="def">{{ article.stored_playable.name }}</dd>
+                            <dd class="def">{{ article.review.playable.name }}</dd>
                         </div>
                         <div class="item">
                             <dt class="term">Développeur :</dt>
@@ -78,11 +78,11 @@
                         </div>
                         <div class="item">
                             <dt class="term">Date de sortie :</dt>
-                            <dd class="def">{{ article.stored_playable.release_date_time|date('Y') }}</dd>
+                            <dd class="def">{{ article.review.playable.release_date_time|date('Y') }}</dd>
                         </div>
                     </dl>
-                    <p class="p">{{ article.stored_review.body }}</p>
-                    {{ review(app.mk, article.stored_playable, article.stored_review) }}
+                    <p class="p">{{ article.review.body }}</p>
+                    {{ review(app.mk, article.review.playable, article.review) }}
                 </div>
             </div>
             {% endif %}
@@ -118,9 +118,10 @@
                 </div>
             </div>
 
-            {% if article.stored_review is not null %}
-            <div class="content _sectionpadded">
-                {{ review(app.mk, article.stored_playable, article.stored_review, '-summary') }}
+            {% if article.review.id is not null %}
+            <div class="content _sectionpadded">ç
+            {{ dump(article.review) }}
+                {{ review(app.mk, article.review.playable, article.review, '-summary') }}
             </div>
             {% endif %}
 

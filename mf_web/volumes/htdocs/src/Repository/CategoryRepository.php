@@ -28,7 +28,7 @@ class CategoryRepository implements IRepository
         $stmt->execute([$id]);
     }
 
-    public function find(string $id): ?array {
+    public function find(string $id): ?AppObject {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_category WHERE category_id = ? LIMIT 1;');
         $stmt->execute([$id]);
 
@@ -36,7 +36,7 @@ class CategoryRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toScalarArray($data[0], 'category');
+            return new AppObject($this->em->toScalarArray($data[0], 'category'), $this->model);
         } else {
             throw new UnexpectedValueException();
         }
@@ -46,7 +46,7 @@ class CategoryRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM e_category;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = Category::fromArray($r);
+            $entities[] = new AppObject($r, $this->model);
         }
         return $entities;
     }

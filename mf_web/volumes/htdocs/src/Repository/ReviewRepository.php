@@ -6,8 +6,6 @@ use MF\Database\DatabaseManager;
 use MF\DataStructure\AppObject;
 use MF\Database\DbEntityManager;
 use MF\Session\SessionManager;
-use MF\Model\ArticleModel;
-use MF\Model\PlayableModel;
 use MF\Model\ReviewModel;
 use UnexpectedValueException;
 
@@ -17,7 +15,7 @@ class ReviewRepository implements IRepository
         private DatabaseManager $conn,
         private DbEntityManager $em,
         private SessionManager $session,
-        private ReviewModel $def,
+        private ReviewModel $model,
     ) {
     }
 
@@ -32,7 +30,7 @@ class ReviewRepository implements IRepository
         $stmt->execute([$id]);
     }
 
-    public function find(string $id): ?array {
+    public function find(string $id): ?AppObject {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_review WHERE (review_id = ?) LIMIT 1;');
         $stmt->execute([$id]);
 
@@ -40,7 +38,7 @@ class ReviewRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toScalarArray($data[0], 'review');
+            return new AppObject($this->em->toScalarArray($data[0], 'review'), $this->model);
         } else {
             throw new UnexpectedValueException();
         }
@@ -50,7 +48,7 @@ class ReviewRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toScalarArray($r, 'review');
+            $entities[] = new AppObject($this->em->toScalarArray($r, 'review'), $this->model);
         }
         return $entities;
     }

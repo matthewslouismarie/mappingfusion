@@ -33,10 +33,10 @@ class LoginController implements ControllerInterface
         $formError = null;
         if ('POST' === $request->getMethod()) {
             $member = $this->repo->find($request->getParsedBody()['username']);
-            if (null === $member || !password_verify($request->getParsedBody()['password'], $member->getPasswordHash())) {
+            if (null === $member || !password_verify($request->getParsedBody()['password'], $member->password)) {
                 $formError = 'Identifiants invalides.';
             } else {
-                $this->session->setCurrentMemberUsername($member->getId());
+                $this->session->setCurrentMemberUsername($member->id);
                 return new Response(body: $this->twig->render('success.html.twig', [
                     'message' => 'Connexion réussie.',
                     'title' => 'Connecté',

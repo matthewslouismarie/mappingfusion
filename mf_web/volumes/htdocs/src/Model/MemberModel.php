@@ -22,7 +22,7 @@ class MemberModel implements IModel
     public function getProperties(): array {
         return [
             new ModelProperty('id', new SlugConstraint()),
-            new ModelProperty('password_hash', new LongStringConstraint(), isGenerated: true),
+            new ModelProperty('password', new LongStringConstraint(), isGenerated: true),
         ];
     }
 }
