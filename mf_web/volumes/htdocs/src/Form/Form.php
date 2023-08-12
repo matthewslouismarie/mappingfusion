@@ -71,14 +71,4 @@ class Form implements Submittable
     public function getDefaultValue(): mixed {
         return $this->defaultValue;
     }
-
-    public function generateSubmission(array|AppObject|null $data, bool $validate = true): FormArray {
-        $formData = [];
-        foreach ($this->children as $c) {
-            $childData = $data[$c->getName()] ?? null;
-            $childErrors = $validate ? $c->validate($childData) : [];
-            $formData[$c->getName()] = new FormValue($childData, $childErrors);
-        }
-        return new FormArray($formData);
-    }
 }

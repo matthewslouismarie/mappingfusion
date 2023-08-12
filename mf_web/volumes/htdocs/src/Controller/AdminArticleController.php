@@ -45,7 +45,8 @@ class AdminArticleController implements ControllerInterface
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $article = null;
         $submission = null;
-        $processingErrors = [];
+        $formData = null;
+        $formErrors = null;
 
         try {
             $article = isset($routeParams[1]) ? $this->repo->findOne($routeParams[1]) : null;
@@ -60,18 +61,15 @@ class AdminArticleController implements ControllerInterface
 
         if ('POST' === $request->getMethod()) {
             $submission = $form->extractFormData($request);
+            $formData = $submission->getData();
+            $formErrors = $submission->getErrors();
+
             if (!$submission->hasErrors()) {
-
-                $formData = $submission->getData();
-
                 $formData['id'] = $article->id ?? (new Slug($formData['title'], true))->__toString();
                 $formData['author_id'] = $this->session->getCurrentMemberUsername();
-                $formData['cover_filename'] = $formData['cover_filename'] ?? $article->coverFilename;
                 $formData['creation_date_time'] = $article->creationDateTime ?? new DateTimeImmutable();
                 $formData['last_update_date_time'] = new DateTimeImmutable();
 
-                // $appObject = $this->appObjectFactory->create($formData, $this->articleModel);
-    
                 try {
                     if (null === $article) {
                         $this->repo->add($formData);
@@ -84,20 +82,21 @@ class AdminArticleController implements ControllerInterface
                     }
                 } catch (PDOException $e) {
                     if ('23000' === $e->getCode()) {
-                        $processingErrors[] = 'Il existe déjà un article avec le même ID.';
+                        $formErrors['title'][] = 'Il existe déjà un article avec le même ID.';
                     } else {
                         throw $e;
                     }
                 }
             }
         } else {
-            $submission = $form->generateSubmission($article, false);
+            $formData = $article;
+            $formErrors = null;
         }
 
         return new Response(body: $this->twig->render('article_form.html.twig', [
             'categories' => $this->catRepo->findAll(),
-            'processingErrors' => $processingErrors,
-            'submission' => $submission,
+            'formData' => $formData,
+            'formErrors' => $formErrors,
         ]));
     }
 
