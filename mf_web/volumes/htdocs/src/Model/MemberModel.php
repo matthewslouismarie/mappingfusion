@@ -5,7 +5,6 @@ namespace MF\Model;
 use MF\Constraint\IModel;
 use MF\Constraint\LongStringConstraint;
 use MF\Constraint\SlugConstraint;
-use MF\Constraint\TextConstraint;
 use MF\Model\ModelProperty;
 
 class MemberModel implements IModel
@@ -18,7 +17,7 @@ class MemberModel implements IModel
     public function getProperties(): array {
         return [
             new ModelProperty('id', new SlugConstraint()),
-            new ModelProperty('password', new LongStringConstraint(), isGenerated: true),
+            new ModelProperty('password', new LongStringConstraint()),
         ];
     }
 }

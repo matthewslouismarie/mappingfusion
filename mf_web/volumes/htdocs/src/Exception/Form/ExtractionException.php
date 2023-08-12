@@ -1,13 +1,13 @@
 <?php
 
-namespace MF\Exception\InvalidFormException;
+namespace MF\Exception\Form;
 
 use Throwable;
 
 /**
  * Thrown by a submittable when no value could be extracted from the request.
  */
-interface InvalidFormException extends Throwable
+interface ExtractionException extends Throwable
 {
     /**
      * @return string A message to display to the user.

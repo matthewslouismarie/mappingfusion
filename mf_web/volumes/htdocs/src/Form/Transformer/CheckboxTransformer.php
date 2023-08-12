@@ -2,12 +2,12 @@
 
 namespace MF\Form\Transformer;
 
-use MF\Form\FormElement;
+use MF\Form\IFormElement;
 use Psr\Http\Message\ServerRequestInterface;
 
 class CheckboxTransformer implements FormTransformer
 {
-    public function extractValueFromRequest(ServerRequestInterface $request, FormElement $input): bool {
+    public function extractValueFromRequest(ServerRequestInterface $request, IFormElement $input): bool {
         if (!isset($request->getParsedBody()[$input->getName()])) {
             return false;
         }

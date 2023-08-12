@@ -4,6 +4,7 @@ namespace MF\Controller;
 
 use MF\Enum\Clearance;
 use MF\Form\FormFactory;
+use MF\Model\MemberModel;
 use MF\Session\SessionManager;
 use MF\Repository\MemberRepository;
 use GuzzleHttp\Psr7\Response;
@@ -19,28 +20,34 @@ class LoginController implements ControllerInterface
         private FormFactory $formFactory,
         private MemberRepository $repo,
         private SessionManager $session,
-        private TwigService $twigService,
+        private TwigService $twig,
     ) {
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $formError = null;
+        $form = $this->formFactory->createForm(new MemberModel());
+        $formErrors = [];
+        $formData = null;
 
-        $form = $this->formFactory->createForm()
         if ('POST' === $request->getMethod()) {
-            $member = $this->repo->find($request->getParsedBody()['username']);
-            if (null === $member || !password_verify($request->getParsedBody()['password'], $member->password)) {
-                $formError = 'Identifiants invalides.';
-            } else {
-                $this->session->setCurrentMemberUsername($member->id);
-                return new Response(body: $this->twig->render('success.html.twig', [
-                    'message' => 'Connexion réussie.',
-                    'title' => 'Connecté',
-                ]));
+            $submission = $form->extractFormData($request);
+            if (!$submission->hasErrors()) {
+                $formData = $submission->getData();
+                $member = $this->repo->find($formData['id']);
+                if (null === $member || !password_verify($request->getParsedBody()['password'], $member->password)) {
+                    $formErrors[] = 'Identifiants invalides.';
+                } else {
+                    $this->session->setCurrentMemberUsername($member->id);
+                    return new Response(body: $this->twig->render('success.html.twig', [
+                        'message' => 'Connexion réussie.',
+                        'title' => 'Connecté',
+                    ]));
+                }
             }
         }
         return new Response(body: $this->twig->render('login.html.twig', [
-            'formError' => $formError,
+            'formErrors' => $formErrors,
+            'formData' => $formData,
         ]));
     }
 

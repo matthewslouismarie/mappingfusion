@@ -10,10 +10,11 @@ use Psr\Http\Message\ServerRequestInterface;
 interface Submittable
 {
     /**
-     * @return FormValue The form value extracted from the request, usually from the corresponding submitted value. A
-     * submittable always return a value (though it can be null), or it throws an exception. This makes sure all the
-     * defined form elements of a form are present in the extracted data, though they can hold a null value.
-     * @throws MissingInputException If no submitted value could not found.
+     * @return \MF\Form\IFormData The form value extracted from the request, usually from the corresponding submitted
+     * value. A submittable always return a value (though it can be null), or it throws an exception. This makes sure
+     * all the defined form elements of a form are present in the extracted data, though they can hold a null value.
+     * An IFormData instance also comes with an array of validation errors, which should be empty.
+     * @throws ExtractionException If no submitted value could not found, or the found value could not be extracted.
      */
     public function extractFormData(ServerRequestInterface $request): IFormData;
 

@@ -2,8 +2,8 @@
 
 namespace MF\Form\Transformer;
 
-use MF\Exception\InvalidFormException\MissingInputException;
-use MF\Form\FormElement;
+use MF\Exception\Form\MissingInputException;
+use MF\Form\IFormElement;
 use MF\Model\SlugFilename;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
@@ -13,7 +13,7 @@ class FileTransformer implements FormTransformer
     /**
      * @throws MissingInputException If no file was uploaded.
      */
-    public function extractValueFromRequest(ServerRequestInterface $request, FormElement $input): ?string {
+    public function extractValueFromRequest(ServerRequestInterface $request, IFormElement $input): ?string {
         if (!isset($request->getUploadedFiles()[$input->getName()])) {
             throw new MissingInputException();
         }

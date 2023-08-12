@@ -4,6 +4,7 @@ namespace MF\Form;
 
 /**
  * Data fetched and transformed from a request along with its errors, if any.
+ * @todo Rename to Submission or DataSubmission or FormSubmission…
  */
 interface IFormData
 {

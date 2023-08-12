@@ -2,8 +2,9 @@
 
 namespace MF\Form\Transformer;
 
-use MF\Exception\InvalidFormException\MissingInputException;
-use MF\Form\FormElement;
+use MF\Exception\Form\MissingInputException;
+use MF\Exception\Form\WrongCsrfException;
+use MF\Form\IFormElement;
 use MF\Session\SessionManager;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -14,9 +15,12 @@ class CsrfTransformer implements FormTransformer
     ) {
     }
 
-    public function extractValueFromRequest(ServerRequestInterface $request, FormElement $input): string {
+    public function extractValueFromRequest(ServerRequestInterface $request, IFormElement $input): string {
         if (!isset($request->getParsedBody()[$input->getName()])) {
             throw new MissingInputException();
+        }
+        if ($this->session->getCsrf() !== $request->getParsedBody()[$input->getName()]) {
+            throw new WrongCsrfException();
         }
 
         return $this->session->getCsrf();

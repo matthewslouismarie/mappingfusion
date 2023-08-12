@@ -2,8 +2,6 @@
 
 namespace MF\Form;
 
-use BadMethodCallException;
-
 class FormArray implements IFormData
 {
     public function __construct(

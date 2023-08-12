@@ -3,13 +3,13 @@
 namespace MF\Form\Transformer;
 
 use DateTimeImmutable;
-use MF\Exception\InvalidFormException\MissingInputException;
-use MF\Form\FormElement;
+use MF\Exception\Form\MissingInputException;
+use MF\Form\IFormElement;
 use Psr\Http\Message\ServerRequestInterface;
 
 class DateTimeTransformer implements FormTransformer
 {
-    public function extractValueFromRequest(ServerRequestInterface $request, FormElement $input): ?DateTimeImmutable {
+    public function extractValueFromRequest(ServerRequestInterface $request, IFormElement $input): ?DateTimeImmutable {
         if (!isset($request->getParsedBody()[$input->getName()])) {
             throw new MissingInputException();
         }

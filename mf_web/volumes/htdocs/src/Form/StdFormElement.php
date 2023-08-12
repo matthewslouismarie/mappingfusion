@@ -5,7 +5,7 @@ namespace MF\Form;
 use MF\Form\Transformer\FormTransformer;
 use Psr\Http\Message\ServerRequestInterface;
 
-class StdFormElement implements FormElement
+class StdFormElement implements IFormElement
 {
     private string $name;
 

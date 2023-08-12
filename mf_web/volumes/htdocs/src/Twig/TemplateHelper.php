@@ -4,6 +4,7 @@ namespace MF\Twig;
 
 use MF\Configuration;
 use MF\Enum\LinkType;
+use MF\Form\FormFactory;
 use MF\Form\StdFormElement;
 use MF\Form\Submittable;
 use MF\Form\Transformer\CsrfTransformer;
@@ -20,12 +21,8 @@ class TemplateHelper
         private MarkdownService $mk,
         private Router $router,
         private SessionManager $session,
-        CsrfTransformer $csrfTransformer,
+        private FormFactory $formFactory,
     ) {
-        $this->csrf = new StdFormElement(
-            'csrf',
-            $csrfTransformer,
-        );
     }
 
     public function getAsset(string $filename): string {
@@ -34,8 +31,8 @@ class TemplateHelper
         return "$publicUrl/$filename?version=$version";
     }
 
-    public function getCsrfFormElement(): Submittable {
-        return $this->csrf;
+    public function getCsrf(): Submittable {
+        return $this->formFactory->getCsrfFormElement();
     }
 
     public function getLinkTypes(): array {

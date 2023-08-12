@@ -2,6 +2,7 @@
 
 namespace MF\Form;
 
+use InvalidArgumentException;
 use MF\Form\FormValue;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -16,13 +17,25 @@ class Form implements Submittable
     private ?array $defaultValue;
 
     /**
-     * @param FormElement[] $children An array of child form elements.
+     * @param IFormElement[] $children An array of child form elements.
      * @param array defaultValue A default value for the form data.
+     * @throws \InvalidArgumentException If the given children are invalid.
      */
     public function __construct(
         array $children = [],
         mixed $defaultValue = null,
     ) {
+        $definedChildNames = [];
+        foreach ($children as $c) {
+            if (!($c instanceof IFormElement)) {
+                throw new InvalidArgumentException('The form must be initialized with an array of IFormElement instances.');
+            }
+            if (in_array($c->getName(), $definedChildNames, true)) {
+                throw new InvalidArgumentException('The form cannot have two direct children with identical names.');
+            }
+            $definedChildNames[] = $c->getName();
+        }
+
         $this->children = $children;
         $this->defaultValue = $defaultValue;
     }
@@ -30,15 +43,12 @@ class Form implements Submittable
     public function extractFormData(ServerRequestInterface $request): FormArray {
         $formArray = [];
         foreach ($this->children as $child) {
-            if (isset($model[$child->getName()])) {
-                throw new RuntimeException();
-            }
             $formArray[$child->getName()] = $child->extractFormData($request);
         }
         return new FormArray($formArray);
     }
 
-    public function getChild(string $id): FormElement {
+    public function getChild(string $id): IFormElement {
         foreach ($this->children as $child) {
             if ($child->getName() === $id) {
                 return $child;
