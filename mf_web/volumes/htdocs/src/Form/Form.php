@@ -48,7 +48,9 @@ class Form implements Submittable
     public function extractFormData(ServerRequestInterface $request): FormArray {
         $formArray = [];
         foreach ($this->children as $child) {
-            if ($child->getName() !== $this->ignoreValueOf) {
+            if ($child->getName() === $this->ignoreValueOf) {
+                $child->extractFormData($request);
+            } else {
                 $formArray[$child->getName()] = $child->extractFormData($request);
             }
         }

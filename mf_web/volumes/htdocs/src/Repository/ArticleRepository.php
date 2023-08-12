@@ -122,26 +122,20 @@ class ArticleRepository implements IRepository
         return $articles;
     }
 
-    public function updateArticle(string $previousId, array $appArray, bool $updateCoverFilename = true): void {
+    public function updateArticle(array $appArray, ?string $previousId = null): void {
         $dbArray = $this->em->toDbValue($appArray);
-        if ($previousId === $dbArray['id']) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_category_id = ?, article_body = ?, article_is_featured = ?, article_title = ?, article_sub_title = ?, ' . ($updateCoverFilename ? 'article_cover_filename = ?, ' : '') . 'article_last_update_date_time = NOW() WHERE article_id = ?;');
-            $parameters = [
-                $dbArray['category_id'],
-                $dbArray['body'],
-                $dbArray['is_featured'],
-                $dbArray['title'],
-                $dbArray['sub_title'],
-                $dbArray['cover_filename'],
-                $dbArray['id'],
-            ];
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_id = ?, article_category_id = ?, article_body = ?, article_is_featured = ?, article_title = ?, article_sub_title = ?, article_cover_filename = ?, article_last_update_date_time = NOW() WHERE article_id = ?;');
+        $parameters = [
+            $dbArray['id'],
+            $dbArray['category_id'],
+            $dbArray['body'],
+            $dbArray['is_featured'],
+            $dbArray['title'],
+            $dbArray['sub_title'],
+            $dbArray['cover_filename'],
+            $previousId ?? $dbArray['id'],
+        ];
 
-            $stmt->execute($parameters);
-        } else {
-            $this->conn->getPdo()->beginTransaction();
-            $this->add($appArray);
-            $this->deleteArticle($previousId);
-            $this->conn->getPdo()->commit();
-        }
+        $stmt->execute($parameters);
     }
 }

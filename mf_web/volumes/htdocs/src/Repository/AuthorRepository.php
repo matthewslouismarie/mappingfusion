@@ -68,15 +68,8 @@ class AuthorRepository implements IRepository
         return $this->find($id);
     }
 
-    public function update(string $previousId, array $authorAppArray): void {
-        if ($previousId === $authorAppArray['id']) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_author SET author_name = :name WHERE author_id = :id;');
-            $stmt->execute($this->em->toDbValue($authorAppArray));
-        } else {
-            $this->conn->getPdo()->beginTransaction();
-            $this->add($authorAppArray);
-            $this->delete($previousId);
-            $this->conn->getPdo()->commit();
-        }
+    public function update(array $authorAppArray, ?string $previousId = null): void {
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_author SET author_id = :id, author_name = :name WHERE author_id = :previous_id;');
+        $stmt->execute(['previous_id' => $previousId ?? $authorAppArray['id']] + $this->em->toDbValue($authorAppArray));
     }
 }

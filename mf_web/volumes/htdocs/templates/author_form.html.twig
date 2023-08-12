@@ -1,17 +1,23 @@
 {% extends 'base.html.twig' %}
 
+{% from 'macros/csrf_input.html.twig' import csrf %}
+{% from 'macros/error_list.html.twig' import errorList %}
+
 {% block title %}Édition d’auteur{% endblock %}
 
 {% block bodyContent %}
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
     <div class="form-row">
-        <label class="label" for="id">ID (générée automatiquement)</label>
-        <input class="input" id="id" name="id" value="{{ author.data.id }}">
+        <label class="label" for="id">ID (peut être laissé vide)</label>
+        <input class="input" id="id" name="id" value="{{ formData.id }}">
+        {% if formErrors %}{{ errorList(formErrors.id) }}{% endif %}
     </div>
     <div class="form-row">
         <label class="label" for="name">Nom</label>
-        <input class="input" id="name" name="name" required value="{{ author.data.name }}">
+        <input class="input" id="name" name="name" required value="{{ formData.name }}">
+        {% if formErrors %}{{ errorList(formErrors.name) }}{% endif %}
     </div>
+    {{ csrf(app.csrf) }}
     <button type="submit">Poster</button>
 </form>
 {% endblock %}
