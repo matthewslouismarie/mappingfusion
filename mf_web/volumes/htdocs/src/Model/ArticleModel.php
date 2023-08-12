@@ -21,10 +21,6 @@ class ArticleModel implements IModel
     ) {
     }
 
-    public function getName(): string {
-        return 'article';
-    }
-
     public function getProperties(): array {
         $properties = [
             new ModelProperty(

@@ -11,14 +11,9 @@ use MF\Constraint\SlugConstraint;
 class PlayableModel implements IModel
 {
     public function __construct(
-        private string $name = 'playable',
         private ?self $gameModel = null,
         private ?PlayableLinkModel $playableLinkModel = null,
     ) {
-    }
-
-    public function getName(): string {
-        return $this->name;
     }
 
     public function getProperties(): array {

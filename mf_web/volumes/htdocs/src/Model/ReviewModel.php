@@ -10,10 +10,6 @@ use MF\Constraint\UintConstraint;
 
 class ReviewModel implements IModel
 {
-    public function getName(): string {
-        return 'review';
-    }
-
     public function getProperties(): array {
         return [
             new ModelProperty('id', new UintConstraint(), isGenerated: true, isRequired: false),

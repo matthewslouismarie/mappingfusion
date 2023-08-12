@@ -11,11 +11,6 @@ use MF\Constraint\IType;
 interface IModelProperty
 {
     /**
-     * @return string An identifier for the property. It MUST be unique among other properties of the same model.
-     */
-    public function getName(): string;
-
-    /**
      * @return \MF\Constraint\IConstraint[] An array of constraint identifiers, used to validate the entity (e.g. after a form submission or
      * before a database create or update operation).
      */

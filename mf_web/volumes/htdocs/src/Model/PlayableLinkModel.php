@@ -16,15 +16,6 @@ use MF\Model\ModelProperty;
  */
 class PlayableLinkModel implements IModel
 {
-    public function __construct(
-        private string $name = 'link',
-    ) {
-    }
-
-    public function getName(): string {
-        return $this->name;
-    }
-
     public function getProperties(): array {
         return [
             new ModelProperty('id', new UintConstraint(), isGenerated: true, isRequired: false),

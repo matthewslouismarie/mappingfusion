@@ -10,15 +10,6 @@ use MF\Constraint\UintConstraint;
 
 class ContributionModel implements IModel
 {
-    public function __construct(
-        private string $name = 'contribution',
-    ) {
-    }
-
-    public function getName(): string {
-        return $this->name;
-    }
-
     public function getProperties(): array {
         return [
             new ModelProperty('id', new UintConstraint(), isGenerated: true, isRequired: false),

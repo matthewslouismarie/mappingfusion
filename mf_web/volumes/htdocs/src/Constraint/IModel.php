@@ -10,13 +10,7 @@ namespace MF\Constraint;
 interface IModel extends IType
 {
     /**
-     * @return string An identifier for the model. This can be used entities convert it back and from various forms.
-     * @todo Remove?
-     */
-    public function getName(): string;
-
-    /**
-     * @return IModelProperty[] An array of model properties defining the model.
+     * @return \MF\Model\IModelProperty[] An array of model properties defining the model.
      */
     public function getProperties(): array;
 }
