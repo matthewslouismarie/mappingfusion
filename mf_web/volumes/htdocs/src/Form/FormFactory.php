@@ -2,6 +2,9 @@
 
 namespace MF\Form;
 
+use MF\Constraint\IBooleanConstraint;
+use MF\Constraint\IDateTimeConstraint;
+use MF\Constraint\IFileConstraint;
 use MF\Constraint\IModel;
 use MF\Constraint\IStringConstraint;
 use MF\Constraint\IType;
@@ -56,7 +59,7 @@ class FormFactory
             }
         }
         $htmlFormElements[] = $this->getCsrfFormElement();
-        return new Form($htmlFormElements, $defaultData);
+        return new Form($htmlFormElements, $defaultData, ignoreValueOf: self::CSRF_FORM_ELEMENT_NAME);
     }
 
     public function getCsrfFormElement(): IFormElement {
@@ -70,6 +73,12 @@ class FormFactory
     private function getTransformer(IType $type): FormTransformer {
         if ($type instanceof IStringConstraint) {
             return $this->stringTransformer;
+        } elseif ($type instanceof IBooleanConstraint) {
+            return $this->checkboxTransformer;
+        } elseif ($type instanceof IFileConstraint) {
+            return $this->fileTransformer;
+        } elseif ($type instanceof IDateTimeConstraint) {
+            return $this->dateTimeTransformer;
         }
         throw new RuntimeException();
     }

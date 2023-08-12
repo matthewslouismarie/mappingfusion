@@ -57,7 +57,7 @@ class AuthorController implements ControllerInterface
                 }
             }
         } else {
-            $formData = $form->generateFormData($author?->toArray() ?? [], false);
+            $formData = $form->generateSubmission($author?->toArray() ?? [], false);
         }
 
         return new Response(

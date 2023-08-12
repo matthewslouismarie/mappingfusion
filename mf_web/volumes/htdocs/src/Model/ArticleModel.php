@@ -37,8 +37,8 @@ class ArticleModel implements IModel
             new ModelProperty('cover_filename', new FileConstraint()),
             new ModelProperty('creation_date_time', new class implements IDateTimeConstraint {}, isGenerated: true),
             new ModelProperty('last_update_date_time', new class implements IDateTimeConstraint {}, isGenerated: true),
-            new ModelProperty('review', new ReviewModel(), isRequired: false),
-            new ModelProperty('category', new CategoryModel(), isRequired: false),
+            new ModelProperty('review', new ReviewModel(), isGenerated: true, isRequired: false),
+            new ModelProperty('category', new CategoryModel(), isGenerated: true, isRequired: false),
         ];
         return $properties;
     }

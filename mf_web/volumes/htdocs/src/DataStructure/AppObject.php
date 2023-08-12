@@ -4,14 +4,11 @@ namespace MF\DataStructure;
 
 use ArrayAccess;
 use BadMethodCallException;
-use DateTimeImmutable;
-use MF\Constraint\IArrayConstraint;
-use MF\Constraint\IDateTimeConstraint;
 use MF\Constraint\IModel;
 use MF\Model\KeyName;
 
 /**
- * @todo Validate input app array from a given definition.
+ * Immutable array that whose values can be accessed like an object property.
  */
 class AppObject implements ArrayAccess
 {
@@ -25,26 +22,8 @@ class AppObject implements ArrayAccess
      * @param IModel $model The entity model.
      * @todo Add back validation?
      */
-    public function __construct(array $scalarArray, IModel $model) {
-        $this->data = [];
-        foreach ($model->getProperties() as $p) {
-            $scalarValue = $scalarArray[$p->getName()] ?? null;
-            if (null === $scalarValue) {
-                $this->data[$p->getName()] = $scalarValue;
-            } elseif ($p->getType() instanceof IModel) {
-                $this->data[$p->getName()] = new self($scalarValue, $p->getType());
-            } elseif ($p->getType() instanceof IArrayConstraint && $p->getType()->getElementType() instanceof IModel) {
-                $this->data[$p->getName()] = [];
-                foreach ($scalarValue as $element) {
-                    $this->data[$p->getName()][] = new self($element, $p->getType()->getElementType());
-                }
-            } elseif ($p->getType() instanceof IDateTimeConstraint) {
-                $this->data[$p->getName()] = new DateTimeImmutable($scalarValue);
-            } else {
-                $this->data[$p->getName()] = $scalarValue;
-            }
-        }
-
+    public function __construct(array $scalarArray, ?IModel $model = null) {
+        $this->data = $scalarArray;
     }
 
     public function __get(string $name): mixed {

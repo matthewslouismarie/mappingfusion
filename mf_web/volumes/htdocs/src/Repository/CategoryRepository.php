@@ -5,6 +5,7 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use MF\Database\DbEntityManager;
 use MF\DataStructure\AppObject;
+use MF\DataStructure\AppObjectFactory;
 use MF\Model\Category;
 use MF\Model\CategoryModel;
 use UnexpectedValueException;
@@ -12,6 +13,7 @@ use UnexpectedValueException;
 class CategoryRepository implements IRepository
 {
     public function __construct(
+        private AppObjectFactory $appObjectFactory,
         private CategoryModel $model,
         private DatabaseManager $conn,
         private DbEntityManager $em,
@@ -36,7 +38,7 @@ class CategoryRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return new AppObject($this->em->toScalarArray($data[0], 'category'), $this->model);
+            return $this->appObjectFactory->create($this->em->toScalarArray($data[0], 'category'), $this->model, 'category_');
         } else {
             throw new UnexpectedValueException();
         }
@@ -46,15 +48,15 @@ class CategoryRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM e_category;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = new AppObject($r, $this->model);
+            $entities[] = $this->appObjectFactory->create($r, $this->model, 'category_');
         }
         return $entities;
     }
 
-    public function update(string $previousId, Category $category): void {
-        if ($previousId === $category->getId()) {
+    public function update(string $previousId, array $category): void {
+        if ($previousId === $category['id']) {
             $stmt = $this->conn->getPdo()->prepare('UPDATE e_category SET category_name = :category_name WHERE category_id = :category_id;');
-            $stmt->execute($category->toArray());
+            $stmt->execute($category);
         } else {
             $this->conn->getPdo()->beginTransaction();
             $this->add($category);

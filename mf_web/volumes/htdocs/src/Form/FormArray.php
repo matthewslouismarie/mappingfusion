@@ -4,14 +4,17 @@ namespace MF\Form;
 
 class FormArray implements IFormData
 {
+    /**
+     * @param \MF\Form\Submittable[] An array fo submittable, indexed by the name of the form element that extracted it.
+     */
     public function __construct(
-        private array $formDatas,
+        private array $submissions,
     ) {
     }
 
     public function getData(): array {
         $data = [];
-        foreach ($this->formDatas as $key => $formValue) {
+        foreach ($this->submissions as $key => $formValue) {
             $data[$key] = $formValue->getData();
         }
 
@@ -19,19 +22,19 @@ class FormArray implements IFormData
     }
 
     public function getFormValue(string $name): ?FormValue {
-        return $this->formDatas[$name] ?? null;
+        return $this->submissions[$name] ?? null;
     }
 
     public function getErrors(): array {
         $errors = [];
-        foreach ($this->formDatas as $key => $formValue) {
+        foreach ($this->submissions as $key => $formValue) {
             $errors[$key] = $formValue->getErrors();
         }
         return $errors;
     }
 
     public function hasErrors(): bool {
-        foreach ($this->formDatas as $formData) {
+        foreach ($this->submissions as $formData) {
             if ($formData->hasErrors()) {
                 return true;
             }

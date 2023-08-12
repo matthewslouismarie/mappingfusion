@@ -14,6 +14,7 @@ class StringTransformer implements FormTransformer
      */
     public function extractValueFromRequest(ServerRequestInterface $request, IFormElement $input): ?string {
         if (!isset($request->getParsedBody()[$input->getName()])) {
+            var_dump($input, $request);
             throw new MissingInputException();
         }
         $submittedString = $request->getParsedBody()[$input->getName()];

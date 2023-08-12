@@ -4,6 +4,7 @@ namespace MF\Controller;
 
 use DateTimeImmutable;
 use MF\Database\DbEntityManager;
+use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
 use MF\Form\FormFactory;
@@ -27,11 +28,12 @@ class AdminArticleController implements ControllerInterface
     const ROUTE_ID = 'manage-article';
 
     public function __construct(
-        private ArticleModel $articleDefinition,
+        private AppObjectFactory $appObjectFactory,
+        private ArticleModel $articleModel,
         private ArticleRepository $repo,
         private CategoryRepository $catRepo,
         private DbEntityManager $em,
-        private FormFactory $FormFactory,
+        private FormFactory $formFactory,
         private FormObjectManager $fOManager,
         private Router $router,
         private SessionManager $session,
@@ -42,7 +44,8 @@ class AdminArticleController implements ControllerInterface
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $article = null;
-        $errorMessages = [];
+        $submission = null;
+        $processingErrors = [];
 
         try {
             $article = isset($routeParams[1]) ? $this->repo->findOne($routeParams[1]) : null;
@@ -50,52 +53,51 @@ class AdminArticleController implements ControllerInterface
             throw new NotFoundException($e);
         }
 
-        $form = $this->FormFactory->createForm(
-            $this->articleDefinition,
+        $form = $this->formFactory->createForm(
+            $this->articleModel,
             formConfig: ['cover_filename' => ['required' => null === $article]],
         );
 
-        $formData = null;
         if ('POST' === $request->getMethod()) {
-            $formData = $form->extractFormData($request);
-            if (!$formData->hasErrors()) {
+            $submission = $form->extractFormData($request);
+            if (!$submission->hasErrors()) {
 
-                $data = $formData->getData();
+                $formData = $submission->getData();
 
-                $data['id'] = $article->id ?? (new Slug($data['title'], true))->__toString();
-                $data['author_id'] = $this->session->getCurrentMemberUsername();
-                $data['cover_filename'] = $data['cover_filename'] ?? $article->coverFilename;
-                $data['creation_date_time'] = $article->creationDateTime ?? new DateTimeImmutable();
-                $data['last_update_date_time'] = new DateTimeImmutable();
+                $formData['id'] = $article->id ?? (new Slug($formData['title'], true))->__toString();
+                $formData['author_id'] = $this->session->getCurrentMemberUsername();
+                $formData['cover_filename'] = $formData['cover_filename'] ?? $article->coverFilename;
+                $formData['creation_date_time'] = $article->creationDateTime ?? new DateTimeImmutable();
+                $formData['last_update_date_time'] = new DateTimeImmutable();
 
-                $appEntity = $this->fOManager->toAppObject($data, $this->articleDefinition);
+                // $appObject = $this->appObjectFactory->create($formData, $this->articleModel);
     
                 try {
                     if (null === $article) {
-                        $this->repo->add($appEntity);
-                        return $this->router->generateRedirect(self::ROUTE_ID, [$appEntity['id']]);
+                        $this->repo->add($formData);
+                        return $this->router->generateRedirect(self::ROUTE_ID, [$formData['id']]);
                     } else {
-                        $this->repo->updateArticle($article->id, $appEntity);
-                        if ($article->id !== $appEntity->id) {
-                            return $this->router->generateRedirect(self::ROUTE_ID, [$appEntity['id']]);
+                        $this->repo->updateArticle($article->id, $formData);
+                        if ($article->id !== $formData['id']) {
+                            return $this->router->generateRedirect(self::ROUTE_ID, [$formData['id']]);
                         }
                     }
                 } catch (PDOException $e) {
                     if ('23000' === $e->getCode()) {
-                        $errorMessages[] = 'Il existe déjà un article avec le même ID.';
+                        $processingErrors[] = 'Il existe déjà un article avec le même ID.';
                     } else {
                         throw $e;
                     }
                 }
             }
         } else {
-            $formData = $form->generateFormData($article?->toArray() ?? [], false);
+            $submission = $form->generateSubmission($article, false);
         }
 
         return new Response(body: $this->twig->render('article_form.html.twig', [
             'categories' => $this->catRepo->findAll(),
-            'article' => $formData,
-            'errorMessages' => $errorMessages,
+            'processingErrors' => $processingErrors,
+            'submission' => $submission,
         ]));
     }
 

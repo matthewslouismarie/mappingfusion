@@ -27,6 +27,7 @@ class ArticleRepository implements IRepository
 
     public function add(array $articleScalarArray): void {
         $dbArray = $this->em->toDbValue($articleScalarArray);
+        var_dump($dbArray);
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (:id, :author_id, :category_id, :body, :is_featured, :sub_title, :title, :cover_filename, :creation_date_time, :last_update_date_time);');
         $stmt->execute($dbArray);
     }
@@ -124,7 +125,7 @@ class ArticleRepository implements IRepository
     public function updateArticle(string $previousId, array $appArray, bool $updateCoverFilename = true): void {
         $dbArray = $this->em->toDbValue($appArray);
         if ($previousId === $dbArray['id']) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_category_id = ?, article_body = ?, article_is_featured = ?, article_title = ?, artiicle_sub_title = ?, ' . ($updateCoverFilename ? 'article_cover_filename = ?, ' : '') . 'article_last_update_date_time = NOW() WHERE article_id = ?;');
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_category_id = ?, article_body = ?, article_is_featured = ?, article_title = ?, article_sub_title = ?, ' . ($updateCoverFilename ? 'article_cover_filename = ?, ' : '') . 'article_last_update_date_time = NOW() WHERE article_id = ?;');
             $parameters = [
                 $dbArray['category_id'],
                 $dbArray['body'],

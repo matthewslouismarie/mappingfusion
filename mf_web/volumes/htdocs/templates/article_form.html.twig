@@ -3,50 +3,52 @@
 {% from 'macros/csrf_input.html.twig' import csrf %}
 {% from 'macros/error_list.html.twig' import errorList %}
 
-{% block title %}Article{% endblock %}
+{% block title %}{{ submission ? 'Édition d’article' ?? 'Nouvel article' }}{% endblock %}
 
 {% block bodyContent %}
+<h1>{{ submission ? 'Édition d’article' ?? 'Nouvel article' }}</h1>
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post" {% if app.isDev %}novalidate{% endif %}>
-    {{ errorList(errorMessages) }}
+    {{ errorList(processingErrors) }}
     <div class="form-row">
         <label class="label" for="title">Titre</label>
-        <input class="input" id="title" name="title" required value="{{ article.data.title }}">
-        {{ errorList(article.errors.title) }}
+        <input class="input" id="title" name="title" required{% if submission %} value="{{ submission.data.title }}"{% endif %}>
+        {% if submission %}{{ errorList( submission.errors.title) }}{% endif %}
     </div>
     <div class="form-row">
-        <label class="label" for="subtitle">Sous-titre</label>
-        <input class="input" id="subtitle" name="subtitle" value="{{ article.data.subtitle }}">
-        {{ errorList(article.errors.subtitle) }}
+        <label class="label" for="sub-title">Sous-titre</label>
+        <input class="input" id="sub-title" name="sub_title"{% if submission %} value="{{ submission.data.sub_title }}"{% endif %}>
+        {% if submission %}{{ errorList( submission.errors.sub_title) }}{% endif %}
     </div>
     <div class="form-row">
         <label class="label" for="category-id">Catégorie</label>
         <select id="category-id" name="category_id" required>
             {% for c in categories %}
-            <option value="{{ c.id }}"{% if c.id == article.data.category_id %} selected{% endif %}>{{ c.name }}</option>
+            <option value="{{ c.id }}"{% if submission and c.id == submission.data.category_id %} selected{% endif %}>{{ c.name }}</option>
             {% endfor %}
         </select>
-        {{ errorList(article.errors.category_id) }}
+        {% if submission %}{{ errorList( submission.errors.category_id) }}{% endif %}
     </div>
     <div class="form-row -singleimage">
         <label class="label" for="p-cover-filename">Couverture</label>
         <input accept="image/*" class="input" id="p-cover-filename" name="cover_filename" type="file">
-        {% if article.data.cover_filename %}
-        <p>Couverture actuelle : {{ article.data.cover_filename }}.</p>
-        <img alt="Image actuelle de couverture de l’article" class="image" src="{{ app.resource(article.data.cover_filename) }}">
+        {% if submission.data.cover_filename %}
+        <input name="cover_filename_previous" type="hidden" value="{{ submission.data.cover_filename }}">
+        <p>Couverture actuelle : {{ submission.data.cover_filename }}.</p>
+        <img alt="Image actuelle de couverture de l’article" class="image" src="{{ app.resource(submission.data.cover_filename) }}">
         {% endif %}
-        {{ errorList(article.errors.cover_filename) }}
+        {% if submission %}{{ errorList( submission.errors.cover_filename) }}{% endif %}
     </div>
     <div class="form-row -checkbox">
-        <input class="input" id="is-featured" name="is_featured" type="checkbox"{% if article.data.is_featured %} checked{% endif %}>
+        <input class="input" id="is-featured" name="is_featured" type="checkbox"{% if submission and submission.data.is_featured %} checked{% endif %}>
         <label class="label" for="is-featured">Mettre à la une</label>
-        {{ errorList(article.errors.is_featured) }}
+        {% if submission %}{{ errorList( submission.errors.is_featured) }}{% endif %}
     </div>
     <div class="form-row">
         <label class="label" for="p-content">Contenu de l’article</label>
-        <textarea class="input -textarea" id="p-content" name="body" required>{{ article.data.body }}</textarea>
-        {{ errorList(article.errors.body) }}
+        <textarea class="input -textarea" id="p-content" name="body" required>{{ submission.data.body ?? null }}</textarea>
+        {% if submission %}{{ errorList( submission.errors.body) }}{% endif %}
     </div>
     <button class="std-button" type="submit">Poster</button>
-    {{ csrf(app.csrfFormElement, app.session.csrf) }}
+    {{ csrf(app.csrf) }}
 </form>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace MF\Form;
 
 use InvalidArgumentException;
+use MF\DataStructure\AppObject;
 use MF\Form\FormValue;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -16,6 +17,8 @@ class Form implements Submittable
 
     private ?array $defaultValue;
 
+    private ?string $ignoreValueOf;
+
     /**
      * @param IFormElement[] $children An array of child form elements.
      * @param array defaultValue A default value for the form data.
@@ -24,6 +27,7 @@ class Form implements Submittable
     public function __construct(
         array $children = [],
         mixed $defaultValue = null,
+        ?string $ignoreValueOf = null,
     ) {
         $definedChildNames = [];
         foreach ($children as $c) {
@@ -38,12 +42,15 @@ class Form implements Submittable
 
         $this->children = $children;
         $this->defaultValue = $defaultValue;
+        $this->ignoreValueOf = $ignoreValueOf;
     }
 
     public function extractFormData(ServerRequestInterface $request): FormArray {
         $formArray = [];
         foreach ($this->children as $child) {
-            $formArray[$child->getName()] = $child->extractFormData($request);
+            if ($child->getName() !== $this->ignoreValueOf) {
+                $formArray[$child->getName()] = $child->extractFormData($request);
+            }
         }
         return new FormArray($formArray);
     }
@@ -65,7 +72,7 @@ class Form implements Submittable
         return $this->defaultValue;
     }
 
-    public function generateFormData(array $data, bool $validate = true): FormArray {
+    public function generateSubmission(array|AppObject|null $data, bool $validate = true): FormArray {
         $formData = [];
         foreach ($this->children as $c) {
             $childData = $data[$c->getName()] ?? null;
