@@ -58,7 +58,7 @@ class AdminArticleController implements ControllerInterface
         );
 
         if ('POST' === $request->getMethod()) {
-            $submission = $form->extractFormData($request->getParsedBody());
+            $submission = $form->extractFormData($request->getParsedBody(), $request->getUploadedFiles());
             $formData = $submission->getData();
             $formErrors = $submission->getErrors();
 
