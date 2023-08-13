@@ -4,8 +4,11 @@ namespace MF\Controller;
 
 use DomainException;
 use GuzzleHttp\Psr7\Response;
+use MF\DataStructure\AppObject;
 use MF\Enum\Clearance;
 use MF\Enum\LinkType;
+use MF\Exception\Database\EntityNotFoundException;
+use MF\Exception\Http\NotFoundException;
 use MF\Model\Playable;
 use MF\Repository\AuthorRepository;
 use MF\Repository\PlayableRepository;
@@ -28,7 +31,7 @@ class AdminPlayableController implements ControllerInterface
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $playableId = $request->getQueryParams()['id'] ?? null;
-        $data = $this->getEntityDataFromRequest($request, $playableId);
+        $playable = $this->getPlayable($routeParams);
 
         // update entity if post request
 
@@ -40,7 +43,7 @@ class AdminPlayableController implements ControllerInterface
         return new Response(
             body: $this->twig->render('playable_form.html.twig', [
                 'authors' => $this->authorRepo->findAll(),
-                'data' => $data,
+                'data' => $playable,
                 'linkTypes' => LinkType::cases(),
                 'playableId' => $playableId,
                 'playables' => $this->repo->findAll(),
@@ -48,32 +51,11 @@ class AdminPlayableController implements ControllerInterface
         );
     }
 
-    private function getEntityDataFromRequest(ServerRequestInterface $request, ?string $playableId): ?array {
-        if ('POST' === $request->getMethod()) {
-            $data = $request->getParsedBody();
-
-            if (key_exists('playable_stored_links', $data)) {
-                for ($i = 0; $i < count($data['playable_stored_links']); $i++) {
-                    $data['playable_stored_links'][$i]['playable_id'] = $request->getQueryParams()['id'] ?? null;
-                }
-            }
-
-            $entity = Playable::fromArray($data, linkPrefix: '');
-            if (null !== $playableId) {
-                $this->repo->update($playableId, $entity, false, $data['links-to-remove'] ?? []);
-            } else {
-                $this->repo->add($entity);
-            }
-            
-            return $data;
-        } elseif (null !== $playableId) {
-            $entity = $this->repo->find($playableId);
-            if (null === $entity) {
-                throw new DomainException();
-            }
-            return $entity->toArray(linkPrefix: '');
-        } else {
-            return null;
+    private function getPlayable(array $routeParams): ?AppObject {
+        try {
+            return key_exists(1, $routeParams) ? $this->repo->findOne($routeParams[1]) : null;
+        } catch (EntityNotFoundException $e) {
+            throw new NotFoundException();
         }
     }
 

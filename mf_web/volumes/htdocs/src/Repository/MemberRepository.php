@@ -30,7 +30,7 @@ class MemberRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return new AppObject($this->em->toScalarArray($data[0], 'member'), $this->model);
+            return $this->em->toAppObject($data[0], $this->model, 'member');
         } else {
             throw new UnexpectedValueException();
         }

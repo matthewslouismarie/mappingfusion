@@ -10,6 +10,11 @@ namespace MF\Constraint;
 interface IModel extends IType
 {
     /**
+     * @return string An identifier that must be unique in a child model context.
+     */
+    public function getName(): string;
+
+    /**
      * @return \MF\Model\IModelProperty[] An array of model properties defining the model.
      */
     public function getProperties(): array;

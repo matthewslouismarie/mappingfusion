@@ -38,7 +38,7 @@ class ReviewRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return new AppObject($this->em->toScalarArray($data[0], 'review'), $this->model);
+            return $this->em->toAppObject($data[0], $this->model, 'review');
         } else {
             throw new UnexpectedValueException();
         }
@@ -48,7 +48,7 @@ class ReviewRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = new AppObject($this->em->toScalarArray($r, 'review'), $this->model);
+            $entities[] = $this->em->toAppObject($r, $this->model, 'review');
         }
         return $entities;
     }

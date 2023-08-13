@@ -14,6 +14,10 @@ class MemberModel implements IModel
     ) {
     }
 
+    public function getName(): string {
+        return 'member';
+    }
+
     public function getProperties(): array {
         return [
             new ModelProperty('id', new SlugConstraint()),

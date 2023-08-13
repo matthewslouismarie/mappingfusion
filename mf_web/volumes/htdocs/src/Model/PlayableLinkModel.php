@@ -16,6 +16,10 @@ use MF\Model\ModelProperty;
  */
 class PlayableLinkModel implements IModel
 {
+    public function getName(): string {
+        return 'link';
+    }
+
     public function getProperties(): array {
         return [
             new ModelProperty('id', new UintConstraint(), isGenerated: true, isRequired: false),
@@ -24,5 +28,9 @@ class PlayableLinkModel implements IModel
             new ModelProperty('type', new EnumConstraint(LinkType::cases())),
             new ModelProperty('url', new LongStringConstraint()),
         ];
+    }
+
+    public function getExportPrefix(): string {
+        return 'link_';
     }
 }

@@ -14,16 +14,12 @@ class AppObject implements ArrayAccess
 {
     private array $data;
 
-    private IModel $model;
-
     /**
-     * Treats missing properties and present properties with null values indifferently.
-     * @param mixed[] $scalarArray A scalar array.
-     * @param IModel $model The entity model.
+     * @param mixed[] $appArray An app array.
      * @todo Add back validation?
      */
-    public function __construct(array $scalarArray, ?IModel $model = null) {
-        $this->data = $scalarArray;
+    public function __construct(array $appArray, ?IModel $model = null) {
+        $this->data = $appArray;
     }
 
     public function __get(string $name): mixed {
@@ -53,5 +49,13 @@ class AppObject implements ArrayAccess
 
     public function set(string $offet, mixed $value): self {
         return new self([$offet => $value] + $this->data, $this->model);
+    }
+
+    public function toArray(): array {
+        $appArray = [];
+        foreach ($this->data as $pName => $pValue) {
+            $appArray[$pName] = $pValue instanceof self ? $pValue->toArray() : $pValue;
+        }
+        return $appArray;
     }
 }

@@ -10,8 +10,17 @@ use MF\Constraint\UintConstraint;
 
 class ReviewModel implements IModel
 {
+    public function __construct(
+        private ?PlayableModel $playableModel = null,
+    ) {
+    }
+
+    public function getName(): string {
+        return 'review';
+    }
+
     public function getProperties(): array {
-        return [
+        $properties = [
             new ModelProperty('id', new UintConstraint(), isGenerated: true, isRequired: false),
             new ModelProperty('article_id', new SlugConstraint()),
             new ModelProperty('playable_id', new SlugConstraint()),
@@ -19,7 +28,10 @@ class ReviewModel implements IModel
             new ModelProperty('body', new TextConstraint()),
             new ModelProperty('cons', new TextConstraint()),
             new ModelProperty('pros', new TextConstraint()),
-            new ModelProperty('playable', new PlayableModel(), isRequired: false),
         ];
+        if (null !== $this->playableModel) {
+            $properties[] = new ModelProperty('playable', $this->playableModel, isRequired: false);
+        }
+        return $properties;
     }
 }

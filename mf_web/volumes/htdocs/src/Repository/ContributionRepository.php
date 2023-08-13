@@ -30,6 +30,6 @@ class ContributionRepository implements IRepository
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_contribution WHERE contribution_id = :?;');
         $stmt->execute([$id]);
         $data = $stmt->fetch();
-        return null !== $data ? $this->em->toScalarArray($data, 'contribution') : null;
+        return null !== $data ? $this->em->toAppObject($data, $this->model, 'contribution') : null;
     }
 }

@@ -30,11 +30,6 @@ interface IModelProperty
     public function getType(): IType;
 
     /**
-     * @return bool Whether this property is a value that can be accessed from here for convenience purposes.
-     */
-    public function isPersisted(): bool;
-
-    /**
      * Hint that this property is generated automatically (i.e. by the app or the RDBMS), and that it should not be the
      * responsability of the user to provide a value for this property.
      * 

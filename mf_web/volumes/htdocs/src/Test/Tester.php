@@ -26,6 +26,40 @@ class Tester
         return true;
     }
 
+    public function assertArrayEquals(array $expected, array $actual): bool {
+        $diffExpectedActual = $this->getSetDifference($expected, $actual);
+        $diffActualExpected = $this->getSetDifference($actual, $expected);
+        if ([] !== $diffActualExpected || [] !== $diffExpectedActual) {
+            $this->errors[] = new AssertionFailure(
+                "The actual array differs from the expected array.",
+                "Additional keys in expected: " . var_export($diffExpectedActual, true) . "\n" .
+                "Additional keys in actual: " . var_export($diffActualExpected, true)
+            );
+            return false;
+        }
+        return true;
+    }
+
+    public function getSetDifference(array $subset, array $superset): array {
+        $diffs = [];
+        foreach ($subset as $key => $value) {
+            if (!key_exists($key, $superset)) {
+                $diffs[] = $key;
+            } elseif (is_array($value)) {
+                if ([] !== $this->getSetDifference($value, $superset[$key]) || [] !== $this->getSetDifference($superset[$key], $value)) {
+                    $diffs[] = $key;
+                }
+            } elseif ($value instanceof \DateTimeImmutable) {
+                if (0 !== $value->getTimestamp() - $superset[$key]->getTimestamp()) {
+                    $diffs[] = $key;
+                }
+            } elseif ($value !== $superset[$key]) {
+                $diffs[] = $key;
+            }
+        }
+        return $diffs;
+    }
+
     public function assertException(string $exceptionClass, Closure $statement): bool {
         try {
             $statement->call($this);

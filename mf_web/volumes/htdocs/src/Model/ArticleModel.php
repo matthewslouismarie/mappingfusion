@@ -17,8 +17,13 @@ use MF\Constraint\TextConstraint;
 class ArticleModel implements IModel
 {
     public function __construct(
+        private ?CategoryModel $categoryModel = null,
         private ?ReviewModel $reviewModel = null,
     ) {
+    }
+
+    public function getName(): string {
+        return 'article';
     }
 
     public function getProperties(): array {
@@ -37,9 +42,13 @@ class ArticleModel implements IModel
             new ModelProperty('cover_filename', new FileConstraint()),
             new ModelProperty('creation_date_time', new class implements IDateTimeConstraint {}, isGenerated: true),
             new ModelProperty('last_update_date_time', new class implements IDateTimeConstraint {}, isGenerated: true),
-            new ModelProperty('review', new ReviewModel(), isGenerated: true, isRequired: false),
-            new ModelProperty('category', new CategoryModel(), isGenerated: true, isRequired: false),
         ];
+        if (null !== $this->reviewModel) {
+            $properties[] = new ModelProperty('review', $this->reviewModel, isGenerated: true, isRequired: false);
+        }
+        if (null !== $this->categoryModel) {
+            $properties[] = new ModelProperty('category', $this->categoryModel, isGenerated: true, isRequired: false);
+        }
         return $properties;
     }
 }

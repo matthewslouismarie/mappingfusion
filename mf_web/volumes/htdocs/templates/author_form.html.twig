@@ -9,12 +9,12 @@
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
     <div class="form-row">
         <label class="label" for="id">ID (peut être laissé vide)</label>
-        <input class="input" id="id" name="id" value="{{ formData.id }}">
+        <input class="input" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
         {% if formErrors %}{{ errorList(formErrors.id) }}{% endif %}
     </div>
     <div class="form-row">
         <label class="label" for="name">Nom</label>
-        <input class="input" id="name" name="name" required value="{{ formData.name }}">
+        <input class="input" id="name" name="name" required{% if formData %} value="{{ formData.name }}"{% endif %}>
         {% if formErrors %}{{ errorList(formErrors.name) }}{% endif %}
     </div>
     {{ csrf(app.csrf) }}

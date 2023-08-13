@@ -15,6 +15,10 @@ class PlayableModel implements IModel
         private ?PlayableLinkModel $playableLinkModel = null,
     ) {
     }
+    
+    public function getName(): string {
+        return 'playable';
+    }
 
     public function getProperties(): array {
         $properties = [
@@ -24,10 +28,10 @@ class PlayableModel implements IModel
             new ModelProperty('game_id', new SlugConstraint(), isRequired: false),
         ];
         if (null !== $this->gameModel) {
-            $properties[] = new ModelProperty('stored_game', $this->gameModel, isPersisted: false);
+            $properties[] = new ModelProperty('game', $this->gameModel);
         }
         if (null !== $this->playableLinkModel) {
-            $properties[] = new ModelProperty('stored_links', new ArrayConstraint($this->playableLinkModel), isPersisted: false);
+            $properties[] = new ModelProperty('links', new ArrayConstraint($this->playableLinkModel));
         }
         return $properties;
     }

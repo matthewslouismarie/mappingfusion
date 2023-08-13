@@ -4,105 +4,106 @@ namespace MF\Database;
 
 use DateTimeImmutable;
 use InvalidArgumentException;
+use MF\Constraint\IArrayConstraint;
+use MF\Constraint\IBooleanConstraint;
+use MF\Constraint\IDateTimeConstraint;
+use MF\Constraint\IModel;
+use MF\Constraint\IType;
+use MF\DataStructure\AppObject;
+use MF\Exception\Database\InvalidDbData;
 use UnexpectedValueException;
 
 /**
- * @todo Could be renamed to DbEntityFactory / DbArrayFactory. It would then become a class instatiable with a
- * particular definition, so that it is possible to further customize how an entity is supposed to be transformed into
- * a DB array, or the other way around.
+ * @todo Could be renamed to DbEntityFactory / DbArrayFactory.
  */
 class DbEntityManager
 {
-    public function isOrdered(array $array): bool {
+    const SEP = '_';
+
+    private function isOrdered(array $array): bool {
         return count($array) === count(array_filter($array, fn($key) => is_int($key), ARRAY_FILTER_USE_KEY));
     }
 
-    public function getScalarProperty(string $property, mixed $value, array $groups, string $sep = '_'): array {
-        $scalarProperties = [];
 
-        // if (is_string($groups)) {
-        //     if (str_starts_with($property, $groups . $sep)) {
-        //         $scalarProperties = [
-        //             $groups => [
-        //                 substr($property, strlen($groups . $sep)) => $value,
-        //             ],
-        //         ];
-        //     }
-        // elseif ($this->isOrdered($prefix)) {
-        //     foreach ($prefix as $d) {
-        //         if (str_starts_with($property, $d)) {
-        //             $scalarProperties = array_merge_recursive(
-        //                 $scalarProperties,
-        //                 $this->getScalarProperty($property, $value, $d, $sep));
-        //         }
-        //     }
-        // } else {
-            foreach ($groups as $group) {
-                if (!is_array($group) &&!is_string($group)) {
-                    throw new UnexpectedValueException();
+    /**
+     * Transform the given DB Array key and value into a Model’s Property.
+     *
+     * @param string $dbArrayKey The DB Array key.
+     * @param mixed $dbValue The associated DB Data.
+     * @param IModel $model The App Object Model to use to extract the property hierarchy.
+     * @return mixed[] A recursive array using valid Property names for keys and terminating with the transformed DB
+     * data.
+     */
+    public function toModelProperty(string $dbArrayKey, mixed $dbValue, IModel $model): ?array {
+        foreach ($model->getProperties() as $p) {
+            if ($p->getType() instanceof IModel) {
+                $pKeys = $this->toModelProperty($dbArrayKey, $dbValue, $p->getType());
+                if (null !== $pKeys) {
+                    return [$p->getName() => $pKeys];
                 }
-                $prefix = null;
-                $destinations = null;
-                if (is_string($group)) {
-                    $prefix = $group;
-                    $destinations = [$group];
-                } else {
-                    $prefix = $group[0];
-                    $destinations = $group[1];
-                }
-                if (str_starts_with($property, $prefix . $sep)) {
-                    $newProp = [
-                        substr($property, strlen($prefix . $sep)) => $value,
-                    ];
-
-                    foreach (array_reverse($destinations) as $d) {
-                        $newProp = [
-                            $d => $newProp,
-                        ];
-                    }
-                    
-                    return array_merge_recursive($scalarProperties, $newProp);
+            } else {
+                if ($model->getName() . self::SEP . $p->getName() ===  $dbArrayKey) {
+                    return [$p->getName() => $this->toAppData($dbValue, $p->getType())];
                 }
             }
-        // }
-
-        if (0 !== count($scalarProperties)) {
-            return $scalarProperties;
-        } else {
-            return [$property => $value];
         }
+
+        return null;
     }
 
     /**
-     * @param mixed[] $dbArray An DB array of scalars extracted from the database, with no more than one dimension.
-     * @param array[] $prefixes A recursive array indexed by a prefix and its sub-prefix, if any.
-     * @return mixed[] A multi-dimensional, scalar array.
-     * @throws InvalidArgumentException 
+     * Transform the given DB Array into an App Object using the specified Model.
+     * 
+     * @param mixed[] $dbArray A DB Array.
+     * @param IModel $model A model.
+     * @return AppObject A DB Array created from the Model and the DB Array.
+     * @throws InvalidArgumentException If $dbArray is not a valid DB Array.
      */
-    public function toScalarArray(array $dbArray, ?string $removePrefix = null, array $groups = [], string $sep = '_'): array {
-        $scalarArray = [];
+    public function toAppObject(
+        array $dbArray,
+        IModel $model,
+    ): AppObject {
+        $appArray = [];
 
         foreach ($dbArray as $key => $value) {
             if (!is_scalar($value) && null !== $value) {
                 throw new InvalidArgumentException("DB arrays must not hold non-scalar values: ");
             }
-            if (null !== $removePrefix) {
-                $groups[] = [$removePrefix, []];
+
+            $hierarchy = $this->toModelProperty($key, $value, $model);
+            if (null !== $hierarchy) {
+                $appArray = array_merge_recursive($appArray, $hierarchy);
             }
-            $newProperty = $this->getScalarProperty($key, $value, $groups);
-            $scalarArray = array_merge_recursive($scalarArray, $newProperty);
         }
 
-        // if (null !== $removePrefix) {
-        //     foreach ($scalarArray as $key => $value) {
-        //         if (str_starts_with($key, $removePrefix)) {
-        //             $scalarArray[substr($key, strlen($removePrefix . $sep))] = $value;
-        //             unset($scalarArray[$key]);
-        //         }
-        //     }
-        // }
+        return new AppObject($appArray);
+    }
 
-        return $scalarArray;
+    /**
+     * Transform DB Data into App Data.
+     *
+     * @param mixed $dbData DB Data.
+     * @param IType $type The Type of the DB Data.
+     * @return mixed App Data.
+     */
+    public function toAppData(mixed $dbData, IType $type): mixed {
+        if (null === $dbData) {
+            return null;
+        } elseif ($type instanceof IModel) {
+            return $this->toAppObject($dbData, $type);
+        } elseif ($type instanceof IArrayConstraint && $type->getElementType() instanceof IModel) {
+            $appObjects = [];
+            foreach ($dbData as $dbArray) {
+                $appObjects[] = $this->toAppObject($dbArray, $type->getElementType());
+            }
+            return $appObjects;
+        } elseif ($type instanceof IDateTimeConstraint) {
+            return new DateTimeImmutable($dbData);
+        } elseif ($type instanceof IBooleanConstraint) {
+            return in_array($dbData, [0, 1], true) ? 1 === $dbData : throw new InvalidDbData();
+        } else {
+            return $dbData;
+        }
     }
 
     /**

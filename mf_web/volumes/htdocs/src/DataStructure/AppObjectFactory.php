@@ -2,8 +2,11 @@
 
 namespace MF\DataStructure;
 
+use DateTimeImmutable;
+use MF\Constraint\IArrayConstraint;
+use MF\Constraint\IDateTimeConstraint;
 use MF\Constraint\IModel;
-use MF\Model\IModelProperty;
+use MF\Constraint\IType;
 
 class AppObjectFactory
 {
@@ -14,23 +17,23 @@ class AppObjectFactory
         $newData = [];
         foreach ($model->getProperties() as $p) {
             $value = $data[$prefix . $p->getName()] ?? null;
-            $newData[$p->getName()] = $this->getValue($p, $value);
+            $newData[$p->getName()] = $this->getValue($p->getType(), $value);
         }
         return new AppObject($newData);
     }
 
-    public function getValue(IModelProperty $property, mixed $data): mixed {
+    public function getValue(IType $type, mixed $data): mixed {
         if (null === $data) {
             return null;
-        } elseif ($property->getType() instanceof IModel) {
-            return $this->create($data, $property->getType());
-        } elseif ($property->getType() instanceof IArrayConstraint && $property->getType()->getElementType() instanceof IModel) {
+        } elseif ($type instanceof IModel) {
+            return $this->create($data, $type);
+        } elseif ($type instanceof IArrayConstraint && $type->getElementType() instanceof IModel) {
             $newData = [];
             foreach ($data as $element) {
-                $newData[] = $this->create($element, $property->getType()->getElementType());
+                $newData[] = $this->create($element, $type->getElementType());
             }
-            return $newData;
-        } elseif ($property->getType() instanceof IDateTimeConstraint) {
+            return new AppObject($newData);
+        } elseif ($type instanceof IDateTimeConstraint) {
             return new DateTimeImmutable($data);
         } else {
             return $data;

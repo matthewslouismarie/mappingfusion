@@ -5,6 +5,8 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use MF\Database\DbEntityManager;
 use MF\DataStructure\AppObject;
+use MF\DataStructure\AppObjectFactory;
+use MF\Model\CategoryModel;
 use MF\Session\SessionManager;
 use MF\Model\ArticleModel;
 use MF\Model\PlayableModel;
@@ -21,13 +23,16 @@ class ArticleRepository implements IRepository
         private DatabaseManager $conn,
         private DbEntityManager $em,
         private SessionManager $session,
+        private AppObjectFactory $appObjectFactory,
     ) {
-        $this->model = new ArticleModel(new ReviewModel());
+        $this->model = new ArticleModel(
+            categoryModel: new CategoryModel(),
+            reviewModel: new ReviewModel(),
+        );
     }
 
     public function add(array $articleScalarArray): void {
         $dbArray = $this->em->toDbValue($articleScalarArray);
-        var_dump($dbArray);
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (:id, :author_id, :category_id, :body, :is_featured, :sub_title, :title, :cover_filename, :creation_date_time, :last_update_date_time);');
         $stmt->execute($dbArray);
     }
@@ -49,11 +54,12 @@ class ArticleRepository implements IRepository
                 'stored_review' => new ReviewModel(),
                 'stored_playable' => new PlayableModel(),
             ];
-            return new AppObject($this->em->toScalarArray(
+            return $this->em->toAppObject(
                 $data[0],
+                $this->model,
                 'article',
                 self::GROUPS,
-            ), $this->model);
+            );
         } else {
             throw new UnexpectedValueException();
         }
@@ -63,7 +69,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NULL;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = new AppObject($this->em->toScalarArray($r, 'article', self::GROUPS), $this->model);
+            $entities[] = $this->em->toAppObject($r, $this->model, 'article', self::GROUPS);
         }
         return $entities;
     }
@@ -80,7 +86,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = new AppObject($this->em->toScalarArray($r, 'article', self::GROUPS), $this->model);
+            $entities[] = $this->em->toAppObject($r, $this->model);
         }
         return $entities;
     }
@@ -89,17 +95,17 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE article_is_featured = 1;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = new AppObject($this->em->toScalarArray($article, 'article', self::GROUPS), $this->model);
+            $articles[] = $this->em->toAppObject($article, $this->model);
         }
         return $articles;
     }
 
-    public function findLast(int $limit = 8, bool $onlyReviews = false): array {
+    public function findLastArticles(int $limit = 8, bool $onlyReviews = false): array {
         $whereClause = $onlyReviews ? 'WHERE article_review_id IS NOT NULL' : '';
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article {$whereClause} ORDER BY article_last_update_date_time DESC LIMIT {$limit};");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = new AppObject($this->em->toScalarArray($article, 'article', self::GROUPS), $this->model);
+            $articles[] = $this->em->toAppObject($article, $this->model);
         }
         return $articles;
     }
@@ -108,7 +114,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE review_id IS NOT NULL ORDER BY article_last_update_date_time DESC LIMIT 4;");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = new AppObject($this->em->toScalarArray($article, 'article', self::GROUPS), $this->model);
+            $articles[] = $this->em->toAppObject($article, new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel())));
         }
         return $articles;
     }
@@ -117,7 +123,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = new AppObject($this->em->toScalarArray($article, 'article', self::GROUPS), $this->model);
+            $articles[] = $this->em->toAppObject($article, new ArticleModel(new CategoryModel(), new ReviewModel()));
         }
         return $articles;
     }
