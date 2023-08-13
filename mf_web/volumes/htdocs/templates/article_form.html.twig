@@ -30,7 +30,7 @@
     <div class="form-row -singleimage">
         <label class="label" for="p-cover-filename">Couverture</label>
         <input accept="image/*" class="input" id="p-cover-filename" name="cover_filename" type="file">
-        {% if formData.cover_filename %}
+        {% if formData %}
         <input name="cover_filename_previous" type="hidden" value="{{ formData.cover_filename }}">
         <p>Couverture actuelle : {{ formData.cover_filename }}.</p>
         <img alt="Image actuelle de couverture de l’article" class="image" src="{{ app.resource(formData.cover_filename) }}">

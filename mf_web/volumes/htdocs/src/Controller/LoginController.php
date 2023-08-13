@@ -30,7 +30,7 @@ class LoginController implements ControllerInterface
         $formData = null;
 
         if ('POST' === $request->getMethod()) {
-            $submission = $form->extractFormData($request);
+            $submission = $form->extractFormData($request->getParsedBody());
             if (!$submission->hasErrors()) {
                 $formData = $submission->getData();
                 $member = $this->repo->find($formData['id']);

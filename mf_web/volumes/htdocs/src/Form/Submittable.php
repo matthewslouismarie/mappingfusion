@@ -1,7 +1,6 @@
 <?php
 
 namespace MF\Form;
-
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -16,7 +15,7 @@ interface Submittable
      * An IFormData instance also comes with an array of validation errors, which should be empty.
      * @throws ExtractionException If no submitted value could not found, or the found value could not be extracted.
      */
-    public function extractFormData(ServerRequestInterface $request): IFormData;
+    public function extractFormData(array $requestFormData, ?array $uploadedFiles): IFormData;
 
     /**
      * @return mixed The default entity value, if any, in case the extracted submitted value is null. It may

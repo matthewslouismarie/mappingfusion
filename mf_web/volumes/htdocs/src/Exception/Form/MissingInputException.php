@@ -2,15 +2,15 @@
 
 namespace MF\Exception\Form;
 
-use InvalidArgumentException;
+use MF\Form\IFormElement;
 
 /**
  * Thrown when the submittable could not find any value from the request.
  */
-class MissingInputException extends InvalidArgumentException implements ExtractionException
+class MissingInputException extends ExtractionException
 {
-    public function __construct($message = "", $code = 0, $previous = null) {
-        parent::__construct($message, $code, $previous);
+    public function __construct(?IFormElement $formElement = null, $previous = null) {
+        parent::__construct(null !== $formElement ? $formElement->getName() . ' is missing ' : null, previous: $previous);
     }
 
     public function getUserErrorMessage(): string {

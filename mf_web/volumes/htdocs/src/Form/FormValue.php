@@ -14,7 +14,24 @@ class FormValue implements IFormData
     ) {
     }
 
-    public function getData(): mixed {
+    public function getData(?array $hereWeGo = null): mixed {
+        if (is_array($this->value)) {
+            $appArray = [];
+            foreach ($hereWeGo ?? $this->value as $k => $v) {
+                if ($v instanceof IFormData) {
+                    $appArray[$k] = $v->getData();
+                } elseif (is_array($v)) {
+                    $appArray[$k] = $this->getData($v);
+                } else {
+                    $appArray[$k] = $v;
+                }
+            }
+            return $appArray;
+        }
+        return $this->value;
+    }
+
+    public function getArrayValue(): array {
         return $this->value;
     }
 

@@ -20,9 +20,9 @@ class CategoryRepository implements IRepository
     ) {
     }
 
-    public function add(array $categoryScalarArray): void {
+    public function add(AppObject $category): void {
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_category VALUES (:id, :name);');
-        $stmt->execute($this->em->toDbValue($categoryScalarArray));
+        $stmt->execute($this->em->toDbValue($category));
     }
 
     public function delete(string $id): void {
@@ -38,30 +38,27 @@ class CategoryRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toAppObject($data[0], $this->model, 'category');
+            return $this->em->toAppObject($data[0], $this->model);
         } else {
             throw new UnexpectedValueException();
         }
+    }
+
+    public function findOne(string $id): AppObject {
+        return $this->find($id);
     }
 
     public function findAll(): array {
         $results = $this->conn->getPdo()->query('SELECT * FROM e_category;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppObject($r, $this->model, 'category');
+            $entities[] = $this->em->toAppObject($r, $this->model);
         }
         return $entities;
     }
 
-    public function update(string $previousId, array $category): void {
-        if ($previousId === $category['id']) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_category SET category_name = :category_name WHERE category_id = :category_id;');
-            $stmt->execute($category);
-        } else {
-            $this->conn->getPdo()->beginTransaction();
-            $this->add($category);
-            $this->delete($previousId);
-            $this->conn->getPdo()->commit();
-        }
+    public function update(AppObject $category, ?string $previousId = null): void {
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_category SET category_id = :id, category_name = :name WHERE category_id = :previous_id;');
+        $stmt->execute($this->em->toDbValue($category) + ['previous_id' => $previousId ?? $category->id]);
     }
 }

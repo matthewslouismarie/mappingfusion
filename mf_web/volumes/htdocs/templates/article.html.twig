@@ -120,7 +120,6 @@
 
             {% if article.review is defined %}
             <div class="content _sectionpadded">ç
-            {{ dump(article.review) }}
                 {{ review(app.mk, article.review.playable, article.review, '-summary') }}
             </div>
             {% endif %}

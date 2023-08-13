@@ -3,6 +3,8 @@
 namespace MF\Form;
 
 use MF\Form\Transformer\FormTransformer;
+use MF\Validator\NotNullValidator;
+use MF\Validator\ValidationFailure;
 use Psr\Http\Message\ServerRequestInterface;
 
 class StdFormElement implements IFormElement
@@ -17,6 +19,9 @@ class StdFormElement implements IFormElement
 
     private array $validators;
 
+    /**
+     * @todo Remove defaultValue?
+     */
     public function __construct(
         string $name,
         FormTransformer $transformer,
@@ -31,10 +36,17 @@ class StdFormElement implements IFormElement
         $this->validators = $validators;
     }
 
-    public function extractFormData(ServerRequestInterface $request): FormValue {
-        $transformedData = $this->transformer->extractValueFromRequest($request, $this) ?? $this->defaultValue;
+    public function extractFormData(array $requestFormData, ?array $uploadedFiles = null): FormValue {
+        $transformedData = $this->transformer->extractValueFromRequest(
+            $requestFormData,
+            $uploadedFiles ?? [],
+            $this,
+        ) ?? $this->defaultValue;
 
-        $errors = $this->validate($transformedData);
+        $errors = [];
+        foreach ($this->validate($transformedData) as $failure) {
+            $errors[] = $failure->getMessage();
+        }
         
         return new FormValue($transformedData, $errors);
     }
@@ -58,10 +70,12 @@ class StdFormElement implements IFormElement
     public function validate(mixed $transformedData): array {
         $errors = [];
         if (null === $transformedData && $this->isRequired) {
-            $errors[] = 'Ce champ est requis.';
+            $errors[] = new ValidationFailure('Ce champ est requis.');
         }
         foreach ($this->validators as $v) {
-            $errors += $v->validate($transformedData);
+            if ($this->isRequired() || !($v instanceof NotNullValidator)) {
+                $errors += $v->validate($transformedData);
+            }
         }
         return $errors;
     }

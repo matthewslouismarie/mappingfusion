@@ -1,17 +1,23 @@
 {% extends 'base.html.twig' %}
 
+{% from 'macros/csrf_input.html.twig' import csrf %}
+{% from 'macros/error_list.html.twig' import errorList %}
+
 {% block title %}Édition de catégorie{% endblock %}
 
 {% block bodyContent %}
-<form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
+<form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post"{% if app.dev %} novalidate{% endif %}>
     <div class="form-row">
         <label class="label" for="p-id">ID de la catégorie (peut être laissé vide, généré automatiquement)</label>
-        <input class="input" id="p-id" name="category_id" value="{% if entity %}{{ entity['category_id'] }}{% endif %}">
+        <input class="input" id="p-id" name="id" value="{% if formData %}{{ formData.id }}{% endif %}">
+        {% if formErrors %}{{ errorList(formErrors.id )}}{% endif %}
     </div>
     <div class="form-row">
         <label class="label" for="p-name">Nom de la catégorie</label>
-        <input class="input" id="p-name" name="category_name" required{% if entity %} value="{{ entity['category_name'] }}"{% endif %}>
+        <input class="input" id="p-name" name="name" required{% if formData %} value="{{ formData.name }}"{% endif %}>
+        {% if formErrors %}{{ errorList(formErrors.name )}}{% endif %}
     </div>
+    {{ csrf(app.csrf) }}
     <button type="submit">Poster</button>
 </form>
 {% endblock %}

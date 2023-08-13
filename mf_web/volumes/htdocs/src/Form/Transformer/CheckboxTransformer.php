@@ -7,10 +7,10 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class CheckboxTransformer implements FormTransformer
 {
-    public function extractValueFromRequest(ServerRequestInterface $request, IFormElement $input): bool {
-        if (!isset($request->getParsedBody()[$input->getName()])) {
+    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, IFormElement $input): bool {
+        if (!isset($formRawData[$input->getName()])) {
             return false;
         }
-        return 'on' === $request->getParsedBody()[$input->getName()] ? true : false;
+        return 'on' === $formRawData[$input->getName()] ? true : false;
     }
 }

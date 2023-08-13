@@ -3,6 +3,7 @@
 namespace MF\Validator;
 
 use MF\Constraint\IModel;
+use MF\Form\FormArray;
 use OutOfBoundsException;
 
 class EntityValidator implements IValidator
@@ -13,8 +14,11 @@ class EntityValidator implements IValidator
     }
 
     public function validate(mixed $data): array {
-        if (!is_array($data)) {
+        if (!is_array($data) && !$data instanceof FormArray) {
             return [new ValidationFailure('Entity data is not an array.')];
+        }
+        if ($data instanceof FormArray) {
+            return $data->getErrors();
         }
         $validatorFactory = new ValidatorFactory();
         $failures = [];

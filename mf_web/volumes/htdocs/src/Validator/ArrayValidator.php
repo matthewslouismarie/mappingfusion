@@ -18,14 +18,7 @@ class ArrayValidator implements IValidator
         if (!is_array($data)) {
             return [new ValidationFailure('Array data is not an array.')];
         }
-        $validator = (new ValidatorFactory())->createValidator($this->constraint->getElementType());
-        $failures = [];
-        foreach ($data as $value) {
-            $validation = $validator->validate($value);
-            if (null !== $validation) {
-                $failures += $validation;
-            }
-        }
-        return $failures;
+
+        return [];
     }
 }

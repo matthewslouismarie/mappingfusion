@@ -14,5 +14,5 @@ interface FormTransformer
      * @return null If the user submitted a null value (or a submitted value that evalutates to a null form value).
      * @throws MissingInputException If no value could be extracted from the request.
      */
-    public function extractValueFromRequest(ServerRequestInterface $request, IFormElement $input): mixed;
+    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, IFormElement $input): mixed;
 }

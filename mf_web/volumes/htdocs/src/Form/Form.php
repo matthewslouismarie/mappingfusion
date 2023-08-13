@@ -45,16 +45,28 @@ class Form implements Submittable
         $this->ignoreValueOf = $ignoreValueOf;
     }
 
-    public function extractFormData(ServerRequestInterface $request): FormArray {
+    public function extractFormData(array $requestFormData, ?array $uploadedFiles = null): FormArray {
         $formArray = [];
         foreach ($this->children as $child) {
             if ($child->getName() === $this->ignoreValueOf) {
-                $child->extractFormData($request);
+                $child->extractFormData($requestFormData, $uploadedFiles ?? []);
             } else {
-                $formArray[$child->getName()] = $child->extractFormData($request);
+                $formArray[$child->getName()] = $child->extractFormData($requestFormData, $uploadedFiles ?? []);
             }
         }
         return new FormArray($formArray);
+    }
+
+    public function extractNoValidate(array $requestFormData, ?array $uploadedFiles = null): array {
+        $formArray = [];
+        foreach ($this->children as $child) {
+            if ($child->getName() === $this->ignoreValueOf) {
+                $child->extractFormData($requestFormData, $uploadedFiles ?? []);
+            } else {
+                $formArray[$child->getName()] = $child->extractFormData($requestFormData, $uploadedFiles ?? [])->getData();
+            }
+        }
+        return $formArray;
     }
 
     public function getChild(string $id): IFormElement {

@@ -2,6 +2,7 @@
 
 namespace MF\Twig;
 
+use DateTimeInterface;
 use MF\Configuration;
 use MF\Enum\LinkType;
 use MF\Form\FormFactory;
@@ -33,6 +34,10 @@ class TemplateHelper
 
     public function getCsrf(): Submittable {
         return $this->formFactory->getCsrfFormElement();
+    }
+
+    public function getDate(DateTimeInterface $date): string {
+        return $date->format('Y-M-D');
     }
 
     public function getLinkTypes(): array {

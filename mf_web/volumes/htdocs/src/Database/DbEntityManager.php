@@ -124,12 +124,11 @@ class DbEntityManager
                     $dbArray[$prefix . ++$i] = $this->toDbValue($subValue, $prefix);
                 }
             } else {
-                foreach ($appData as $key => $subValue) {
-                    $dbValue = $this->toDbValue($subValue);
-                    if (is_array($subValue)) {
-                        $dbArray += $dbValue;
+                foreach ($appData as $pName => $pValue) {
+                    if (is_array($pValue)) {
+                        $dbArray += $this->toDbValue($pValue, $pName);
                     } else {
-                        $dbArray[$prefix . $key] = $dbValue;
+                        $dbArray[$prefix . $pName] = $this->toDbValue($pValue);
                     }
                 }
             }

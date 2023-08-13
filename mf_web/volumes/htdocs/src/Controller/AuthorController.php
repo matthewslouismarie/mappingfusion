@@ -2,15 +2,12 @@
 
 namespace MF\Controller;
 
-use DomainException;
 use GuzzleHttp\Psr7\Response;
 use MF\DataStructure\AppObject;
 use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
 use MF\Form\FormFactory;
-use MF\Form\FormObjectManager;
-use MF\Model\Author;
 use MF\Model\AuthorModel;
 use MF\Model\Slug;
 use MF\Repository\AuthorRepository;
@@ -35,8 +32,8 @@ class AuthorController implements ControllerInterface
     ) {
     }
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $author = $this->getAuthorFromRequest($routeParams);
-        $formData = $author;
+        $existingAuthor = $this->getAuthorFromRequest($routeParams);
+        $formData = $existingAuthor;
         $formErrors = [];
 
         $form = $this->FormFactory->createForm($this->model, formConfig: [
@@ -46,18 +43,19 @@ class AuthorController implements ControllerInterface
         ]);
 
         if ('POST' === $request->getMethod()) {
-            $submission = $form->extractFormData($request);
+            $submission = $form->extractFormData($request->getParsedBody());
             $formData = $submission->getData();
+            $formErrors = $submission->getErrors();
 
             if (!$submission->hasErrors()) {
                 $formData['id'] = $formData['id'] !== null ? $formData['id'] : (new Slug($formData['name'], true))->__toString();
                 try {
-                    if (null === $author) {
+                    if (null === $existingAuthor) {
                         $this->repo->add($formData);
                         return $this->router->generateRedirect(self::ROUTE_ID, [$formData['id']]);
                     } else {
-                        $this->repo->update($formData, $author->id);
-                        if ($author->id !== $formData['id']) {
+                        $this->repo->update($formData, $existingAuthor->id);
+                        if ($existingAuthor->id !== $formData['id']) {
                             return $this->router->generateRedirect(self::ROUTE_ID, [$formData['id']]);
                         }
                     }

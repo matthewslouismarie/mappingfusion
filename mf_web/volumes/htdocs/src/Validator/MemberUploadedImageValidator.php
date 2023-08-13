@@ -2,12 +2,12 @@
 
 namespace MF\Validator;
 
-use MF\Constraint\IStringConstraint;
+use MF\Constraint\IFileConstraint;
 
-class StringValidator implements IValidator
+class MemberUploadedImageValidator implements IValidator
 {
     public function __construct(
-        private IStringConstraint $constraint,
+        private IFileConstraint $constraint,
     ) {
     }
 

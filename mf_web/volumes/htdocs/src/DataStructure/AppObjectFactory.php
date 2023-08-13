@@ -33,8 +33,6 @@ class AppObjectFactory
                 $newData[] = $this->create($element, $type->getElementType());
             }
             return new AppObject($newData);
-        } elseif ($type instanceof IDateTimeConstraint) {
-            return new DateTimeImmutable($data);
         } else {
             return $data;
         }

@@ -3,8 +3,13 @@
 namespace MF\Controller;
 
 use DomainException;
+use MF\DataStructure\AppObject;
+use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
+use MF\Form\FormFactory;
 use MF\Model\Category;
+use MF\Model\CategoryModel;
+use MF\Model\Slug;
 use MF\Session\SessionManager;
 use GuzzleHttp\Psr7\Response;
 use MF\Repository\CategoryRepository;
@@ -17,61 +22,55 @@ class CategoryAdminController implements ControllerInterface
 {
     const ROUTE_ID = 'manage_category';
 
-    private CategoryRepository $repo;
-
-    private Router $router;
-
-    private SessionManager $session;
-
-    private TwigService $twig;
-
     public function __construct(
-        Form $form,
-        CategoryRepository $repo,
-        Router $router,
-        SessionManager $session,
-        TwigService $twig,
+        private CategoryRepository $repo,
+        private Router $router,
+        private SessionManager $session,
+        private AppObjectFactory $appObjectFactory,
+        private FormFactory $formFactory,
+        private TwigService $twig,
     ) {
-        $this->form = $form;
-        $this->repo = $repo;
-        $this->router = $router;
-        $this->session = $session;
-        $this->twig = $twig;
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
-        $category = $this->getEntityFromRequest($request);
+        $existingCategory = $this->getExistingCategory($routeParams);
+        $formData = $existingCategory;
+        $formErrors = null;
+
+        $model = new CategoryModel();
+        $form = $this->formFactory->createForm($model, formConfig: [
+            'id' => [
+                'required' => false,
+            ]
+        ]);
 
         if ('POST' === $request->getMethod()) {
-            if (isset($request->getQueryParams()['id'])) {
-                $this->repo->update($request->getQueryParams()['id'], $category);
-            } else {
-                $this->repo->add($category);
-            }
-        }
+            $submission = $form->extractFormData($request->getParsedBody(), $request->getUploadedFiles());
+            $formData = $submission->getData();
+            $formErrors = $submission->getErrors();
 
-        if (null !== $category && (!isset($request->getQueryParams()['id']) || $category->getId()->__toString() !== $request->getQueryParams()['id'])) {
-            return $this->router->generateRedirect(self::ROUTE_ID, ['id' => $category->getId()]);
+            if (!$submission->hasErrors()) {
+                $formData['id'] = $formData['id'] ?? (new Slug($formData['name'], true))->__toString();
+                $category = $this->appObjectFactory->create($formData, $model);
+                if (null === $existingCategory) {
+                    $this->repo->add($category);
+                } else {
+                    $this->repo->update($category, $existingCategory->id);
+                }
+                if (null === $existingCategory || $existingCategory->id || $category->id) {
+                    return $this->router->generateRedirect(self::ROUTE_ID, [$category->id]);
+                }
+            }
         }
 
         return new Response(body: $this->twig->render('category_form.html.twig', [
-            'entity' => $category?->toArray(),
+            'formData' => $formData,
+            'formErrors' => $formErrors,
         ]));
     }
 
-    private function getEntityFromRequest(ServerRequestInterface $request): ?Category {
-        if ('POST' === $request->getMethod()) {
-            $data = $this->form->nullifyEmptyStrings($request->getParsedBody());
-            return Category::fromArray($data);
-        } elseif (isset($request->getQueryParams()['id'])) {
-            $category = $this->repo->find($request->getQueryParams()['id']);
-            if (null === $category) {
-                throw new DomainException();
-            }
-            return $category;
-        } else {
-            return null;
-        }
+    private function getExistingCategory(array $routeParams): ?AppObject {
+        return isset($routeParams[1]) ? $this->repo->findOne($routeParams[1]) : null;
     }
 
     public function getAccessControl(): Clearance {

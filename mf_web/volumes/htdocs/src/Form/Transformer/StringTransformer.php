@@ -4,7 +4,6 @@ namespace MF\Form\Transformer;
 
 use MF\Exception\Form\MissingInputException;
 use MF\Form\IFormElement;
-use Psr\Http\Message\ServerRequestInterface;
 
 class StringTransformer implements FormTransformer
 {
@@ -12,11 +11,11 @@ class StringTransformer implements FormTransformer
      * @return string The submitted, non-empty string.
      * @return null If an empty string was submitted.
      */
-    public function extractValueFromRequest(ServerRequestInterface $request, IFormElement $input): ?string {
-        if (!isset($request->getParsedBody()[$input->getName()])) {
-            throw new MissingInputException();
+    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, IFormElement $input): ?string {
+        if (!isset($formRawData[$input->getName()])) {
+            throw new MissingInputException($input);
         }
-        $submittedString = $request->getParsedBody()[$input->getName()];
+        $submittedString = $formRawData[$input->getName()];
         return '' !== $submittedString ? $submittedString : null;
     }
 }

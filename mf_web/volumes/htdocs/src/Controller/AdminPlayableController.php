@@ -4,13 +4,21 @@ namespace MF\Controller;
 
 use DomainException;
 use GuzzleHttp\Psr7\Response;
+use MF\Database\DbEntityManager;
 use MF\DataStructure\AppObject;
+use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
 use MF\Enum\LinkType;
 use MF\Exception\Database\EntityNotFoundException;
 use MF\Exception\Http\NotFoundException;
+use MF\Form\FormFactory;
 use MF\Model\Playable;
+use MF\Model\PlayableLink;
+use MF\Model\PlayableLinkModel;
+use MF\Model\PlayableModel;
+use MF\Model\Slug;
 use MF\Repository\AuthorRepository;
+use MF\Repository\PlayableLinkRepository;
 use MF\Repository\PlayableRepository;
 use MF\Router;
 use MF\TwigService;
@@ -23,30 +31,68 @@ class AdminPlayableController implements ControllerInterface
 
     public function __construct(
         private AuthorRepository $authorRepo,
-        private TwigService $twig,
-        private Router $router,
+        private AppObjectFactory $appObjectFactory,
+        private FormFactory $formFactory,
         private PlayableRepository $repo,
+        private PlayableLinkRepository $linkRepo,
+        private Router $router,
+        private TwigService $twig,
     ) {
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $playableId = $request->getQueryParams()['id'] ?? null;
-        $playable = $this->getPlayable($routeParams);
+        $existingPlayable = $this->getPlayable($routeParams);
+        $formData = $existingPlayable;
+        $formErrors = null;
+        $model = new PlayableModel(playableLinkModel: new PlayableLinkModel);
+        $submission = null;
 
-        // update entity if post request
+        $form = $this->formFactory->createForm($model, formConfig: [
+            'id' => [
+                'required' => false,
+            ],
+            'links' => [
+                'playable_id' => [
+                    'generated' => true,
+                ]
+            ]
+        ]);
 
-        // @todo throw exception in getEntityDataFromRequest instead
-        // if (null === $entityData && isset($request->getQueryParams()['id'])) {
-        //     return new Response(302, ['Location' => $this->router->generateUrl(self::ROUTE_ID, ['id' => strval($entity->getId())])]);
-        // }
+        if ('POST' === $request->getMethod()) {
+            $submission = $form->extractFormData($request->getParsedBody());
+            $formData = $submission->getData();
+            $formData['id'] = $formData['id'] ?? (new Slug($formData['name'], true))->__toString();
+            $formErrors = $submission->getErrors();
+
+            if (!$submission->hasErrors()) {
+                $playable = $this->appObjectFactory->create($formData, new PlayableModel());
+                if (null === $existingPlayable) {
+                    $this->repo->add($playable);
+                } else {
+                    $this->repo->update($playable, $existingPlayable->id);
+                }
+                foreach ($formData['links'] as $link) {
+                    $link['playable_id'] = $playable->id;
+                    if (isset($link['id'])) {
+                        $this->linkRepo->update($this->appObjectFactory->create($link, new PlayableLinkModel()));
+                    } else {
+                        $this->linkRepo->add($this->appObjectFactory->create($link, new PlayableLinkModel()));
+                    }
+                }
+                if (null === $existingPlayable || $playable->id !== $existingPlayable->id) {
+                    return $this->router->generateRedirect(self::ROUTE_ID, [$playable->id]);
+                }
+            }
+        }
 
         return new Response(
             body: $this->twig->render('playable_form.html.twig', [
                 'authors' => $this->authorRepo->findAll(),
-                'data' => $playable,
+                'formData' => $formData,
+                'formErrors' => $formErrors,
                 'linkTypes' => LinkType::cases(),
-                'playableId' => $playableId,
                 'playables' => $this->repo->findAll(),
+                'submission' => $submission,
             ]),
         );
     }

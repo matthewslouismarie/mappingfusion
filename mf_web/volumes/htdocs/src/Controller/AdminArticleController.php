@@ -8,7 +8,6 @@ use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
 use MF\Form\FormFactory;
-use MF\Form\FormObjectManager;
 use MF\Model\ArticleModel;
 use MF\Model\Slug;
 use MF\Repository\ArticleRepository;
@@ -34,7 +33,6 @@ class AdminArticleController implements ControllerInterface
         private CategoryRepository $catRepo,
         private DbEntityManager $em,
         private FormFactory $formFactory,
-        private FormObjectManager $fOManager,
         private Router $router,
         private SessionManager $session,
         private TemplateHelper $templateHelper,
@@ -43,39 +41,40 @@ class AdminArticleController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $article = null;
+        $existingArticle = null;
         $submission = null;
         $formData = null;
         $formErrors = null;
 
         try {
-            $article = isset($routeParams[1]) ? $this->repo->findOne($routeParams[1]) : null;
+            $existingArticle = isset($routeParams[1]) ? $this->repo->findOne($routeParams[1]) : null;
         } catch (OutOfBoundsException $e) {
             throw new NotFoundException($e);
         }
 
         $form = $this->formFactory->createForm(
             $this->articleModel,
-            formConfig: ['cover_filename' => ['required' => null === $article]],
+            formConfig: ['cover_filename' => ['required' => null === $existingArticle]],
         );
 
         if ('POST' === $request->getMethod()) {
-            $submission = $form->extractFormData($request);
+            $submission = $form->extractFormData($request->getParsedBody());
             $formData = $submission->getData();
             $formErrors = $submission->getErrors();
 
             if (!$submission->hasErrors()) {
-                $formData['id'] = $article->id ?? (new Slug($formData['title'], true))->__toString();
+                $formData['id'] = $existingArticle->id ?? (new Slug($formData['title'], true))->__toString();
                 $formData['author_id'] = $this->session->getCurrentMemberUsername();
-                $formData['creation_date_time'] = $article->creationDateTime ?? new DateTimeImmutable();
+                $formData['creation_date_time'] = $existingArticle->creationDateTime ?? new DateTimeImmutable();
                 $formData['last_update_date_time'] = new DateTimeImmutable();
+                $article = $this->appObjectFactory->create($formData, $this->articleModel);
 
                 try {
-                    if (null === $article) {
-                        $this->repo->add($formData);
+                    if (null === $existingArticle) {
+                        $this->repo->add($article);
                         return $this->router->generateRedirect(self::ROUTE_ID, [$formData['id']]);
                     } else {
-                        $this->repo->updateArticle($article->id, $formData);
+                        $this->repo->updateArticle($article, $existingArticle->id);
                         if ($article->id !== $formData['id']) {
                             return $this->router->generateRedirect(self::ROUTE_ID, [$formData['id']]);
                         }
@@ -89,7 +88,7 @@ class AdminArticleController implements ControllerInterface
                 }
             }
         } else {
-            $formData = $article;
+            $formData = $existingArticle;
             $formErrors = null;
         }
 

@@ -48,7 +48,7 @@ class AppObject implements ArrayAccess
     }
 
     public function set(string $offet, mixed $value): self {
-        return new self([$offet => $value] + $this->data, $this->model);
+        return new self([$offet => $value] + $this->data);
     }
 
     public function toArray(): array {

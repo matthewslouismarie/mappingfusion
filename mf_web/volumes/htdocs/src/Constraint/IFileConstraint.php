@@ -2,7 +2,7 @@
 
 namespace MF\Constraint;
 
-interface IFileConstraint extends IType
+interface IFileConstraint extends IStringConstraint
 {
     const FILENAME_MAX_LENGTH = 128;
 

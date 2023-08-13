@@ -21,8 +21,8 @@ class PlayableRepository implements IRepository
     ) {
     }
 
-    public function add(array $appArray): void {
-        $dbArray = $this->em->toDbValue($appArray);
+    public function add(AppObject $playable): void {
+        $dbArray = $this->em->toDbValue($playable);
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:id, :name, :release_date_time, :game_id);');
         $stmt->execute($dbArray);
     }
@@ -44,16 +44,24 @@ class PlayableRepository implements IRepository
         }
 
         $rows = $stmt->fetchAll();
+        $links = [];
+        for ($i = 0; $i < count($rows); $i++) {
+            $links[] = $this->em->toAppObject($rows[$i], new PlayableLinkModel());
+        }
 
-        return $this->em->toAppObject($rows[0], $this->model, 'playable');
+        $playable = $this->em->toAppObject($rows[0], new PlayableModel(new PlayableModel()));
+        return $playable->set('links', $links);
+
     }
 
+    /**
+     * @return AppObject[]
+     */
     public function findAll(): array {
         $results = $this->conn->getPdo()->query('SELECT * FROM e_playable;')->fetchAll();
         $playables = [];
         foreach ($results as $r) {
-            $appArray = $this->em->toAppObject($r, 'playable');
-            $playables[] = $this->appObjectFactory->create($appArray, $this->model);
+            $playables[] = $this->em->toAppObject($r, $this->model);
         }
         return $playables;
     }
@@ -63,27 +71,27 @@ class PlayableRepository implements IRepository
         return $this->find($id) ?? throw new EntityNotFoundException();
     }
 
-    public function update(array $scalarArray, ?string $previousId = null, array $linksToRemove = []): void {
-        $dbArray = $this->em->toDbValue($scalarArray);
+    public function update(AppObject $playable, ?string $previousId = null, array $linksToRemove = []): void {
+        $dbArray = $this->em->toDbValue($playable);
 
         $this->conn->getPdo()->beginTransaction();
         $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_id = :id, playable_name = :name, playable_game_id = :game_id, playable_release_date_time = :release_date_time WHERE playable_id = :previous_id;');
+        var_dump($dbArray);
         $stmt->execute($dbArray + ['previous_id' => $previousId ?? $dbArray['id']]);
-
         // foreach ($linksToRemove as $linkId) {
         //     $this->linkRepo->remove($linkId);
         // }
-        if (key_exists('links', $dbArray)) {
-            foreach ($dbArray['links'] as $link) {
-                if (null === $link->getId()) {
-                    $this->linkRepo->add($link);
-                } else {
-                    $this->linkRepo->update($link);
-                }
-            }
-            $linkStmt = $this->conn->getPdo()->prepare('DELETE FROM e_playable_line WHERE link_playable_id = :playable_id AND link_id NOT IN :links;');
-            $stmt->execute(['links' => $dbArray['links'], 'playable_id' => $dbArray['id']]);
-        }
+        // if (key_exists('links', $dbArray)) {
+        //     foreach ($dbArray['links'] as $link) {
+        //         if (null === $link['id']) {
+        //             $this->linkRepo->add($link);
+        //         } else {
+        //             $this->linkRepo->update($link);
+        //         }
+        //     }
+        //     $linkStmt = $this->conn->getPdo()->prepare('DELETE FROM e_playable_line WHERE link_playable_id = :playable_id AND link_id NOT IN :links;');
+        //     $linkStmt->execute(['links' => array_map(fn ($value) => $value['id'], $dbArray['links']), 'playable_id' => $dbArray['id']]);
+        // }
 
         $this->conn->getPdo()->commit();
     }

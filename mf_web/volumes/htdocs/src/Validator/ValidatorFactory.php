@@ -2,23 +2,29 @@
 
 namespace MF\Validator;
 
-use MF\Constraint\ArrayConstraint;
+use InvalidArgumentException;
 use MF\Constraint\IArrayConstraint;
 use MF\Constraint\IBooleanConstraint;
 use MF\Constraint\IConstraint;
 use MF\Constraint\IDateTimeConstraint;
 use MF\Constraint\IEnumConstraint;
+use MF\Constraint\IFileConstraint;
 use MF\Constraint\IModel;
 use MF\Constraint\INotNullableConstraint;
 use MF\Constraint\IDecimalConstraint;
 use MF\Constraint\IStringConstraint;
-use MF\Exception\Validation\ValidationException;
 
 class ValidatorFactory
 {
+    /**
+     * @throws InvalidArgumentException If no validator could be found for the constraint. 
+     */
     public function createValidator(IConstraint $constraint): IValidator {
         if ($constraint instanceof IDecimalConstraint) {
             return new DecimalNumberValidator($constraint);
+        }
+        if ($constraint instanceof IFileConstraint) {
+            return new MemberUploadedImageValidator($constraint);
         }
         if ($constraint instanceof IStringConstraint) {
             return new StringValidator($constraint);
@@ -42,6 +48,6 @@ class ValidatorFactory
             return new EnumValidator($constraint);
         }
 
-        throw new ValidationException();
+        throw new InvalidArgumentException('No validator could be found for constraint of class ' . get_class($constraint) . '.');
     }
 }

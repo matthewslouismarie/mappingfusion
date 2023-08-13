@@ -2,11 +2,17 @@
 
 namespace MF\Constraint;
 
-class EnumConstraint implements IType
+class EnumConstraint implements IEnumConstraint
 {
+    private array $acceptedValues;
+
     public function __construct(
-        private array $acceptedValues,
+        array $enumCases,
     ) {
+        $this->acceptedValues = [];
+        foreach ($enumCases as $c) {
+            $this->acceptedValues[] = $c->value;
+        }
     }
 
     public function getAcceptedValues(): array {

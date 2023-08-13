@@ -4,8 +4,13 @@ namespace MF\Database;
 
 use DateTimeImmutable;
 use MF\Configuration;
+use MF\DataStructure\AppObjectFactory;
 use MF\Enum\LinkType;
+use MF\Model\ArticleModel;
+use MF\Model\CategoryModel;
 use MF\Model\PasswordHash;
+use MF\Model\PlayableLinkModel;
+use MF\Model\PlayableModel;
 use MF\Repository\ArticleRepository;
 use MF\Repository\AuthorRepository;
 use MF\Repository\CategoryRepository;
@@ -28,6 +33,7 @@ class Fixture
         private PlayableLinkRepository $linkRepo,
         private PlayableRepository $repoPlayable,
         private ReviewRepository $repoReview,
+        private AppObjectFactory $factory,
     ) {
     }
 
@@ -54,26 +60,28 @@ class Fixture
         $hl2 = ['id' => 'half-life-2', 'name' => 'Half-Life 2', 'release_date_time' => new DateTimeImmutable(), 'game_id' => null];
         $sc = ['id' => 'sven-co-op', 'name' => 'Sven Co-op', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'goldsource'];
         $cp = ['id' => 'crossed-paths', 'name' => 'Crossed Paths', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'sven-co-op'];
-        $this->repoPlayable->add($gs);
-        $this->repoPlayable->add($hl);
-        $this->repoPlayable->add($hl2);
-        $this->repoPlayable->add($sc);
-        $this->repoPlayable->add($cp);
+        $model = new PlayableModel();
+        $this->repoPlayable->add($this->factory->create($gs, $model));
+        $this->repoPlayable->add($this->factory->create($hl, $model));
+        $this->repoPlayable->add($this->factory->create($hl2, $model));
+        $this->repoPlayable->add($this->factory->create($sc, $model));
+        $this->repoPlayable->add($this->factory->create($cp, $model));
 
-        $this->linkRepo->add([
+        $linkModel = new PlayableLinkModel();
+        $this->linkRepo->add($this->factory->create([
            'id' => null,
            'playable_id' => $sc['id'],
            'name' => 'Homepage',
            'type' => LinkType::HomePage->name,
            'url' => 'https://svencoop.com',
-        ]);
-        $this->linkRepo->add([
+        ], $linkModel));
+        $this->linkRepo->add($this->factory->create([
            'id' => null,
            'playable_id' => $sc['id'],
            'name' => 'Download',
            'type' => LinkType::Download->name,
            'url' => 'https://store.steampowered.com/agecheck/app/225840/',
-        ]);
+        ], $linkModel));
 
         $this->repoContrib->add([
             'id' => null,
@@ -111,6 +119,7 @@ class Fixture
             'summary' => null,
         ]);
 
+        $catModel = new CategoryModel();
         $cat0 = [
             'id' => 'cat',
             'name' => 'Une catégorie',
@@ -119,9 +128,10 @@ class Fixture
             'id' => 'another-cat',
             'name' => 'Une autre catégorie',
         ];
-        $this->repoCat->add($cat0);
-        $this->repoCat->add($cat1);
+        $this->repoCat->add($this->factory->create($cat0, $catModel));
+        $this->repoCat->add($this->factory->create($cat1, $catModel));
 
+        $articleModel = new ArticleModel();
         $article0 = [
             'id' => 'nouvel-article',
             'author_id' => $root['id'],
@@ -134,7 +144,7 @@ class Fixture
             'creation_date_time' => new DateTimeImmutable(),
             'last_update_date_time' => new DateTimeImmutable(),
         ];
-        $this->repoArticle->add($article0);
+        $this->repoArticle->add($this->factory->create($article0, $articleModel));
         
         $article1 = [
             'id' => 'nouvel-version-tcm',
@@ -148,7 +158,7 @@ class Fixture
             'creation_date_time' => new DateTimeImmutable(),
             'last_update_date_time' => new DateTimeImmutable(),
         ];
-        $this->repoArticle->add($article1);
+        $this->repoArticle->add($this->factory->create($article1, $articleModel));
         
         $article2 = [
             'id' => 'prout-lol-xptdr',
@@ -162,7 +172,7 @@ class Fixture
             'creation_date_time' => new DateTimeImmutable(),
             'last_update_date_time' => new DateTimeImmutable(),
         ];
-        $this->repoArticle->add($article2);
+        $this->repoArticle->add($this->factory->create($article2, $articleModel));
         
         $article3 = [
             'id' => 'bonjour-a-tous',
@@ -176,7 +186,7 @@ class Fixture
             'creation_date_time' => new DateTimeImmutable(),
             'last_update_date_time' => new DateTimeImmutable(),
         ];
-        $this->repoArticle->add($article3);
+        $this->repoArticle->add($this->factory->create($article3, $articleModel));
 
         $this->repoReview->add([
             'id' => null,
