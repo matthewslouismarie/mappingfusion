@@ -12,7 +12,7 @@
 {% block body %}
 <div class="page-article">
     <article class="std-article">
-        {% if article.review.id is not null %}
+        {% if article.review is defined %}
         <div class="blue">
             <div class="imafraidijustbluemyself">
             </div>
@@ -64,7 +64,7 @@
                     </ul>
                 </div>
             </nav>
-            {% if article.review.id is not null %}
+            {% if article.review is defined %}
             <div class="content -review _sectionpadded">
                 <div class="_padded -a -g">
                     <dl class="std-metadata">
@@ -118,7 +118,7 @@
                 </div>
             </div>
 
-            {% if article.review.id is not null %}
+            {% if article.review is defined %}
             <div class="content _sectionpadded">ç
             {{ dump(article.review) }}
                 {{ review(app.mk, article.review.playable, article.review, '-summary') }}

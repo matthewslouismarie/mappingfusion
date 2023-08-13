@@ -31,8 +31,8 @@ class ArticleRepository implements IRepository
         );
     }
 
-    public function add(array $articleScalarArray): void {
-        $dbArray = $this->em->toDbValue($articleScalarArray);
+    public function add(AppObject $appObject): void {
+        $dbArray = $this->em->toDbValue($appObject);
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (:id, :author_id, :category_id, :body, :is_featured, :sub_title, :title, :cover_filename, :creation_date_time, :last_update_date_time);');
         $stmt->execute($dbArray);
     }
@@ -50,16 +50,8 @@ class ArticleRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            $stored = null === $data[0]['review_id'] ? [] : [
-                'stored_review' => new ReviewModel(),
-                'stored_playable' => new PlayableModel(),
-            ];
-            return $this->em->toAppObject(
-                $data[0],
-                $this->model,
-                'article',
-                self::GROUPS,
-            );
+            $reviewModel = null !== $data[0]['review_id'] ? new ReviewModel(new PlayableModel()) : null;
+            return $this->em->toAppObject($data[0], new ArticleModel(new CategoryModel(), $reviewModel));
         } else {
             throw new UnexpectedValueException();
         }
@@ -69,7 +61,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NULL;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppObject($r, $this->model, 'article', self::GROUPS);
+            $entities[] = $this->em->toAppObject($r, $this->model);
         }
         return $entities;
     }
@@ -100,6 +92,9 @@ class ArticleRepository implements IRepository
         return $articles;
     }
 
+    /**
+     * @return AppObject[]
+     */
     public function findLastArticles(int $limit = 8, bool $onlyReviews = false): array {
         $whereClause = $onlyReviews ? 'WHERE article_review_id IS NOT NULL' : '';
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article {$whereClause} ORDER BY article_last_update_date_time DESC LIMIT {$limit};");
@@ -110,6 +105,9 @@ class ArticleRepository implements IRepository
         return $articles;
     }
 
+    /**
+     * @return AppObject[]
+     */
     public function findLastReviews(): array {
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE review_id IS NOT NULL ORDER BY article_last_update_date_time DESC LIMIT 4;");
         $articles = [];
@@ -119,17 +117,20 @@ class ArticleRepository implements IRepository
         return $articles;
     }
 
+    /**
+     * @return AppObject[]
+     */
     public function findReviews(): array {
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppObject($article, new ArticleModel(new CategoryModel(), new ReviewModel()));
+            $articles[] = $this->em->toAppObject($article, new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel())));
         }
         return $articles;
     }
 
-    public function updateArticle(array $appArray, ?string $previousId = null): void {
-        $dbArray = $this->em->toDbValue($appArray);
+    public function updateArticle(AppObject $appObject, ?string $previousId = null): void {
+        $dbArray = $this->em->toDbValue($appObject);
         $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_id = ?, article_category_id = ?, article_body = ?, article_is_featured = ?, article_title = ?, article_sub_title = ?, article_cover_filename = ?, article_last_update_date_time = NOW() WHERE article_id = ?;');
         $parameters = [
             $dbArray['id'],

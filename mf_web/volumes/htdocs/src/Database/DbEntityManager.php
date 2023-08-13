@@ -107,24 +107,24 @@ class DbEntityManager
     }
 
     /**
-     * @todo Accept AppObject as well? Would allow repos to accept directly AppObject-s, although we migt not want that
-     * could force (if AppObject validation is enforced) having all the entity properties defined.
      * @throws UnexpectedValueException If some of the properties are set to be persisted and are not scalar.
      */
-    public function toDbValue(mixed $scalar, string $prefix = ''): mixed {
-        if (is_bool($scalar)) {
-            return $scalar ? 1 : 0;
-        } elseif ($scalar instanceof DateTimeImmutable) {
-            return $scalar->format('Y-m-d H:i:s');
-        } elseif (is_array($scalar)) {
+    public function toDbValue(mixed $appData, string $prefix = ''): mixed {
+        if ($appData instanceof AppObject) {
+            return $this->toDbValue($appData->toArray(), $prefix);
+        } elseif (is_bool($appData)) {
+            return $appData ? 1 : 0;
+        } elseif ($appData instanceof DateTimeImmutable) {
+            return $appData->format('Y-m-d H:i:s');
+        } elseif (is_array($appData)) {
             $dbArray = [];
-            if ($this->isOrdered($scalar)) {
+            if ($this->isOrdered($appData)) {
                 $i = 0;
-                foreach ($scalar as $subValue) {
+                foreach ($appData as $subValue) {
                     $dbArray[$prefix . ++$i] = $this->toDbValue($subValue, $prefix);
                 }
             } else {
-                foreach ($scalar as $key => $subValue) {
+                foreach ($appData as $key => $subValue) {
                     $dbValue = $this->toDbValue($subValue);
                     if (is_array($subValue)) {
                         $dbArray += $dbValue;
@@ -135,7 +135,7 @@ class DbEntityManager
             }
             return $dbArray;
         } else {
-            return $scalar;
+            return $appData;
         }
     }
 }
