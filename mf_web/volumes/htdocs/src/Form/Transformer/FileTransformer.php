@@ -16,13 +16,13 @@ class FileTransformer implements FormTransformer
      * @throws MissingInputException If no file was uploaded.
      */
     public function extractValueFromRequest(array $formRawData, array $uploadedFiles, IFormElement $input): ?string {
-        if (!key_exists($input->getName(), $uploadedFiles)) {
+        if (!key_exists($input->getName(), $formRawData) && !key_exists($input->getName(), $uploadedFiles)) {
             if (key_exists($input->getName() . self::PREVIOUS_SUFFIX, $formRawData)) {
                 return $formRawData[$input->getName() . self::PREVIOUS_SUFFIX];
             }
-            throw new MissingInputException();
+            return null;
         }
-        $uploadedFile = $formRawData[$input->getName()];
+        $uploadedFile = $uploadedFiles[$input->getName()];
 
         if (0 === $uploadedFile->getError()) {
             $filename = new SlugFilename($uploadedFile->getClientFilename());
