@@ -60,8 +60,8 @@ class PlayableRepository implements IRepository
     public function findAll(): array {
         $results = $this->conn->getPdo()->query('SELECT * FROM e_playable;')->fetchAll();
         $playables = [];
-        foreach ($results as $r) {
-            $playables[] = $this->em->toAppObject($r, $this->model);
+        foreach ($results as $row) {
+            $playables[] = $this->em->toAppObject($row, $this->model);
         }
         return $playables;
     }

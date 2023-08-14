@@ -15,18 +15,15 @@ class Form implements Submittable
 {
     private array $children;
 
-    private ?array $defaultValue;
-
     private ?string $ignoreValueOf;
 
     /**
-     * @param IFormElement[] $children An array of child form elements.
-     * @param array defaultValue A default value for the form data.
+     * @param IFormElement[] $children An array of Form Element constituting the form.
+     * @param string|null $ignoreValueOf The name of a Form Element to ignore.
      * @throws \InvalidArgumentException If the given children are invalid.
      */
     public function __construct(
         array $children = [],
-        mixed $defaultValue = null,
         ?string $ignoreValueOf = null,
     ) {
         $definedChildNames = [];
@@ -41,7 +38,6 @@ class Form implements Submittable
         }
 
         $this->children = $children;
-        $this->defaultValue = $defaultValue;
         $this->ignoreValueOf = $ignoreValueOf;
     }
 
@@ -80,9 +76,5 @@ class Form implements Submittable
 
     public function getChildren(): array {
         return $this->children;
-    }
-
-    public function getDefaultValue(): mixed {
-        return $this->defaultValue;
     }
 }

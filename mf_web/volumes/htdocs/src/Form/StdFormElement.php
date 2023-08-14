@@ -11,27 +11,20 @@ class StdFormElement implements IFormElement
 {
     private string $name;
 
-    private mixed $defaultValue;
-
     private FormTransformer $transformer;
 
     private bool $isRequired;
 
     private array $validators;
 
-    /**
-     * @todo Remove defaultValue?
-     */
     public function __construct(
         string $name,
         FormTransformer $transformer,
-        mixed $defaultValue = null,
         bool $isRequired = true,
         array $validators = [],
     ) {
         $this->name = $name;
         $this->transformer = $transformer;
-        $this->defaultValue = $defaultValue;
         $this->isRequired = $isRequired;
         $this->validators = $validators;
     }
@@ -41,7 +34,7 @@ class StdFormElement implements IFormElement
             $requestFormData,
             $uploadedFiles ?? [],
             $this,
-        ) ?? $this->defaultValue;
+        );
 
         $errors = [];
         foreach ($this->validate($transformedData) as $failure) {
@@ -53,10 +46,6 @@ class StdFormElement implements IFormElement
 
     public function getName(): string {
         return $this->name;
-    }
-
-    public function getDefaultValue(): mixed {
-        return $this->defaultValue;
     }
 
     public function getTransformer(): FormTransformer {

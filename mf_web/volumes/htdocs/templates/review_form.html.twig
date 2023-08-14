@@ -1,56 +1,59 @@
 {% extends 'base.html.twig' %}
 
+{% from 'macros/csrf_input.html.twig' import csrf %}
+{% from 'macros/error_list.html.twig' import errorList %}
+
 {% block title %}Nouveau test{% endblock %}
 
 {% block bodyContent %}
 <div class="_flex -gapl">
-    <form autocomplete="on" class="std-form _flex -gap" enctype="multipart/form-data" method="post">
-        <h1>Édition de test</h1>
+    <h1>Édition de test</h1>
+    <form autocomplete="on" class="std-form _flex -gap" enctype="multipart/form-data" method="post"{% if app.dev %} novalidate{% endif %}>
         <div class="form-row">
-            <label class="label" for="p-playable-id">ID du jeu ou mod testé</label>
-            <select id="p-playable-id" name="review_playable_id" required>
+            <label class="label" for="playable-id">ID du jeu ou mod testé</label>
+            <select id="playable-id" name="playable_id" required>
                 {% for p in playables %}
-                <option label="{{ p.name }}"{% if entity and entity['review_playable_id'] == p.id %} selected="selected"{% endif %} value="{{ p.id }}">
+                <option value="{{ p.id }}"{% if formData and formData.playable_id == p.id %} selected="selected"{% endif %}>{{ p.name }}</option>
                 {% endfor %}
             </select>
+            {% if formErrors %}{{ errorList(formErrors.playable_id )}}{% endif %}
         </div>
         <div class="form-row">
-            <label class="label" for="parent-article">ID de l’article parent</label>
-            <select id="parent-article-id" name="review_article_id" required>
-                {% if entity and entity['review_article_id'] %}
-                <option label="{{ entity['review_stored_article']['title'] ?? entity['review_article_id'] }}" selected="selected" value="{{ entity['review_article_id'] }}">
+            <label class="label" for="article-id">ID de l’article parent</label>
+            <select id="article-id" name="article_id" required>
+                {% if formData and formData.article_id %}
+                <option value="{{ formData.article_id  }}" selected="selected">{{ formData.article_id }}</option>
                 {% endif %}
                 {% for a in availableArticles %}
-                <option label="{{ a.title }}"{% if entity and entity['review_article_id'] == a.id %} selected="selected"{% endif %} value="{{ a.id }}">
+                {% if a.id != formData.article_id %}
+                <option value="{{ a.id }}">{{ a.title }}</option>
+                {% endif %}
                 {% endfor %}
             </select>
+            {% if formErrors %}{{ errorList(formErrors.article_id )}}{% endif %}
         </div>
         <div class="form-row">
-            <label class="label" for="p-rating">Note (de 1 à 5)</label>
-            <input class="input" id="p-rating" inputmode="decimal" min="1" max="5" name="review_rating" required step="0.1" type="number"{% if entity %} value="{{ entity['review_rating'] }}"{% endif %}>
+            <label class="label" for="rating">Note (de 1 à 5)</label>
+            <input class="input" id="rating" name="rating" inputmode="decimal" min="1" max="5" required step="0.1" type="number"{% if formData %} value="{{ formData.rating }}"{% endif %}>
+            {% if formErrors %}{{ errorList(formErrors.rating )}}{% endif %}
         </div>
         <div class="form-row">
-            <label class="label" for="p-body">Avis final</label>
-            <textarea class="input" id="p-body" name="review_body">{% if entity %}{{ entity['review_body'] }}{% endif %}</textarea>
+            <label class="label" for="body">Avis final</label>
+            <textarea class="input" id="body" name="body">{% if formData %}{{ formData.body }}{% endif %}</textarea>
+            {% if formErrors %}{{ errorList(formErrors.body )}}{% endif %}
         </div>
         <div class="form-row">
-            <label class="label" for="p-cons">Points négatifs</label>
-            <textarea class="input" id="p-cons" name="review_cons">{% if entity %}{{ entity['review_cons'] }}{% endif %}</textarea>
+            <label class="label" for="cons">Points négatifs</label>
+            <textarea class="input" id="cons" name="cons">{% if formData %}{{ formData.cons }}{% endif %}</textarea>
+            {% if formErrors %}{{ errorList(formErrors.cons )}}{% endif %}
         </div>
         <div class="form-row">
             <label class="label" for="p-pros">Ponts positifs</label>
-            <textarea class="input" id="p-pros" name="review_pros">{% if entity %}{{ entity['review_pros'] }}{% endif %}</textarea>
+            <textarea class="input" id="pros" name="pros">{% if formData %}{{ formData.pros }}{% endif %}</textarea>
+            {% if formErrors %}{{ errorList(formErrors.pros )}}{% endif %}
         </div>
         <button type="submit">Poster</button>
-    </form>
-
-    <form class="std-form" enctype="multipart/form-data" method="post">
-        <h2>Supprimer le test</h2>
-        <div class="form-row">
-            <label class="label" for="delete-review">Confirmez en écrivant « supprimer » (sans les guillements, bien évidemment)</label>
-            <input class="input" id="delete-review" name="delete-review" pattern="^supprimer$" required>
-        </div>
-        <button type="submit">Poster</button>
+        {{ csrf(app) }}
     </form>
 </div>
 {% endblock %}

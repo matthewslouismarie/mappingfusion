@@ -16,10 +16,4 @@ interface Submittable
      * @throws ExtractionException If no submitted value could not found, or the found value could not be extracted.
      */
     public function extractFormData(array $requestFormData, ?array $uploadedFiles): IFormData;
-
-    /**
-     * @return mixed The default entity value, if any, in case the extracted submitted value is null. It may
-     * be accessed from the form.
-     */
-    public function getDefaultValue(): mixed;
 }

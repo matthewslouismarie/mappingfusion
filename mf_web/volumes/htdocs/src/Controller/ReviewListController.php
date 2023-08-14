@@ -20,7 +20,7 @@ class ReviewListController implements ControllerInterface
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): Response {
         return new Response(body: $this->twig->render('review_list.html.twig', [
-            'reviews' => $this->repo->findReviews(),
+            'reviews' => $this->repo->findAllReviews(),
         ]));
     }
 

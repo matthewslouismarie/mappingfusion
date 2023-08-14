@@ -1,3 +1,3 @@
-{% macro csrf(csrf) %}
-<input name="{{ csrf.name }}" type="hidden" value="{{ csrf.defaultValue }}">
+{% macro csrf(app) %}
+<input name="{{ app.csrf.name }}" type="hidden" value="{{ app.session.csrf }}">
 {% endmacro %}

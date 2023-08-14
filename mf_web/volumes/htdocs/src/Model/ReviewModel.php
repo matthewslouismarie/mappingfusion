@@ -12,6 +12,7 @@ class ReviewModel implements IModel
 {
     public function __construct(
         private ?PlayableModel $playableModel = null,
+        private ?ArticleModel $articleModel = null,
     ) {
     }
 
@@ -31,6 +32,9 @@ class ReviewModel implements IModel
         ];
         if (null !== $this->playableModel) {
             $properties[] = new ModelProperty('playable', $this->playableModel, isRequired: false);
+        }
+        if (null !== $this->articleModel) {
+            $properties[] = new ModelProperty('article', $this->articleModel, isRequired: false);
         }
         return $properties;
     }

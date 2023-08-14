@@ -7,6 +7,7 @@ use MF\Constraint\ArrayConstraint;
 use MF\Constraint\IArrayConstraint;
 use MF\Constraint\IBooleanConstraint;
 use MF\Constraint\IDateTimeConstraint;
+use MF\Constraint\IDecimalConstraint;
 use MF\Constraint\IEnumConstraint;
 use MF\Constraint\IFileConstraint;
 use MF\Constraint\IModel;
@@ -46,7 +47,6 @@ class FormFactory
     public function createForm(
         IModel $model,
         string $prefix = '',
-        array $defaultData = null,
         array $formConfig = [],
         bool $csrf = true,
     ): Form {
@@ -63,7 +63,6 @@ class FormFactory
                 $htmlFormElements[] = new StdFormElement(
                     $prefix . $property->getName(),
                     $transformer,
-                    defaultValue: $defaultData[$prefix . $property->getName()] ?? null,
                     isRequired: $formElementConfig['required'] ?? $property->isRequired(),
                     validators: $validators,
                 );
@@ -72,14 +71,13 @@ class FormFactory
         if ($csrf) {
             $htmlFormElements[] = $this->getCsrfFormElement();
         }
-        return new Form($htmlFormElements, $defaultData, ignoreValueOf: self::CSRF_FORM_ELEMENT_NAME);
+        return new Form($htmlFormElements, ignoreValueOf: self::CSRF_FORM_ELEMENT_NAME);
     }
 
     public function getCsrfFormElement(): IFormElement {
         return new StdFormElement(
             self::CSRF_FORM_ELEMENT_NAME,
             $this->csrfTransformer,
-            $this->session->getCsrf(),
         );
     }
 
@@ -94,6 +92,8 @@ class FormFactory
             return $this->dateTimeTransformer;
         } elseif ($type instanceof IArrayConstraint) {
             return new ArrayTransformer($this->createForm($type->getElementType(), formConfig: $formConfig, csrf: false));
+        } elseif ($type instanceof IDecimalConstraint) {
+            return $this->stringTransformer;
         }
         throw new InvalidArgumentException('No transformer found for ' . get_class($type) . '.');
     }

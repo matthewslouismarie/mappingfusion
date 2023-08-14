@@ -5,6 +5,7 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use MF\DataStructure\AppObject;
 use MF\Database\DbEntityManager;
+use MF\Model\PlayableModel;
 use MF\Session\SessionManager;
 use MF\Model\ReviewModel;
 use UnexpectedValueException;
@@ -19,9 +20,9 @@ class ReviewRepository implements IRepository
     ) {
     }
 
-    public function add(array $reviewScalarArray): string {
+    public function add(AppObject $review): string {
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_review VALUES (:id, :article_id, :playable_id, :rating, :body, :cons, :pros);');
-        $stmt->execute($this->em->toDbValue($reviewScalarArray));
+        $stmt->execute($this->em->toDbValue($review));
         return $this->conn->getPdo()->lastInsertId();
     }
 
@@ -38,23 +39,26 @@ class ReviewRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toAppObject($data[0], $this->model, 'review');
+            return $this->em->toAppObject($data[0], $this->model);
         } else {
             throw new UnexpectedValueException();
         }
     }
 
+    /**
+     * @return \MF\DataStructure\AppObject[]
+     */
     public function findAll(): array {
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;')->fetchAll();
-        $entities = [];
-        foreach ($results as $r) {
-            $entities[] = $this->em->toAppObject($r, $this->model, 'review');
+        $reviews = [];
+        foreach ($results as $row) {
+            $reviews[] = $this->em->toAppObject($row, new ReviewModel(new PlayableModel()));
         }
-        return $entities;
+        return $reviews;
     }
 
-    public function update(AppObject $entity): void {
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_review SET review_article_id = :review_article_id, review_playable_id = :review_playable_id, review_rating = :review_rating, review_body = :review_body, review_cons = :review_cons, review_pros = :review_pros WHERE review_id = :review_id;');
-        $stmt->execute($this->em->toDbValue($entity));
+    public function update(AppObject $review): void {
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_review SET review_article_id = :article_id, review_playable_id = :playable_id, review_rating = :rating, review_body = :body, review_cons = :cons, review_pros = :pros WHERE review_id = :id;');
+        $stmt->execute($this->em->toDbValue($review));
     }
 }

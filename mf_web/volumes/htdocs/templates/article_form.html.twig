@@ -48,6 +48,6 @@
         {% if formErrors %}{{ errorList( formErrors.body) }}{% endif %}
     </div>
     <button class="std-button" type="submit">Poster</button>
-    {{ csrf(app.csrf) }}
+    {{ csrf(app) }}
 </form>
 {% endblock %}

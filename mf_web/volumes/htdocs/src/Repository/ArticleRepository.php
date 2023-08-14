@@ -61,7 +61,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NULL;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppObject($r, $this->model);
+            $entities[] = $this->em->toAppObject($r, new ArticleModel());
         }
         return $entities;
     }
@@ -120,7 +120,7 @@ class ArticleRepository implements IRepository
     /**
      * @return AppObject[]
      */
-    public function findReviews(): array {
+    public function findAllReviews(): array {
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {

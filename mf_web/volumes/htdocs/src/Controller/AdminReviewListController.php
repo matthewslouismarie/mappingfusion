@@ -13,19 +13,13 @@ class AdminReviewListController implements ControllerInterface
 {
     const ROUTE_ID = 'admin-review-list';
 
-    private ReviewRepository $repo;
-
-    private TwigService $twig;
-
     public function __construct(
-        ReviewRepository $repo,
-        TwigService $twig,
+        private ReviewRepository $repo,
+        private TwigService $twig,
     ) {
-        $this->repo = $repo;
-        $this->twig = $twig;
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {   
         return new Response(body: $this->twig->render('admin_review_list.html.twig', [
             'reviews' => $this->repo->findAll(),
         ]));

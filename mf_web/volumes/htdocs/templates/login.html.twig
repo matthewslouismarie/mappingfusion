@@ -21,7 +21,7 @@
                     <input class="input" id="password" name="password" required type="password"{% if formData %} value="{{ formData.password }}"{% endif %}>
                 </div>
             </div>
-            {{ csrf(app.csrf) }}
+            {{ csrf(app) }}
             <button class="std-button" type="submit">Se connecter</button>
         </form>
     </div>

@@ -3,8 +3,11 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
+use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
-use MF\Model\Review;
+use MF\Exception\Http\NotFoundException;
+use MF\Form\FormFactory;
+use MF\Model\ReviewModel;
 use MF\Repository\ArticleRepository;
 use MF\Repository\PlayableRepository;
 use MF\Repository\ReviewRepository;
@@ -12,72 +15,55 @@ use MF\Router;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use UnexpectedValueException;
 
 class ReviewController implements ControllerInterface
 {
     const ROUTE_ID = 'manage_review';
 
-    private ArticleRepository $articleRepo;
-
-    private PlayableRepository $playableRepo;
-
-    private ReviewRepository $repo;
-
-    private Router $router;
-
-    private TwigService $twig;
-
     public function __construct(
-        ArticleRepository $articleRepo,
-        PlayableRepository $playableRepo,
-        ReviewRepository $repo,
-        Router $router,
-        TwigService $twig,
+        private ArticleRepository $articleRepo,
+        private PlayableRepository $playableRepo,
+        private ReviewRepository $repo,
+        private Router $router,
+        private TwigService $twig,
+        private FormFactory $formFactory,
+        private ReviewModel $model,
+        private AppObjectFactory $appObjectFactory,
     ) {
-        $this->articleRepo = $articleRepo;
-        $this->playableRepo = $playableRepo;
-        $this->repo = $repo;
-        $this->router = $router;
-        $this->twig = $twig;
-    }    
+    }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $id = $request->getQueryParams()['id'] ?? null;
+        $id = $routeParams[1] ?? null;
+        $existingReview = null !== $id ? $this->repo->find($routeParams[1]) : null;
 
-
-        if ('POST' === $request->getMethod()) {
-            $data = $request->getParsedBody();
-            if (isset($data['delete-review'])) {
-                if ('supprimer' === $data['delete-review']) {
-                    $this->repo->delete($id);
-        
-                    return new Response(body: $this->twig->render('success.html.twig', [
-                        'title' => 'Test supprimé',
-                        'message' => 'Le test a bien été supprimé.',
-                    ]));
-                } else {
-                    return new Response(body: $this->twig->render('error.html.twig', [
-                        'title' => 'Erreur',
-                        'message' => 'Le texte rentré n’est pas correct.',
-                    ]));
-                }
-            }
+        if (null === $existingReview && key_exists(1, $routeParams)) {
+            throw new NotFoundException();
         }
-    
-        $entity = $this->retrieveEntityFromRequest($request, $id);
+
+        $formData = $existingReview;
+        $formErrors = null;
+        $form = $this->formFactory->createForm($this->model);
 
         if ('POST' === $request->getMethod()) {
-            if (null === $id) {
-                $updatedEntity = $this->repo->add($entity);
-                return $this->router->generateRedirect(self::ROUTE_ID, ['id' => $updatedEntity->getId()]);
-            } else {
-                $this->repo->update($entity);
+            $submission = $form->extractFormData($request->getParsedBody());
+            $formData = $submission->getData();
+            $formErrors = $submission->getErrors();
+
+            if (!$submission->hasErrors()) {
+                $review = $this->appObjectFactory->create($formData, $this->model);
+                if (null === $id) {
+                    $id = $this->repo->add($review);
+                } else {
+                    $this->repo->update($review);
+                }
+
+                return $this->router->generateRedirect(self::ROUTE_ID, [$id]);
             }
         }
 
         return new Response(body: $this->twig->render('review_form.html.twig', [
-            'entity' => $entity?->toArray(),
+            'formData' => $formData,
+            'formErrors' => $formErrors,
             'playables' => $this->playableRepo->findAll(),
             'availableArticles' => $this->articleRepo->findAvailableArticles(),
         ]));
@@ -85,19 +71,5 @@ class ReviewController implements ControllerInterface
 
     public function getAccessControl(): Clearance {
         return Clearance::ADMINS;
-    }
-
-    private function retrieveEntityFromRequest(ServerRequestInterface $request, ?string $id): ?Review {
-        if ('POST' === $request->getMethod()) {
-            return Review::fromArray(['review_id' => $id ?? null] + $request->getParsedBody());
-        } elseif (null !== $id) {
-            $entity = $this->repo->find($id);
-            if (null === $entity) {
-                throw new UnexpectedValueException();
-            }
-            return $entity;
-        } else {
-            return null;
-        }
     }
 }
