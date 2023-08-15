@@ -25,7 +25,7 @@
                 <option value="{{ formData.article_id  }}" selected="selected">{{ formData.article_id }}</option>
                 {% endif %}
                 {% for a in availableArticles %}
-                {% if formData and a.id != formData.article_id %}
+                {% if null == formData or a.id != formData.article_id %}
                 <option value="{{ a.id }}">{{ a.title }}</option>
                 {% endif %}
                 {% endfor %}
