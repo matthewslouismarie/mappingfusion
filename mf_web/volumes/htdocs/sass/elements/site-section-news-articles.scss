@@ -1,12 +1,11 @@
 .site-section-news-articles {
-    background-color: #19577a;
-    color: #ffffff;
-
-    padding: $gap-xl 0;
+    background-color: $color-blue-2;
+    color: $color-white;
 
     > ._wrapper {
         display: flex;
         flex-direction: column;
+        padding: $gap-xl 0;
         gap: $gap-l;
         align-items: center;
 
@@ -18,9 +17,9 @@
 
     @media (min-width: $screen-size-m) {
         > ._wrapper {
-            background: url('crowbar-transparent.svg') no-repeat,
-                url('gauss-transparent.svg') no-repeat $icon-size-xs ($icon-size-xs / 2),
-                url('bullsquid-transparent.svg') no-repeat top right
+            background: url('crowbar-transparent.svg') no-repeat top $gap-l left / 16%,
+                url('gauss-transparent.svg') no-repeat top #{$gap-xl + $gap-l} left #{$gap-xl + $gap-l} / 24%,
+                url('bullsquid-transparent.svg') no-repeat top $gap-l + $gap-m right
             ;
 
             > .std-block-list {

@@ -35,13 +35,12 @@
     {% include 'sections/social-networks.html.twig' %}
     <section class="site-maps-and-mods-tests">
         <div class="_wrapper">
-            <hgroup class="section-heading -white">
-                <p class="p">
-                    <img alt="Tests maps et mods" class="image" src="{{ app.asset('tests_icon.svg') }}">
-                </p>
-                <h2 class="title" >Tests maps et mods</h2>
-                <p class="p">proposés par l’équipe</p>
-            </hgroup>
+            <div class="section-heading -white">
+                <img alt="Tests maps et mods" class="image" src="{{ app.asset('tests_icon.svg') }}">
+                <h2 class="text">
+                    <span class="bold">Tests maps et mods<br></span><span class="regular">proposés par l’équipe</span>
+                </h2>
+            </div>
             <ul class="std-block-list">
                 {% for r in last_reviews %}
                 <li class="item">
@@ -63,14 +62,13 @@
     </section>
     <section class="site-section-news-articles">
         <div class="_wrapper">
-            <hgroup class="section-heading -inline">
-                <p class="imgp">
-                    <img alt="Tests maps et mods" class="image" src="{{ app.asset('news.svg') }}">
-                </p>
-                <p class="p">Les dernières</p>
-                <h2 class="title">actualités</h2>
-            </hgroup>
-            <ul class="std-block-list -small">
+            <div class="section-heading -inline -white">
+                <img alt="Les dernières actualités" class="image" src="{{ app.asset('news.svg') }}">
+                <h2 class="text">
+                    <span class="regular">Les dernières </span><span class="bold">actualités</span>
+                </h2>
+            </div>
+            <ul class="std-block-list -small -twoperrow">
                 {% for a in last_articles %}
                 <li class="item">{{ articleMosaic(a, app) }}</li>
                 {% endfor %}

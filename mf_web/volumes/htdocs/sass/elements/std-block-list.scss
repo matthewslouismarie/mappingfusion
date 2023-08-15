@@ -1,27 +1,20 @@
 .std-block-list {
-    list-style-type: none;
     display: flex;
     flex-direction: column;
 
     > .item {
-        flex-basis: auto;
-        flex-grow: 1;
-        height: 20vi;
+        flex: 1 1 auto;
     }
 
     @media (min-width: $screen-size-m) {
         flex-direction: row;
         gap: 0;
         justify-content: space-between;
+        flex-wrap: wrap;
 
-        > .item {
-            height: 10vi;
-        }
-
-        &.-small {
-
+        &.-twoperrow {
             > .item {
-                height: 7.5vi;
+                width: 50%;
             }
         }
     }

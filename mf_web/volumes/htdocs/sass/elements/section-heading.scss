@@ -1,42 +1,27 @@
 .section-heading {
+    display: flex;
+    flex-direction: column;
+    gap: $gap-m;
+
     text-align: center;
+    align-items: center;
 
     &.-white {
-        > .title {
+        > .text {
             color: $color-white;
         }
     }
 
-    > .img {
-        margin-bottom: $gap-m;
+    > .image {
+        max-width: $img-size-xs;
+        height: auto;
     }
 
-    > .title,
-    > .p {
+    > .text {
         font-size: $txt-font-size-xl;
-    }
 
-    > .p {
-        font-weight: $txt-weight-regular;
-    }
-
-    > .title {
-        font-weight: $txt-weight-bold;
-    }
-
-    &.-inline {
-        > .p,
-        > .title {
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        > .p {
+        > .regular {
             font-weight: $txt-weight-regular;
-        }
-
-        > .title {
-            padding-left: $gap-s;
         }
     }
 }
