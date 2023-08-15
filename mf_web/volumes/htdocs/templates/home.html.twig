@@ -17,7 +17,8 @@
             {% for a in featured_articles %}
                 <li class="glide__slide">
                     <a class="link" href="{{ app.router.generateUrl('view-article', {id: a.id}) }}" style="background-image: url({{ app.resource(a['cover_filename']) }});">
-                        <div class="text">{{ app.mk.format(a.title)|raw }}</div>
+                        {% if a.sub_title %}<div class="sub-title">{{ app.mk.format(a.sub_title)|raw }}</div>{% endif %}
+                        <div class="title">{{ app.mk.format(a.title)|raw }}</div>
                     </a>
                 </li>
             {% endfor %}
@@ -25,8 +26,8 @@
         </div>
         <div class="glide__bullets" data-glide-el="controls[nav]">
             {% for a in featured_articles %}
-            <button class="glide__bullet" data-glide-dir="={{ loop.index0 }}" type="button">
-                <div class="image" style="background-image: url('{{ app.resource(featured_articles[loop.index0]['cover_filename']) }}');">{{ featured_articles[loop.index0].title }}</div>
+            <button aria-label="{{ featured_articles[loop.index0].title }}" class="glide__bullet" data-glide-dir="={{ loop.index0 }}" style="background-image: url('{{ app.resource(featured_articles[loop.index0]['cover_filename']) }}');" type="button">
+                <div class="image" ></div>
             </button>
             {% endfor %}
         </div>

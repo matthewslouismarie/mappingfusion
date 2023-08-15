@@ -36,25 +36,20 @@
 
     > .glide__bullets {
         display: flex;
-        justify-content: center;
         gap: $gap-s;
-        position: relative;
-        z-index: 2;
-        top: -$bullet-height;
         height: 0;
+        justify-content: center;
     
         > .glide__bullet {
             border: $border-s solid transparent;
-            background: none;
-            height: fit-content;
-            
-            > .image {
-                font-size: 0;
-                background-size: cover;
-                background-position: center;
-                width: $img-size-xs / 1.5;
-                height: $img-size-xs / 3;
-            }
+            height: 93dvw * 0.12;
+            transform: translateY(-100%);
+            width: 235dvw * 0.12;
+            z-index: 2;
+
+            background-clip: content-box;
+            background-size: cover;
+            background-position: center;
 
             &.glide__bullet--active {
                 border-color: #3d9cce;
@@ -67,22 +62,20 @@
         .glide__slides {
             .glide__slide {
                 > .link {
-                    height: 60vh;
                     display: flex;
-                    align-items: end;
-                    justify-content: stretch;
-                    font-size: 2rem;
-                    padding-bottom: $bullet-height + $gap-s;
-        
+                    flex-direction: column;
+                    height: 60vh;
+                    justify-content: center;
+                    
+                    font-size: $txt-font-size-xl;
                     background-position: center;
                     background-size: cover;
-                    color: #ffffff;
-                    text-decoration: none;
+                    color: $color-white;
+                    text-align: center;
                     text-shadow: 0 0 $txt-shadow-blur-l #000000;
 
-                    > .text {
-                        flex-grow: 1;
-                        text-align: center;
+                    > .title {
+                        font-weight: $txt-weight-semi-bold;
                     }
                 }
             }
@@ -107,23 +100,9 @@
         }
 
         > .glide__bullets {
-            top: -$bullet-height;
-
             > .glide__bullet {
-                > .image {
-                    width: $img-size-xs;
-                    height: $img-size-xs / 2;
-                }
-            }
-        }
-
-        > .glide__track {
-            .glide__slides {
-                .glide__slide {
-                    > .link {
-                        padding-bottom: $bullet-height + $gap-s;
-                    }
-                }
+                width: 235px;
+                height: 93px;
             }
         }
     }
@@ -132,15 +111,7 @@
         $bullet-height: $img-size-s / 3.5 + $border-s * 2;
 
         > .glide__bullets {
-            top: -$bullet-height;
             gap: $gap-l;
-
-            > .glide__bullet {
-                > .image {
-                    width: $img-size-s / 1.75;
-                    height: $img-size-s / 3.5;
-                }
-            }
         }
 
         > .glide__track {
@@ -148,31 +119,6 @@
                 .glide__slide {
                     > .link {
                         padding-bottom: $bullet-height + $gap-l;
-                    }
-                }
-            }
-        }
-    }
-
-    @media (min-width: $screen-size-xxl) {    
-        $bullet-height: $img-size-s / 2 + $border-s * 2;
-        
-        > .glide__bullets {
-            top: -$bullet-height;
-
-            > .glide__bullet {
-                > .image {
-                    width: $img-size-s;
-                    height: $img-size-s / 2;
-                }
-            }
-        }
-
-        > .glide__track {
-            .glide__slides {
-                .glide__slide {
-                    > .link {
-                        padding-bottom: $bullet-height + $gap-xl;
                     }
                 }
             }
