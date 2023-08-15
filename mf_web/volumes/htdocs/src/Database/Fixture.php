@@ -11,6 +11,7 @@ use MF\Model\CategoryModel;
 use MF\Model\PasswordHash;
 use MF\Model\PlayableLinkModel;
 use MF\Model\PlayableModel;
+use MF\Model\ReviewModel;
 use MF\Repository\ArticleRepository;
 use MF\Repository\AuthorRepository;
 use MF\Repository\CategoryRepository;
@@ -179,7 +180,7 @@ class Fixture
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
             'body' => 'The Crystal Mission a reçu une nouvelle mise à jour, et franchement elle vaut le coup de rejouer à la map.',
-            'is_featured' => true,
+            'is_featured' => false,
             'title' => 'L’inspiration c’est pas mon truc',
             'sub_title' => 'mais genre pas du tout',
             'cover_filename' => '202111271348081.jpg',
@@ -188,7 +189,8 @@ class Fixture
         ];
         $this->repoArticle->add($this->factory->create($article3, $articleModel));
 
-        $this->repoReview->add([
+        $reviewModel = new ReviewModel();
+        $this->repoReview->add($this->factory->create([
             'id' => null,
             'article_id' => $article0['id'],
             'playable_id' => $sc['id'],
@@ -196,8 +198,8 @@ class Fixture
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
             'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
             'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
-        ]);
-        $this->repoReview->add([
+        ], $reviewModel));
+        $this->repoReview->add($this->factory->create([
             'id' => null,
             'article_id' => $article1['id'],
             'playable_id' => $sc['id'],
@@ -205,7 +207,7 @@ class Fixture
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
             'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
             'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
-        ]);
+        ], $reviewModel));
         $this->conn->getPdo()->commit();
     }
 }

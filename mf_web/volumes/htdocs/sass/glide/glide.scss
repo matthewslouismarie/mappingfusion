@@ -154,7 +154,7 @@
         }
     }
 
-    @media (min-width: $screen-size-xl) {    
+    @media (min-width: $screen-size-xxl) {    
         $bullet-height: $img-size-s / 2 + $border-s * 2;
         
         > .glide__bullets {

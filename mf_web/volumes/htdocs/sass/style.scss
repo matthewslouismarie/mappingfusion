@@ -5,10 +5,13 @@ $border-m: 6px;
 $border-s: 3px;
 $border-xs: 1.5px;
 $btn-l-height: 6rem;
+$color-black: #000000;
+$color-dark: #1e1e1e;
 $color-blue-0: #3d9cce;
 $color-blue-1: #428ab4;
 $color-blue-2: #19577a;
 $color-blue-3: #0c4b6e;
+$color-grey: #f2f2f2;
 $color-white: #ffffff;
 $gap-l: 32px;
 $gap-m: 16px;
@@ -25,7 +28,8 @@ $img-size-xxs: 64px;
 $screen-size-l: 1024px;
 $screen-size-m: 768px;
 $screen-size-s: 425px;
-$screen-size-xl: 2560px;
+$screen-size-xl: 1920px;
+$screen-size-xxl: 2560px;
 $txt-area-width-s: 30rem;
 $txt-font-size-l: 1.2rem;
 $txt-font-size-m: 1rem;
@@ -68,8 +72,6 @@ $txt-weight-semi-bold: 600;
 
 @import 'elements/section-heading.scss';
 
-@import 'elements/header-menu.scss';
-
 @import 'elements/std-article.scss';
 @import 'elements/std-badge.scss';
 @import 'elements/std-block-list.scss';
@@ -81,7 +83,7 @@ $txt-weight-semi-bold: 600;
 @import 'elements/std-mosaic-list.scss';
 @import 'elements/std-rating-container.scss';
 @import 'elements/std-review.scss';
-@import 'elements/std-search-input.scss';
+@import 'elements/std-interactive.scss';
 
 @import 'elements/form-row.scss';
 

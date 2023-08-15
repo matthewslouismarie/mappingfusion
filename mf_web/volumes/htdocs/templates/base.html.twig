@@ -47,21 +47,22 @@
                 </a>
                 <div class="text" id="menu">
                     <p class="intro">Communauté francophone sur l’univers d’<strong>Half-Life et le modding pour Goldsource et Source</strong>.</p>
-                    <div class="header-nav">
-                        <ul class="header-menu">
-                            <li class="item -search">
-                                <form class="form" rel="search" id="search-form" data-form-action="{{ app.router.generateUrl('search') }}" method="post">
-                                    <input class="std-search-input" name="search-query" type="search" placeholder="Votre recherche" value="{{ searchQuery ?? "" }}" data-type="search-field">
-                                </form>
-                            </li>
-                            <li class="item">
-                                <a class="link">Nouveau sur Sven Co-op ?</a>
-                            </li>
-                            <li class="item">
-                                <a class="link">Comment installer un mod Half-Life</a>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="header-menu">
+                        <li class="item -search">
+                            <form class="form" rel="search" id="search-form" data-form-action="{{ app.router.generateUrl('search') }}" method="post">
+                                <div class="std-interactive -search">
+                                    <img class="icon" alt="Recherche" src="{{ app.asset('magnifying-glass.svg') }}">
+                                    <input class="input" name="search-query" type="search" placeholder="Votre recherche" value="{{ searchQuery ?? "" }}" data-type="search-field">
+                                </div>
+                            </form>
+                        </li>
+                        <li class="item">
+                            <a class="std-interactive">Nouveau sur Sven Co-op ?</a>
+                        </li>
+                        <li class="item">
+                            <a class="std-interactive">Comment installer un mod Half-Life</a>
+                        </li>
+                    </ul>
                 </div>                
                 <button class="button" id="menu-button">
                     <img alt="Menu" class="img" src="{{ app.asset('dropdown-menu-icon.svg') }}">

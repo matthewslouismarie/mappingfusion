@@ -1,50 +1,48 @@
 .site-header {
     background-color: $color-white;
+    padding: $gap-s 0;
 
     > ._wrapper {
-        display: flex;
         align-items: stretch;
-        gap: $gap-s;
-        padding: $gap-s;
+        display: flex;
+        justify-content: space-between;
 
-        > .button {
+        > .button,
+        > .text {
             display: none;
-            background: none;
-            border: none;
-
-            > .img {
-                display: block;
-            }
         }
 
         > .logo {
-            width: 50%;
-
+            flex-shrink: 0;
+            @include center-content();
+    
             > .img {
-                width: 100%;
+                height: $txt-font-size-m * 4;
+                width: auto;
                 display: block;
             }
         }
 
         > .text {
-            display: none;
+            > .header-menu {
+                display: flex;
 
-            > .intro {
-                display: none;
-                font-size: $txt-font-size-s;
-
-                color: #19577a;
+                > .item > .std-interactive {
+                    display: block;
+                }
             }
         }
     }
 
-    @media (max-width: ($screen-size-s - 1)) {
+    @media (max-width: ($screen-size-l - 1)) {
         > ._wrapper.-js {
             flex-wrap: wrap;
-            justify-content: space-between;
+            gap: $gap-xs;
 
             > .button {
-                display: block;
+                @include center-content();
+                background: none;
+                border: none;
             }
 
             > .text {
@@ -54,50 +52,45 @@
                 &.-open {
                     display: block;
                 }
-            }
-        }
-    }
 
-    @media (min-width: $screen-size-s) {
-        > ._wrapper {
-            padding-left: 0;
-            padding-right: 0;
+                > .intro {
+                    display: none;
+                }
 
-            > .logo {
-                width: 30%;
-            }
-
-            > .text {
-                display: flex;
-                justify-content: center;
-            }
-        }
-    }
-
-    @media (min-width: $screen-size-m) {
-        > ._wrapper {
-            gap: $gap-l;
-
-            > .logo {
-                width: 15%;
+                > .header-menu {
+                    flex-direction: column;
+                    gap: $gap-xs;
+                }
             }
         }
     }
 
     @media (min-width: $screen-size-l) {
         > ._wrapper {
-            > .logo {
-                width: 10%;
-            }
+            gap: $gap-xl;
 
-            > .text {
+            > .text {                
                 display: flex;
                 flex-direction: column;
                 gap: $gap-s;
+                flex: 0 1 auto;
 
                 > .intro {
-                    display: block;                
-                    font-size: $txt-font-size-m;
+                    color: #19577a;
+                    font-size: $txt-font-size-l;
+                }
+
+                > .header-menu {
+                    justify-content: space-between;
+                    gap: $gap-m;
+
+                    > .item {
+                        flex: 0 1 auto;
+                    }
+
+                    > .item.-search {
+                        flex: 2 1 auto;
+                    }
                 }
             }
         }

@@ -1,14 +1,27 @@
 ._wrapper {
-    @media (min-width: $screen-size-s) {
-        width: 95%;
-        margin: auto;
-    }
+    // @media (min-width: $screen-size-s) {
+        //     width: 95%;
+        //     margin: auto;
+        // }
+    padding: 0 $gap-s;
 
+        
     @media (min-width: $screen-size-m) {
+        margin: auto;
+        max-width: 70rem;
         width: 90%;
+        padding: 0;
     }
 
-    @media (min-width: $screen-size-l) {
-        width: 85%;
-    }
+    // @media (min-width: $screen-size-l) {
+    //     width: 85%;
+    // }
+
+    // @media (min-width: $screen-size-xl) {
+    //     width: 85%;
+    // }
+
+    // @media (min-width: $screen-size-xxl) {
+    //     width: 60%;
+    // }
 }

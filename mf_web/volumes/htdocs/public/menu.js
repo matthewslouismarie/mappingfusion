@@ -1,11 +1,12 @@
 class Menu
 {
     #button;
+    #containerHtmlId;
     #menu;
     #searchForm;
 
-    constructor(buttonId, containerhtmlId, menuId, searchFormId) {
-        document.getElementById(containerhtmlId).classList.add('-js');
+    constructor(buttonId, containerHtmlId, menuId, searchFormId) {
+        this.#containerHtmlId = containerHtmlId;
         this.#button = document.getElementById(buttonId);
         this.#menu = document.getElementById(menuId);
         this.#searchForm = document.getElementById(searchFormId);
@@ -13,6 +14,8 @@ class Menu
     }
 
     init() {
+        document.getElementById(this.#containerHtmlId).classList.add('-js');
+
         this.#button.onclick = (ev) => {
             if (this.#menu.classList.contains('-open')) {
                 this.#menu.classList.remove('-open');

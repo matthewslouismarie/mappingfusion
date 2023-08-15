@@ -1,0 +1,37 @@
+.std-interactive {
+    border-radius: $block-border-width;
+    border-style: solid;
+    border-width: $border-s;
+    font-size: $txt-font-size-m;
+    padding: $gap-s;
+    text-align: center;
+    font-weight: 500;
+
+    border-color: $color-blue-0;
+    color: $color-blue-2;
+
+    &.-search {
+        display: flex;
+        gap: $gap-s;
+
+        border-color:$color-grey;
+        background-color: $color-grey;
+        color: $color-dark;
+
+        > .icon {
+            flex: 0 0 auto;
+            height: $txt-font-size-m;
+        }
+
+        > .input {
+            background: none;
+            border: none;
+            outline: none;
+        }
+    }
+
+    @media (min-width: $screen-size-s) {
+        padding: $gap-xs $gap-m;
+        font-size: $txt-font-size-s;
+    }
+}
