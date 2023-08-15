@@ -35,7 +35,7 @@
     {% include 'sections/social-networks.html.twig' %}
     <section class="site-maps-and-mods-tests">
         <div class="_wrapper">
-            <hgroup class="section-heading">
+            <hgroup class="section-heading -white">
                 <p class="p">
                     <img alt="Tests maps et mods" class="image" src="{{ app.asset('tests_icon.svg') }}">
                 </p>
@@ -45,10 +45,10 @@
             <ul class="std-block-list">
                 {% for r in last_reviews %}
                 <li class="item">
-                    <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.resource(r['cover_filename']) }}');"{% endif %}>
+                    <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.resource(r.cover_filename) }}');"{% endif %} href="{{ app.router.generateUrl('view-article', [r.id]) }}">
                         <div class="content">
                             <span class="playable">{{ r.review.playable.name }}</span>
-                            <span class="game">{{ r.review.playable.name }}</span>
+                            <span class="std-badge">{{ r.review.playable.name }}</span>
                         </div>
                     </a>
                 </li>

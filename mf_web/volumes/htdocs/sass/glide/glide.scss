@@ -108,20 +108,8 @@
     }
 
     @media (min-width: $screen-size-l) {
-        $bullet-height: $img-size-s / 3.5 + $border-s * 2;
-
         > .glide__bullets {
             gap: $gap-l;
-        }
-
-        > .glide__track {
-            .glide__slides {
-                .glide__slide {
-                    > .link {
-                        padding-bottom: $bullet-height + $gap-l;
-                    }
-                }
-            }
         }
     }
 }

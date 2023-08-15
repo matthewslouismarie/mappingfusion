@@ -208,6 +208,24 @@ class Fixture
             'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
             'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
         ], $reviewModel));
+        $this->repoReview->add($this->factory->create([
+            'id' => null,
+            'article_id' => $article2['id'],
+            'playable_id' => $sc['id'],
+            'rating' => 4,
+            'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
+            'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
+            'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
+        ], $reviewModel));
+        $this->repoReview->add($this->factory->create([
+            'id' => null,
+            'article_id' => $article3['id'],
+            'playable_id' => $sc['id'],
+            'rating' => 4,
+            'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
+            'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
+            'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
+        ], $reviewModel));
         $this->conn->getPdo()->commit();
     }
 }

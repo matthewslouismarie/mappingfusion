@@ -1,31 +1,29 @@
 .review-mosaic-bare {
     display: block;
     height: 100%;
+    background-position: center;
+    background-size: cover;
 
-    color: #ffffff;
+    color: $color-white;
 
     > .content {
         display: flex;
         align-items: center;
         flex-direction: column;
-        gap: $gap-xs;
+        gap: $gap-s;
         height: 100%;
         justify-content: center;
-
+        
+        font-weight: $txt-weight-semi-bold;
         background-color: #00000099;
         transition: background-color 0.2s ease;
 
         > .playable {
             font-size: $txt-font-size-l;
-            font-weight: $txt-weight-semi-bold;
         }
 
-        > .game {
-            font-size: $txt-font-size-m;
-            font-weight: $txt-weight-bold;
-            padding: $gap-xs;
-
-            background-color: #3d9cce;
+        > .std-badge {
+            font-size: $txt-font-size-s;
         }
     }
 

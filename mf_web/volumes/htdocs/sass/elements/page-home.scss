@@ -1,11 +1,17 @@
 .page-home {
+    > .site-maps-and-mods-tests > ._wrapper,
+    > .site-social-networks {
+        padding-top: $gap-xxl;
+    }
+
+    > .site-maps-and-mods-tests {
+        padding-top: 0;
+    }
+
     > .site-social-networks {
         background-color: #19577a;
         box-shadow: 0 (-$area-size-s / 2) $area-size-s ($area-size-s / 2) #19577a;
         position: relative;
-
-        > .std-button {
-            transform: translateY(50%);
-        }
+        height: 0;
     }
 }

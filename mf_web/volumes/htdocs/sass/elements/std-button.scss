@@ -5,9 +5,9 @@
     border: $border-xs solid $color-white;
     gap: $gap-s;
     justify-content: center;
-    padding: $gap-xs;
-
-    text-decoration: none;
+    padding: $gap-s $gap-l;
+    
+    font-size: $txt-font-size-m;
 
     &.-blue {
         background-color: #19577a;
