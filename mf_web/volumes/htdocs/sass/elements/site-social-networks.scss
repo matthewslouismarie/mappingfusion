@@ -4,9 +4,38 @@
     gap: $gap-l;
     justify-content: center;
 
-    > .std-button {
+    > .button {
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+        border: $border-s solid $color-white;
+        font-size: $txt-font-size-xl;
+        gap: $gap-m;
+        padding: $gap-m $gap-l;
+
+        &.-discord {
+            background-color: $color-white;
+            color: $color-blue-3;
+        }
+
+        &.-facebook {
+            background-color: $color-blue-2;
+        }
+
         > .image {
             height: 100%;
+        }
+
+        > .text {
+            text-align: center;
+
+            > .line {
+                display: block;
+
+                &.-bold {
+                    font-weight: $txt-weight-bold;
+                }
+            }
         }
     }
 }
