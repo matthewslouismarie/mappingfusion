@@ -1,15 +1,16 @@
 .site-maps-and-mods-tests {
     background-color: #0c4b6e;
-    padding: $gap-l 0;
+    padding: 46px 0;
 
     > ._wrapper {
         display: flex;
         align-items: center;
         flex-direction: column;
-        gap: $gap-l;
+        gap: 46px;
 
         > .std-block-list {
             width: 100%;
+            gap: 0;
             
             > .item {
                 height: 176px;
@@ -19,7 +20,7 @@
 
     @media (min-width: $screen-size-m) {
         > ._wrapper {
-            background: url('headcrab-transparent.svg') no-repeat top $gap-xxl left $gap-xxl, url('marine-transparent.svg') no-repeat top $gap-l right #{$gap-xl} / 20%;
+            background: url('headcrab-transparent.svg') no-repeat top 160px left 160px  / 160px 144px, url('marine-transparent.svg') no-repeat top 40px right 46px / 208px 296px;
         }
     }
 }

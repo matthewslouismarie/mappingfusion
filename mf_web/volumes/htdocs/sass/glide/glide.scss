@@ -36,15 +36,15 @@
 
     > .glide__bullets {
         display: flex;
-        gap: $gap-s;
+        gap: 16px;
         height: 0;
         justify-content: center;
     
         > .glide__bullet {
-            border: $border-s solid transparent;
-            height: 93dvw * 0.12;
+            border: 5px solid transparent;
             transform: translateY(-100%);
-            width: 235dvw * 0.12;
+            width: 118px;
+            height: 46px;
             z-index: 2;
 
             background-clip: content-box;
@@ -64,10 +64,9 @@
                 > .link {
                     display: flex;
                     flex-direction: column;
-                    height: 60vh;
+                    height: 502px;
                     justify-content: center;
                     
-                    font-size: $txt-font-size-xl;
                     background-position: center;
                     background-size: cover;
                     color: $color-white;
@@ -100,16 +99,12 @@
         }
 
         > .glide__bullets {
-            > .glide__bullet {
-                width: 235px;
-                height: 93px;
-            }
-        }
-    }
+            gap: 42px;
 
-    @media (min-width: $screen-size-l) {
-        > .glide__bullets {
-            gap: $gap-l;
+            > .glide__bullet {
+                width: 236px;
+                height: 92px;
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 .site-social-networks {
     display: flex;
     align-items: center;
-    gap: $gap-l;
+    gap: 20px;
     justify-content: center;
 
     > .button {
@@ -9,9 +9,8 @@
         align-items: center;
         border-radius: 10px;
         border: $border-s solid $color-white;
-        font-size: $txt-font-size-xl;
-        gap: $gap-m;
-        padding: $gap-m $gap-l;
+        gap: 8px;
+        padding: 8px 16px;
 
         &.-discord {
             background-color: $color-white;
@@ -23,15 +22,19 @@
         }
 
         > .image {
-            height: 100%;
+            width: auto;
+            height: 92px;
         }
 
         > .text {
             display: none;
         }
+    }
 
-        @media (min-width: $screen-size-s) {
+    @media (min-width: $screen-size-l) {
+        > .button {
             > .text {
+                display: block;
                 text-align: center;
     
                 > .line {
@@ -43,5 +46,5 @@
                 }
             }
         }
-        }
+    }
 }

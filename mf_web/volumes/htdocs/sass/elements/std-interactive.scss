@@ -2,8 +2,7 @@
     border-radius: $block-border-width;
     border-style: solid;
     border-width: $border-s;
-    font-size: $txt-font-size-m;
-    padding: $gap-s;
+    padding: 8px;
     text-align: center;
     font-weight: 500;
 
@@ -17,6 +16,7 @@
         border-color:$color-grey;
         background-color: $color-grey;
         color: $color-dark;
+        border-radius: 1vb;
 
         > .icon {
             flex: 0 0 auto;
@@ -32,46 +32,29 @@
     }
 
     @media (min-width: $screen-size-s) {
-        padding: 2.5% 5%;
-        font-size: $txt-font-size-s;
+        padding: 8px 20px;
 
         &.-search {
-            gap: 2.5%;
+            gap: 8px;
 
             > .icon {
                 height: $txt-font-size-s;
-            }
-    
-            > .input {
-                font-size: $txt-font-size-s;
             }
         }
     }
 
     @media (min-width: $screen-size-l2) {
-        font-size: $txt-font-size-m;
-
         &.-search {
             > .icon {
                 height: $txt-font-size-m;
-            }
-    
-            > .input {
-                font-size: $txt-font-size-m;
             }
         }
     }
 
     @media (min-width: $screen-size-xl) {
-        font-size: $txt-font-size-l;
-
         &.-search {
             > .icon {
                 height: $txt-font-size-l;
-            }
-    
-            > .input {
-                font-size: $txt-font-size-l;
             }
         }
     }

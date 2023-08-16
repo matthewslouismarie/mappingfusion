@@ -1,21 +1,14 @@
 .std-button {
     display: inline-flex;
     align-items: center;
-    border-radius: $gap-s;
+    border-radius: 10px;
     border: $border-xs solid $color-white;
-    gap: $gap-s;
     justify-content: center;
-    padding: $gap-s $gap-l;
-    
-    font-size: $txt-font-size-m;
+    @include asymetric-padding;
 
     &.-blue {
         background-color: #19577a;
         color: #ffffff;
-    }
-
-    &.-sm {
-        font-size: $txt-font-size-s;
     }
 
     &.-transparent {

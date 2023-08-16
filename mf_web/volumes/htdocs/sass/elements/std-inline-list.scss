@@ -1,20 +1,18 @@
 .std-inline-list {
     display: flex;
     flex-wrap: wrap;
-    font-size: $txt-font-size-s;
-    gap: $gap-s * 2;
+    gap: 22px;
     justify-content: center;
     list-style-type: "-";
 
     > .item {
-        padding-left: $gap-s;
+        padding-left: 16px;
 
         > .link {
-            text-decoration: none;
-            color: #ffffff;
+            color: $color-white;
 
             > .img {
-                height: $txt-font-size-s;
+                height: 1em;
             }
         }
 

@@ -17,7 +17,7 @@
             @include center-content();
     
             > .img {
-                height: $txt-font-size-m * 4;
+                height: 62px;
                 width: auto;
                 display: block;
             }
@@ -59,7 +59,8 @@
 
                 > .header-menu {
                     flex-direction: column;
-                    gap: $gap-xs;
+                    gap: 16px;
+                    padding: 16px 0;
                 }
             }
         }
@@ -69,21 +70,25 @@
         > ._wrapper {
             gap: $gap-l;
 
+            > .logo > .img {
+                height: 124px;
+            }
+
             > .text {                
                 display: flex;
                 flex-direction: column;
                 flex: 0 1 auto;
-                justify-content: space-around;
+                justify-content: center;
+                gap: 16px;
 
                 > .intro {
                     color: #19577a;
-                    font-size: $txt-font-size-m;
                 }
 
                 > .header-menu {
                     align-items: center;
                     justify-content: space-between;
-                    gap: 2%;
+                    gap: 32px;
 
                     > .item {
                         flex: 1 1 auto;
@@ -92,34 +97,6 @@
                     > .item.-search {
                         flex: 2 1 auto;
                     }
-                }
-            }
-        }
-    }
-
-    @media (min-width: $screen-size-l2) {
-        > ._wrapper {
-            > .logo > .img {
-                height: $txt-font-size-l * 4;
-            }
-
-            > .text {
-                > .intro {
-                    font-size: $txt-font-size-l;
-                }
-            }
-        }
-    }
-
-    @media (min-width: $screen-size-xl) {
-        > ._wrapper {
-            > .logo > .img {
-                height: $txt-font-size-xl * 4;
-            }
-
-            > .text {
-                > .intro {
-                    font-size: $txt-font-size-l2;
                 }
             }
         }

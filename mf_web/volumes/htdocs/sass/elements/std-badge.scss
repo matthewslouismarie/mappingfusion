@@ -1,7 +1,6 @@
 .std-badge {
+    @include asymetric-padding;
     display: inline-block;
     background-color: #3D9CCE;
-    padding: $gap-xs;
     color: #ffffff;
-    font-size: $txt-font-size-s;
 }

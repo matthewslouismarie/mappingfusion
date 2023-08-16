@@ -1,7 +1,7 @@
 .section-heading {
     display: flex;
     flex-direction: column;
-    gap: $gap-m;
+    gap: 8px;
 
     text-align: center;
     align-items: center;
@@ -13,13 +13,11 @@
     }
 
     > .image {
-        max-width: $img-size-xs;
+        width: 118px;
         height: auto;
     }
 
     > .text {
-        font-size: $txt-font-size-xl;
-
         > .regular {
             font-weight: $txt-weight-regular;
         }

@@ -1,12 +1,17 @@
 .site-footer {
     background-color: #0b4b6e;
-    color: #ffffff;
-    padding: $gap-m 0;
+    color: $color-white;
+    padding: 28px 0;
 
     > ._wrapper {
         align-items: center;
         display: flex;
         flex-direction: column;
-        gap: $gap-m;
+        gap: 6px;
+
+        > .img {
+            width: 189px;
+            height: auto;   
+        }
     }
 }

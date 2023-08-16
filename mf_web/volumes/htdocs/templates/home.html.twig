@@ -16,7 +16,7 @@
             <ul class="glide__slides">
             {% for a in featured_articles %}
                 <li class="glide__slide">
-                    <a class="link" href="{{ app.router.generateUrl('view-article', {id: a.id}) }}" style="background-image: url({{ app.resource(a['cover_filename']) }});">
+                    <a class="link _textxxl" href="{{ app.router.generateUrl('view-article', {id: a.id}) }}" style="background-image: url({{ app.resource(a['cover_filename']) }});">
                         {% if a.sub_title %}<div class="sub-title">{{ app.mk.format(a.sub_title)|raw }}</div>{% endif %}
                         <div class="title">{{ app.mk.format(a.title)|raw }}</div>
                     </a>
@@ -37,8 +37,9 @@
         <div class="_wrapper">
             <div class="section-heading -white">
                 <img alt="Tests maps et mods" class="image" src="{{ app.asset('tests_icon.svg') }}">
-                <h2 class="text">
-                    <span class="bold">Tests maps et mods<br></span><span class="regular">proposés par l’équipe</span>
+                <h2 class="text _textxl">
+                    <span class="bold">Tests maps et mods<br></span>
+                    <span class="regular">proposés par l’équipe</span>
                 </h2>
             </div>
             <ul class="std-block-list">
@@ -46,15 +47,15 @@
                 <li class="item">
                     <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.resource(r.cover_filename) }}');"{% endif %} href="{{ app.router.generateUrl('view-article', [r.id]) }}">
                         <div class="content">
-                            <span class="playable">{{ r.review.playable.name }}</span>
-                            <span class="std-badge">{{ r.review.playable.name }}</span>
+                            <span class="playable _textl">{{ r.review.playable.name }}</span>
+                            <span class="std-badge _texts">{{ r.review.playable.name }}</span>
                         </div>
                     </a>
                 </li>
                 {% endfor %}
             </ul>
             <a class="std-button -white" href="{{ app.router.generateUrl('reviews') }}">
-                <div class="text">
+                <div class="text _textm">
                     <span class="bold">Voir plus de tests</span>
                 </div>
             </a>
@@ -64,7 +65,7 @@
         <div class="_wrapper">
             <div class="section-heading -inline -white">
                 <img alt="Les dernières actualités" class="image" src="{{ app.asset('news.svg') }}">
-                <h2 class="text">
+                <h2 class="text _textxl">
                     <span class="regular">Les dernières </span><span class="bold">actualités</span>
                 </h2>
             </div>
@@ -75,7 +76,7 @@
             </ul>
             
             <a class="std-button -white" href="{{ app.router.generateUrl('articles') }}">
-                <div class="text">
+                <div class="text _textm">
                     <span class="bold">Voir plus d’articles</span>
                 </div>
             </a>
@@ -84,28 +85,28 @@
     
     <section class="site-section-beginners">
         <div class="_wrapper">
-            <hgroup class="left">
-                <h2 class="title">Nouveau et un peu perdu ?<br>Pas de panique !</h2>
-                <p class="text">Consulte dès à présent <em>tous nos dossiers explicatifs</em> pour bien <em>comprendre comment fonctionnent Half-Life et ses mods</em>.</p>
-            </hgroup>
+            <div class="left _textxl">
+                <h2 class="title _textm">Nouveau et un peu perdu ?<br>Pas de panique !</h2>
+                <p class="text _textm">Consulte dès à présent <em>tous nos dossiers explicatifs</em> pour bien <em>comprendre comment fonctionnent Half-Life et ses mods</em>.</p>
+            </div>
             <dl class="right">
                 <div class="item">
-                    <dt class="subject">Fonctionnement Sven Co-op</dt>
-                    <dd class="text">Guide d’installation, lancement de partie, création de serveurs, etc…</dd>
+                    <dt class="subject _textm">Fonctionnement Sven Co-op</dt>
+                    <dd class="text _textm">Guide d’installation, lancement de partie, création de serveurs, etc…</dd>
                     <dd>
                         <a class="std-button -white" href="{{ app.router.generateUrl('reviews') }}">
-                            <div class="text">
-                                <span class="bold">Voir plus de tests</span>
+                            <div class="text _texts">
+                                <span class="bold">En savoir plus</span>
                             </div>
                         </a>
                     </dd>
                 </div>
                 <div class="item">
-                    <dt class="subject">Installation de mods</dt>
-                    <dd class="text">Installation des mods pour Half-Life et Half-Life 2</dd>
+                    <dt class="subject _textm">Installation de mods</dt>
+                    <dd class="text _textm">Installation des mods pour Half-Life et Half-Life 2</dd>
                     <dd>
                         <a class="std-button -white" href="#">
-                            <div class="text">
+                            <div class="text _texts">
                                 <span class="bold">Voir plus de tests</span>
                             </div>
                         </a>
