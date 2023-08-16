@@ -27,15 +27,21 @@
         }
 
         > .text {
-            text-align: center;
+            display: none;
+        }
 
-            > .line {
-                display: block;
-
-                &.-bold {
-                    font-weight: $txt-weight-bold;
+        @media (min-width: $screen-size-s) {
+            > .text {
+                text-align: center;
+    
+                > .line {
+                    display: block;
+    
+                    &.-bold {
+                        font-weight: $txt-weight-bold;
+                    }
                 }
             }
         }
-    }
+        }
 }

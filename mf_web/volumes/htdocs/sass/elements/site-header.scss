@@ -67,30 +67,59 @@
 
     @media (min-width: $screen-size-l) {
         > ._wrapper {
-            gap: $gap-xl;
+            gap: $gap-l;
 
             > .text {                
                 display: flex;
                 flex-direction: column;
-                gap: $gap-s;
                 flex: 0 1 auto;
+                justify-content: space-around;
 
                 > .intro {
                     color: #19577a;
-                    font-size: $txt-font-size-l;
+                    font-size: $txt-font-size-m;
                 }
 
                 > .header-menu {
+                    align-items: center;
                     justify-content: space-between;
-                    gap: $gap-m;
+                    gap: 2%;
 
                     > .item {
-                        flex: 0 1 auto;
+                        flex: 1 1 auto;
                     }
 
                     > .item.-search {
                         flex: 2 1 auto;
                     }
+                }
+            }
+        }
+    }
+
+    @media (min-width: $screen-size-l2) {
+        > ._wrapper {
+            > .logo > .img {
+                height: $txt-font-size-l * 4;
+            }
+
+            > .text {
+                > .intro {
+                    font-size: $txt-font-size-l;
+                }
+            }
+        }
+    }
+
+    @media (min-width: $screen-size-xl) {
+        > ._wrapper {
+            > .logo > .img {
+                height: $txt-font-size-xl * 4;
+            }
+
+            > .text {
+                > .intro {
+                    font-size: $txt-font-size-l2;
                 }
             }
         }

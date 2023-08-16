@@ -24,14 +24,55 @@
         }
 
         > .input {
-            background: none;
             border: none;
+            flex-grow: 1;
+            background: none;
             outline: none;
         }
     }
 
     @media (min-width: $screen-size-s) {
-        padding: $gap-xs $gap-m;
+        padding: 2.5% 5%;
         font-size: $txt-font-size-s;
+
+        &.-search {
+            gap: 2.5%;
+
+            > .icon {
+                height: $txt-font-size-s;
+            }
+    
+            > .input {
+                font-size: $txt-font-size-s;
+            }
+        }
+    }
+
+    @media (min-width: $screen-size-l2) {
+        font-size: $txt-font-size-m;
+
+        &.-search {
+            > .icon {
+                height: $txt-font-size-m;
+            }
+    
+            > .input {
+                font-size: $txt-font-size-m;
+            }
+        }
+    }
+
+    @media (min-width: $screen-size-xl) {
+        font-size: $txt-font-size-l;
+
+        &.-search {
+            > .icon {
+                height: $txt-font-size-l;
+            }
+    
+            > .input {
+                font-size: $txt-font-size-l;
+            }
+        }
     }
 }

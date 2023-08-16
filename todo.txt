@@ -1,0 +1,50 @@
+ - FAIT centrer contenu de menu du site
+ - FAIT menu plus aéré, entre logo MF et reste menu, texte introduction plus long
+ - FAIT vignette du carousel plus large
+ - FAIT plus d’espace entre boutons réseaux sociaux et vignette
+ - FAIT texte boutons réseaux sociaux plus gros, avec petit espace entre les icones
+ - FAIT zone réseau socieux plus gros
+- FAIT plus espace réesaux scoiax icones tests maps et mods
+ - PB validation note
+ - FAIT mosaic test dans page d’acceuil toujours même taille
+ - FAIT mosaic test homepage plus grand, surtout comparé au jeu
+ - FAIT mosaic test homepgae clickable
+ - mosaic article même largeur, même le dernier
+
+ - FAIT augmenter taille texte "voir plus de tests"
+ - FAIT "voir plus de tests" plus padding verticale, encore plus padding horizontal
+ - FAIT centrer espacement voir plus de tests entre bordure pas et mosaiques haut
+ - FAIT  (70rem) réduire taille wrapper à 80% ? notamment pour liste articles
+ - FAIT laisser icones dans background plus au centre
+ - FAIT (sauf headcrab) agrandir headcrab, réduire militaire
+ - ne pas limiter affichage mosaic article à une ligne
+ - augmenter taille texte et marge catégorie mosaic article
+ - aerer mosaic article verticalement (titre, la date, et l’extrait), espace entre texte et image aussi
+ - taille texte "nouveau perdu" plus grand
+ - texte footer plus gros
+ - moins d’espace entre icone facebook et discord dans footer
+ - régler affichage note dans reviews
+ - taille vertical mosaic responsive (article et review)
+ - reviewss : trois par ligne
+
+ - enlever bande instlattion modes
+ - "tests maps et modesproposés"
+ - recherche par tag
+ - bouton "retour à l’acceuil"
+ - petit bug carousel images article
+ - rajouter tags
+ - augmenter taille texte article, surtout taille métadonnées
+ - régler note mal affichée
+ - plus d’espace plus et moins
+ - boutons téléchargement plus gros
+ - menu sommaire de l’article qui suit, avec progression en blanc
+ - "tests et articles similaires" en blanc
+ - boutons en dessous plus gros, qu’ils prennent toute la largeur, trait un poil plus épais
+ - largeur maximale article
+ - bande bleue doit pas dépasser zone test
+ - problème avec édition de test
+ - aside de l’article collé à droite de la zone de l’article
+ - insert "dossiers exlicatifs" plus gros
+ - text insert réseaux socieux plus gros
+ - lien plus de tests, plus d’actualité dans page articles
+ - 

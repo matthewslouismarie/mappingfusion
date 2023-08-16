@@ -8,9 +8,17 @@
         
     @media (min-width: $screen-size-m) {
         margin: auto;
-        max-width: 70rem;
-        width: 90%;
+        max-width: 90rem;
+        width: 85%;
         padding: 0;
+    }
+
+    @media (min-width: $screen-size-l) {
+        width: 80%;
+    }
+
+    @media (min-width: $screen-size-l2) {
+        width: 75%;
     }
 
     // @media (min-width: $screen-size-l) {
