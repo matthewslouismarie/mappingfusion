@@ -33,6 +33,7 @@ class DbEntityManager
      * @param IModel $model The App Object Model to use to extract the property hierarchy.
      * @return mixed[] A recursive array using valid Property names for keys and terminating with the transformed DB
      * data.
+     * @todo Should return an array object as value if property is of the IModel type.
      */
     public function toModelProperty(string $dbArrayKey, mixed $dbValue, IModel $model): ?array {
         foreach ($model->getProperties() as $p) {

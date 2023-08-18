@@ -4,7 +4,10 @@
     border-radius: 10px;
     border: $border-xs solid $color-white;
     justify-content: center;
-    @include asymetric-padding;
+
+    &.-padded {
+        @include asymetric-padding;
+    }
 
     &.-blue {
         background-color: #19577a;

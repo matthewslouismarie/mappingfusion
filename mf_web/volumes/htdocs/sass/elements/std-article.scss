@@ -4,141 +4,89 @@
 
         > .imafraidijustbluemyself {
             background-color: $color-blue-3;
-            height: $area-height-l * 2;
+            height: 721px;
         }
     }
 
-    > .main {
-        > .content {
-            &.-review {
-                background-color: $color-blue-3;
-            }
-    
-            p {
-                color: $color-white;
-                line-height: $txt-font-size-l;
-                margin-bottom: $gap-s;
-            }
-        }
+    > ._wrapper {
+        display: flex;
+        flex-direction: column;
 
         > .nav {
             display: flex;
             flex-direction: column;
-            gap: $gap-m;
-            
+            align-items: center;
+
             > .frame {
-                border: $border-xs solid $color-blue-1;
+                flex: 1 0 100%;
+                display: flex;
+                flex-direction: column;
+
+                border: 3px solid $color-blue-1;
                 background-color: $color-blue-3;
 
                 &.-articlenav {
-                    > .list {
-                        > .item {
-                            > .link {
-                                display: block;
-                                border-right: $border-m solid $color-blue-1;
-                                color: $color-blue-1;
-                                text-align: right;
-                                padding: $gap-s;
-                                font-weight: $txt-weight-semi-bold;
-
-                                &.-active {
-                                    color: $color-white;
-                                    border-color: $color-white;
-                                    font-weight: $txt-weight-bold;
-                                }
-                            }
-                        }
-                    }
+                    display: none;
                 }
 
                 &.-related {
-                    text-align: center;
-                    color: $color-white;
-
+                    
                     > .heading {
+                        color: $color-white;
                         text-align: center;
-                        font-size: $txt-font-size-l;
-                        margin-bottom: $gap-m;
                     }
 
                     > .list {
                         display: flex;
-                        flex-direction: column;
-                        gap: $gap-s;
 
                         > .item {
                             > .link {
+                                display: flex;
+                                flex-direction: column;
+                                width: 176px;
+
                                 color: $color-white;
                                 font-weight: $txt-weight-regular;
-                                text-decoration: none;
 
                                 > .image {
-                                    display: block;
-                                    margin: $gap-s auto;
                                     width: 100%;
+                                    display: block;
                                 }
+                            }
+
+                            > .list {
+                                display: flex;
+                                flex-direction: column;
                             }
                         }
                     }
                 }
-
-                > .list {
-                    list-style-type: none;
-                }
-            }
-        }
-    }
-
-    @media (min-width: $screen-size-m) {
-        > .main {
-            > .content {
-                display: flex;
-                flex-direction: column;
-                gap: $gap-l;
-                padding-left: 5%;
-                padding-right: 30%;
-
-                &.-articlebody > ._padded {
-                    padding: 0;
-                }
-            }
-            
-            > .nav {
-                position: absolute;
-                right: 5%;
-                width: 20%;
             }
         }
     }
 
     @media (min-width: $screen-size-l) {
-        > .main {
-            > .content {
-                padding-right: 25%;
-            }
-            
-            > .nav {
-                display: flex;
-                flex-direction: column;
-                gap: $gap-m;
-                width: 15%;
-            }
-        }
-    }
+        > ._wrapper {
+            flex-direction: row;
+            align-items: flex-start;
+            column-gap: 106px;
 
-    @media (min-width: $screen-size-xxl) {
-        > .main {
-            > .content {
-                padding-right: 20%;
+            > .main {
+                flex: 1 1 100%;
             }
             
             > .nav {
-                display: flex;
-                flex-direction: column;
-                gap: $gap-m;
-                width: 10%;
-                position: absolute;
-                right: 5%;
+                flex: 0 0 16%;
+
+                > .frame {
+                    > .list {
+                        flex-direction: column;
+
+                        > .item > .list > .std-button {
+                            font-weight: $txt-weight-semi-bold;
+                        }
+                    }
+                }
             }
         }
     }

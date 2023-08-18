@@ -1,20 +1,21 @@
 .article-cover {
-    background-size: cover;
     background-position: center;
+    background-size: cover;
 
     > .content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        height: $area-height-l;
-        background: url('blue-shadow.png') bottom repeat-x;
-        background-size: auto 50%;
+        background: url('blue-shadow.png') repeat-x bottom left / auto 50%;
 
-        > .title {
-            color: $color-white;
-            text-align: center;
-            font-weight: $txt-weight-semi-bold;
-            font-size: $txt-font-size-xl;
+        > ._wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 486px;
+
+            > .title {
+                color: $color-white;
+                text-align: center;
+                font-weight: $txt-weight-semi-bold;
+            }
         }
     }
 }

@@ -11,7 +11,7 @@
         <input class="file" name="images[]" type="file" accept="image/*" multiple>
     </div>
     <div class="form-row">
-        <button class="std-button">Mettre en ligne</button>
+        <button class="std-button -padded">Mettre en ligne</button>
     </div>
 </form>
 <ul class="std-mosaic-list">
@@ -21,7 +21,7 @@
         <em>{{ i }}</em>
         <form method="post">
             <input name="image-to-delete" type="hidden" value="{{ i }}">
-            <button class="std-button">Supprimer</button>
+            <button class="std-button -padded">Supprimer</button>
         </form>
     </li>
     {% endfor %}

@@ -1,10 +1,22 @@
 ._gap {
+    &.-gap-col-xs {
+        column-gap: 12px;
+    }
+
     &.-gap-col-s {
         column-gap: 16px;
     }
 
     &.-gap-col-m {
         column-gap: 24px;
+    }
+
+    &.-gap-row-xxs {
+        row-gap: 12px;
+    }
+
+    &.-gap-row-xs {
+        row-gap: 16px;
     }
 
     &.-gap-row-s {
@@ -32,20 +44,20 @@
             column-gap: 32px;
         }
 
-        &.-gap-row-xl {
-            row-gap: 64px;
+        &.-gap-row-s {
+            row-gap: 20px;
         }
 
         &.-gap-row-l {
             row-gap: 40px;
         }
 
-        &.-gap-row-s {
-            row-gap: 20px;
-        }
-
         &.-gap-row-m {
             row-gap: 32px;
+        }
+
+        &.-gap-row-xl {
+            row-gap: 64px;
         }
     }
 }

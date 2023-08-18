@@ -4,6 +4,10 @@
         max-width: 90rem;
         width: 85%;
         padding: 0;
+
+        &.-sm {
+            max-width: 70rem;
+        }
     }
 
     @media (min-width: $screen-size-l) {

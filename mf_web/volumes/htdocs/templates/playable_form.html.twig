@@ -73,10 +73,10 @@
     {{ _self.linkForm(   app.linkTypes, link, loop.index0) }}
     {% endfor %}
     {% endif %}
-    <button class="std-button" id="link-form-button" data-type="add-link-form-button" data-location-target="link-form-button" data-template="link-form-template" type="button">Ajouter un lien</button>
+    <button class="std-button -padded" id="link-form-button" data-type="add-link-form-button" data-location-target="link-form-button" data-template="link-form-template" type="button">Ajouter un lien</button>
 
     <div class="_text -textcentered">
-        <button class="std-button" type="submit">Poster</button>
+        <button class="std-button -padded" type="submit">Poster</button>
     </div>
 
     {{ csrf(app) }}
