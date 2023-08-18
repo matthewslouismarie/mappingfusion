@@ -17,7 +17,7 @@
             @include center-content();
     
             > .img {
-                height: 62px;
+                height: 96px;
                 width: auto;
                 display: block;
             }
@@ -68,8 +68,6 @@
 
     @media (min-width: $screen-size-l) {
         > ._wrapper {
-            gap: $gap-l;
-
             > .logo > .img {
                 height: 124px;
             }
@@ -77,9 +75,7 @@
             > .text {                
                 display: flex;
                 flex-direction: column;
-                flex: 0 1 auto;
                 justify-content: center;
-                gap: 16px;
 
                 > .intro {
                     color: #19577a;
@@ -88,7 +84,6 @@
                 > .header-menu {
                     align-items: center;
                     justify-content: space-between;
-                    gap: 32px;
 
                     > .item {
                         flex: 1 1 auto;

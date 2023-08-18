@@ -1,18 +1,18 @@
 .site-maps-and-mods-tests {
     background-color: #0c4b6e;
-    padding: 46px 0;
 
     > ._wrapper {
         display: flex;
         align-items: center;
         flex-direction: column;
-        gap: 46px;
 
-        > .std-block-list {
+        > .list {
+            display: flex;
+            flex-wrap: wrap;
             width: 100%;
-            gap: 0;
             
             > .item {
+                flex: 0 0 50%;
                 height: 176px;
             }
         }
@@ -20,7 +20,13 @@
 
     @media (min-width: $screen-size-m) {
         > ._wrapper {
-            background: url('headcrab-transparent.svg') no-repeat top 160px left 160px  / 160px 144px, url('marine-transparent.svg') no-repeat top 40px right 46px / 208px 296px;
+            background: url('headcrab-transparent.svg') no-repeat top 206px left 160px  / 160px 144px, url('marine-transparent.svg') no-repeat top 86px right 46px / 208px 296px;
+
+            > .list {
+                flex-direction: row;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
         }
     }
 }

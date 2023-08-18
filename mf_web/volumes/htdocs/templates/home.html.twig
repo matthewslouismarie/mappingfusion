@@ -34,7 +34,7 @@
     </div>
     {% include 'sections/social-networks.html.twig' %}
     <section class="site-maps-and-mods-tests">
-        <div class="_wrapper">
+        <div class="_wrapper _gap -gap-row-l _padding -padding-vert-l">
             <div class="section-heading -white">
                 <img alt="Tests maps et mods" class="image" src="{{ app.asset('tests_icon.svg') }}">
                 <h2 class="text _textxl">
@@ -42,7 +42,7 @@
                     <span class="regular">proposés par l’équipe</span>
                 </h2>
             </div>
-            <ul class="std-block-list">
+            <ul class="list">
                 {% for r in last_reviews %}
                 <li class="item">
                     <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.resource(r.cover_filename) }}');"{% endif %} href="{{ app.router.generateUrl('view-article', [r.id]) }}">
@@ -62,14 +62,14 @@
         </div>
     </section>
     <section class="site-section-news-articles">
-        <div class="_wrapper _gap -gap-row-m">
+        <div class="_wrapper _gap -gap-row-xl _padding -padding-hori-mobile -padding-vert-xl">
             <div class="section-heading -inline -white">
                 <img alt="Les dernières actualités" class="image" src="{{ app.asset('news.svg') }}">
                 <h2 class="text _textxl">
                     <span class="regular">Les dernières </span><span class="bold">actualités</span>
                 </h2>
             </div>
-            <ul class="list _gap -gap-row-m">
+            <ul class="list _gap -gap-row-xl">
                 {% for a in last_articles %}
                 <li class="item">{{ articleMosaic(a, app) }}</li>
                 {% endfor %}
@@ -84,12 +84,12 @@
     </section>
     
     <section class="site-section-beginners">
-        <div class="_wrapper _gap -gap-row-m">
-            <div class="left _textxl _gap -gap-row-m _padding -padding-vert-m">
+        <div class="_wrapper _gap -gap-row-m _padding -padding-hori-mobile">
+            <div class="left _textxl _gap -gap-row-m _padding -padding-vert-xl">
                 <h2 class="title">Nouveau et un peu perdu ?<br>Pas de panique !</h2>
                 <p class="text">Consulte dès à présent <em>tous nos dossiers explicatifs</em> pour bien <em>comprendre comment fonctionnent Half-Life et ses mods</em>.</p>
             </div>
-            <dl class="right _gap -gap-row-m _padding -padding-vert-m">
+            <dl class="right _gap -gap-row-m _padding -padding-vert-xl">
                 <div class="item -sc _gap -gap-row-s">
                     <dt class="subject _textm">Fonctionnement Sven Co-op</dt>
                     <dd class="text _textm">Guide d’installation, lancement de partie, création de serveurs, etc…</dd>

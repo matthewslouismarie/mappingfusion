@@ -1,6 +1,5 @@
 .article-mosaic {
     display: flex;
-    gap: 28px;
 
     > .left,
     > .right {
@@ -26,20 +25,23 @@
     > .right {
         overflow: hidden;
         display: flex;
-        flex-direction: column;
-        justify-content: start;
-        gap: 16px;
+        flex-wrap: wrap;
+
+        > .date,
+        > .title,
+        > .excerpt {
+            overflow: hidden;
+            flex: 0 0 100%;
+        }
 
         > .date,
         > .title {
-            overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            flex: 0 0 auto;
         }
 
         > .title {
-            color: #ffffff;
+            color: $color-white;
             font-weight: $txt-weight-semi-bold;
         }
 

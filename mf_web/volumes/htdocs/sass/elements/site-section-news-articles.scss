@@ -5,16 +5,17 @@
     > ._wrapper {
         display: flex;
         flex-direction: column;
-        padding: 94px 0 46px 0;
+        padding-top: 94px;
         align-items: center;
 
         > .list {
             display: flex;
             flex-direction: column;
+            width: 100%;
             flex: 0 0 100%;
 
             > .item {
-                flex: 1 1 100%;
+                flex: 0 0 100%;
             }
         }
     }
