@@ -1,14 +1,14 @@
 .page-article {
     > .socialnetworks {
         display: flex;
-        align-items: center;
         flex-direction: column;
-        gap: $gap-l;
+        align-items: center;
 
-        > .text {
-            max-width: $txt-area-width-s;
-            font-weight: $txt-weight-bold;
-            text-align: center;
+        > ._wrapper {
+            > .text {
+                font-weight: $txt-weight-bold;
+                text-align: center;
+            }
         }
     }
 }

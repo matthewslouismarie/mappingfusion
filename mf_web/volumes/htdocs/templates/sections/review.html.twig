@@ -1,26 +1,38 @@
 {% macro review(mk, playable, review, variant) %}
-    <div class="std-review{% if variant %} {{ variant }}{% endif %} _padded -g -t">
-        <div class="rating-container">
-            <strong class="rating">{{ review.rating }}</strong>
-        </div>
-        <h2 class="heading">{{ playable.name }} : l’avis de l’équipe</h2>
-        {% if variant == '-summary' %}
-        {{ mk.format(review.body)|raw }}
-        {% endif %}
-        <div class="prosandcons">
-            <div class="part -pros">
-                <h3 class="subheading">Les plus</h3>
-                <div class="markdown -pros">
-                    {% if review.pros %}{{ mk.format(review.pros)|raw }}{% else %}Rien à afficher.{% endif %}
+    <div class="std-review{% if variant %} {{ variant }}{% endif %}">
+        <div class="box _padding -padding-m">
+            <div class="std-rating-container">
+                <div class="rating">
+                    <strong class="whole">{{ review.rating|round(0, 'floor') }}</strong>
+                    <span class="decimal">,{{ review.rating - review.rating|round(0, 'floor') }}</span>
                 </div>
             </div>
-            <div class="part -cons">
-                <h3 class="subheading">Les moins</h3>
-                <div class="markdown -cons">
-                    {% if review.cons %}{{ mk.format(review.cons)|raw }}{% else %}Rien à afficher.{% endif %}
+
+            <h2 class="heading _padding -padding-bottom-l _text -text-l">{{ playable.name }} : l’avis de l’équipe</h2>
+
+            {% if variant == '-summary' %}
+            <div class="_padding -padding-bottom-m">
+                {{ mk.format(review.body)|raw }}
+            </div>
+            {% endif %}
+
+            <div class="prosandcons _gap -gap-row-m">
+                <div class="part -pros _flex -col _gap -gap-row-xs">
+                    <h3 class="subheading _text -text-l">Les plus</h3>
+                    <div class="markdown -pros">
+                        {% if review.pros %}{{ mk.format(review.pros)|raw }}{% else %}Rien à afficher.{% endif %}
+                    </div>
+                </div>
+
+                <div class="part -cons _flex -col _gap -gap-row-xs">
+                    <h3 class="subheading _text -text-l">Les moins</h3>
+                    <div class="markdown -cons">
+                        {% if review.cons %}{{ mk.format(review.cons)|raw }}{% else %}Rien à afficher.{% endif %}
+                    </div>
                 </div>
             </div>
         </div>
+    
         <div class="relatedlinks">
             <a class="std-button -padded -sm -white" href="#">
                 <div class="text">

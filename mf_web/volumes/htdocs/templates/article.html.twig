@@ -27,17 +27,17 @@
         </div>
 
         <div class="_wrapper -sm _padding -padding-vert-l">
-            <div class="main">
+            <div class="main _flex -col _gap -gap-row-xl">
                 {% if article.review is defined %}
-                <div class="">
-                    <dl class="std-metadata _text -text-m">
+                <div class="_flex -col _gap -gap-row-s2">
+                    <dl class="std-metadata _gap -gap-col-l _text -text-m">
                         <div class="item">
                             <dt class="term">Jeu :</dt>
                             <dd class="def">{{ article.review.playable.name }}</dd>
                         </div>
                         <div class="item">
                             <dt class="term">Développeur :</dt>
-                            <dd class="def">{% for a in authors %}{{ dump(a) }}{% if not loop.last %}, {% endif %}{% endfor %}</dd>
+                            <dd class="def">{% for a in authors %}{{ a.name }}{% if not loop.last %}, {% endif %}{% endfor %}</dd>
                         </div>
                         <div class="item">
                             <dt class="term">Date de sortie :</dt>
@@ -79,20 +79,18 @@
                 </div> #}
 
                 {% if article.review is defined %}
-                <div class="content _sectionpadded">ç
+                <div class="content _sectionpadded">
                     {{ review(app.mk, article.review.playable, article.review, '-summary') }}
                 </div>
                 {% endif %}
 
-                <div class="content _sectionpadded">
-                    <div class="article-advice _padded -a">
-                        <img alt="Le conseil Mapping-Fusion" class="img" src="{{ app.asset('mapping-fusion-advice.svg') }}">
-                        <div class="text">
-                            <h2 class="heading">Le petit conseil pour les mappeurs de Mapping Fusion</h2>
-                            <p class="text">Le level design et l’éclairage étant très réussi, nous vous recommandons de jouer à ce MOD qui reste un très bonne source d’inspiration pour créer vos maps ! (structure, type de textures, mis en lumière etc...)</p>
-                        </div>
+                <aside class="article-advice _flex _gap -gap-col-s _padding -padding-s">
+                    <img alt="Le conseil Mapping-Fusion" class="img" src="{{ app.asset('mapping-fusion-advice.svg') }}">
+                    <div class="text _flex -col _gap -gap-row-xs">
+                        <h2 class="heading _text -text-l">Le petit conseil pour les mappeurs de Mapping Fusion</h2>
+                        <p class="text _text -text-m">Le level design et l’éclairage étant très réussi, nous vous recommandons de jouer à ce MOD qui reste un très bonne source d’inspiration pour créer vos maps ! (structure, type de textures, mis en lumière etc...)</p>
                     </div>
-                </div>
+                </aside>
             </div>
 
             <nav class="nav _gap -gap-row-s">

@@ -6,7 +6,11 @@
         padding: 0;
 
         &.-sm {
-            max-width: 70rem;
+            max-width: 75rem;
+        }
+
+        &.-xs {
+            max-width: 65rem;
         }
     }
 

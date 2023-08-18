@@ -1,51 +1,62 @@
 .std-review {
-    border: $border-m solid $color-white;
-    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+
+    border: 4px solid $color-white;
 
     &.-summary {
         background-color: $color-blue-3;
         border: none;
 
-        > .prosandcons {
-            > .part > .markdown > ul {
-                flex-direction: column;
-                flex-wrap: nowrap;
+        > .box {
+            > .prosandcons {
+                display: flex;
+
+                > .part > .markdown > ul {
+                    flex-direction: column;
+                    flex-wrap: nowrap;
+                }
             }
         }
     }
 
-    > .rating-container {
-        float: right;
-    }
+    > .box {
+        > .std-rating-container {
+            float: right;
+        }
+    
+        > .prosandcons {
+            display: flex;
+            flex-direction: column;
 
-    > .prosandcons {
-        > .part {
-            > .heading {
-                color: $color-white;
-            }
-        
-            > .markdown {
-                > ul {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: $gap-m;
-                    list-style-type: none;
-        
-                    > li {
-                        padding-left: $gap-l;
-                        background: center left / $gap-m $gap-m no-repeat;
-                    }
+            > .part {
+                > .heading {
+                    color: $color-white;
                 }
-        
-                &.-pros {
-                    > ul > li {
-                        background-image: url('list-plus.svg');
+            
+                > .markdown {
+                    > ul {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 16px;
+                        list-style-type: none;
+            
+                        > li {
+                            padding-left: 24px;
+                            background: center left / 16px 16px no-repeat;
+                        }
                     }
-                }
-        
-                &.-cons {
-                    > ul > li {
-                        background-image: url('list-minus.svg');
+
+                    &.-pros {
+                        > ul > li {
+                            background-image: url('list-plus.svg');
+                        }
+                    }
+            
+                    &.-cons {
+                        > ul > li {
+                            background-image: url('list-minus.svg');
+                        }
                     }
                 }
             }
@@ -54,7 +65,7 @@
 
     > .relatedlinks {
         display: flex;
-        gap: $gap-m;
+        gap:16px;
         justify-content: center;
 
         > .std-button {
@@ -62,11 +73,17 @@
         }
     }
 
-    @media (min-width: $screen-size-s) {
+    @media (min-width: $screen-size-l2) {
         &.-summary {
-            > .prosandcons {
-                display: flex;
-                gap: $gap-m;
+            > .box {
+                > .prosandcons {
+                    flex-direction: row;
+                    gap: 4%;
+    
+                    > .part {
+                        flex: 1 1 48%;
+                    }
+                }
             }
         }
     }

@@ -10,7 +10,7 @@
     <div class="_wrappers _flex -centered -gap">
         <h1 class="heading">Connexion</h1>
         <form autocomplete="on" class="std-form -centered _flex -gap" method="post" {% if app.dev %} novalidate{% endif %}>
-            <div class="_flex -gaps">
+            <div class="_flex -col -gaps">
                 {{ errorList(formErrors) }}
                 <div class="form-row">
                     <label class="label" for="username">Nom d’utilisateur :</label>

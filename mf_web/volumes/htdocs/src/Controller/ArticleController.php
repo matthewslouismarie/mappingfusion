@@ -24,13 +24,10 @@ class ArticleController implements ControllerInterface
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $article = $this->repo->findOne($routeParams[1]);
 
-        var_dump($article->review);
-        var_dump(isset($article->review));
-
         return new Response(
             body: $this->twig->render('article.html.twig', [
                 'article' => $article,
-                'authors' => isset($article->review) ? $this->authorRepo->findAuthorsOf($article->review['playable_id']) : ['a'],
+                'authors' => null !== $article->review ? $this->authorRepo->findAuthorsOf($article->review['playable_id']) : null,
             ]),
         );
     }

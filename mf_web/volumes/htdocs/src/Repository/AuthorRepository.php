@@ -60,7 +60,6 @@ class AuthorRepository implements IRepository
             $authors[] = $this->em->toAppObject($row, $this->model);
             $row = $stmt->fetch();
         }
-        var_dump($authors);
 
         return $authors;
     }

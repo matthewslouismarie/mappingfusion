@@ -3,15 +3,25 @@
     border-radius: 50%;
     justify-content: center;
     align-items: center;
-    width: 8rem;
-    border: $border-m solid $color-white;
-    height: 8rem;
+    width: 120px;
+    height: 120px;
 
+    border: 5px solid $color-white;
     color: $color-white;
 
     > .rating {
-        font-size: 5rem;
-        font-weight: $txt-weight-semi-bold;
+        > .whole {
+            font-size: 76px;
+            font-weight: $txt-weight-semi-bold;
+        }
+
+        > .decimal {
+            font-size: 40px;
+        }
+    }
+
+    > .heading {
+        color: $color-white;
     }
 
     &.-sm {

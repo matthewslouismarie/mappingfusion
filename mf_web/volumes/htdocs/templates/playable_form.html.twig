@@ -6,7 +6,7 @@
 {% macro index(i) %}{{ i ?? '${index}' }}{% endmacro %}
 
 {% macro linkForm(linkTypes, link, i) %}
-<div class="_flex -gaps" data-link-form-id="link-form" id="link-form-{{ _self.index(i) }}">
+<div class="_flex -col -gaps" data-link-form-id="link-form" id="link-form-{{ _self.index(i) }}">
     <div class="form-row">
         <label class="label" for="link-{{ _self.index(i) }}-name">Nom du lien</label>
         <input class="input" id="link-{{ _self.index(i) }}-name" name="links[{{ _self.index(i) }}][name]"{% if link %} value="{{ link.data.name }}"{% endif %}>
@@ -38,7 +38,7 @@
 {% block bodyContent %}
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
     <h1>{% if formData %}Édition de {{ formData.name }}{% else %}Nouveau jeu{% endif %}</h1>
-    <div class="_flex -gaps">
+    <div class="_flex -col -gaps">
         <div class="form-row">
             <label class="label" for="p-id">ID (générée automatiquement)</label>
             <input class="input" id="p-id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>

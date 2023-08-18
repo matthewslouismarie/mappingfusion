@@ -1,20 +1,13 @@
 .site-section-beginners-short {
     background-color: #22668c;
 
-    > .content {
+    > ._wrapper {
         display: flex;
         align-items: center;
         flex-direction: column;
-        gap: $gap-m;
-        margin: auto;
-        max-width: $txt-area-width-s;
 
         > .text {
             text-align: center;
-        }
-
-        > .std-button {
-            display: inline-block;
         }
     }
 }
