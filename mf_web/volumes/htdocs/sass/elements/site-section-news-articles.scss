@@ -6,36 +6,34 @@
         display: flex;
         flex-direction: column;
         padding: 94px 0 46px 0;
-        gap: 52px;
         align-items: center;
 
-        > .std-block-list {
+        > .list {
             display: flex;
-            flex: 0 0 100%;
             flex-direction: column;
+            flex: 0 0 100%;
 
             > .item {
-                flex: 1 1 auto;
+                flex: 1 1 100%;
             }
         }
     }
 
-    @media (min-width: $screen-size-l) {
+    @media (min-width: $screen-size-l2) {
         > ._wrapper {
-            background: url('crowbar-transparent.svg') no-repeat top 20px left / 107px 123px,
+            background: url('crowbar-transparent.svg') no-repeat top 20px left / 207px 123px,
                 url('gauss-transparent.svg') no-repeat top 103px left 121px / 313px 87px,
                 url('bullsquid-transparent.svg') no-repeat top 44px right 89px / 285px 162px
             ;
 
-            > .std-block-list {
+            > .list {
                 flex-direction: row;
                 flex-wrap: wrap;
-                gap: 53px 24px;
                 justify-content: space-between;
 
                 > .item {
-                    flex: 1 1 45%;
-                    max-width: 50%;
+                    flex: 0 0 48%;
+                    max-width: 48%;
                 }
             }
         }

@@ -50,7 +50,9 @@ $txt-weight-semi-bold: 600;
 @import 'mixins.scss';
 
 @import 'helpers/_flex.scss';
+@import 'helpers/_gap.scss';
 @import 'helpers/_padded.scss';
+@import 'helpers/_padding.scss';
 @import 'helpers/_sectionpadded.scss';
 @import 'helpers/_text.scss';
 @import 'helpers/_textl.scss';

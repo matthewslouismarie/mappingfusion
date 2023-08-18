@@ -1,18 +1,22 @@
 .site-section-beginners {
     background-color: #22668c;
 
-    > ._wrapper,
-    > ._wrapper > .left,
-    > ._wrapper > .right,
-    > ._wrapper > .right > .item {
-        display: flex;
-        flex-direction: column;
-    }
-
     > ._wrapper {
-        > .left {
-            gap: 42px;
+        display: flex;
+        flex-wrap: wrap;
 
+        > .left,
+        > .right {
+            flex: 0 0 100%;
+        }
+
+        > .left,
+        > .right,
+        > .right > .item {
+            display: flex;
+            flex-direction: column;
+        }
+        > .left {
             > .title {
                 color: #45b0e9;
                 font-weight: normal;
@@ -20,11 +24,7 @@
         }
 
         > .right {
-            gap: 33px;
-
             > .item {
-                gap: 18px;
-
                 > .subject {
                     font-weight: bold;
                 }
@@ -36,36 +36,31 @@
         }
     }
 
-    @media (min-width: $screen-size-s) {
+    @media (min-width: $screen-size-m) {
         > ._wrapper {
-            flex-direction: row;
-            gap: 32px;
+            gap: 2%;
 
             > .left,
             > .right {
-                padding: 70px 0;
-            }
-
-            > .left {
-                flex: 1 1 50%;
-                padding-right: 296px;
-            }
-
-            > .right {
-                flex: 1 1 50%;
+                flex-basis: 48%;
             }
         }
     }
 
-    @media (min-width: $screen-size-m) {
+    @media (min-width: $screen-size-l2) {
         > ._wrapper {
             > .left {   
                 background: no-repeat url('barney-transparent.svg') top 20px right / 163px 365px;
+                padding-right: 296px;
                 background-repeat: no-repeat;
             }
 
             > .right {
                 background: url('munition-transparent.svg') no-repeat top 130px right 87px / 98px 110px, url('grenade-transparent.svg') no-repeat top 78px right / 61px 90px;
+
+                > .item.-sc {
+                    padding-right: 183px;
+                }
             }
         }
     }

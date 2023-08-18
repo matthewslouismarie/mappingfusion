@@ -1,0 +1,15 @@
+._gap {
+    &.-gap-row-s {
+        row-gap: 16px;
+    }
+
+    &.-gap-row-m {
+        row-gap: 32px;
+    }
+
+    @media (min-width: $screen-size-l2) {   
+        &.-gap-row-m {
+            row-gap: 64px;
+        }
+    }
+}
