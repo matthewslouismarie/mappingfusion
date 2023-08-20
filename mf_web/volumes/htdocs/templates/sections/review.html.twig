@@ -8,23 +8,23 @@
                 </div>
             </div>
 
-            <h2 class="heading _padding -padding-bottom-l _text -text-l">{{ playable.name }} : l’avis de l’équipe</h2>
+            <h2 class="heading _padding _text -text-l">{{ playable.name }} : l’avis de l’équipe</h2>
 
             {% if variant == '-summary' %}
-            <div class="_padding -padding-bottom-m">
+            <div class="body">
                 {{ mk.format(review.body)|raw }}
             </div>
             {% endif %}
 
-            <div class="prosandcons _gap -gap-row-m">
-                <div class="part -pros _flex -col _gap -gap-row-xs">
+            <div class="prosandcons _gap -gap-row-l">
+                <div class="part -pros _flex -col _gap -gap-row-s">
                     <h3 class="subheading _text -text-l">Les plus</h3>
                     <div class="markdown -pros">
                         {% if review.pros %}{{ mk.format(review.pros)|raw }}{% else %}Rien à afficher.{% endif %}
                     </div>
                 </div>
 
-                <div class="part -cons _flex -col _gap -gap-row-xs">
+                <div class="part -cons _flex -col _gap -gap-row-s">
                     <h3 class="subheading _text -text-l">Les moins</h3>
                     <div class="markdown -cons">
                         {% if review.cons %}{{ mk.format(review.cons)|raw }}{% else %}Rien à afficher.{% endif %}
@@ -34,12 +34,12 @@
         </div>
     
         <div class="relatedlinks">
-            <a class="std-button -padded -sm -white" href="#">
+            <a class="std-button -padded -s -white" href="#">
                 <div class="text">
                     <span class="bold">Page de téléchargement ModDB</span>
                 </div>
             </a>
-            <a class="std-button -padded -sm -blue" href="#">
+            <a class="std-button -padded -s -blue" href="#">
                 <div class="text">Voir plus de tests</div>
             </a>
         </div>

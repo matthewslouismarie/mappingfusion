@@ -11,14 +11,39 @@
         padding: 24px;
     }
 
-    &.-padding-hori-mobile {
+    &.-padding-hori-s {
         padding-left: 16px;
         padding-right: 16px;
     }
 
+    &.-padding-hori-s2 {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    &.-padding-hori-mobile {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    &.-padding-vert-s {
+        padding-bottom: 16px;
+        padding-top: 16px;
+    }
+
     &.-padding-vert-l {
+        padding-bottom: 32px;
+        padding-top: 32px;
+    }
+
+    &.-padding-vert-l2 {
         padding-bottom: 40px;
         padding-top: 40px;
+    }
+
+    &.-padding-vert-xl {
+        padding-bottom: 64px;
+        padding-top: 64px;
     }
 
     &.-padding-bottom-l {
@@ -29,22 +54,10 @@
         padding-bottom: 24px;
     }
 
-    &.-padding-vert-xl {
-        padding-bottom: 32px;
-        padding-top: 32px;
-    }
-
     @media (min-width: $screen-size-m) {
         &.-padding-hori-mobile {
             padding-left: 0;
             padding-right: 0;
-        }
-    }
-
-    @media (min-width: $screen-size-l2) {
-        &.-padding-vert-xl {
-            padding-bottom: 64px;
-            padding-top: 64px;
         }
     }
 }

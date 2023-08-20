@@ -1,0 +1,48 @@
+{% macro articleNav(app, article) %}
+<nav class="article-nav _gap -gap-row-s2 _padding -padding-vert-l -padding-hori-s">
+    <div class="frame -articlenav _padding -padding-hori-s2 -padding-vert-s">
+        <ul class="list _text -text-m">
+            <li class="item _padding -padding-s">
+                <a class="link -active" href="#review-intro" data-type="review-menu-link">Présentation</a>
+            </li>
+            <li class="item _padding -padding-s">
+                <a class="link" href="#article-body" data-type="review-menu-link">Test explicatif</a>
+            </li>
+            <li class="item _padding -padding-s">
+                <a class="link" href="#article-images" data-type="review-menu-link">Galerie d’images</a>
+            </li>
+            <li class="item _padding -padding-s">
+                <a class="link" href="#review-summary" data-type="review-menu-link">Résumé et notes</a>
+            </li>
+        </ul>
+    </div>
+
+    <a href="#" class="std-button -upper -white _padding -padding-vert-s">
+        <div class="text">
+            <span class="bold _text -text-m">Comment installer un mod</span>
+        </div>
+    </a>
+
+    <div class="frame -related _gap -gap-row-m _padding -padding-hori-s2 -padding-vert-s">
+        <h2 class="heading _text -text-m ">Tests et articles similaires</h2>
+        <ul class="list _gap -gap-col-xs -gap-row-s2">
+            <li class="item">
+                <a class="link _gap -gap-row-xs" href="#">
+                    <img alt="{{ article.title }}" class="image"{% if article.cover_filename is defined %} src="{{ app.resource(article.cover_filename) }}"{% endif %}>
+                    <div class="_text -text-s">{{ article.title }}</div>
+                </a>
+            </li>
+            <li class="item">
+                <div class="list _gap -gap-row-s">
+                    <a class="std-button -s -transparent _padding -padding-xs _text -text-s" href="{{ app.router.generateUrl('review_list') }}">
+                        <span class="text">Voir plus de tests</span>
+                    </a>
+                    <a class="std-button -s -transparent _padding -padding-xs _text -text-s" href="#">
+                        <span class="text">Voir + d’actualité</span>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endmacro %}

@@ -3,7 +3,7 @@
     <div class="left"{% if a.cover_filename %} style="background-image: url('{{ app.resource(a.cover_filename) }}');"{% endif %}>
         <em class="std-badge _texts">{{ a.category.name }}</em>
     </div>
-    <div class="right _gap -gap-row-s">
+    <div class="right _gap -gap-row-s2">
         <h3 class="title _textm">{{ app.mk.getText(a.title) }}</h3>
         <p class="date _texts">Le {{ a.last_update_date_time.format('d/m/y') }}</p>
         <div class="excerpt _texts">

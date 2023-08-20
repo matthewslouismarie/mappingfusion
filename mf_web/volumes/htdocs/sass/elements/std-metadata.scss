@@ -1,8 +1,8 @@
 .std-metadata {
     display: flex;
-    flex-wrap: wrap;
+    gap: $gap-xs;
+    flex-direction: column;
 
-    font-size: $txt-font-size-s;
     font-weight: $txt-weight-semi-bold;
 
     > .item {
@@ -12,9 +12,13 @@
         }
 
         > .term {
-            margin-right: $gap-s;
-
             color: $color-blue-1;
         }
+    }
+
+    @media (min-width: $screen-size-m) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        column-gap: $gap-l;
     }
 }

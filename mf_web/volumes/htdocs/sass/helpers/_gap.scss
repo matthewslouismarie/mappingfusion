@@ -1,59 +1,45 @@
 ._gap {
     &.-gap-col-xs {
-        column-gap: 12px;
+        column-gap: $gap-xs;
     }
 
     &.-gap-col-s {
-        column-gap: 16px;
-    }
-
-    &.-gap-col-m {
-        column-gap: 32px;
+        column-gap: $gap-s;
     }
 
     &.-gap-col-l {
-        column-gap: 40px;
+        column-gap: $gap-l;
     }
 
-    &.-gap-row-xxs {
-        row-gap: 12px;
+    &.-gap-col-l2 {
+        column-gap: $gap-l2;
     }
 
     &.-gap-row-xs {
-        row-gap: 16px;
+        row-gap: $gap-xs;
     }
 
     &.-gap-row-s {
-        row-gap: 20px;
+        row-gap: $gap-s;
     }
 
     &.-gap-row-s2 {
-        row-gap: 24px;
+        row-gap: $gap-s2;
     }
 
     &.-gap-row-m {
-        row-gap: 32px;
+        row-gap: $gap-m;
     }
 
     &.-gap-row-l {
-        row-gap: 40px;
+        row-gap: $gap-l;
     }
 
+    &.-gap-row-l2 {
+        row-gap: $gap-l2;
+    }
+    
     &.-gap-row-xl {
-        row-gap: 32px;
-    }
-
-    @media (min-width: $screen-size-l2) {
-        &.-gap-col-s {
-            column-gap: 20px;
-        }
-
-        &.-gap-col-l {
-            column-gap: 40px;
-        }
-
-        &.-gap-row-xl {
-            row-gap: 64px;
-        }
+        row-gap: $gap-xl;
     }
 }

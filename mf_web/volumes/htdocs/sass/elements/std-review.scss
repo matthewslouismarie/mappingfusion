@@ -4,25 +4,13 @@
 
     border: 4px solid $color-white;
 
-    &.-summary {
-        background-color: $color-blue-3;
-        border: none;
-
-        > .box {
-            > .prosandcons {
-                display: flex;
-
-                > .part > .markdown > ul {
-                    flex-direction: column;
-                    flex-wrap: nowrap;
-                }
-            }
-        }
-    }
-
     > .box {
         > .std-rating-container {
             float: right;
+        }
+
+        > .heading {
+            margin-bottom: $gap-l;
         }
     
         > .prosandcons {
@@ -73,15 +61,46 @@
         }
     }
 
+    &.-summary {
+        background-color: $color-blue-3;
+        border: none;
+
+        > .box {
+            > .heading {
+                color: $color-white;
+                margin-bottom: $gap-l;
+            }
+
+            > .body {
+                margin-bottom: $gap-l2;
+            }
+
+            > .prosandcons {
+                display: flex;
+
+                > .part {
+                    > .subheading {
+                        color: $color-white;
+                    }
+
+                    > .markdown > ul {
+                        flex-direction: column;
+                        flex-wrap: nowrap;
+                    }
+                }
+            }
+        }
+    }
+
     @media (min-width: $screen-size-l2) {
         &.-summary {
             > .box {
                 > .prosandcons {
                     flex-direction: row;
-                    gap: 4%;
-    
+                    gap: $gap-s;
+
                     > .part {
-                        flex: 1 1 48%;
+                        flex: 1 1 50%;
                     }
                 }
             }

@@ -1,16 +1,29 @@
 .article-advice {
     display: flex;
-    align-items: stretch;
+    align-items: center;
+    flex-direction: column;
 
     background-color: $color-blue-1;
 
-    > .img {
-        flex: 0 0;
-    }
-
     > .text {
         > .heading {
+            text-align: center;
             color: $color-white;
+        }
+    }
+
+    @media (min-width: $screen-size-l) {
+        flex-direction: row;
+        align-items: stretch;
+
+        > .img {
+            flex: 0 0;
+        }
+
+        > .text {
+            > .heading {
+                text-align: left;
+            }
         }
     }
 }

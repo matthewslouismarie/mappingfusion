@@ -1,0 +1,86 @@
+.article-nav {
+    display: flex;
+    flex-direction: column;
+
+    background-color: $color-blue-3;
+
+    > .frame {
+        display: flex;
+        flex-direction: column;
+
+        border: 3px solid $color-blue-1;
+
+        &.-articlenav {
+            display: none;
+        }
+
+        &.-related {
+            > .heading {
+                color: $color-white;
+                text-align: center;
+            }
+
+            > .list {
+                display: flex;
+                justify-content: center;
+
+                > .item {
+                    > .link {
+                        display: flex;
+                        flex-direction: column;
+                        width: 176px;
+
+                        color: $color-white;
+                        font-weight: $txt-weight-regular;
+
+                        > .image {
+                            width: 100%;
+                            display: block;
+                        }
+                    }
+
+                    > .list {
+                        display: flex;
+                        flex-direction: column;
+                    }
+                }
+            }
+        }
+    }
+
+    @media (min-width: $screen-size-m) {
+        flex: 0 0 16%;
+
+        background: none;
+                
+        > .frame {
+            background-color: $color-blue-3;
+            flex: 0 0 auto;
+
+            &.-articlenav {
+                display: unset;
+                position: sticky;
+                color: $color-blue-05;
+                top: 18px;
+                text-align: right;
+
+                > .list > .item {
+                    border-right: 8px solid;
+
+                    > .link.-active {
+                        color: $color-white;
+                        font-weight: $txt-weight-bold;
+                    }
+                }
+            }
+
+            > .list {
+                flex-direction: column;
+
+                > .item > .list > .std-button {
+                    font-weight: $txt-weight-semi-bold;
+                }
+            }
+        }
+    }
+}
