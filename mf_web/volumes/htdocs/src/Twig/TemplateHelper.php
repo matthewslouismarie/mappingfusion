@@ -6,9 +6,8 @@ use DateTimeInterface;
 use MF\Configuration;
 use MF\Enum\LinkType;
 use MF\Form\FormFactory;
-use MF\Form\StdFormElement;
 use MF\Form\Submittable;
-use MF\Form\Transformer\CsrfTransformer;
+use MF\Framework\File\FileService;
 use MF\Session\SessionManager;
 use MF\MarkdownService;
 use MF\Router;
@@ -23,6 +22,7 @@ class TemplateHelper
         private Router $router,
         private SessionManager $session,
         private FormFactory $formFactory,
+        private FileService $file,
     ) {
     }
 
@@ -38,6 +38,16 @@ class TemplateHelper
 
     public function getDate(DateTimeInterface $date): string {
         return $date->format('Y-M-D');
+    }
+
+    public function getImages(string $text): array {
+        $foundImages = [];
+        foreach ($this->file->getUploadedImages() as $image) {
+            if (str_contains($text, $image)) {
+                $foundImages[] = $image;
+            }
+        }
+        return $foundImages;
     }
 
     public function getLinkTypes(): array {

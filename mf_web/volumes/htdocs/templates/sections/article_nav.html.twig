@@ -8,9 +8,11 @@
             <li class="item _padding -padding-s" data-type="toc-item">
                 <a class="link" href="#article-body">Test explicatif</a>
             </li>
+            {% if app.getImages(article.body) %}
             <li class="item _padding -padding-s" data-type="toc-item">
                 <a class="link" href="#article-images">Galerie d’images</a>
             </li>
+            {% endif %}
             <li class="item _padding -padding-s" data-type="toc-item">
                 <a class="link" href="#review-summary">Résumé et notes</a>
             </li>

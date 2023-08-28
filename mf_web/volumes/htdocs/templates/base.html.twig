@@ -34,6 +34,9 @@
                     <a class="link" href="{{ app.router.generateUrl('admin-review-list') }}">Gérer les tests</a>
                 </li>
                 <li class="item">
+                    <a class="link" href="{{ app.router.generateUrl('manage-images') }}">Gérer les images</a>
+                </li>
+                <li class="item">
                     <a class="link" href="{{ app.router.generateUrl('logout') }}">Déconnexion</a>
                 </li>
             </ul>
@@ -73,7 +76,7 @@
         <main class="site-main">
             {% block body %}
             <div class="_padded -a">
-                <div class="_wrappers _flex -gap">
+                <div class="_wrappers _flex -col -gap">
                     {% block bodyContent %}{% endblock %}
                 </div>
             </div>

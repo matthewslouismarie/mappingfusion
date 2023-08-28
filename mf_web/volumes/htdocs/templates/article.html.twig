@@ -58,28 +58,25 @@
                     </div>
                 </div>
 
+                {% if app.getImages(article.body) %}
                 <div class="glide -arrows _padding -padding-vert-l -padding-s" id="article-images">
                     <div class="controls" data-glide-el="controls">
                         <button class="button -left" data-glide-dir="<"></button>
                     </div>
                     <div class="glide__track" data-glide-el="track">
                         <ul class="glide__slides">
+                            {% for i in app.getImages(article.body) %}
                             <li class="glide__slide">
-                                <a class="link" href="{{ app.router.generateUrl('view-article', {id: article.id}) }}"{% if article.cover_filename is defined %} style="background-image: url({{ app.resource(article.cover_filename) }});"{% endif %}>
-                                    <div class="text">{{ app.mk.format(article.title)|raw }}</div>
-                                </a>
+                                <a class="link" href="{{ app.resource(i) }}" style="background-image: url({{ app.resource(i) }});"></a>
                             </li>
-                            <li class="glide__slide">
-                                <a class="link" href="{{ app.router.generateUrl('view-article', {id: article.id}) }}"{% if article.cover_filename is defined %} style="background-image: url({{ app.resource(article.cover_filename) }});"{% endif %}>
-                                    <div class="text">{{ app.mk.format(article.title)|raw }}</div>
-                                </a>
-                            </li>
+                            {% endfor %}
                         </ul>
                     </div>
                     <div class="controls" data-glide-el="controls">
                         <button class="button -right" data-glide-dir=">"></button>
                     </div>
                 </div>
+                {% endif %}
 
                 {% if article.review is defined %}
                 <div class="sectioncontent _padding -padding-hori-s -padding-vert-l" id="review-summary">
