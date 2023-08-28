@@ -5,24 +5,30 @@
 {% block title %}Derniers tests{% endblock %}
 
 {% block body %}
-<div class="_sectionpadded -a">
-    <div class="_wrapper _flex -gapl">
-    
-        <hgroup class="section-heading -inline -white">
-            <p class="imgp">
-                <img alt="Liste des tests" class="image" src="{{ app.asset('news.svg') }}">
-            </p>
-            <h2 class="title">Tests maps et mods</h2>
-            <p class="p">proposés par l’équipe</p>
-        </hgroup>
+<div class="_wrapper _flex -col _gap -gap-row-xl _padding -padding-vert-xl -padding-hori-mobile">
 
-        <ul class="std-mosaic-list">
-            {% for r in reviews %}
-                <li class="item">
-                    {{ reviewMosaic(r, app) }}
-                </li>
-            {% endfor %}
-        </ul>
+    <h2 class="section-heading -inline -white">
+        <img alt="Liste des tests" class="image" src="{{ app.asset('news.svg') }}">
+        <div class="text _text -text-xl">
+            <span class="title">Tests maps et mods</span>
+            <span class="regular"> proposés par l’équipe</span>
+        </div>
+    </h2>
+
+    <ul class="std-mosaic-list -n3">
+        {% for r in reviews %}
+            <li class="item">
+                {{ reviewMosaic(r, app) }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="_text -textcentered">
+        <a class="std-button -darkblue -padded" href="{{ app.router.generateUrl('reviews') }}">
+            <div class="text _text -text-m">
+                <span class="bold">Retour à l’accueil</span>
+            </div>
+        </a>
     </div>
 </div>
 

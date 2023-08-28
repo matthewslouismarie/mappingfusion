@@ -6,35 +6,40 @@
     > .img {
         display: flex;
         align-items: end;
-        height: $img-size-xs;
+        height: 280px;
 
         background-size: cover;
         background-position: center;
 
         > .std-badge {
-            position: relative;
-            top: $gap-m;
-            left: $gap-m;
+            transform: translateX(16px) translateY(50%);
+            font-size: 18px;
         }
     }
 
     > .text {
         display: flex;
-        align-items: center;
+        align-items: stretch;
         justify-content: space-between;
 
         > .left {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+
             > .date,
             > .title {
                 font-size: $txt-font-size-m;
             }
 
             > .date {
-                color: $color-blue-2;
+                color: $color-blue-05;
+                font-size: 18px;
             }
 
-            > .date {
+            > .title {
                 color: $color-white;
+                font-size: 20px;
             }
         }
     }

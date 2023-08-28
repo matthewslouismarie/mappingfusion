@@ -25,12 +25,12 @@
     }
 
     &.-s {
-        width: 3rem;
-        height: 3rem;
-        border-width: $border-s;
+        width: 80px;
+        height: 80px;
+        border-width: 5px;
     
         > .rating {
-            font-size: 2rem;
+            font-size: 60px;
         }
     }
 }

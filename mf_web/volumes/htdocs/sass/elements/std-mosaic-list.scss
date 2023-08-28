@@ -1,11 +1,17 @@
 .std-mosaic-list {
     display: flex;
     flex-wrap: wrap;
-    gap: $gap-m;
+    column-gap: 2%;
+    row-gap: $gap-m;
     list-style-type: none;
 
     > .item {
-        flex: 1 1 auto;
-        width: 49%;;
+        flex: 0 0 49%;
+    }
+
+    &.-n3 {
+        > .item {
+            flex-basis: 32%;
+        }
     }
 }

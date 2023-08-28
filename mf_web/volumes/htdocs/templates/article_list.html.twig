@@ -5,22 +5,28 @@
 {% block title %}Liste des articles{% endblock %}
 
 {% block body %}
-<div class="_sectionpadded -a">
-    <div class="_wrapper _flex -gapl">
-    
-        <hgroup class="section-heading -inline -white">
-            <p class="imgp">
-                <img alt="Liste des actualités" class="image" src="{{ app.asset('news.svg') }}">
-            </p>
-            <p class="p">Liste des</p>
-            <h2 class="title">actualités</h2>
-        </hgroup>
+<div class="_wrapper _flex -col _gap -gap-row-xl _padding -padding-hori-mobile -padding-vert-xl">
 
-        <ul class="std-mosaic-list">
-            {% for a in articles %}
-            <li class="item">{{ articleMosaic(a, app) }}</li>
-            {% endfor %}
-        </ul>
+    <h1 class="section-heading -inline -white _text -text-xl">
+        <img alt="Liste des actualités" class="image" src="{{ app.asset('news.svg') }}">
+        <div class="text">
+            <span class="regular">Liste des </span>
+            <span class="title">actualités</span>
+        </div>
+    </h1>
+
+    <ul class="std-mosaic-list">
+        {% for a in articles %}
+        <li class="item">{{ articleMosaic(a, app) }}</li>
+        {% endfor %}
+    </ul>
+
+    <div class="_text -textcentered">
+        <a class="std-button -darkblue -padded" href="{{ app.router.generateUrl('reviews') }}">
+            <div class="text _text -text-m">
+                <span class="bold">Retour à l’accueil</span>
+            </div>
+        </a>
     </div>
 </div>
 
