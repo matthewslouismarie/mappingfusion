@@ -24,7 +24,9 @@
         </div>
 
         <div class="columns">
-            {{ articleNav(app, article) }}
+            <div class="nav">
+                {{ articleNav(app, article) }}
+            </div>
 
             <div class="content">
                 {% if article.review is defined %}

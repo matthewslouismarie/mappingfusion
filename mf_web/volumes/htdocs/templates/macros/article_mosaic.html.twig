@@ -7,7 +7,7 @@
         <h3 class="title _textm">{{ app.mk.getText(a.title) }}</h3>
         <p class="date _texts">Le {{ a.last_update_date_time.format('d/m/y') }}</p>
         <div class="excerpt _texts">
-            {{ app.mk.getText(a.body) }}
+            {{ app.shorten(app.mk.getText(a.body), 128, '…') }}
         </div>
     </div>
 </a>

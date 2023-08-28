@@ -68,4 +68,8 @@ class TemplateHelper
     public function isDev(): bool {
         return $this->config->getBoolSetting('dev');
     }
+
+    public function shorten(string $string, int $nCharacters, string $suffix) {
+        return mb_substr($string, 0, $nCharacters) . $suffix;
+    }
 }

@@ -14,12 +14,17 @@
         > .columns {
             flex-direction: row;
 
-            > .article-nav {
+            > .nav {
                 order: 1;
                 position: relative;
                 left: -30%;
                 width: 30%;
                 flex: 0 0 auto;
+
+                > .article-nav {
+                    position: sticky;
+                    top: 18px;
+                }
             }
     
             > .content {
@@ -36,7 +41,7 @@
 
     @media (min-width: $screen-size-l) {   
         > .columns {
-            > .article-nav {
+            > .nav {
                 left: -25%;
                 width: 256px;
             }
@@ -52,7 +57,7 @@
 
     @media (min-width: $screen-size-l2) {   
         > .columns {
-            > .article-nav {
+            > .nav {
                 left: -25%;
             }
     
@@ -67,7 +72,7 @@
 
     @media (min-width: $screen-size-xl) {   
         > .columns {
-            > .article-nav {
+            > .nav {
                 left: -30%;
             }
     

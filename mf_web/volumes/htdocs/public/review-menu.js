@@ -1,22 +1,30 @@
 class ReviewMenu
 {
-    #links;
+    #tocItems;
+    #html;
 
     constructor() {
-        this.#links = document.querySelectorAll('[data-type="review-menu-link"]');
-        this.#links.forEach((link) => {
-            link.dataset.reviewSectionBottom = document.querySelector(link.hash).getBoundingClientRect().top;
-        });
+        this.#tocItems = document.querySelectorAll('[data-type="toc-item"]');
+        this.#html = document.querySelector('html');
     }
 
     init() {
+        this.#tocItems.forEach((tocItem) => {
+            const item = document.querySelector(tocItem.querySelector('a').hash);
+            const itemTop = item.getBoundingClientRect().top + window.scrollY;
+            if (itemTop + window.innerHeight < document.documentElement.scrollHeight) {
+                tocItem.dataset.isReachedY = itemTop;
+            } else {
+                tocItem.dataset.isReachedY = item.getBoundingClientRect().bottom + window.scrollY;
+            }
+        });
+
         document.addEventListener('scroll', (ev) => {
-            console.log(window.scrollY);
-            this.#links.forEach((link) => {
-                if (window.scrollY > link.dataset.reviewSectionBottom) {
-                    link.classList.add('-active');
+            this.#tocItems.forEach((tocItem) => {
+                if (window.scrollY + window.innerHeight > tocItem.dataset.isReachedY) {
+                    tocItem.classList.add('-active');
                 } else {
-                    link.classList.remove('-active');
+                    tocItem.classList.remove('-active');
                 }
             })
         });

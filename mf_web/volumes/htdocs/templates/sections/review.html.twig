@@ -3,8 +3,7 @@
         <div class="box _padding -padding-m">
             <div class="std-rating-container">
                 <div class="rating">
-                    <strong class="whole">{{ review.rating|round(0, 'floor') }}</strong>
-                    <span class="decimal">,{{ review.rating - review.rating|round(0, 'floor') }}</span>
+                    <strong class="whole">{{ review.rating|round(0) }}</strong>
                 </div>
             </div>
 
