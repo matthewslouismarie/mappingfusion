@@ -27,7 +27,7 @@ class PlayableLinkRepository implements IRepository
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_playable_link WHERE link_id = :?;');
         $stmt->execute([$id]);
         $data = $stmt->fetch();
-        return null !== $data ? $this->em->toAppObject($data, $this->model, 'link') : null;
+        return null !== $data ? $this->em->toAppData($data, $this->model, 'link') : null;
     }
 
     public function remove(string $id): void {

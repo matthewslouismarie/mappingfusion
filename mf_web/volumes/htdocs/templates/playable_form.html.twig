@@ -63,14 +63,14 @@
         </div>
         <div class="form-row">
             <label class="label" for="p-release-date-time">Date de publication (optionnel)</label>
-            <input class="input" id="p-release-date-time" name="release_date_time" type="datetime-local" {% if formData %} value="{{ formData.release_date_time.format('Y-m-d H:i') }}"{% endif %}>
+            <input class="input" id="p-release-date-time" name="release_date_time" type="datetime-local" {% if formData %} value="{{ formData.release_date_time.format('Y-m-d H:i') ?? formData.release_date_time }}"{% endif %}>
             {% if formErrors %}{{ errorList(formErrors.release_date_time )}}{% endif %}
         </div>
     </div>
     
     {% if submission %}
     {% for link in submission.formValue('links').arrayValue %}
-    {{ _self.linkForm(   app.linkTypes, link, loop.index0) }}
+    {{ _self.linkForm(app.linkTypes, link, loop.index0) }}
     {% endfor %}
     {% endif %}
     <button class="std-button -padded" id="link-form-button" data-type="add-link-form-button" data-location-target="link-form-button" data-template="link-form-template" type="button">Ajouter un lien</button>

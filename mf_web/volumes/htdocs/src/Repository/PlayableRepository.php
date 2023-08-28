@@ -46,10 +46,10 @@ class PlayableRepository implements IRepository
         $rows = $stmt->fetchAll();
         $links = [];
         for ($i = 0; $i < count($rows); $i++) {
-            $links[] = $this->em->toAppObject($rows[$i], new PlayableLinkModel());
+            $links[] = $this->em->toAppData($rows[$i], new PlayableLinkModel());
         }
 
-        $playable = $this->em->toAppObject($rows[0], new PlayableModel(new PlayableModel()));
+        $playable = $this->em->toAppData($rows[0], new PlayableModel(new PlayableModel()));
         return $playable->set('links', $links);
 
     }
@@ -61,7 +61,7 @@ class PlayableRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM e_playable;')->fetchAll();
         $playables = [];
         foreach ($results as $row) {
-            $playables[] = $this->em->toAppObject($row, $this->model);
+            $playables[] = $this->em->toAppData($row, $this->model);
         }
         return $playables;
     }

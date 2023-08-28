@@ -1,14 +1,11 @@
 <?php
 
-use MF\Constraint\DecimalConstraint;
 use MF\Database\DbEntityManager;
-use MF\DataStructure\DecimalNumber;
 use MF\Model\ArticleModel;
 use MF\Model\CategoryModel;
 use MF\Model\PlayableModel;
 use MF\Model\ReviewModel;
 use MF\Test\Tester;
-use MF\Validator\DecimalNumberValidator;
 
 $container = require_once(dirname(__FILE__) . '/../index.php');
 
@@ -16,7 +13,7 @@ $tester = $container->get(Tester::class);
 
 $em = $container->get(DbEntityManager::class);
 
-$appObject = $em->toAppObject(
+$appObject = $em->toAppData(
     [
         'article_id' => 'prout-prite',
         'article_author_id' => 'root',
@@ -64,21 +61,7 @@ $tester->assertArrayEquals(
             'id' => 'cat',
             'name' => 'Une catégorie',
         ],
-        'review' => [
-            'article_id' => NULL,
-            'body' => NULL,
-            'cons' => NULL,
-            'id' => NULL,
-            'playable_id' => NULL,
-            'pros' => NULL,
-            'rating' => NULL,
-            'playable' => [
-                'game_id' => NULL,
-                'id' => NULL,
-                'name' => NULL,
-                'release_date_time' => NULL,
-            ],
-        ],
+        'review' => null,
     ],
     $appObject->toArray(),
 );
@@ -101,7 +84,7 @@ $tester->assertArrayEquals(
 //         ],
 //         'admin' => true,
 //     ],
-//     $em->toAppObject([
+//     $em->toAppData([
 //         'author_name' => 'M. Grinchon',
 //         'playable_name' => 'Half-Life',
 //         'playable_year' => 1998,
@@ -113,7 +96,7 @@ $tester->assertArrayEquals(
 // $tester->assertEquals([
 //         'name' => 'M. Grinchon',
 //     ],
-//     $em->toAppObject([
+//     $em->toAppData([
 //         'author_name' => 'M. Grinchon',
 //     ], 'author'),
 // );
@@ -127,7 +110,7 @@ $tester->assertArrayEquals(
 //             'name' => 'hi',
 //         ],
 //     ],
-//     $em->toAppObject([
+//     $em->toAppData([
 //         'name' => 'M. Grinchon',
 //         'category_name' => 'yo',
 //         'tag_name' => 'hi',

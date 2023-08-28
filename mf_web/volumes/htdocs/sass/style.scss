@@ -1,3 +1,12 @@
+/**
+ * @todo Reorganise CSS into different parts.
+ * reset: (done) Reset user agent default CSS.
+ * body: Consists only of blocks that must form a partition of the viewport.
+ * block (block-…): Direct child of the body. Element that is meant to take the entire viewport width, without any margin.
+ * helpers (_…): Classes for frequent formatting directives, such as font size, padding, flex parameters…
+ * standard elements (std-…): Classes for specific HTML structures and more complex formatting. They can adapt to various resolutions.
+ */
+
 $area-height-l: 40vh;
 $area-size-s: 3rem;
 $block-border-width: 0.5rem;

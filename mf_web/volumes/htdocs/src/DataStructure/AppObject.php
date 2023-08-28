@@ -58,4 +58,25 @@ class AppObject implements ArrayAccess
         }
         return $appArray;
     }
+
+    public function isEqualTo(mixed $appObject): bool {
+        if (!($appObject instanceof AppObject)) {
+            return false;
+        }
+        foreach ($this->data as $key => $value) {
+            $isEqual = null;
+            if ($value instanceof AppObject) {
+                $isEqual = $value->isEqualTo($appObject[$key]);
+            } elseif (gettype($value) === 'object') {
+                $isEqual = $value == $appObject[$key];
+            } else {
+                $isEqual = $value === $appObject[$key];
+            }
+            if (!$isEqual) {
+                var_dump($value, $appObject[$key]);
+                return false;
+            }
+        }
+        return true;
+    }
 }

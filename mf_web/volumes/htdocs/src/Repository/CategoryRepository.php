@@ -38,7 +38,7 @@ class CategoryRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toAppObject($data[0], $this->model);
+            return $this->em->toAppData($data[0], $this->model);
         } else {
             throw new UnexpectedValueException();
         }
@@ -52,7 +52,7 @@ class CategoryRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM e_category;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppObject($r, $this->model);
+            $entities[] = $this->em->toAppData($r, $this->model);
         }
         return $entities;
     }

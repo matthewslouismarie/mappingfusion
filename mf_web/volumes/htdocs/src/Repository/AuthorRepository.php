@@ -36,7 +36,7 @@ class AuthorRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toAppObject($data[0], $this->model);
+            return $this->em->toAppData($data[0], $this->model);
         } else {
             throw new UnexpectedValueException();
         }
@@ -46,7 +46,7 @@ class AuthorRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM e_author;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppObject($r, $this->model);
+            $entities[] = $this->em->toAppData($r, $this->model);
         }
         return $entities;
     }
@@ -57,7 +57,7 @@ class AuthorRepository implements IRepository
         $row = $stmt->fetch();
         $authors = [];
         while (false !== $row) {
-            $authors[] = $this->em->toAppObject($row, $this->model);
+            $authors[] = $this->em->toAppData($row, $this->model);
             $row = $stmt->fetch();
         }
 

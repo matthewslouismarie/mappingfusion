@@ -8,7 +8,7 @@
         <label class="label" for="author-id">ID de l’auteur</label>
         <select class="input" id="author-id" name="contribution_author_id" required>
             {% for a in authors %}
-            <option label="{{ a.name }}" value="{{ a.id }}" {% if contribution and contribution['contribution_author_id'] == a.id %}selected="selected"{% endif %}>
+            <option label="{{ a.name }}" value="{{ a.id }}" {% if contribution and contribution.contributionAuthorId == a.id %}selected="selected"{% endif %}>
             {% endfor %}
         </select>
     </div>

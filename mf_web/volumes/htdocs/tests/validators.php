@@ -77,7 +77,7 @@ $tester->assertEquals(1, count($validator->validate('-78.1')));
 //         ],
 //         'admin' => true,
 //     ],
-//     $em->toAppObject([
+//     $em->toAppData([
 //         'author_name' => 'M. Grinchon',
 //         'playable_name' => 'Half-Life',
 //         'playable_year' => 1998,
@@ -89,7 +89,7 @@ $tester->assertEquals(1, count($validator->validate('-78.1')));
 // $tester->assertEquals([
 //         'name' => 'M. Grinchon',
 //     ],
-//     $em->toAppObject([
+//     $em->toAppData([
 //         'author_name' => 'M. Grinchon',
 //     ], 'author'),
 // );
@@ -103,7 +103,7 @@ $tester->assertEquals(1, count($validator->validate('-78.1')));
 //             'name' => 'hi',
 //         ],
 //     ],
-//     $em->toAppObject([
+//     $em->toAppData([
 //         'name' => 'M. Grinchon',
 //         'category_name' => 'yo',
 //         'tag_name' => 'hi',

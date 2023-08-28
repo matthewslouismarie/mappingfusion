@@ -96,6 +96,14 @@ class Tester
         return true;
     }
 
+    public function assertTrue(mixed $variable): bool {
+        if ($variable !== true) {
+            $this->errors[] = 'Expected true, got ' . gettype($variable) . "\n" . var_export($variable, true);
+            return false;
+        }
+        return true;
+    }
+
     public function getErrors(): array {
         return $this->errors;
     }

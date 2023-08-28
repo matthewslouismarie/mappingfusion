@@ -24,62 +24,6 @@ class DbEntityManager
         return count($array) === count(array_filter($array, fn($key) => is_int($key), ARRAY_FILTER_USE_KEY));
     }
 
-
-    /**
-     * Transform the given DB Array key and value into a Model’s Property.
-     *
-     * @param string $dbArrayKey The DB Array key.
-     * @param mixed $dbValue The associated DB Data.
-     * @param IModel $model The App Object Model to use to extract the property hierarchy.
-     * @return mixed[] A recursive array using valid Property names for keys and terminating with the transformed DB
-     * data.
-     * @todo Should return an array object as value if property is of the IModel type.
-     */
-    public function toModelProperty(string $dbArrayKey, mixed $dbValue, IModel $model): ?array {
-        foreach ($model->getProperties() as $p) {
-            if ($p->getType() instanceof IModel) {
-                $pKeys = $this->toModelProperty($dbArrayKey, $dbValue, $p->getType());
-                if (null !== $pKeys) {
-                    return [$p->getName() => $pKeys];
-                }
-            } else {
-                if ($model->getName() . self::SEP . $p->getName() ===  $dbArrayKey) {
-                    return [$p->getName() => $this->toAppData($dbValue, $p->getType())];
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Transform the given DB Array into an App Object using the specified Model.
-     * 
-     * @param mixed[] $dbArray A DB Array.
-     * @param IModel $model A model.
-     * @return AppObject A DB Array created from the Model and the DB Array.
-     * @throws InvalidArgumentException If $dbArray is not a valid DB Array.
-     */
-    public function toAppObject(
-        array $dbArray,
-        IModel $model,
-    ): AppObject {
-        $appArray = [];
-
-        foreach ($dbArray as $key => $value) {
-            if (!is_scalar($value) && null !== $value) {
-                throw new InvalidArgumentException("DB arrays must not hold non-scalar values: ");
-            }
-
-            $hierarchy = $this->toModelProperty($key, $value, $model);
-            if (null !== $hierarchy) {
-                $appArray = array_merge_recursive($appArray, $hierarchy);
-            }
-        }
-
-        return new AppObject($appArray);
-    }
-
     /**
      * Transform DB Data into App Data.
      *
@@ -88,16 +32,37 @@ class DbEntityManager
      * @return mixed App Data.
      */
     public function toAppData(mixed $dbData, IType $type): mixed {
-        if (null === $dbData) {
-            return null;
-        } elseif ($type instanceof IModel) {
-            return $this->toAppObject($dbData, $type);
-        } elseif ($type instanceof IArrayConstraint && $type->getElementType() instanceof IModel) {
-            $appObjects = [];
-            foreach ($dbData as $dbArray) {
-                $appObjects[] = $this->toAppObject($dbArray, $type->getElementType());
+        if ($type instanceof IModel) {
+            $appArray = [];
+            foreach ($type->getProperties() as $p) {
+                if ($p->getType() instanceof IModel) {
+                    $appArray[$p->getName()] = $this->toAppData($dbData, $p->getType());
+                } else {
+                    $appArray[$p->getName()] = $this->toAppData(
+                        $dbData[$type->getName() . '_' . $p->getName()],
+                        $p->getType(),
+                    );
+                }
             }
-            return $appObjects;
+            if (count($appArray) === count(array_filter($appArray, fn ($value) => null === $value))) {
+                return null;
+            } else {
+                return new AppObject($appArray);
+            }
+        } elseif (null === $dbData) {
+            return null;
+        } elseif ($type instanceof IArrayConstraint) {
+            $appDatas = [];
+            if ($type->getElementType() instanceof IModel) {
+                foreach ($dbData as $dbArray) {
+                    $appDatas[] = $this->toAppData($dbArray, $type->getElementType());
+                }
+            } else {
+                foreach ($dbData as $dbArray) {
+                    $appDatas[] = $this->toAppData($dbArray, $type->getElementType());
+                }
+            }
+            return $appDatas;
         } elseif ($type instanceof IDateTimeConstraint) {
             return new DateTimeImmutable($dbData);
         } elseif ($type instanceof IBooleanConstraint) {
