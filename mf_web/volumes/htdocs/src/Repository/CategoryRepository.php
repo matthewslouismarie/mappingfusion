@@ -6,7 +6,6 @@ use MF\Database\DatabaseManager;
 use MF\Database\DbEntityManager;
 use MF\DataStructure\AppObject;
 use MF\DataStructure\AppObjectFactory;
-use MF\Model\Category;
 use MF\Model\CategoryModel;
 use UnexpectedValueException;
 

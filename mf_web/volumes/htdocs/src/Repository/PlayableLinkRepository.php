@@ -5,7 +5,6 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use MF\Database\DbEntityManager;
 use MF\DataStructure\AppObject;
-use MF\Model\PlayableLink;
 use MF\Model\PlayableLinkModel;
 
 class PlayableLinkRepository implements IRepository

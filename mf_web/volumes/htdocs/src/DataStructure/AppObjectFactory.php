@@ -9,6 +9,7 @@ use MF\Constraint\IModel;
 use MF\Constraint\IType;
 
 class AppObjectFactory
+
 {
     /**
      * @todo Validate input app array from a given definition.

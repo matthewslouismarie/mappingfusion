@@ -2,12 +2,10 @@
 
 namespace MF\Controller;
 
-use DomainException;
 use MF\DataStructure\AppObject;
 use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
 use MF\Form\FormFactory;
-use MF\Model\Category;
 use MF\Model\CategoryModel;
 use MF\Model\Slug;
 use MF\Session\SessionManager;

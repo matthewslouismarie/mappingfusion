@@ -2,9 +2,7 @@
 
 namespace MF\Controller;
 
-use DomainException;
 use GuzzleHttp\Psr7\Response;
-use MF\Database\DbEntityManager;
 use MF\DataStructure\AppObject;
 use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
@@ -12,8 +10,6 @@ use MF\Enum\LinkType;
 use MF\Exception\Database\EntityNotFoundException;
 use MF\Exception\Http\NotFoundException;
 use MF\Form\FormFactory;
-use MF\Model\Playable;
-use MF\Model\PlayableLink;
 use MF\Model\PlayableLinkModel;
 use MF\Model\PlayableModel;
 use MF\Model\Slug;
