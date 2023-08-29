@@ -39,7 +39,7 @@ class FormValue implements IFormData
         return is_bool($this->value) ? $this->value : null;
     }
 
-    public function getFormValue(string $name): ?FormValue {
+    public function getFormData(string $name): ?FormValue {
         return $this->value[$name] ?? null;
     }
 
@@ -47,7 +47,7 @@ class FormValue implements IFormData
         return is_string($this->value) ? $this->value : null;
     }
 
-    public function getErrors(): array {
+    public function getValidationFailures(): array {
         return $this->errors;
     }
 

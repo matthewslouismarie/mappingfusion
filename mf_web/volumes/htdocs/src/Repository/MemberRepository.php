@@ -30,14 +30,19 @@ class MemberRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toAppData($data[0], $this->model, 'member');
+            return $this->em->toAppData($data[0], $this->model);
         } else {
             throw new UnexpectedValueException();
         }
     }
 
     public function updateMember(AppObject $member): void {
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_member SET member_password = :password_hash WHERE member_id = :id');
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_member SET member_password = :password WHERE member_id = :id');
         $stmt->execute($this->em->toDbValue($member));
+    }
+
+    public function updateId(string $oldId, string $newId): void {
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_member SET member_id = :new_id WHERE member_id = :old_id');
+        $stmt->execute(['old_id' => $oldId, 'new_id' => $newId]);
     }
 }

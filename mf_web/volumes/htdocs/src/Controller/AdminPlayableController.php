@@ -58,7 +58,7 @@ class AdminPlayableController implements ControllerInterface
             $submission = $form->extractFormData($request->getParsedBody());
             $formData = $submission->getData();
             $formData['id'] = $formData['id'] ?? (new Slug($formData['name'], true))->__toString();
-            $formErrors = $submission->getErrors();
+            $formErrors = $submission->getValidationFailures();
 
             if (!$submission->hasErrors()) {
                 $playable = $this->appObjectFactory->create($formData, new PlayableModel());

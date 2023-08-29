@@ -10,7 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * @todo Finish up.
+ * @todo Restore.
  */
 class AdminContributionController implements ControllerInterface
 {

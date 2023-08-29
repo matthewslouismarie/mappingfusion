@@ -69,7 +69,7 @@
     </div>
     
     {% if submission %}
-    {% for link in submission.formValue('links').arrayValue %}
+    {% for link in submission.formData('links').arrayValue %}
     {{ _self.linkForm(app.linkTypes, link, loop.index0) }}
     {% endfor %}
     {% endif %}

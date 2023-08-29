@@ -13,7 +13,6 @@ class ExtractionException extends InvalidArgumentException
     private string $userErrorMessage;
 
     public function __construct(
-        string $userErrorMessage,
         string $message = '',
         int $code = 0,
         Throwable $previous = null,

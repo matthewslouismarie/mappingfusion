@@ -13,7 +13,7 @@ interface IFormData
     /**
      * @return string[] An array of string errors, or of arrays of string errors, regarding the data. If the
      */
-    public function getErrors(): array;
+    public function getValidationFailures(): array;
 
     public function hasErrors(): bool;
 }

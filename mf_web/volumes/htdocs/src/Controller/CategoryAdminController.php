@@ -45,7 +45,7 @@ class CategoryAdminController implements ControllerInterface
         if ('POST' === $request->getMethod()) {
             $submission = $form->extractFormData($request->getParsedBody(), $request->getUploadedFiles());
             $formData = $submission->getData();
-            $formErrors = $submission->getErrors();
+            $formErrors = $submission->getValidationFailures();
 
             if (!$submission->hasErrors()) {
                 $formData['id'] = $formData['id'] ?? (new Slug($formData['name'], true))->__toString();

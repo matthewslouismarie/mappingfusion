@@ -5,13 +5,12 @@ namespace MF\Form;
 use MF\Form\Transformer\FormTransformer;
 
 /**
- * Defines a submittable individual element with no children.
+ * Defines a submittable with a name and an associated transformer.
  */
 interface IFormElement extends Submittable
 {
     /**
      * @return string The form identifier for the form element.
-     * @todo Must not be able to return non valid names?
      */
     public function getName(): string;
 

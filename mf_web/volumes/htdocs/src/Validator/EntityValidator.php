@@ -18,7 +18,7 @@ class EntityValidator implements IValidator
             return [new ValidationFailure('Entity data is not an array.')];
         }
         if ($data instanceof FormArray) {
-            return $data->getErrors();
+            return $data->getValidationFailures();
         }
         $validatorFactory = new ValidatorFactory();
         $failures = [];

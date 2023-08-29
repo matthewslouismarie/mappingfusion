@@ -1,17 +1,29 @@
 {% extends 'base.html.twig' %}
 
+{% from 'macros/csrf_input.html.twig' import csrf %}
+{% from 'macros/error_list.html.twig' import errorList %}
+
 {% block title %}Compte{% endblock %}
 
-{% block body %}
-Compte
-<form autocomplete="on" method="post">
+{% block bodyContent %}
+<h1>Mon Compte</h1>
+<form class="std-form" autocomplete="on" method="post"{% if app.dev %} novalidate{% endif %}>
     {% if success %}
     {{ success }}
     {% endif %}
     <div class="form-row">
-        <label for="password">Mot de passe :</label>
-        <input id="password" name="password" required type="password">
+        <label class="label" for="id">Nom d’utilisateur :</label>
+        <input class="input" id="id" name="id" required value="{{ formData['id'] }}">
+        {% if formErrors %}{{ errorList(formErrors.id )}}{% endif %}
     </div>
-    <button type="submit">Mettre à jour</button>
+    <div class="form-row">
+        <label class="label" for="password">Mot de passe :</label>
+        <input class="input" id="password" name="password" type="password">
+        {% if formErrors %}{{ errorList(formErrors.password )}}{% endif %}
+    </div>
+    <button class="std-button -padded" type="submit">
+        <div class="text _text -bold">Mettre à jour</div>
+    </button>
+    {{ csrf(app) }}
 </form>
 {% endblock %}

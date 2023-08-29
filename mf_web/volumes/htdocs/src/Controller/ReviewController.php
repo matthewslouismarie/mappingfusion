@@ -47,7 +47,7 @@ class ReviewController implements ControllerInterface
         if ('POST' === $request->getMethod()) {
             $submission = $form->extractFormData($request->getParsedBody());
             $formData = $submission->getData();
-            $formErrors = $submission->getErrors();
+            $formErrors = $submission->getValidationFailures();
 
             if (!$submission->hasErrors()) {
                 $review = $this->appObjectFactory->create($formData, $this->model);

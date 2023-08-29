@@ -2,7 +2,10 @@
 
 namespace MF\Controller;
 
+use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
+use MF\Form\FormFactory;
+use MF\Model\MemberModel;
 use MF\Session\SessionManager;
 use MF\Repository\MemberRepository;
 use GuzzleHttp\Psr7\Response;
@@ -14,30 +17,53 @@ class AccountController implements ControllerInterface
 {
     const ROUTE_ID = 'manage-account';
 
-    private MemberRepository $repo;
-    private SessionManager $session;
-
-    private TwigService $twig;
-
     public function __construct(
-        MemberRepository $repo,
-        SessionManager $session,
-        TwigService $twig,
+        private MemberRepository $repo,
+        private SessionManager $session,
+        private TwigService $twig,
+        private FormFactory $formFactory,
+        private AppObjectFactory $appObjectFactory,
+        private MemberModel $model,
     ) {
-        $this->repo = $repo;
-        $this->session = $session;
-        $this->twig = $twig;
     }    
 
+    /**
+     * @todo Use standard form.
+     */
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $member = $this->repo->find($this->session->getCurrentMemberUsername());
+        $formData = [
+            'id' => $this->session->getCurrentMemberUsername(),
+            'password' => null,
+        ];
+        $formErrors = null;
         $success = null;
+        $form = $this->formFactory->createForm($this->model, formConfig: [
+            'password' => [
+                'required' => false,
+            ],
+        ]);
         if ('POST' === $request->getMethod()) {
-            $newPasswordHash = password_hash($request->getParsedBody()['password'], PASSWORD_DEFAULT);
-            $this->repo->updateMember($member->setPasswordHash($newPasswordHash));
-            $success = 'Votre mot de passe a été mis à jour.';
+            $submitted = $form->extractFormData($request->getParsedBody());
+            $formData = $submitted->getData();
+            $formErrors = $submitted->getValidationFailures();
+            if (!$submitted->hasErrors()) {
+                if (null !== $formData['password']) {
+                    $success = 'Votre compte a été mis à jour.';
+                    $formData['password'] =  password_hash($formData['password'], PASSWORD_DEFAULT);
+                    $this->repo->updateMember($this->appObjectFactory->create($formData, $this->model));
+                    $this->session->setCurrentMemberUsername($formData['id']);
+                } else {
+                    $this->repo->updateId($this->session->getCurrentMemberUsername(), $formData['id']);
+                    $success = 'Votre nom d’utilisateur a été mis à jour.';
+                    $this->session->setCurrentMemberUsername($formData['id']);
+                }
+            }
         }
-        return new Response(body: $this->twig->render('account.html.twig', ['success' => $success]));
+        return new Response(body: $this->twig->render('account.html.twig', [
+            'success' => $success,
+            'formData' => $formData,
+            'formErrors' => $formErrors,
+        ]));
     }
 
     public function getAccessControl(): Clearance {

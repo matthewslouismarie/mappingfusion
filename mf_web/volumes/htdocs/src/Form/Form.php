@@ -3,9 +3,6 @@
 namespace MF\Form;
 
 use InvalidArgumentException;
-use MF\DataStructure\AppObject;
-use MF\Form\FormValue;
-use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Extracts a FormArray from HTTP requests, and converts arrays into FormArray-s.
@@ -19,7 +16,7 @@ class Form implements Submittable
 
     /**
      * @param IFormElement[] $children An array of Form Element constituting the form.
-     * @param string|null $ignoreValueOf The name of a Form Element to ignore.
+     * @param string|null $ignoreValueOf The name of a Form Element to ignore whose value it extracts should be ignored.
      * @throws \InvalidArgumentException If the given children are invalid.
      */
     public function __construct(
