@@ -43,9 +43,9 @@ class AccountController implements ControllerInterface
             ],
         ]);
         if ('POST' === $request->getMethod()) {
-            $submitted = $form->extractFormData($request->getParsedBody());
-            $formData = $submitted->getData();
-            $formErrors = $submitted->getValidationFailures();
+            $submitted = $form->extractFromRequest($request->getParsedBody());
+            $formData = $submitted->getContent();
+            $formErrors = $submitted->getErrors();
             if (!$submitted->hasErrors()) {
                 if (null !== $formData['password']) {
                     $success = 'Votre compte a été mis à jour.';

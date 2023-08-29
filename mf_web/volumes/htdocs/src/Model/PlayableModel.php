@@ -13,6 +13,7 @@ class PlayableModel implements IModel
     public function __construct(
         private ?self $gameModel = null,
         private ?PlayableLinkModel $playableLinkModel = null,
+        private ?ContributionModel $contributionModel = null,
     ) {
     }
     
@@ -32,6 +33,9 @@ class PlayableModel implements IModel
         }
         if (null !== $this->playableLinkModel) {
             $properties[] = new ModelProperty('links', new ArrayConstraint($this->playableLinkModel));
+        }
+        if (null !== $this->contributionModel) {
+            $properties[] = new ModelProperty('contributions', new ArrayConstraint($this->contributionModel));
         }
         return $properties;
     }

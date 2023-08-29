@@ -3,7 +3,6 @@
 namespace MF\Form;
 
 use InvalidArgumentException;
-use MF\Constraint\ArrayConstraint;
 use MF\Constraint\IArrayConstraint;
 use MF\Constraint\IBooleanConstraint;
 use MF\Constraint\IDateTimeConstraint;
@@ -24,7 +23,6 @@ use MF\Form\Transformer\StringTransformer;
 use MF\Model\ModelProperty;
 use MF\Session\SessionManager;
 use MF\Validator\ValidatorFactory;
-use RuntimeException;
 
 /**
  * Automatically creates a Form object from a model definition.
@@ -46,7 +44,6 @@ class FormFactory
 
     public function createForm(
         IModel $model,
-        string $prefix = '',
         array $formConfig = [],
         bool $csrf = true,
     ): Form {
@@ -61,7 +58,7 @@ class FormFactory
                 $validators = $this->getValidators($property);
 
                 $htmlFormElements[] = new StdFormElement(
-                    $prefix . $property->getName(),
+                    $property->getName(),
                     $transformer,
                     isRequired: $formElementConfig['required'] ?? $property->isRequired(),
                     validators: $validators,
@@ -91,7 +88,7 @@ class FormFactory
         } elseif ($type instanceof IDateTimeConstraint) {
             return $this->dateTimeTransformer;
         } elseif ($type instanceof IArrayConstraint) {
-            return new ArrayTransformer($this->createForm($type->getElementType(), formConfig: $formConfig, csrf: false));
+            return new ArrayTransformer($this->createForm($type->getElementType(), $formConfig, csrf: false));
         } elseif ($type instanceof IDecimalConstraint) {
             return $this->stringTransformer;
         }

@@ -3,77 +3,54 @@
 {% from 'macros/csrf_input.html.twig' import csrf %}
 {% from 'macros/error_list.html.twig' import errorList %}
 
-{% macro index(i) %}{{ i ?? '${index}' }}{% endmacro %}
-
-{% macro linkForm(linkTypes, link, i) %}
-<div class="_flex -col -gaps" data-link-form-id="link-form" id="link-form-{{ _self.index(i) }}">
-    <div class="form-row">
-        <label class="label" for="link-{{ _self.index(i) }}-name">Nom du lien</label>
-        <input class="input" id="link-{{ _self.index(i) }}-name" name="links[{{ _self.index(i) }}][name]"{% if link %} value="{{ link.data.name }}"{% endif %}>
-        {% if link %}{{ errorList(link.errors.name) }}{% endif %}
-    </div>
-    <div class="form-row">
-        <label class="label" for="link-{{ _self.index(i) }}-url">URL du lien</label>
-        <input class="input" id="link-{{ _self.index(i) }}-url" name="links[{{ _self.index(i) }}][url]"{% if link %} value="{{ link.data.url }}"{% endif %}>
-        {% if link %}{{ errorList(link.errors.url) }}{% endif %}
-    </div>
-    <div class="form-row">
-        <label class="label" for="link-{{ _self.index(i) }}-type">Type de lien</label>
-        <select class="input" id="link-{{ _self.index(i) }}-type" name="links[{{ _self.index(i) }}][type]">
-            {% for t in linkTypes %}
-            <option value="{{ t.value }}"{% if link and link.data.type == t.value %} selected{% endif %}>{{ t.value }}</option>
-            {% endfor %}
-        </select>
-        {% if link %}{{ errorList(link.errors.type) }}{% endif %}
-    </div>
-    <button class="stb-button" type="button" data-type="delete-link-button" data-form-id="link-form-{{ _self.index(i) }}" {% if link.data.id is defined %}data-link-id="{{ link.data.id }}" data-template-id="link-to-remove-template"{% endif %}>Supprimer le lien</button>
-    {% if  link.data.id is defined %}
-    <input class="input" name="links[{{ _self.index(i) }}][id]" type="hidden" value="{{ link.data.id }}">
-    {% endif %}
-</div>
-{% endmacro %}
-
 {% block title %}Édition de mod{% endblock %}
 
 {% block bodyContent %}
-<form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
-    <h1>{% if formData %}Édition de {{ formData.name }}{% else %}Nouveau jeu{% endif %}</h1>
+<h1>{% if formData.name.value %}Édition de {{ formData.name.value }}{% else %}Nouveau jeu{% endif %}</h1>
+
+<form class="std-form" autocomplete="on" enctype="multipart/form-data" method="post">
     <div class="_flex -col -gaps">
         <div class="form-row">
-            <label class="label" for="p-id">ID (générée automatiquement)</label>
-            <input class="input" id="p-id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
-            {% if formErrors %}{{ errorList(formErrors.id )}}{% endif %}
+            <label class="label" for="id">ID (générée automatiquement)</label>
+            <input class="input" id="id" name="id" value="{{ formData.id.value }}">
+            {{ errorList(formData.id.errors )}}
         </div>
+
         <div class="form-row">
-            <label class="label" for="p-name">Nom</label>
-            <input class="input" id="p-name" name="name" required{% if formData %} value="{{ formData.name }}"{% endif %}>
-            {% if formErrors %}{{ errorList(formErrors.name )}}{% endif %}
+            <label class="label" for="name">Nom</label>
+            <input class="input" id="name" name="name" required value="{{ formData.name.value }}">
+            {{ errorList(formData.name.errors )}}
         </div>
+
         <div class="form-row">
-            <label class="label" for="p-game-id">Si mod ou map, ID du jeu (laisser vide si c’est un jeu stand-alone)</label>
-            <select class="input" id="p-game-id" name="game_id">
-                <option value="">
+            <label class="label" for="game-id">Si mod ou map, ID du jeu (laisser vide si c’est un jeu stand-alone)</label>
+            <select class="input" id="game-id" name="game_id">
+                <option value=""></option>
                 {% for p in playables %}
-                {% if formData is null or p.id != formData.id %}
-                <option value="{{ p.id }}"{% if formData and formData.game_id == p.id %} selected{% endif %}>{{ p.name }}</option>
+                {% if p.id != formData.id.value %}
+                <option value="{{ p.id }}"{% if formData.game_id.value == p.id %} selected{% endif %}>{{ p.name }}</option>
                 {% endif %}
                 {% endfor %}
             </select>
-            {% if formErrors %}{{ errorList(formErrors.game_id )}}{% endif %}
+            {{ errorList(formData.game_id.errors )}}
         </div>
+
         <div class="form-row">
-            <label class="label" for="p-release-date-time">Date de publication (optionnel)</label>
-            <input class="input" id="p-release-date-time" name="release_date_time" type="datetime-local" {% if formData %} value="{{ formData.release_date_time.format('Y-m-d H:i') ?? formData.release_date_time }}"{% endif %}>
-            {% if formErrors %}{{ errorList(formErrors.release_date_time )}}{% endif %}
+            <label class="label" for="release-date-time">Date de publication (optionnel)</label>
+            <input class="input" id="release-date-time" name="release_date_time" type="datetime-local" value="{{ formData.release_date_time.value.format('Y-m-d H:i') }}">
+            {{ errorList(formData.release_date_time.errors )}}
         </div>
     </div>
     
-    {% if submission %}
-    {% for link in submission.formData('links').arrayValue %}
+    {# {% if formData %}
+    {% for link in formData.links %}
     {{ _self.linkForm(app.linkTypes, link, loop.index0) }}
     {% endfor %}
-    {% endif %}
+    {% endif %} #}
+
     <button class="std-button -padded" id="link-form-button" data-type="add-link-form-button" data-location-target="link-form-button" data-template="link-form-template" type="button">Ajouter un lien</button>
+
+    <button class="std-button -padded" id="add-contrib-button" data-source="contrib-form-tpl" data-location-target="add-contrib-button" type="button">Ajouter un contributeur</button>
 
     <div class="_text -textcentered">
         <button class="std-button -padded" type="submit">Poster</button>
@@ -86,6 +63,10 @@
 {{ _self.linkForm(app.linkTypes) }}
 </template>
 
+<template id="contrib-form-tpl">
+{{ _self.contributionForm(authors, '{{ i }}') }}
+</template>
+
 <template id="link-to-remove-template">
     <input type="hidden" name="links-to-remove[]" value="${linkId}">
 </template>
@@ -93,7 +74,72 @@
 
 {% block scriptInit %}
 <script src="{{ app.asset('link-form.js') }}"></script>
+<script src="{{ app.asset('dynamic-form.js') }}"></script>
 <script>
 const linkFormBtn = new LinkFormButton('link-form-button');
+const contribForm = new DynamicForm('add-contrib-button');
+contribForm.init();
 </script>
 {% endblock %}
+
+{% macro index(i) %}{{ i ?? '${index}' }}{% endmacro %}
+
+{% macro linkForm(linkTypes, link, i) %}
+<div class="_flex -col -gaps" data-link-form-id="link-form" id="link-form-{{ _self.index(i) }}">
+    <div class="form-row">
+        <label class="label" for="link-{{ _self.index(i) }}-name">Nom du lien</label>
+        <input class="input" id="link-{{ _self.index(i) }}-name" name="links[{{ _self.index(i) }}][name]"{% if link %} value="{{ link.content.name }}"{% endif %}>
+        {% if link %}{{ errorList(link.errors) }}{% endif %}
+    </div>
+    <div class="form-row">
+        <label class="label" for="link-{{ _self.index(i) }}-url">URL du lien</label>
+        <input class="input" id="link-{{ _self.index(i) }}-url" name="links[{{ _self.index(i) }}][url]"{% if link %} value="{{ link.content.url }}"{% endif %}>
+        {% if link %}{{ errorList(link.errors.url) }}{% endif %}
+    </div>
+    <div class="form-row">
+        <label class="label" for="link-{{ _self.index(i) }}-type">Type de lien</label>
+        <select class="input" id="link-{{ _self.index(i) }}-type" name="links[{{ _self.index(i) }}][type]">
+            {% for t in linkTypes %}
+            <option value="{{ t.value }}"{% if link and link.content.type == t.value %} selected{% endif %}>{{ t.value }}</option>
+            {% endfor %}
+        </select>
+        {% if link %}{{ errorList(link.errors.type) }}{% endif %}
+    </div>
+    <button class="stb-button" type="button" data-type="delete-link-button" data-form-id="link-form-{{ _self.index(i) }}" {% if link.content.id is defined %}data-link-id="{{ link.content.id }}" data-template-id="link-to-remove-template"{% endif %}>Supprimer le lien</button>
+    {% if  link.content.id is defined %}
+    <input class="input" name="links[{{ _self.index(i) }}][id]" type="hidden" value="{{ link.content.id }}">
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro contributionForm(authors, i, contribution = null) %}
+<div data-type="dynamic-form">
+    <div class="form-row">
+        <select id="contributions[{{ i }}][author_id]" name="contributions[{{ i }}][author_id]">
+            {% for a in authors %}
+            <option value="{{ a.id }}"{% if contribution and a.id == contribution.content.author_id %} selected{% endif %}>{{ a.name }}</option>
+            {% endfor %}
+        </select>
+        {% if contribution %}{{ errorList( contribution.author_id.validationFailures) }}{% endif %}
+    </div>
+
+    <div class="form-row -checkbox">
+        <input class="input" id="contributions[{{ i }}][is_author]" name="contributions[{{ i }}][is_author]" type="checkbox"{% if contribution and contribution.content.is_author %} checked{% endif %}>
+        <label class="label" for="contributions[{{ i }}][is_author]">Mettre à la une</label>
+        {% if contribution %}{{ errorList( contribution.is_featured.validationFailures) }}{% endif %}
+    </div>
+
+    <div class="form-row">
+        <label class="label" for="contributions[{{ i }}][summary]">Résumé</label>
+        <input class="input" id="contributions[{{ i }}][summary]" name="contributions[{{ i }}][summary]">
+        {% if contribution %}{{ errorList( contribution.summary.validationFailures) }}{% endif %}
+    </div>
+
+    <div class="form-row">
+        <button class="std-button -padded" data-type="remove-dynamic-form-button" type="button">
+            <div class="text">Supprimer</div>
+        </button>
+    </div>
+    <input type="hidden" value="{{ contribution.id.content ?? null }}">
+</div>
+{% endmacro %}

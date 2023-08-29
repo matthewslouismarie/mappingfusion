@@ -30,9 +30,9 @@ class LoginController implements ControllerInterface
         $formData = null;
 
         if ('POST' === $request->getMethod()) {
-            $submission = $form->extractFormData($request->getParsedBody());
+            $submission = $form->extractFromRequest($request->getParsedBody());
             if (!$submission->hasErrors()) {
-                $formData = $submission->getData();
+                $formData = $submission->getContent();
                 $member = $this->repo->find($formData['id']);
                 if (null === $member || !password_verify($request->getParsedBody()['password'], $member->password)) {
                     $formErrors[] = 'Identifiants invalides.';

@@ -58,9 +58,9 @@ class AdminArticleController implements ControllerInterface
         );
 
         if ('POST' === $request->getMethod()) {
-            $submission = $form->extractFormData($request->getParsedBody(), $request->getUploadedFiles());
-            $formData = $submission->getData();
-            $formErrors = $submission->getValidationFailures();
+            $submission = $form->extractFromRequest($request->getParsedBody(), $request->getUploadedFiles());
+            $formData = $submission->getContent();
+            $formErrors = $submission->getErrors();
 
             if (!$submission->hasErrors()) {
                 $formData['id'] = $existingArticle->id ?? (new Slug($formData['title'], true))->__toString();

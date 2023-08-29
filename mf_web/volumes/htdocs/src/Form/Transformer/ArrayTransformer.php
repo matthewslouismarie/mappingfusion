@@ -3,28 +3,28 @@
 namespace MF\Form\Transformer;
 
 use MF\Exception\Form\ExtractionException;
-use MF\Form\Form;
-use MF\Form\IFormElement;
+use MF\Form\IFormDataFactory;
 
 class ArrayTransformer implements FormTransformer
 {
     public function __construct(
-        private Form $submittable,
+        private IFormDataFactory $formDataFactory,
     ) {
     }
 
-    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, IFormElement $input): array {
-        if (!key_exists($input->getName(), $formRawData)) {
+    public function extractValueFromRequest(array $requestParsedBody, array $uploadedFiles, string $inputName): array {
+        if (!key_exists($inputName, $requestParsedBody)) {
             return [];
         }
-        if (!is_array($formRawData[$input->getName()])) {
+        if (!is_array($requestParsedBody[$inputName])) {
             throw new ExtractionException('Une erreur s’est produite.');
         }
 
         $appArray = [];
-        foreach ($formRawData[$input->getName()] as $subFormRawData) {
-            $appArray[] = $this->submittable->extractFormData($subFormRawData, $uploadedFiles);
+        foreach ($requestParsedBody[$inputName] as $subRequestParsedBody) {
+            $appArray[] = $this->formDataFactory->extractFromRequest($subRequestParsedBody, $uploadedFiles);
         }
+    
         return $appArray;
     }
 }

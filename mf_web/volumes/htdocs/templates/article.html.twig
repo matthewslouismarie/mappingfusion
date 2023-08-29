@@ -12,6 +12,7 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block body %}
+{# @todo micro data attributes #}
 <div class="page-article">
     <div class="std-article">
 
@@ -105,11 +106,14 @@
 
 {% block scriptInit %}
 <script>
+    {% if app.getImages(article.body) %}
     const glide = new Glide('.glide', {gap: 0});
     glide.on('mount.after', function () {
         glide.update();
     });
     glide.mount();
+    {% endif %}
+
     const reviewMenu = new ReviewMenu();
     reviewMenu.init();
 </script>

@@ -6,6 +6,7 @@
 {% block title %}Compte{% endblock %}
 
 {% block bodyContent %}
+{# @todo autocomplete attributes #}
 <h1>Mon Compte</h1>
 <form class="std-form" autocomplete="on" method="post"{% if app.dev %} novalidate{% endif %}>
     {% if success %}

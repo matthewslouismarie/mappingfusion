@@ -6,9 +6,8 @@ use InvalidArgumentException;
 
 /**
  * Extracts a FormArray from HTTP requests, and converts arrays into FormArray-s.
- * It is
  */
-class Form implements Submittable
+class Form implements IFormDataFactory
 {
     private array $children;
 
@@ -38,25 +37,37 @@ class Form implements Submittable
         $this->ignoreValueOf = $ignoreValueOf;
     }
 
-    public function extractFormData(array $requestFormData, ?array $uploadedFiles = null): FormArray {
-        $formArray = [];
-        foreach ($this->children as $child) {
-            if ($child->getName() === $this->ignoreValueOf) {
-                $child->extractFormData($requestFormData, $uploadedFiles ?? []);
+    public function createFromAppArray(array $appArray): FormArray {
+        $submissions = [];
+        foreach ($appArray as $key => $value) {
+            if (is_array($value)) {
+                $submissions[$key] = $this->createFromAppArray($value);
             } else {
-                $formArray[$child->getName()] = $child->extractFormData($requestFormData, $uploadedFiles ?? []);
+                $submissions[$key] = new StdFormData($value);
             }
         }
-        return new FormArray($formArray);
+        return new FormArray($submissions);
+    }
+
+    public function extractFromRequest(array $requestParsedBody, ?array $uploadedFiles = null): FormArray {
+        $formDatas = [];
+        foreach ($this->children as $child) {
+            if ($child->getName() === $this->ignoreValueOf) {
+                $child->extractFromRequest($requestParsedBody, $uploadedFiles ?? []);
+            } else {
+                $formDatas[$child->getName()] = $child->extractFromRequest($requestParsedBody, $uploadedFiles ?? []);
+            }
+        }
+        return new FormArray($formDatas);
     }
 
     public function extractNoValidate(array $requestFormData, ?array $uploadedFiles = null): array {
         $formArray = [];
         foreach ($this->children as $child) {
             if ($child->getName() === $this->ignoreValueOf) {
-                $child->extractFormData($requestFormData, $uploadedFiles ?? []);
+                $child->extractFromRequest($requestFormData, $uploadedFiles ?? []);
             } else {
-                $formArray[$child->getName()] = $child->extractFormData($requestFormData, $uploadedFiles ?? [])->getData();
+                $formArray[$child->getName()] = $child->extractFromRequest($requestFormData, $uploadedFiles ?? [])->getContent();
             }
         }
         return $formArray;

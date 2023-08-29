@@ -15,21 +15,21 @@ class FileTransformer implements FormTransformer
     /**
      * @throws MissingInputException If no file was uploaded.
      */
-    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, IFormElement $input): ?string {
-        if (!key_exists($input->getName(), $formRawData) && !key_exists($input->getName(), $uploadedFiles)) {
-            if (key_exists($input->getName() . self::PREVIOUS_SUFFIX, $formRawData)) {
-                return $formRawData[$input->getName() . self::PREVIOUS_SUFFIX];
+    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, string $inputName): ?string {
+        if (!key_exists($inputName, $formRawData) && !key_exists($inputName, $uploadedFiles)) {
+            if (key_exists($inputName . self::PREVIOUS_SUFFIX, $formRawData)) {
+                return $formRawData[$inputName . self::PREVIOUS_SUFFIX];
             }
             return null;
         }
-        $uploadedFile = $uploadedFiles[$input->getName()];
+        $uploadedFile = $uploadedFiles[$inputName];
 
         if (0 === $uploadedFile->getError()) {
             $filename = new SlugFilename($uploadedFile->getClientFilename());
             $uploadedFile->moveTo(dirname(__FILE__) . "/../../../public/uploaded/" . $filename->__toString());
             return $filename->__toString();
         } elseif (4 === $uploadedFile->getError()) {
-            return $formRawData[$input->getName() . self::PREVIOUS_SUFFIX] ?? null;
+            return $formRawData[$inputName . self::PREVIOUS_SUFFIX] ?? null;
         } else {
             throw new UnexpectedValueException();
         }

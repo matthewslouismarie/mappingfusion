@@ -5,7 +5,7 @@ namespace MF\Form;
 /**
  * Extract and validate submitted form data from a request.
  */
-interface Submittable
+interface IFormDataFactory
 {
     /**
      * @return \MF\Form\IFormData An object containing the submitted data alongside any validation failures if relevant.
@@ -13,5 +13,5 @@ interface Submittable
      * An IFormData instance also comes with an array of validation failures, which should be empty.
      * @throws ExtractionException If no submitted value could not found, or the found value could not be extracted.
      */
-    public function extractFormData(array $requestFormData, ?array $uploadedFiles): IFormData;
+    public function extractFromRequest(array $requestFormData, ?array $uploadedFiles): IFormData;
 }

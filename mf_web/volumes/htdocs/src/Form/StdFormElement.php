@@ -29,11 +29,11 @@ class StdFormElement implements IFormElement
         $this->validators = $validators;
     }
 
-    public function extractFormData(array $requestFormData, ?array $uploadedFiles = null): FormValue {
+    public function extractFromRequest(array $requestFormData, ?array $uploadedFiles = null): StdFormData {
         $transformedData = $this->transformer->extractValueFromRequest(
             $requestFormData,
             $uploadedFiles ?? [],
-            $this,
+            $this->name,
         );
 
         $errors = [];
@@ -41,7 +41,7 @@ class StdFormElement implements IFormElement
             $errors[] = $failure->getMessage();
         }
         
-        return new FormValue($transformedData, $errors);
+        return new StdFormData($transformedData, $errors);
     }
 
     public function getName(): string {

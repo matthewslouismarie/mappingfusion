@@ -2,9 +2,6 @@
 
 namespace MF\Form\Transformer;
 
-use MF\Form\IFormElement;
-use Psr\Http\Message\ServerRequestInterface;
-
 interface FormTransformer
 {
     /**
@@ -14,5 +11,5 @@ interface FormTransformer
      * @return null If the user submitted a null value (or a submitted value that evalutates to a null form value).
      * @throws MissingInputException If no value could be extracted from the request.
      */
-    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, IFormElement $input): mixed;
+    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, string $inputName): mixed;
 }

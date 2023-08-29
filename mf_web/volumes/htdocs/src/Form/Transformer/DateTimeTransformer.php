@@ -8,12 +8,12 @@ use MF\Form\IFormElement;
 
 class DateTimeTransformer implements FormTransformer
 {
-    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, IFormElement $input): ?DateTimeImmutable {
-        if (!isset($formRawData[$input->getName()])) {
+    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, string $inputName): ?DateTimeImmutable {
+        if (!isset($formRawData[$inputName])) {
             throw new MissingInputException();
         }
 
-        $submittedString = $formRawData[$input->getName()];
+        $submittedString = $formRawData[$inputName];
 
         return '' !== $submittedString ? new DateTimeImmutable($submittedString) : null;
     }

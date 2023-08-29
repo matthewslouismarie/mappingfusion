@@ -4,7 +4,6 @@ namespace MF\Form\Transformer;
 
 use MF\Exception\Form\MissingInputException;
 use MF\Exception\Form\WrongCsrfException;
-use MF\Form\IFormElement;
 use MF\Session\SessionManager;
 
 class CsrfTransformer implements FormTransformer
@@ -14,11 +13,11 @@ class CsrfTransformer implements FormTransformer
     ) {
     }
 
-    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, IFormElement $input): string {
-        if (!isset($formRawData[$input->getName()])) {
-            throw new MissingInputException($input);
+    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, string $inputName): string {
+        if (!isset($formRawData[$inputName])) {
+            throw new MissingInputException($inputName);
         }
-        if ($this->session->getCsrf() !== $formRawData[$input->getName()]) {
+        if ($this->session->getCsrf() !== $formRawData[$inputName]) {
             throw new WrongCsrfException();
         }
 

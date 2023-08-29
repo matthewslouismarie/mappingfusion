@@ -9,8 +9,8 @@ use MF\Form\IFormElement;
  */
 class MissingInputException extends ExtractionException
 {
-    public function __construct(?IFormElement $formElement = null, $previous = null) {
-        parent::__construct(null !== $formElement ? $formElement->getName() . ' is missing ' : null, previous: $previous);
+    public function __construct(?string $inputName = null, $previous = null) {
+        parent::__construct(null !== $inputName ? $inputName . ' is missing ' : null, previous: $previous);
     }
 
     public function getUserErrorMessage(): string {

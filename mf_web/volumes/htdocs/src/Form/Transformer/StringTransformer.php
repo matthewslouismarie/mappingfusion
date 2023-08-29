@@ -3,18 +3,17 @@
 namespace MF\Form\Transformer;
 
 use MF\Exception\Form\MissingInputException;
-use MF\Form\IFormElement;
 
 class StringTransformer implements FormTransformer
 {
     /**
      * @return string|null The submitted, non-empty string, or null if the string is empty.
      */
-    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, IFormElement $input): ?string {
-        if (!isset($formRawData[$input->getName()])) {
-            throw new MissingInputException($input);
+    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, string $inputName): ?string {
+        if (!isset($formRawData[$inputName])) {
+            throw new MissingInputException($inputName);
         }
-        $submittedString = $formRawData[$input->getName()];
+        $submittedString = $formRawData[$inputName];
         return '' !== $submittedString ? $submittedString : null;
     }
 }

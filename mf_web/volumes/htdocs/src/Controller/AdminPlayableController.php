@@ -10,6 +10,7 @@ use MF\Enum\LinkType;
 use MF\Exception\Database\EntityNotFoundException;
 use MF\Exception\Http\NotFoundException;
 use MF\Form\FormFactory;
+use MF\Model\ContributionModel;
 use MF\Model\PlayableLinkModel;
 use MF\Model\PlayableModel;
 use MF\Model\Slug;
@@ -37,11 +38,11 @@ class AdminPlayableController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+        $model = new PlayableModel(
+            playableLinkModel: new PlayableLinkModel(),
+            contributionModel: new ContributionModel(),
+        );
         $existingPlayable = $this->getPlayable($routeParams);
-        $formData = $existingPlayable;
-        $formErrors = null;
-        $model = new PlayableModel(playableLinkModel: new PlayableLinkModel);
-        $submission = null;
 
         $form = $this->formFactory->createForm($model, formConfig: [
             'id' => [
@@ -51,44 +52,48 @@ class AdminPlayableController implements ControllerInterface
                 'playable_id' => [
                     'generated' => true,
                 ]
-            ]
+            ],
+            'contributions' => [
+                'playable_id' => [
+                    'generated' => true,
+                ]
+            ],
         ]);
+    
+        $formData = $form->createFromAppArray($existingPlayable->toArray())->getChildren();
 
         if ('POST' === $request->getMethod()) {
-            $submission = $form->extractFormData($request->getParsedBody());
-            $formData = $submission->getData();
-            $formData['id'] = $formData['id'] ?? (new Slug($formData['name'], true))->__toString();
-            $formErrors = $submission->getValidationFailures();
+            $submission = $form->extractFromRequest($request->getParsedBody());
+            $formData = $submission->getChildren();
 
-            if (!$submission->hasErrors()) {
-                $playable = $this->appObjectFactory->create($formData, new PlayableModel());
-                if (null === $existingPlayable) {
-                    $this->repo->add($playable);
-                } else {
-                    $this->repo->update($playable, $existingPlayable->id);
-                }
-                foreach ($formData['links'] as $link) {
-                    $link['playable_id'] = $playable->id;
-                    if (isset($link['id'])) {
-                        $this->linkRepo->update($this->appObjectFactory->create($link, new PlayableLinkModel()));
-                    } else {
-                        $this->linkRepo->add($this->appObjectFactory->create($link, new PlayableLinkModel()));
-                    }
-                }
-                if (null === $existingPlayable || $playable->id !== $existingPlayable->id) {
-                    return $this->router->generateRedirect(self::ROUTE_ID, [$playable->id]);
-                }
-            }
+            // if (!$submission->hasErrors()) {
+            //     $submittedData['id'] = $submittedData['id'] ?? (new Slug($submittedData['name'], true))->__toString();
+            //     $playable = $this->appObjectFactory->create($submittedData, new PlayableModel());
+            //     if (null === $existingPlayable) {
+            //         $this->repo->add($playable);
+            //     } else {
+            //         $this->repo->update($playable, $existingPlayable->id);
+            //     }
+            //     foreach ($submittedData['links'] as $link) {
+            //         $link['playable_id'] = $playable->id;
+            //         if (isset($link['id'])) {
+            //             $this->linkRepo->update($this->appObjectFactory->create($link, new PlayableLinkModel()));
+            //         } else {
+            //             $this->linkRepo->add($this->appObjectFactory->create($link, new PlayableLinkModel()));
+            //         }
+            //     }
+            //     if (null === $existingPlayable || $playable->id !== $existingPlayable->id) {
+            //         return $this->router->generateRedirect(self::ROUTE_ID, [$playable->id]);
+            //     }
+            // }
         }
 
         return new Response(
             body: $this->twig->render('playable_form.html.twig', [
                 'authors' => $this->authorRepo->findAll(),
                 'formData' => $formData,
-                'formErrors' => $formErrors,
                 'linkTypes' => LinkType::cases(),
                 'playables' => $this->repo->findAll(),
-                'submission' => $submission,
             ]),
         );
     }

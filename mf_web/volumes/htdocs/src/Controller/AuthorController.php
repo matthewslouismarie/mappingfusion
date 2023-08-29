@@ -43,9 +43,9 @@ class AuthorController implements ControllerInterface
         ]);
 
         if ('POST' === $request->getMethod()) {
-            $submission = $form->extractFormData($request->getParsedBody());
-            $formData = $submission->getData();
-            $formErrors = $submission->getValidationFailures();
+            $submission = $form->extractFromRequest($request->getParsedBody());
+            $formData = $submission->getContent();
+            $formErrors = $submission->getErrors();
 
             if (!$submission->hasErrors()) {
                 $formData['id'] = $formData['id'] !== null ? $formData['id'] : (new Slug($formData['name'], true))->__toString();
