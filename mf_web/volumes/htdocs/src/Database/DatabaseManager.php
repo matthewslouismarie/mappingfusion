@@ -25,7 +25,7 @@ class DatabaseManager
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]);
-        $this->pdo->exec("CREATE DATABASE IF NOT EXISTS ${dbName}");
+        $this->pdo->exec("CREATE DATABASE IF NOT EXISTS $dbName");
         $this->pdo->exec('USE ' . $dbName);
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_member.sql'), LongStringConstraint::MAX_LENGTH));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_author.sql'), LongStringConstraint::MAX_LENGTH));
