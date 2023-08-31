@@ -6,7 +6,7 @@ use MF\Constraint\IModel;
 use MF\Constraint\IType;
 
 /**
- * @todo Merge with a type?
+ * @todo Associates a type with a name, some constraints and a context.
  */
 interface IModelProperty
 {

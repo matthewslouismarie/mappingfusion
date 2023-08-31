@@ -5,7 +5,7 @@ namespace MF\Form;
 /**
  * Extract and validate submitted form data from a request.
  */
-interface IFormDataFactory
+interface IFormExtractor
 {
     /**
      * @return \MF\Form\IFormData An object containing the submitted data alongside any validation failures if relevant.

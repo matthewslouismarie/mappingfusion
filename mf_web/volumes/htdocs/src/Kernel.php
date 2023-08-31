@@ -72,6 +72,9 @@ class Kernel
         return explode('/', $request->getQueryParams()['route_params']);
     }
 
+    /**
+     * @todo Make sure HTTP response is valid and complete.
+     */
     public function generateResponse(string $routeId, ServerRequestInterface $request): Response {
         if (!key_exists($routeId, self::ROUTES)) {
             return new Response(

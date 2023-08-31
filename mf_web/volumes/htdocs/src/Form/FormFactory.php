@@ -20,6 +20,7 @@ use MF\Form\Transformer\DateTimeTransformer;
 use MF\Form\Transformer\FileTransformer;
 use MF\Form\Transformer\FormTransformer;
 use MF\Form\Transformer\StringTransformer;
+use MF\Model\IModelProperty;
 use MF\Model\ModelProperty;
 use MF\Session\SessionManager;
 use MF\Validator\ValidatorFactory;
@@ -57,12 +58,7 @@ class FormFactory
 
                 $validators = $this->getValidators($property);
 
-                $htmlFormElements[] = new StdFormElement(
-                    $property->getName(),
-                    $transformer,
-                    isRequired: $formElementConfig['required'] ?? $property->isRequired(),
-                    validators: $validators,
-                );
+                $htmlFormElements[] = $this->createFormExtractor($property, $formElementConfig);
             }
         }
         if ($csrf) {
@@ -78,7 +74,20 @@ class FormFactory
         );
     }
 
-    private function getTransformer(IType $type, array $formConfig): FormTransformer {
+    private function createFormExtractor(IModelProperty $property, array $config): IFormExtractor {
+        if ($property->getType() instanceof IModel) {
+            return $this->createForm($property->getType(), $config, csrf: false);
+        }
+
+        return new StdFormElement(
+            $property->getName(),
+            $this->getTransformer($type, $config),
+            isRequired: $config['required'] ?? $property->isRequired(),
+            validators: $validators,
+        );
+    }
+
+    public function getTransformer(IType $type, array $config): FormTransformer {
         if ($type instanceof IFileConstraint) {
             return $this->fileTransformer;
         } elseif ($type instanceof IStringConstraint || $type instanceof IEnumConstraint) {
@@ -88,7 +97,7 @@ class FormFactory
         } elseif ($type instanceof IDateTimeConstraint) {
             return $this->dateTimeTransformer;
         } elseif ($type instanceof IArrayConstraint) {
-            return new ArrayTransformer($this->createForm($type->getElementType(), $formConfig, csrf: false));
+            return new ArrayTransformer($this->createForm($type->getElementType(), $config, csrf: false));
         } elseif ($type instanceof IDecimalConstraint) {
             return $this->stringTransformer;
         }

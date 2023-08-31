@@ -7,7 +7,7 @@ use InvalidArgumentException;
 /**
  * Extracts a FormArray from HTTP requests, and converts arrays into FormArray-s.
  */
-class Form implements IFormDataFactory
+class Form implements IFormExtractor
 {
     private array $children;
 
@@ -55,6 +55,9 @@ class Form implements IFormDataFactory
             if ($child->getName() === $this->ignoreValueOf) {
                 $child->extractFromRequest($requestParsedBody, $uploadedFiles ?? []);
             } else {
+                if ($child instanceof Form) {
+                    
+                }
                 $formDatas[$child->getName()] = $child->extractFromRequest($requestParsedBody, $uploadedFiles ?? []);
             }
         }

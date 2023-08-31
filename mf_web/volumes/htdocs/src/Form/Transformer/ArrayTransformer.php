@@ -3,12 +3,12 @@
 namespace MF\Form\Transformer;
 
 use MF\Exception\Form\ExtractionException;
-use MF\Form\IFormDataFactory;
+use MF\Form\IFormExtractor;
 
 class ArrayTransformer implements FormTransformer
 {
     public function __construct(
-        private IFormDataFactory $formDataFactory,
+        private IFormExtractor $formDataFactory,
     ) {
     }
 

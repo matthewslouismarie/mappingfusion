@@ -6,7 +6,7 @@ use DateTimeInterface;
 use MF\Configuration;
 use MF\Enum\LinkType;
 use MF\Form\FormFactory;
-use MF\Form\IFormDataFactory;
+use MF\Form\IFormExtractor;
 use MF\Framework\File\FileService;
 use MF\Session\SessionManager;
 use MF\MarkdownService;
@@ -14,7 +14,7 @@ use MF\Router;
 
 class TemplateHelper
 {
-    private IFormDataFactory $csrf;
+    private IFormExtractor $csrf;
 
     public function __construct(
         private Configuration $config,
@@ -32,7 +32,7 @@ class TemplateHelper
         return "$publicUrl/$filename?version=$version";
     }
 
-    public function getCsrf(): IFormDataFactory {
+    public function getCsrf(): IFormExtractor {
         return $this->formFactory->getCsrfFormElement();
     }
 

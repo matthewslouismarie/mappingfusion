@@ -39,7 +39,7 @@ if (CLI_ID === php_sapi_name()) {
 
     $routeId = $routeParams[0];
     
-    $response = $requestManager->generateResponse($container->get($routeId), $request);
+    $response = $requestManager->generateResponse($routeId, $request);
     
     if (302 === $response->getStatusCode()) {
         header('Location: ' . $response->getHeaderLine('Location'));

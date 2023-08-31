@@ -7,7 +7,7 @@ use MF\Form\Transformer\FormTransformer;
 /**
  * Defines a form data factory with a name and an associated transformer.
  */
-interface IFormElement extends IFormDataFactory
+interface IFormElement extends IFormExtractor
 {
     /**
      * @return string The form identifier for the form element.

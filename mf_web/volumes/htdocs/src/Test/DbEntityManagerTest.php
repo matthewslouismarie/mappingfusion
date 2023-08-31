@@ -1,6 +1,7 @@
 <?php
 
 namespace MF\Test;
+
 use DateTimeImmutable;
 use MF\Database\DbEntityManager;
 use MF\DataStructure\AppObject;
