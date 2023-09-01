@@ -15,10 +15,12 @@
                 <div class="form-row">
                     <label class="label" for="username">Nom d’utilisateur :</label>
                     <input class="input" id="username" name="id" required{% if formData %} value="{{ formData.id }}"{% endif %}>
+                    {{ errorList(formErrors.id ?? null) }}
                 </div>
                 <div class="form-row">
                     <label class="label" for="password">Mot de passe :</label>
                     <input class="input" id="password" name="password" required type="password"{% if formData %} value="{{ formData.password }}"{% endif %}>
+                    {{ errorList(formErrors.password ?? []) }}
                 </div>
             </div>
             {{ csrf(app) }}

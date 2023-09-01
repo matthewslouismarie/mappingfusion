@@ -1,6 +1,6 @@
 <?php
 
-namespace MF\Form\Transformer;
+namespace MF\Framework\Form\Transformer;
 
 use MF\Exception\Form\MissingInputException;
 use MF\Form\IFormElement;

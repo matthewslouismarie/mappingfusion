@@ -4,7 +4,6 @@ namespace MF\DataStructure;
 
 use ArrayAccess;
 use BadMethodCallException;
-use MF\Constraint\IModel;
 use MF\Model\KeyName;
 
 /**
@@ -18,7 +17,7 @@ class AppObject implements ArrayAccess
      * @param mixed[] $appArray An app array.
      * @todo Add back validation?
      */
-    public function __construct(array $appArray, ?IModel $model = null) {
+    public function __construct(array $appArray) {
         $this->data = $appArray;
     }
 

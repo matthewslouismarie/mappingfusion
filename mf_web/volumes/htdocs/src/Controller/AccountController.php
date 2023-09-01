@@ -4,7 +4,7 @@ namespace MF\Controller;
 
 use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
-use MF\Form\FormFactory;
+use MF\Framework\Form\FormFactory;
 use MF\Model\MemberModel;
 use MF\Session\SessionManager;
 use MF\Repository\MemberRepository;

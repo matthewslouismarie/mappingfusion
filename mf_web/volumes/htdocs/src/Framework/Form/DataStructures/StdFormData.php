@@ -1,6 +1,6 @@
 <?php
 
-namespace MF\Form;
+namespace MF\Framework\Form\DataStructures;
 
 /**
  * @todo Create a separate class for form array and form value?

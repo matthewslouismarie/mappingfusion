@@ -2,16 +2,26 @@
 
 namespace MF\Framework\Model;
 
-use MF\Framework\Type\ModelType;
-
 interface IModel
 {
-    /**
-     * @return \MF\Framework\Constraints\IConstraint[]
-     */
-    public function getConstraints(): array;
-
-    public function getType(): ModelType;
+    public function isBool(): bool;
 
     public function isNullable(): bool;
+
+    /**
+     * @return \MF\Framework\Model\IModel[] An indexed array of models.
+     */
+    public function getArrayDefinition(): ?array;
+
+    /**
+     * @return \MF\Framework\Constraints\IDateTimeConstraint[]
+     */
+    public function getDateTimeConstraints(): ?array;
+
+    public function getListNodeModel(): ?IModel;
+
+    /**
+     * @return \MF\Framework\Constraints\IStringConstraint[] A list of string constraints.
+     */
+    public function getStringConstraints(): ?array;
 }

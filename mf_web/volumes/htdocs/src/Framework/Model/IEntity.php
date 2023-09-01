@@ -2,7 +2,7 @@
 
 namespace MF\Framework\Model;
 
-interface IEntity extends IModel
+interface IEntity
 {
     /**
      * @return \MF\Framework\Model\IModel;

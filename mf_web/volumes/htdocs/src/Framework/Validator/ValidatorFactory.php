@@ -5,6 +5,7 @@ namespace MF\Framework\Validator;
 use DomainException;
 use MF\Framework\Constraints\IConstraint;
 use MF\Framework\Constraints\EntityConstraint;
+use MF\Framework\Constraints\INotNullConstraint;
 use MF\Framework\Constraints\StringConstraint;
 use MF\Framework\Type\ModelValidator;
 
@@ -14,6 +15,9 @@ class ValidatorFactory
      * @throws DomainException If no validator is associated with the constraint.
      */
     public function createValidator(IConstraint $constraint, ModelValidator $modelValidator) {
+        if ($constraint instanceof INotNullConstraint) {
+            return new NotNullValidator($constraint);
+        }
         if ($constraint instanceof EntityConstraint) {
             return new EntityValidator($constraint, $modelValidator);
         }

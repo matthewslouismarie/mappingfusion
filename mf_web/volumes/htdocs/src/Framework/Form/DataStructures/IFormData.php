@@ -1,6 +1,6 @@
 <?php
 
-namespace MF\Form;
+namespace MF\Framework\Form\DataStructures;
 
 /**
  * Data fetched and transformed from a request along with its errors, if any.

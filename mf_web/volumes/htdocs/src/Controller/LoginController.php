@@ -3,7 +3,8 @@
 namespace MF\Controller;
 
 use MF\Enum\Clearance;
-use MF\Form\FormFactory;
+use MF\Framework\Form\FormFactory;
+use MF\Framework\Type\ModelValidator;
 use MF\Model\MemberModel;
 use MF\Session\SessionManager;
 use MF\Repository\MemberRepository;
@@ -19,20 +20,22 @@ class LoginController implements ControllerInterface
     public function __construct(
         private FormFactory $formFactory,
         private MemberRepository $repo,
+        private ModelValidator $validator,
         private SessionManager $session,
         private TwigService $twig,
     ) {
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $form = $this->formFactory->createForm(new MemberModel());
+        $model = new MemberModel();
+        $form = $this->formFactory->createTransformer($model);
         $formErrors = [];
         $formData = null;
 
         if ('POST' === $request->getMethod()) {
-            $submission = $form->extractFromRequest($request->getParsedBody());
-            if (!$submission->hasErrors()) {
-                $formData = $submission->getContent();
+            $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
+            $formErrors = $this->validator->validate($formData, $model);
+            if (0 === count($formErrors)) {
                 $member = $this->repo->find($formData['id']);
                 if (null === $member || !password_verify($request->getParsedBody()['password'], $member->password)) {
                     $formErrors[] = 'Identifiants invalides.';

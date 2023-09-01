@@ -7,7 +7,7 @@ use MF\DataStructure\AppObject;
 use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
-use MF\Form\FormFactory;
+use MF\Framework\Form\FormFactory;
 use MF\Model\AuthorModel;
 use MF\Model\Slug;
 use MF\Repository\AuthorRepository;

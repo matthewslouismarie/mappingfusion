@@ -2,19 +2,18 @@
 
 namespace MF\Model;
 
-use MF\Framework\Constraints\EntityConstraint;
 use MF\Framework\Constraints\StringConstraint;
 use MF\Framework\Model\AbstractEntity;
 use MF\Framework\Model\StringModel;
 
-class MemberModel extends AbstractEntity
+class AuthorModel extends AbstractEntity
 {
     public function getArrayDefinition(): array {
         return [
             'id' => new StringModel([
                 new StringConstraint(minLength: 1, regex: StringConstraint::REGEX_DASHES),
             ]),
-            'password' => new StringModel([
+            'name' => new StringModel([
                 new StringConstraint(minLength: 1),
             ]),
         ];

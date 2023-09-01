@@ -4,8 +4,12 @@ namespace MF\Framework\Type;
 
 use DomainException;
 use InvalidArgumentException;
+use MF\Constraint\INotNullableConstraint;
+use MF\Framework\Constraints\INotNullConstraint;
+use MF\Framework\DataStructures\ConstraintViolation;
 use MF\Framework\Model\IEntity;
 use MF\Framework\Model\IModel;
+use MF\Framework\Model\IString;
 use MF\Framework\Model\StringModel;
 use MF\Framework\Validator\ValidatorFactory;
 
@@ -23,25 +27,47 @@ class ModelValidator
     public function validate(mixed $data, IModel $model): array {
         $constraintViolations = [];
 
-        if (null === $data && !$model->isNullable()) {
-            throw new InvalidArgumentException('Null is not allowed by model.');
+        if (!is_scalar($data) && !is_array($data) && null !== $data) {
         }
-        if (ModelType::Entity === $model->getType()) {
-            if (!is_array($data)) {
-                throw new InvalidArgumentException('Variable must be an array to be validated against an entity model.');
+        
+        if (null === $data) {
+            if (!$model->isNullable()) {
+                return [
+                    new ConstraintViolation(
+                        new class implements INotNullConstraint {},
+                        'Data is not allowed to be null.',
+                    ),
+                ];
             }
-        } elseif (ModelType::String === $model->getType()) {
-            if (!is_string($data)) {
-                throw new InvalidArgumentException('Variable must be a string to be validated against the string model.');
+        } elseif (is_array($data)) {
+            $arrayDefinition = $model->getArrayDefinition();
+            if (null === $arrayDefinition) {
+                throw new InvalidArgumentException('The provided model does not provide a definition for arrays.');
             }
+            if (count($arrayDefinition) !== count($data)) {
+                throw new InvalidArgumentException('The provided array does not have the expected number of properties.');
+            }
+            foreach ($arrayDefinition as $key => $property) {
+                $violations = $this->validate($data[$key], $property);
+                if (count($violations) > 0) {
+                    $constraintViolations[$key] = $violations;
+                }
+            }
+        } elseif (is_string($data)) {
+            $stringConstraints = $model->getStringConstraints();
+            if (null === $stringConstraints) {
+                throw new InvalidArgumentException('The provided model does not provide a definition for arrays.');
+            }
+            foreach ($stringConstraints as $c) {
+                $violations = $this->validatorFactory->createValidator($c, $this)->validate($data);
+                if (count($violations) > 0) {
+                    $constraintViolations = array_merge_recursive($violations);
+                }
+            }
+        } else {
+            throw new InvalidArgumentException("Data to be validated must be scalar.");
         }
-        foreach ($model->getConstraints() as $constraint) {
-            $violations = $this->validatorFactory->createValidator($constraint, $this)->validate($data);
-            if (count($violations) > 0) {
-                $constraintViolations = array_merge_recursive($constraintViolations, $violations);
-            }
-        }
+
         return $constraintViolations;
-        // throw new DomainException('Type ' . get_class($model) . ' is unknown.');
     }
 }

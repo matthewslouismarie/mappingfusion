@@ -21,7 +21,7 @@ class EntityConstraint implements IConstraint
     }
 
     /**
-     * @return \MF\Framework\Model\IModel[]
+     * @return \MF\Framework\Model\IModel[] An array of properties, indexed by property name.
      */
     public function getProperties(): array {
         return $this->properties;

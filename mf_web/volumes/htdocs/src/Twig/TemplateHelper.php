@@ -5,9 +5,9 @@ namespace MF\Twig;
 use DateTimeInterface;
 use MF\Configuration;
 use MF\Enum\LinkType;
-use MF\Form\FormFactory;
-use MF\Form\IFormExtractor;
+use MF\Framework\Form\FormFactory;
 use MF\Framework\File\FileService;
+use MF\Framework\Form\IFormExtractor;
 use MF\Session\SessionManager;
 use MF\MarkdownService;
 use MF\Router;
@@ -21,7 +21,6 @@ class TemplateHelper
         private MarkdownService $mk,
         private Router $router,
         private SessionManager $session,
-        private FormFactory $formFactory,
         private FileService $file,
     ) {
     }
@@ -30,10 +29,6 @@ class TemplateHelper
         $publicUrl = $this->getPublicUrl();
         $version = filemtime(dirname(__FILE__) . '/../../public/' . $filename);
         return "$publicUrl/$filename?version=$version";
-    }
-
-    public function getCsrf(): IFormExtractor {
-        return $this->formFactory->getCsrfFormElement();
     }
 
     public function getDate(DateTimeInterface $date): string {

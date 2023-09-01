@@ -1,6 +1,6 @@
 <?php
 
-namespace MF\Form\Transformer;
+namespace MF\Framework\Form\Transformer;
 
 use DateTimeImmutable;
 use MF\Exception\Form\MissingInputException;

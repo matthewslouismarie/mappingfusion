@@ -3,14 +3,13 @@
 namespace MF\Database;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
+use DomainException;
 use MF\Constraint\IArrayConstraint;
 use MF\Constraint\IBooleanConstraint;
 use MF\Constraint\IDateTimeConstraint;
-use MF\Constraint\IModel;
-use MF\Constraint\IType;
 use MF\DataStructure\AppObject;
 use MF\Exception\Database\InvalidDbData;
+use MF\Framework\Model\IModel;
 use UnexpectedValueException;
 
 /**
@@ -28,19 +27,19 @@ class DbEntityManager
      * Transform DB Data into App Data.
      *
      * @param mixed $dbData DB Data.
-     * @param IType $type The Type of the DB Data.
+     * @param IModel $model The model of the DB Data.
      * @return mixed App Data.
      */
-    public function toAppData(mixed $dbData, IType $type): mixed {
-        if ($type instanceof IModel) {
+    public function toAppData(mixed $dbData, IModel $model, ?string $name = null): mixed {
+        if (null !== $model->getArrayDefinition()) {
             $appArray = [];
-            foreach ($type->getProperties() as $p) {
-                if ($p->getType() instanceof IModel) {
-                    $appArray[$p->getName()] = $this->toAppData($dbData, $p->getType());
+            foreach ($model->getArrayDefinition() as $key => $property) {
+                if (null !== $property->getArrayDefinition()) {
+                    $appArray[$key] = $this->toAppData($dbData, $property);
                 } else {
-                    $appArray[$p->getName()] = $this->toAppData(
-                        $dbData[$type->getName() . '_' . $p->getName()],
-                        $p->getType(),
+                    $appArray[$key] = $this->toAppData(
+                        $dbData[$name . '_' . $key],
+                        $property,
                     );
                 }
             }
@@ -51,21 +50,11 @@ class DbEntityManager
             }
         } elseif (null === $dbData) {
             return null;
-        } elseif ($type instanceof IArrayConstraint) {
-            $appDatas = [];
-            if ($type->getElementType() instanceof IModel) {
-                foreach ($dbData as $dbArray) {
-                    $appDatas[] = $this->toAppData($dbArray, $type->getElementType());
-                }
-            } else {
-                foreach ($dbData as $dbArray) {
-                    $appDatas[] = $this->toAppData($dbArray, $type->getElementType());
-                }
-            }
-            return $appDatas;
-        } elseif ($type instanceof IDateTimeConstraint) {
+        } elseif (null !== $model->getListNodeModel()) {
+            throw new DomainException('Not supported yet.');
+        } elseif (null !== $model->getDateTimeConstraints()) {
             return new DateTimeImmutable($dbData);
-        } elseif ($type instanceof IBooleanConstraint) {
+        } elseif ($model->isBool()) {
             return in_array($dbData, [0, 1], true) ? 1 === $dbData : throw new InvalidDbData();
         } else {
             return $dbData;

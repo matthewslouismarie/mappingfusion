@@ -1,8 +1,9 @@
 <?php
 
-namespace MF\Form;
+namespace MF\Framework\Form;
 
 use InvalidArgumentException;
+use MF\Framework\Form\DataStructures\FormArray;
 
 /**
  * Extracts a FormArray from HTTP requests, and converts arrays into FormArray-s.

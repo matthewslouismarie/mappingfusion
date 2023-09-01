@@ -6,7 +6,7 @@ use GuzzleHttp\Psr7\Response;
 use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
-use MF\Form\FormFactory;
+use MF\Framework\Form\FormFactory;
 use MF\Model\ReviewModel;
 use MF\Repository\ArticleRepository;
 use MF\Repository\PlayableRepository;

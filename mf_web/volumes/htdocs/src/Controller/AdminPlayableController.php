@@ -9,7 +9,7 @@ use MF\Enum\Clearance;
 use MF\Enum\LinkType;
 use MF\Exception\Database\EntityNotFoundException;
 use MF\Exception\Http\NotFoundException;
-use MF\Form\FormFactory;
+use MF\Framework\Form\FormFactory;
 use MF\Model\ContributionModel;
 use MF\Model\PlayableLinkModel;
 use MF\Model\PlayableModel;

@@ -7,7 +7,7 @@ use MF\Database\DbEntityManager;
 use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
-use MF\Form\FormFactory;
+use MF\Framework\Form\FormFactory;
 use MF\Model\ArticleModel;
 use MF\Model\Slug;
 use MF\Repository\ArticleRepository;
