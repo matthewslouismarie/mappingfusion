@@ -4,7 +4,7 @@ namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
 use MF\Framework\Database\DbEntityManager;
-use MF\Framework\DataStructure\AppObject;
+use MF\Framework\DataStructures\AppObject;
 use MF\Model\MemberModel;
 use UnexpectedValueException;
 

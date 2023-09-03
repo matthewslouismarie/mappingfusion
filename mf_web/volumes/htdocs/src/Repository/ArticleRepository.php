@@ -4,7 +4,7 @@ namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
 use MF\Framework\Database\DbEntityManager;
-use MF\Framework\DataStructure\AppObject;
+use MF\Framework\DataStructures\AppObject;
 use MF\Model\CategoryModel;
 use MF\Session\SessionManager;
 use MF\Model\ArticleModel;
@@ -53,28 +53,32 @@ class ArticleRepository implements IRepository
         }
     }
 
-    public function findAvailableArticles(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NULL;')->fetchAll();
-        $entities = [];
-        foreach ($results as $r) {
-            $entities[] = $this->em->toAppData($r, new ArticleModel(), 'article');
-        }
-        return $entities;
-    }
-
-    public function findOne(string $id): AppObject {
-        $article = $this->find($id);
-        if (null === $article) {
-            throw new OutOfBoundsException();
-        }
-        return $article;
-    }
-
     public function findAll(): array {
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
             $entities[] = $this->em->toAppData($r, new ArticleModel(new CategoryModel()), 'article');
+        }
+        return $entities;
+    }
+
+    /**
+     * @return AppObject[]
+     */
+    public function findAllReviews(): array {
+        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;');
+        $articles = [];
+        foreach ($results->fetchAll() as $article) {
+            $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel())), 'article');
+        }
+        return $articles;
+    }
+
+    public function findAvailableArticles(): array {
+        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NULL;')->fetchAll();
+        $entities = [];
+        foreach ($results as $r) {
+            $entities[] = $this->em->toAppData($r, new ArticleModel(), 'article');
         }
         return $entities;
     }
@@ -113,16 +117,25 @@ class ArticleRepository implements IRepository
         return $articles;
     }
 
+    public function findOne(string $id): AppObject {
+        $article = $this->find($id);
+        if (null === $article) {
+            throw new OutOfBoundsException();
+        }
+        return $article;
+    }
+
     /**
      * @return AppObject[]
      */
-    public function findAllReviews(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;');
-        $articles = [];
-        foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel())), 'article');
+    public function findRelatedArticles(AppObject $article): array {
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_article WHERE article_category_id = :category_id AND article_id != :id;');
+        $stmt->execute(['category_id' => $article->category_id, 'id' => $article->id]);
+        $relatedArticles = [];
+        foreach ($stmt->fetchAll() as $row) {
+            $relatedArticles[] = $this->em->toAppData($row, new ArticleModel(), 'article');
         }
-        return $articles;
+        return $relatedArticles;
     }
 
     public function updateArticle(AppObject $appObject, ?string $previousId = null): void {

@@ -3,7 +3,7 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\Framework\DataStructure\AppObject;
+use MF\Framework\DataStructures\AppObject;
 use MF\Enum\Clearance;
 use MF\Enum\LinkType;
 use MF\Exception\Database\EntityNotFoundException;

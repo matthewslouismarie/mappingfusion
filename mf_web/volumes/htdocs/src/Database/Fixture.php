@@ -4,7 +4,7 @@ namespace MF\Database;
 
 use DateTimeImmutable;
 use MF\Configuration;
-use MF\Framework\DataStructure\AppObject;
+use MF\Framework\DataStructures\AppObject;
 use MF\Enum\LinkType;
 use MF\Repository\ArticleRepository;
 use MF\Repository\AuthorRepository;

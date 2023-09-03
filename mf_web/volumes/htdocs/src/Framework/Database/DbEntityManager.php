@@ -4,7 +4,7 @@ namespace MF\Framework\Database;
 
 use DateTimeImmutable;
 use InvalidArgumentException;
-use MF\Framework\DataStructure\AppObject;
+use MF\Framework\DataStructures\AppObject;
 use MF\Framework\Model\IModel;
 use UnexpectedValueException;
 

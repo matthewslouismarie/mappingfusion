@@ -4,7 +4,7 @@ namespace MF\Test;
 
 use DateTimeImmutable;
 use MF\Framework\Database\DbEntityManager;
-use MF\Framework\DataStructure\AppObject;
+use MF\Framework\DataStructures\AppObject;
 use MF\Framework\Test\IUnitTest;
 use MF\Model\ArticleModel;
 use MF\Model\CategoryModel;

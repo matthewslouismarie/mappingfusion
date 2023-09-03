@@ -3,7 +3,7 @@
 namespace MF\Controller;
 
 use MF\Framework\Database\DbEntityManager;
-use MF\Framework\DataStructure\AppObject;
+use MF\Framework\DataStructures\AppObject;
 use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
 use MF\Framework\Form\FormFactory;

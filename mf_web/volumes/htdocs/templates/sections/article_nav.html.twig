@@ -1,4 +1,4 @@
-{% macro articleNav(app, article) %}
+{% macro articleNav(app, article, relatedArticles) %}
 <nav class="article-nav _gap -gap-row-s2 _padding -padding-vert-l -padding-hori-s">
     <div class="frame -articlenav _padding -padding-hori-s2 -padding-vert-s">
         <ul class="list _text -text-m">
@@ -28,12 +28,14 @@
     <div class="frame -related _gap -gap-row-m _padding -padding-hori-s2 -padding-vert-s">
         <h2 class="heading _text -text-m ">Tests et articles similaires</h2>
         <ul class="list _gap -gap-col-xs -gap-row-s2">
+            {% for r in relatedArticles %}
             <li class="item">
                 <a class="link _gap -gap-row-xs" href="#">
-                    <img alt="{{ article.title }}" class="image"{% if article.cover_filename is defined %} src="{{ app.resource(article.cover_filename) }}"{% endif %}>
-                    <div class="_text -text-s">{{ article.title }}</div>
+                    <img alt="{{ r.title }}" class="image"{% if r.cover_filename is defined %} src="{{ app.resource(r.cover_filename) }}"{% endif %}>
+                    <div class="_text -text-s">{{ r.title }}</div>
                 </a>
             </li>
+            {% endfor %}
             <li class="item">
                 <div class="list _gap -gap-row-s">
                     <a class="std-button -s -transparent _padding -padding-xs _text -text-s" href="{{ app.router.generateUrl('review_list') }}">

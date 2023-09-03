@@ -33,6 +33,7 @@ class ArticleController implements ControllerInterface
             body: $this->twig->render('article.html.twig', [
                 'article' => $article,
                 'authors' => isset($article->review) ? $this->authorRepo->findAuthorsOf($article->review['playable_id']) : null,
+                'relatedArticles' => $this->repo->findRelatedArticles($article),
             ]),
         );
     }
