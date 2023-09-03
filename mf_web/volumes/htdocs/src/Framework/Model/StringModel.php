@@ -1,16 +1,23 @@
 <?php
 
 namespace MF\Framework\Model;
+use MF\Framework\Constraints\StringConstraint;
 
 class StringModel implements IModel
 {
+    private array $constraints;
+
+    private bool $isNullable;
+
     /**
      * @param \MF\Framework\Constraints\IConstraint[] $constraints
      */
     public function __construct(
-        private array $constraints = [],
-        private bool $isNullable = false,
+        ?array $constraints = null,
+        bool $isNullable = false,
     ) {
+        $this->constraints = null !== $constraints ? $constraints : [new StringConstraint()];
+        $this->isNullable = $isNullable;
     }
 
     public function getArrayDefinition(): ?array {
@@ -25,7 +32,7 @@ class StringModel implements IModel
         return null;
     }
 
-    public function getNumberConstraints(): ?array {
+    public function getIntegerConstraints(): ?array {
         return null;
     }
 

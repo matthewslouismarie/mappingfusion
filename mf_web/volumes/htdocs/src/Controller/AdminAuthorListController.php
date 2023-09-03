@@ -13,16 +13,10 @@ class AdminAuthorListController implements ControllerInterface
 {
     const ROUTE_ID = 'admin-author-list';
 
-    private AuthorRepository $repo;
-
-    private TwigService $twig;
-
     public function __construct(
-        AuthorRepository $repo,
-        TwigService $twig,
+        private AuthorRepository $repo,
+        private TwigService $twig,
     ) {
-        $this->repo = $repo;
-        $this->twig = $twig;
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    

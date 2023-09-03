@@ -3,12 +3,12 @@
 {% block title %}Liste des tests{% endblock %}
 
 {% block bodyContent %}
-<a class="link" href="{{ app.router.generateUrl('manage_review') }}">Créer un nouveau test</a>
+<a class="link" href="{{ app.router.generateUrl('gestion-de-tests') }}">Créer un nouveau test</a>
 
 <ul>
     {% for r in reviews %}
     <li class="item">
-        <a class="link" href="{{ app.router.generateUrl('manage_review', {id: r.id}) }}">Pour {{ r.playable_id }} (note {{ r.rating}})</a>
+        <a class="link" href="{{ app.router.generateUrl('gestion-de-tests', {id: r.id}) }}">Pour {{ r.playable_id }} (note {{ r.rating}})</a>
     </li>
     {% endfor %}
 </ul>

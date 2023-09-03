@@ -25,7 +25,7 @@ class DateTimeModel implements IModel
         return null;
     }
 
-    public function getNumberConstraints(): ?array {
+    public function getIntegerConstraints(): ?array {
         return null;
     }
 

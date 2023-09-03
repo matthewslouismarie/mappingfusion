@@ -4,6 +4,7 @@ namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
 use MF\Enum\Clearance;
+use MF\Exception\Http\NotFoundException;
 use MF\Repository\ArticleRepository;
 use MF\Repository\AuthorRepository;
 use MF\TwigService;
@@ -12,7 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ArticleController implements ControllerInterface
 {
-    const ROUTE_ID = 'view-article';
+    const ROUTE_ID = 'article';
 
     public function __construct(
         private AuthorRepository $authorRepo,
@@ -22,12 +23,16 @@ class ArticleController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $article = $this->repo->findOne($routeParams[1]);
+        $article = $this->repo->find($routeParams[1]);
+
+        if (null === $article) {
+            throw new NotFoundException();
+        }
 
         return new Response(
             body: $this->twig->render('article.html.twig', [
                 'article' => $article,
-                'authors' => null !== $article->review ? $this->authorRepo->findAuthorsOf($article->review['playable_id']) : null,
+                'authors' => isset($article->review) ? $this->authorRepo->findAuthorsOf($article->review['playable_id']) : null,
             ]),
         );
     }

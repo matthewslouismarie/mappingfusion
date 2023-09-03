@@ -2,13 +2,14 @@
 
 namespace MF\Model;
 
-use MF\Constraint\DecimalConstraint;
-use MF\Constraint\IModel;
-use MF\Constraint\SlugConstraint;
-use MF\Constraint\TextConstraint;
-use MF\Constraint\UintConstraint;
+use MF\Framework\Constraints\RangeConstraint;
+use MF\Framework\Model\AbstractEntity;
+use MF\Framework\Model\IntegerModel;
+use MF\Framework\Model\SlugModel;
+use MF\Framework\Model\StringModel;
+use MF\Framework\Model\UintModel;
 
-class ReviewModel implements IModel
+class ReviewModel extends AbstractEntity
 {
     public function __construct(
         private ?PlayableModel $playableModel = null,
@@ -16,25 +17,21 @@ class ReviewModel implements IModel
     ) {
     }
 
-    public function getName(): string {
-        return 'review';
-    }
-
-    public function getProperties(): array {
+    public function getArrayDefinition(): array {
         $properties = [
-            new ModelProperty('id', new UintConstraint(), isGenerated: true, isRequired: false),
-            new ModelProperty('article_id', new SlugConstraint()),
-            new ModelProperty('playable_id', new SlugConstraint()),
-            new ModelProperty('rating', new DecimalConstraint(max: 5, min: 1)),
-            new ModelProperty('body', new TextConstraint()),
-            new ModelProperty('cons', new TextConstraint()),
-            new ModelProperty('pros', new TextConstraint()),
+            'id' => new UintModel(isNullable: true),
+            'article_id' => new SlugModel(),
+            'playable_id' => new SlugModel(),
+            'rating' => new IntegerModel([new RangeConstraint(min: 1, max: 5)]),
+            'body' => new StringModel([]),
+            'cons' => new StringModel([]),
+            'pros' => new StringModel([]),
         ];
         if (null !== $this->playableModel) {
-            $properties[] = new ModelProperty('playable', $this->playableModel, isRequired: false);
+            $properties['playable'] = $this->playableModel;
         }
         if (null !== $this->articleModel) {
-            $properties[] = new ModelProperty('article', $this->articleModel, isRequired: false);
+            $properties['article'] = $this->articleModel;
         }
         return $properties;
     }

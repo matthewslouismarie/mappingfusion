@@ -2,53 +2,41 @@
 
 namespace MF\Model;
 
-use MF\Constraint\BoolConstraint;
-use MF\Constraint\FileConstraint;
-use MF\Constraint\IDateTimeConstraint;
-use MF\Constraint\IModel;
-use MF\Constraint\LongStringConstraint;
-use MF\Constraint\SlugConstraint;
-use MF\Constraint\TextConstraint;
-
+use MF\Framework\Constraints\IUploadedImageConstraint;
+use MF\Framework\Model\AbstractEntity;
+use MF\Framework\Model\BoolModel;
+use MF\Framework\Model\DateTimeModel;
+use MF\Framework\Model\IModel;
+use MF\Framework\Model\SlugModel;
+use MF\Framework\Model\StringModel;
 
 /**
  * @todo Create factory for article entities?
  */
-class ArticleModel implements IModel
+class ArticleModel extends AbstractEntity
 {
     public function __construct(
-        private ?CategoryModel $categoryModel = null,
-        private ?ReviewModel $reviewModel = null,
+        ?CategoryModel $categoryModel = null,
+        ?ReviewModel $reviewModel = null,
     ) {
-    }
-
-    public function getName(): string {
-        return 'article';
-    }
-
-    public function getProperties(): array {
         $properties = [
-            new ModelProperty(
-                'id',
-                new SlugConstraint(),
-                isGenerated: true,
-            ),
-            new ModelProperty('author_id', new SlugConstraint(), isGenerated: true),
-            new ModelProperty('category_id', new SlugConstraint),
-            new ModelProperty('body', new TextConstraint()),
-            new ModelProperty('is_featured', new BoolConstraint()),
-            new ModelProperty('title', new LongStringConstraint()),
-            new ModelProperty('sub_title', new LongStringConstraint(), isRequired: false),
-            new ModelProperty('cover_filename', new FileConstraint()),
-            new ModelProperty('creation_date_time', new class implements IDateTimeConstraint {}, isGenerated: true),
-            new ModelProperty('last_update_date_time', new class implements IDateTimeConstraint {}, isGenerated: true),
+            'id' => new SlugModel(),
+            'author_id' => new SlugModel(),
+            'category_id' => new SlugModel(),
+            'body' => new StringModel([]),
+            'is_featured' => new BoolModel(),
+            'title' => new StringModel(),
+            'sub_title' => new StringModel(isNullable: true),
+            'cover_filename' => new StringModel([new class implements IUploadedImageConstraint {}]),
+            'creation_date_time' => new DateTimeModel(),
+            'last_update_date_time' => new DateTimeModel(),
         ];
-        if (null !== $this->reviewModel) {
-            $properties[] = new ModelProperty('review', $this->reviewModel, isGenerated: true, isRequired: false);
+        if (null !== $reviewModel) {
+            $properties['review'] = $reviewModel;
         }
-        if (null !== $this->categoryModel) {
-            $properties[] = new ModelProperty('category', $this->categoryModel, isGenerated: true, isRequired: false);
+        if (null !== $categoryModel) {
+            $properties['category'] = $categoryModel;
         }
-        return $properties;
+        parent::__construct($properties);
     }
 }

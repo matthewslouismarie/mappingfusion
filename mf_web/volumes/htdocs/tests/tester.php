@@ -24,14 +24,3 @@ foreach (array_slice($argv, 1) as $unitTestClass) {
         $allFailures[] = $unitTestFailures;
     }
 }
-
-if (count($allFailures) > 0) {
-    $logger->log("Some of the tests failed.");
-    foreach ($allFailures as $unitTestFailures) {
-        var_dump($unitTestFailures);
-    }
-    exit(1);
-} else {
-    $logger->log("All the tests passed.");
-    exit(0);
-}

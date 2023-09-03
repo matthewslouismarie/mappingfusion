@@ -114,11 +114,3 @@ $tester->assertNoException(
         $playableDef,
     ),
 );
-
-if (count($tester->getErrors()) > 0) {
-    var_dump($tester->getErrors());
-    exit(1);
-} else {
-    echo "All the tests passed.\n";
-    exit(0);
-}

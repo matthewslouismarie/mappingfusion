@@ -5,7 +5,6 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use MF\Database\DbEntityManager;
 use MF\DataStructure\AppObject;
-use MF\DataStructure\AppObjectFactory;
 use MF\Exception\Database\EntityNotFoundException;
 use MF\Model\ContributionModel;
 use MF\Model\PlayableLinkModel;
@@ -19,7 +18,6 @@ class PlayableRepository implements IRepository
         private DbEntityManager $em,
         private PlayableLinkRepository $linkRepo,
         private ContributionRepository $contributionRepository,
-        private AppObjectFactory $appObjectFactory,
     ) {
     }
 
@@ -60,7 +58,8 @@ class PlayableRepository implements IRepository
             }
         }
 
-        $playable = $this->em->toAppData($rows[0], new PlayableModel(new PlayableModel()), 'playable');
+        $gameModel = null !== $rows[0]['playable_game_id'] ? new PlayableModel() : null;
+        $playable = $this->em->toAppData($rows[0], new PlayableModel($gameModel), 'playable');
         return $playable->set('links', $links)->set('contributions', $contributions);
     }
 

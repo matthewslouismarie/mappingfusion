@@ -2,20 +2,16 @@
 
 namespace MF\Model;
 
-use MF\Constraint\IModel;
-use MF\Constraint\LongStringConstraint;
-use MF\Constraint\SlugConstraint;
+use MF\Framework\Model\AbstractEntity;
+use MF\Framework\Model\SlugModel;
+use MF\Framework\Model\StringModel;
 
-class CategoryModel implements IModel
+class CategoryModel extends AbstractEntity
 {
-    public function getName(): string {
-        return 'category';
-    }
-
-    public function getProperties(): array {
-        return [
-            new ModelProperty('id', new SlugConstraint()),
-            new ModelProperty('name', new LongStringConstraint()),
-        ];
+    public function __construct() {
+        parent::__construct([
+            'id' => new SlugModel(),
+            'name' => new StringModel(),
+        ]);
     }
 }

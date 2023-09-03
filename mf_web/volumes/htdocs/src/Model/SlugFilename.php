@@ -3,26 +3,26 @@
 namespace MF\Model;
 
 use InvalidArgumentException;
-use MF\Constraint\IFileConstraint;
+use MF\Framework\Constraints\IUploadedImageConstraint;
 use Stringable;
 
 class SlugFilename implements Stringable
 {
-    private LongString $value;
+    private string $value;
 
     public function __construct(string $value, bool $transform = false) {
         if ($transform) {
-            $this->value = new LongString(preg_replace('/[^a-z0-9\-\.]/', '', preg_replace('/[_\s]/', '-', strtolower($value))));
+            $this->value = preg_replace('/[^a-z0-9\-\.]/', '', preg_replace('/[_\s]/', '-', strtolower($value)));
         } else {
-            $this->value = new LongString($value);
+            $this->value = $value;
         }
-        if (1 !== preg_match('/' . IFileConstraint::FILENAME_REGEX . '/', $this->value)) {
+        if (1 !== preg_match('/' . IUploadedImageConstraint::FILENAME_REGEX . '/', $this->value)) {
             throw new InvalidArgumentException();
         }
     }
 
     public function __toString(): string
     {
-        return $this->value->__toString();
+        return $this->value;
     }
 }

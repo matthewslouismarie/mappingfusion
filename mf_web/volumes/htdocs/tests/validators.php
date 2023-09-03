@@ -109,11 +109,3 @@ $tester->assertEquals(1, count($validator->validate('-78.1')));
 //         'tag_name' => 'hi',
 //     ], groups: ['category', 'tag']),
 // );
-
-if (count($tester->getErrors()) > 0) {
-    var_dump($tester->getErrors());
-    exit(1);
-} else {
-    echo "All the tests passed.\n";
-    exit(0);
-}

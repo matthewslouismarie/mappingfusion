@@ -3,10 +3,11 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\DataStructure\AppObjectFactory;
+use MF\DataStructure\AppObject;
 use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
 use MF\Framework\Form\FormFactory;
+use MF\Framework\Type\ModelValidator;
 use MF\Model\ReviewModel;
 use MF\Repository\ArticleRepository;
 use MF\Repository\PlayableRepository;
@@ -18,46 +19,45 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ReviewController implements ControllerInterface
 {
-    const ROUTE_ID = 'manage_review';
+    const ROUTE_ID = 'gestion-de-tests';
 
     public function __construct(
         private ArticleRepository $articleRepo,
+        private FormFactory $formFactory,
+        private ModelValidator $modelValidator,
         private PlayableRepository $playableRepo,
+        private ReviewModel $model,
         private ReviewRepository $repo,
         private Router $router,
         private TwigService $twig,
-        private FormFactory $formFactory,
-        private ReviewModel $model,
-        private AppObjectFactory $appObjectFactory,
     ) {
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $id = $routeParams[1] ?? null;
-        $existingReview = null !== $id ? $this->repo->find($routeParams[1]) : null;
+        $requestedId = $routeParams[1] ?? null;
 
-        if (null === $existingReview && key_exists(1, $routeParams)) {
-            throw new NotFoundException();
-        }
-
-        $formData = $existingReview;
+        $formData = null;
         $formErrors = null;
         $form = $this->formFactory->createForm($this->model);
 
         if ('POST' === $request->getMethod()) {
-            $submission = $form->extractFromRequest($request->getParsedBody());
-            $formData = $submission->getContent();
-            $formErrors = $submission->getErrors();
+            $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
+            $formErrors = $this->modelValidator->validate($formData, $this->model);
 
-            if (!$submission->hasErrors()) {
-                $review = $this->appObjectFactory->create($formData, $this->model);
-                if (null === $id) {
+            if (0 === count($formErrors)) {
+                $review = new AppObject($formData);
+                if (null === $requestedId) {
                     $id = $this->repo->add($review);
                 } else {
                     $this->repo->update($review);
                 }
 
                 return $this->router->generateRedirect(self::ROUTE_ID, [$id]);
+            }
+        } elseif (null !== $requestedId) {
+            $formData = $this->repo->find($requestedId)?->toArray();
+            if (null === $formData) {
+                throw new NotFoundException();
             }
         }
 

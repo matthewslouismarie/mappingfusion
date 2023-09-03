@@ -21,7 +21,7 @@ interface IModel
     /**
      * @return \MF\Framework\Constraints\INumberConstraint[]
      */
-    public function getNumberConstraints(): ?array;
+    public function getIntegerConstraints(): ?array;
 
     public function getListNodeModel(): ?IModel;
 

@@ -74,7 +74,7 @@ class ModelValidator
             }
         }
         if (is_numeric($data)) {
-            $numericConstraints = $model->getNumberConstraints();
+            $numericConstraints = $model->getIntegerConstraints();
             if (null !== $numericConstraints) {
                 $constraintViolations = [];
                 foreach ($numericConstraints as $c) {
@@ -104,8 +104,6 @@ class ModelValidator
                 return [];
             }
         }
-
-        var_dump($data, $model);
 
         throw new InvalidArgumentException("Data is not of any type supported by the given model.");
     }

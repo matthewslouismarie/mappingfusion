@@ -25,7 +25,7 @@ class ListModel implements IModel
         return $this->nodeModel;
     }
 
-    public function getNumberConstraints(): ?array {
+    public function getIntegerConstraints(): ?array {
         return null;
     }
 

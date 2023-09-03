@@ -4,10 +4,12 @@ namespace MF\Framework\Form;
 
 use DomainException;
 use InvalidArgumentException;
+use MF\Framework\Constraints\IUploadedImageConstraint;
 use MF\Framework\Form\Transformer\ArrayTransformer;
 use MF\Framework\Form\Transformer\CheckboxTransformer;
 use MF\Framework\Form\Transformer\CsrfTransformer;
 use MF\Framework\Form\Transformer\DateTimeTransformer;
+use MF\Framework\Form\Transformer\FileTransformer;
 use MF\Framework\Form\Transformer\IFormTransformer;
 use MF\Framework\Form\Transformer\ListTransformer;
 use MF\Framework\Form\Transformer\StringTransformer;
@@ -25,7 +27,7 @@ class FormFactory
     ) {
     }
 
-    public function createForm(IModel $model, array $config): ArrayTransformer {
+    public function createForm(IModel $model, array $config = []): ArrayTransformer {
         if (null === $model->getArrayDefinition()) {
             throw new InvalidArgumentException('Model must possess an array definition.');
         }
@@ -49,7 +51,14 @@ class FormFactory
         if (null !== $model->getListNodeModel()) {
             return new ListTransformer($model->getListNodeModel(), $config, $this, $name);
         }
-        if (null !== $model->getStringConstraints() || null !== $model->getNumberConstraints()) {
+        if (null !== $model->getStringConstraints() || null !== $model->getIntegerConstraints()) {
+            if (null !== $model->getStringConstraints()) {
+                foreach ($model->getStringConstraints() as $c) {
+                    if ($c instanceof IUploadedImageConstraint) {
+                        return new FileTransformer($name);
+                    }
+                }
+            }
             return new StringTransformer($name);
         }
         if (null !== $model->getDateTimeConstraints()) {

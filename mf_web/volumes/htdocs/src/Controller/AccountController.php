@@ -2,9 +2,11 @@
 
 namespace MF\Controller;
 
-use MF\DataStructure\AppObjectFactory;
+use MF\DataStructure\AppObject;
 use MF\Enum\Clearance;
 use MF\Framework\Form\FormFactory;
+use MF\Framework\Model\StringModel;
+use MF\Framework\Type\ModelValidator;
 use MF\Model\MemberModel;
 use MF\Session\SessionManager;
 use MF\Repository\MemberRepository;
@@ -18,12 +20,11 @@ class AccountController implements ControllerInterface
     const ROUTE_ID = 'manage-account';
 
     public function __construct(
+        private FormFactory $formFactory,
         private MemberRepository $repo,
+        private ModelValidator $modelValidator,
         private SessionManager $session,
         private TwigService $twig,
-        private FormFactory $formFactory,
-        private AppObjectFactory $appObjectFactory,
-        private MemberModel $model,
     ) {
     }    
 
@@ -31,26 +32,20 @@ class AccountController implements ControllerInterface
      * @todo Use standard form.
      */
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $formData = [
-            'id' => $this->session->getCurrentMemberUsername(),
-            'password' => null,
-        ];
+        $model = (new MemberModel())->removeProperty('password')->addProperty('password', new StringModel(isNullable: true));
+
+        $formData = null;
         $formErrors = null;
         $success = null;
-        $form = $this->formFactory->createForm($this->model, formConfig: [
-            'password' => [
-                'required' => false,
-            ],
-        ]);
+        $form = $this->formFactory->createForm($model);
         if ('POST' === $request->getMethod()) {
-            $submitted = $form->extractFromRequest($request->getParsedBody());
-            $formData = $submitted->getContent();
-            $formErrors = $submitted->getErrors();
-            if (!$submitted->hasErrors()) {
+            $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
+            $formErrors = $this->modelValidator->validate($formData, $model);
+            if (0 === count($formErrors)) {
                 if (null !== $formData['password']) {
                     $success = 'Votre compte a été mis à jour.';
                     $formData['password'] =  password_hash($formData['password'], PASSWORD_DEFAULT);
-                    $this->repo->updateMember($this->appObjectFactory->create($formData, $this->model));
+                    $this->repo->updateMember(new AppObject($formData));
                     $this->session->setCurrentMemberUsername($formData['id']);
                 } else {
                     $this->repo->updateId($this->session->getCurrentMemberUsername(), $formData['id']);
@@ -58,6 +53,11 @@ class AccountController implements ControllerInterface
                     $this->session->setCurrentMemberUsername($formData['id']);
                 }
             }
+        } else {
+            $formData = [
+                'id' => $this->session->getCurrentMemberUsername(),
+                'password' => null,
+            ];
         }
         return new Response(body: $this->twig->render('account.html.twig', [
             'success' => $success,

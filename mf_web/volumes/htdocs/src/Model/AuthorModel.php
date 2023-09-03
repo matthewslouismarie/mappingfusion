@@ -8,14 +8,14 @@ use MF\Framework\Model\StringModel;
 
 class AuthorModel extends AbstractEntity
 {
-    public function getArrayDefinition(): array {
-        return [
+    public function __construct() {
+        parent::__construct([
             'id' => new StringModel([
                 new StringConstraint(regex: StringConstraint::REGEX_DASHES),
             ]),
             'name' => new StringModel([
                 new StringConstraint(),
             ]),
-        ];
+        ]);
     }
 }

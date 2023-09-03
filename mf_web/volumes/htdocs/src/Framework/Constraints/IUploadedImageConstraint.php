@@ -1,8 +1,8 @@
 <?php
 
-namespace MF\Constraint;
+namespace MF\Framework\Constraints;
 
-interface IFileConstraint extends IStringConstraint
+interface IUploadedImageConstraint extends IStringConstraint
 {
     const FILENAME_MAX_LENGTH = 128;
 

@@ -17,7 +17,7 @@ class RangeValidator implements IValidator
         if (null !== $this->constraint->getMax() && $data > $this->constraint->getMax()) {
             $violations[] =  new ConstraintViolation($this->constraint, "$data is higher than set maximum.");
         }
-        if (null !== $this->constraint->getMin() && $data < $this->constraint->getMax()) {
+        if (null !== $this->constraint->getMin() && $data < $this->constraint->getMin()) {
             $violations[] =  new ConstraintViolation($this->constraint, "$data is lower than set minimum.");
         }
         return $violations;

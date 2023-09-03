@@ -3,12 +3,12 @@
 namespace MF\Controller;
 
 use MF\DataStructure\AppObject;
-use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
+use MF\Exception\Http\NotFoundException;
 use MF\Framework\Form\FormFactory;
+use MF\Framework\Type\ModelValidator;
 use MF\Model\CategoryModel;
 use MF\Model\Slug;
-use MF\Session\SessionManager;
 use GuzzleHttp\Psr7\Response;
 use MF\Repository\CategoryRepository;
 use MF\Router;
@@ -21,43 +21,44 @@ class CategoryAdminController implements ControllerInterface
     const ROUTE_ID = 'manage_category';
 
     public function __construct(
+        private CategoryModel $model,
         private CategoryRepository $repo,
-        private Router $router,
-        private SessionManager $session,
-        private AppObjectFactory $appObjectFactory,
         private FormFactory $formFactory,
+        private ModelValidator $modelValidator,
+        private Router $router,
         private TwigService $twig,
     ) {
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
-        $existingCategory = $this->getExistingCategory($routeParams);
-        $formData = $existingCategory;
+        $requestedId = $routeParams[1] ?? null;
+        $formData = null;
         $formErrors = null;
 
-        $model = new CategoryModel();
-        $form = $this->formFactory->createForm($model, formConfig: [
+        $form = $this->formFactory->createForm($this->model, config: [
             'id' => [
                 'required' => false,
             ]
         ]);
 
         if ('POST' === $request->getMethod()) {
-            $submission = $form->extractFromRequest($request->getParsedBody(), $request->getUploadedFiles());
-            $formData = $submission->getContent();
-            $formErrors = $submission->getErrors();
+            $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
+            $formData['id'] = $formData['id'] ??  null !== $formData['name'] ? (new Slug($formData['name'], true))->__toString() : null;
+            $formErrors = $this->modelValidator->validate($formData, $this->model);
 
-            if (!$submission->hasErrors()) {
-                $formData['id'] = $formData['id'] ?? (new Slug($formData['name'], true))->__toString();
-                $category = $this->appObjectFactory->create($formData, $model);
-                if (null === $existingCategory) {
+            if (0 === count($formErrors)) {
+                $category = new AppObject($formData);
+                if (null === $requestedId) {
                     $this->repo->add($category);
                 } else {
-                    $this->repo->update($category, $existingCategory->id);
+                    $this->repo->update($category, $requestedId);
                 }
-                if (null === $existingCategory || $existingCategory->id || $category->id) {
-                    return $this->router->generateRedirect(self::ROUTE_ID, [$category->id]);
-                }
+                return $this->router->generateRedirect(self::ROUTE_ID, [$category->id]);
+            }
+        } elseif (null !== $requestedId) {
+            $formData = $this->repo->find($requestedId)?->toArray();
+            if (null === $formData) {
+                throw new NotFoundException();
             }
         }
 

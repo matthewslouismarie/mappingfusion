@@ -5,14 +5,12 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use MF\Database\DbEntityManager;
 use MF\DataStructure\AppObject;
-use MF\DataStructure\AppObjectFactory;
 use MF\Model\CategoryModel;
 use UnexpectedValueException;
 
 class CategoryRepository implements IRepository
 {
     public function __construct(
-        private AppObjectFactory $appObjectFactory,
         private CategoryModel $model,
         private DatabaseManager $conn,
         private DbEntityManager $em,
@@ -37,7 +35,7 @@ class CategoryRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toAppData($data[0], $this->model);
+            return $this->em->toAppData($data[0], $this->model, 'category');
         } else {
             throw new UnexpectedValueException();
         }
@@ -51,7 +49,7 @@ class CategoryRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM e_category;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppData($r, $this->model);
+            $entities[] = $this->em->toAppData($r, $this->model, 'category');
         }
         return $entities;
     }

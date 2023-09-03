@@ -13,16 +13,10 @@ class AdminArticleListController implements ControllerInterface
 {
     const ROUTE_ID = 'admin-article-list';
 
-    private ArticleRepository $repo;
-
-    private TwigService $twig;
-
     public function __construct(
-        ArticleRepository $repo,
-        TwigService $twig,
+        private ArticleRepository $repo,
+        private TwigService $twig,
     ) {
-        $this->repo = $repo;
-        $this->twig = $twig;
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    

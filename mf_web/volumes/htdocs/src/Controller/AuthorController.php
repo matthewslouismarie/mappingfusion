@@ -3,8 +3,6 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\DataStructure\AppObject;
-use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
 use MF\Framework\Form\FormFactory;
@@ -14,7 +12,6 @@ use MF\Model\Slug;
 use MF\Repository\AuthorRepository;
 use MF\Router;
 use MF\TwigService;
-use OutOfBoundsException;
 use PDOException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -24,7 +21,6 @@ class AuthorController implements ControllerInterface
     const ROUTE_ID = 'manage_author';
 
     public function __construct(
-        private AppObjectFactory $appObjectFactory,
         private AuthorModel $model,
         private AuthorRepository $repo,
         private FormFactory $formFactory,
@@ -33,6 +29,7 @@ class AuthorController implements ControllerInterface
         private TwigService $twig,
     ) {
     }
+
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $requestedId = $routeParams[1] ?? null;
         $formData = null;
@@ -66,11 +63,10 @@ class AuthorController implements ControllerInterface
                 }
             }
         } elseif (null !== $requestedId) {
-            $author = $this->repo->find($requestedId);
-            if (null === $author) {
+            $formData = $this->repo->find($requestedId)?->toArray();
+            if (null === $formData) {
                 throw new NotFoundException();
             }
-            $formData = $author->toArray();
         }
 
         return new Response(

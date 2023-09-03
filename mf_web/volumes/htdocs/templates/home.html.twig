@@ -16,7 +16,7 @@
             <ul class="glide__slides">
             {% for a in featured_articles %}
                 <li class="glide__slide">
-                    <a class="link _textxxl" href="{{ app.router.generateUrl('view-article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.cover_filename) }});">
+                    <a class="link _textxxl" href="{{ app.router.generateUrl('article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.cover_filename) }});">
                         {% if a.sub_title %}<div class="sub-title">{{ app.mk.format(a.sub_title)|raw }}</div>{% endif %}
                         <div class="title">{{ app.mk.format(a.title)|raw }}</div>
                     </a>
@@ -45,7 +45,7 @@
             <ul class="list">
                 {% for r in last_reviews %}
                 <li class="item">
-                    <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.resource(r.cover_filename) }}');"{% endif %} href="{{ app.router.generateUrl('view-article', [r.id]) }}">
+                    <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.resource(r.cover_filename) }}');"{% endif %} href="{{ app.router.generateUrl('article', [r.id]) }}">
                         <div class="content">
                             <span class="playable _textl">{{ r.review.playable.name }}</span>
                             <span class="std-badge _texts">{{ r.review.playable.name }}</span>

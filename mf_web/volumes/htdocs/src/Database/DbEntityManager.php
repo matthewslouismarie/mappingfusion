@@ -39,7 +39,7 @@ class DbEntityManager
                 $appArray = [];
                 foreach ($model->getArrayDefinition() as $key => $property) {
                     if (null !== $property->getArrayDefinition()) {
-                        $appArray[$key] = $this->toAppData($dbData, $property, $prefix);
+                        $appArray[$key] = $this->toAppData($dbData, $property, $key);
                     } else {
                         $appArray[$key] = $this->toAppData(
                             $dbData[$prefix . '_' . $key],
@@ -57,7 +57,7 @@ class DbEntityManager
         if (is_numeric($dbData)) {
             if ($model->isBool() && in_array($dbData, [0, 1], true)) {
                 return 1 === $dbData;
-            } elseif (null !== $model->getNumberConstraints()) {
+            } elseif (null !== $model->getIntegerConstraints()) {
                 return intval($dbData);
             }
         }

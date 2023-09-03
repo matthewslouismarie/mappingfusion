@@ -4,14 +4,11 @@ namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
 use MF\DataStructure\AppObject;
-use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
 use MF\Enum\LinkType;
 use MF\Exception\Database\EntityNotFoundException;
 use MF\Exception\Http\NotFoundException;
 use MF\Framework\Form\FormFactory;
-use MF\Framework\Form\Transformer\ArrayTransformer;
-use MF\Framework\Form\Transformer\IFormTransformer;
 use MF\Framework\Type\ModelValidator;
 use MF\Model\ContributionModel;
 use MF\Model\PlayableLinkModel;
@@ -30,12 +27,12 @@ class AdminPlayableController implements ControllerInterface
     const ROUTE_ID = 'manage_playable';
 
     public function __construct(
-        private AppObjectFactory $appObjectFactory,
         private AuthorRepository $authorRepo,
         private FormFactory $formFactory,
         private ModelValidator $validator,
         private PlayableLinkRepository $linkRepo,
         private PlayableRepository $repo,
+        private Router $router,
         private TwigService $twig,
     ) {
     }
@@ -70,7 +67,7 @@ class AdminPlayableController implements ControllerInterface
         if ('POST' === $request->getMethod()) {
             // Form Data extraction, generation and validation.
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
-            $formData['id'] = $formData['id'] ?? (new Slug($formData['name'], true))->__toString();
+            $formData['id'] = $formData['id'] ?? $formData['name'] !== null ? (new Slug($formData['name'], true))->__toString() : null;
             foreach ($formData['contributions'] as $key => $c) {
                 $formData['contributions'][$key]['playable_id'] = $formData['id'];
             }
@@ -86,17 +83,7 @@ class AdminPlayableController implements ControllerInterface
                 } else {
                     $this->repo->update($playable, $playableId);
                 }
-            //     foreach ($submittedData['links'] as $link) {
-            //         $link['playable_id'] = $playable->id;
-            //         if (isset($link['id'])) {
-            //             $this->linkRepo->update($this->appObjectFactory->create($link, new PlayableLinkModel()));
-            //         } else {
-            //             $this->linkRepo->add($this->appObjectFactory->create($link, new PlayableLinkModel()));
-            //         }
-            //     }
-            //     if (null === $existingPlayable || $playable->id !== $existingPlayable->id) {
-            //         return $this->router->generateRedirect(self::ROUTE_ID, [$playable->id]);
-            //     }
+                return $this->router->generateRedirect(self::ROUTE_ID, [$playable->id]);
             }
         } elseif (isset($routeParams[1])) {
             try {

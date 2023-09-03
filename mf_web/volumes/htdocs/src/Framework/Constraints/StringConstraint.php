@@ -9,7 +9,7 @@ class StringConstraint implements IConstraint
     const REGEX_DASHES = '^(([a-z0-9])-?)*(?2)+$';
 
     public function __construct(
-        private int $minLength = 1,
+        private int $minLength = 0,
         private ?int $maxLength = self::MAX_LENGTH,
         private ?string $regex = null,
     ) {

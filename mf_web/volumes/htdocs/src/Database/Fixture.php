@@ -4,7 +4,6 @@ namespace MF\Database;
 
 use DateTimeImmutable;
 use MF\Configuration;
-use MF\DataStructure\AppObjectFactory;
 use MF\Enum\LinkType;
 use MF\Model\ArticleModel;
 use MF\Model\CategoryModel;
@@ -34,7 +33,6 @@ class Fixture
         private PlayableLinkRepository $linkRepo,
         private PlayableRepository $repoPlayable,
         private ReviewRepository $repoReview,
-        private AppObjectFactory $factory,
     ) {
     }
 

@@ -15,24 +15,21 @@ class PlayableModel extends AbstractEntity
         private ?PlayableLinkModel $playableLinkModel = null,
         private ?ContributionModel $contributionModel = null,
     ) {
-    }
-
-    public function getArrayDefinition(): array {
         $properties = [
             'id' => new StringModel([new StringConstraint(regex: StringConstraint::REGEX_DASHES)]),
             'name' => new StringModel([new StringConstraint()]),
             'release_date_time' => new DateTimeModel(),
             'game_id' => new StringModel([new StringConstraint(regex: StringConstraint::REGEX_DASHES)], true),
         ];
-        if (null !== $this->gameModel) {
-            $properties['game'] = $this->gameModel;
+        if (null !== $gameModel) {
+            $properties['game'] = $gameModel;
         }
-        if (null !== $this->playableLinkModel) {
-            $properties['links'] = new ListModel($this->playableLinkModel);
+        if (null !== $playableLinkModel) {
+            $properties['links'] = new ListModel($playableLinkModel);
         }
-        if (null !== $this->contributionModel) {
-            $properties['contributions'] = new ListModel($this->contributionModel);
+        if (null !== $contributionModel) {
+            $properties['contributions'] = new ListModel($contributionModel);
         }
-        return $properties;
+        parent::__construct($properties);
     }
 }

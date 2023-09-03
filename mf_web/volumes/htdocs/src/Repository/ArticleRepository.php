@@ -5,7 +5,6 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use MF\Database\DbEntityManager;
 use MF\DataStructure\AppObject;
-use MF\DataStructure\AppObjectFactory;
 use MF\Model\CategoryModel;
 use MF\Session\SessionManager;
 use MF\Model\ArticleModel;
@@ -16,14 +15,11 @@ use UnexpectedValueException;
 
 class ArticleRepository implements IRepository
 {
-    const GROUPS = ['category', 'review', ['playable', ['review', 'playable']]];
-
     public function __construct(
         private ArticleModel $model,
         private DatabaseManager $conn,
         private DbEntityManager $em,
         private SessionManager $session,
-        private AppObjectFactory $appObjectFactory,
     ) {
         $this->model = new ArticleModel(
             categoryModel: new CategoryModel(),
@@ -33,7 +29,7 @@ class ArticleRepository implements IRepository
 
     public function add(AppObject $appObject): void {
         $dbArray = $this->em->toDbValue($appObject);
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article VALUES (:id, :author_id, :category_id, :body, :is_featured, :sub_title, :title, :cover_filename, :creation_date_time, :last_update_date_time);');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article SET article_id = :id, article_author_id = :author_id, article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_sub_title = :sub_title, article_title = :title, article_cover_filename = :cover_filename;');
         $stmt->execute($dbArray);
     }
 
@@ -51,7 +47,7 @@ class ArticleRepository implements IRepository
             return null;
         } elseif (1 === count($data)) {
             $reviewModel = null !== $data[0]['review_id'] ? new ReviewModel(new PlayableModel()) : null;
-            return $this->em->toAppData($data[0], new ArticleModel(new CategoryModel(), $reviewModel));
+            return $this->em->toAppData($data[0], new ArticleModel(new CategoryModel(), $reviewModel), 'article');
         } else {
             throw new UnexpectedValueException();
         }
@@ -61,7 +57,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NULL;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppData($r, new ArticleModel());
+            $entities[] = $this->em->toAppData($r, new ArticleModel(), 'article');
         }
         return $entities;
     }
@@ -78,7 +74,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article;')->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppData($r, $this->model);
+            $entities[] = $this->em->toAppData($r, new ArticleModel(new CategoryModel()), 'article');
         }
         return $entities;
     }
@@ -100,7 +96,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article {$whereClause} ORDER BY article_last_update_date_time DESC LIMIT {$limit};");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, $this->model);
+            $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel()), 'article');
         }
         return $articles;
     }
@@ -112,7 +108,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE review_id IS NOT NULL ORDER BY article_last_update_date_time DESC LIMIT 4;");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel())));
+            $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel())), 'article');
         }
         return $articles;
     }
@@ -124,7 +120,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel())));
+            $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel())), 'article');
         }
         return $articles;
     }
