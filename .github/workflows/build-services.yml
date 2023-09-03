@@ -15,4 +15,8 @@ jobs:
       - name: Generate style.css
         run: docker-compose exec -T mf_web vendor/bin/pscss sass/style.scss public/style.css
       - name: Running basic tests
+        run:
+         - docker-compose exec -T mf_web php -f tests/tester.php "MF\Test\AppEntityTest"
+         - docker-compose exec -T mf_web php -f tests/tester.php "MF\Test\DbEntityManagerTest"
+      - name: Running integration test
         run: docker-compose exec -T mf_web php -f scripts/tests.php
