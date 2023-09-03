@@ -1,6 +1,6 @@
 <?php
 
-namespace MF\Exception\Form;
+namespace MF\Framework\Form\Exceptions;
 
 use InvalidArgumentException;
 use Throwable;

@@ -3,8 +3,8 @@
 namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
-use MF\DataStructure\AppObject;
-use MF\Database\DbEntityManager;
+use MF\Framework\DataStructure\AppObject;
+use MF\Framework\Database\DbEntityManager;
 use MF\Model\PlayableModel;
 use MF\Session\SessionManager;
 use MF\Model\ReviewModel;
@@ -46,7 +46,7 @@ class ReviewRepository implements IRepository
     }
 
     /**
-     * @return \MF\DataStructure\AppObject[]
+     * @return \MF\Framework\DataStructure\AppObject[]
      */
     public function findAll(): array {
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;')->fetchAll();

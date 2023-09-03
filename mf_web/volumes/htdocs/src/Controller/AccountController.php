@@ -2,7 +2,7 @@
 
 namespace MF\Controller;
 
-use MF\DataStructure\AppObject;
+use MF\Framework\DataStructure\AppObject;
 use MF\Enum\Clearance;
 use MF\Framework\Form\FormFactory;
 use MF\Framework\Model\StringModel;

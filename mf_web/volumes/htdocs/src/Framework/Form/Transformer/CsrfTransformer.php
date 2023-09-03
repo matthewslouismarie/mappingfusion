@@ -2,8 +2,8 @@
 
 namespace MF\Framework\Form\Transformer;
 
-use MF\Exception\Form\MissingInputException;
-use MF\Exception\Form\WrongCsrfException;
+use MF\Framework\Form\Exceptions\MissingInputException;
+use MF\Framework\Form\Exceptions\WrongCsrfException;
 use MF\Session\SessionManager;
 
 class CsrfTransformer implements IFormTransformer

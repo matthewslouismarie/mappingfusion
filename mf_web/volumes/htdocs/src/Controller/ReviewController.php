@@ -3,7 +3,7 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\DataStructure\AppObject;
+use MF\Framework\DataStructure\AppObject;
 use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
 use MF\Framework\Form\FormFactory;

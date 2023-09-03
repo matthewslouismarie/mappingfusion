@@ -3,7 +3,7 @@
 namespace MF\Framework\Form\Transformer;
 
 use DateTimeImmutable;
-use MF\Exception\Form\MissingInputException;
+use MF\Framework\Form\Exceptions\MissingInputException;
 
 class DateTimeTransformer implements IFormTransformer
 {

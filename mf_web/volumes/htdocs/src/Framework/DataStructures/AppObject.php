@@ -1,6 +1,6 @@
 <?php
 
-namespace MF\DataStructure;
+namespace MF\Framework\DataStructure;
 
 use ArrayAccess;
 use ArrayIterator;

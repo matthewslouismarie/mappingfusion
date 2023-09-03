@@ -1,15 +1,10 @@
 <?php
 
-namespace MF\Database;
+namespace MF\Framework\Database;
 
 use DateTimeImmutable;
-use DomainException;
 use InvalidArgumentException;
-use MF\Constraint\IArrayConstraint;
-use MF\Constraint\IBooleanConstraint;
-use MF\Constraint\IDateTimeConstraint;
-use MF\DataStructure\AppObject;
-use MF\Exception\Database\InvalidDbData;
+use MF\Framework\DataStructure\AppObject;
 use MF\Framework\Model\IModel;
 use UnexpectedValueException;
 

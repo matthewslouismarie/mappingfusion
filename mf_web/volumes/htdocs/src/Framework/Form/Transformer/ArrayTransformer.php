@@ -2,8 +2,7 @@
 
 namespace MF\Framework\Form\Transformer;
 
-use MF\Exception\Form\ExtractionException;
-use MF\Framework\Form\IFormExtractor;
+use MF\Framework\Form\Exceptions\ExtractionException;
 
 class ArrayTransformer implements IFormTransformer
 {

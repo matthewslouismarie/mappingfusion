@@ -1,8 +1,6 @@
 <?php
 
-namespace MF\Exception\Form;
-
-use MF\Form\IFormElement;
+namespace MF\Framework\Form\Exceptions;
 
 /**
  * Thrown when the submittable could not find any value from the request.

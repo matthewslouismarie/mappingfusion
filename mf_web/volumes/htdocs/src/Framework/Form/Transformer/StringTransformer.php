@@ -2,7 +2,7 @@
 
 namespace MF\Framework\Form\Transformer;
 
-use MF\Exception\Form\MissingInputException;
+use MF\Framework\Form\Exceptions\MissingInputException;
 
 class StringTransformer implements IFormTransformer
 {

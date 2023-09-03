@@ -2,7 +2,7 @@
 
 namespace MF\Repository;
 
-use MF\DataStructure\AppObject;
+use MF\Framework\DataStructure\AppObject;
 
 interface IRepository
 {
