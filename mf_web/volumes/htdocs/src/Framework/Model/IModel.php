@@ -18,6 +18,11 @@ interface IModel
      */
     public function getDateTimeConstraints(): ?array;
 
+    /**
+     * @return \MF\Framework\Constraints\INumberConstraint[]
+     */
+    public function getNumberConstraints(): ?array;
+
     public function getListNodeModel(): ?IModel;
 
     /**

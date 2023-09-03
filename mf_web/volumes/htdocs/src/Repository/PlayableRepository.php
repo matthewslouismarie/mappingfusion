@@ -7,6 +7,7 @@ use MF\Database\DbEntityManager;
 use MF\DataStructure\AppObject;
 use MF\DataStructure\AppObjectFactory;
 use MF\Exception\Database\EntityNotFoundException;
+use MF\Model\ContributionModel;
 use MF\Model\PlayableLinkModel;
 use MF\Model\PlayableModel;
 
@@ -17,6 +18,7 @@ class PlayableRepository implements IRepository
         private PlayableModel $model,
         private DbEntityManager $em,
         private PlayableLinkRepository $linkRepo,
+        private ContributionRepository $contributionRepository,
         private AppObjectFactory $appObjectFactory,
     ) {
     }
@@ -32,9 +34,6 @@ class PlayableRepository implements IRepository
         $stmt->execute([$id]);
     }
 
-    /**
-     * @todo Fetch the links in the process?
-     */
     public function find(string $id): ?AppObject {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_playable WHERE playable_id = ?;');
         $stmt->execute([$id]);
@@ -44,14 +43,25 @@ class PlayableRepository implements IRepository
         }
 
         $rows = $stmt->fetchAll();
+        $linkModel = new PlayableLinkModel();
+        $linkIds = [null];
         $links = [];
+        $contributions = [];
+        $contributionModel = new ContributionModel();
+        $contribIds = [null];
         for ($i = 0; $i < count($rows); $i++) {
-            $links[] = $this->em->toAppData($rows[$i], new PlayableLinkModel());
+            if (!in_array($rows[$i]['link_id'], $linkIds, true)) {
+                $linkIds[] = $rows[$i]['link_id'];
+                $links[] = $this->em->toAppData($rows[$i], $linkModel, 'link');
+            }
+            if (!in_array($rows[$i]['contribution_id'], $contribIds, true)) {
+                $contribIds[] = $rows[$i]['contribution_id'];
+                $contributions[] = $this->em->toAppData($rows[$i], $contributionModel, 'contribution');
+            }
         }
 
-        $playable = $this->em->toAppData($rows[0], new PlayableModel(new PlayableModel()));
-        return $playable->set('links', $links);
-
+        $playable = $this->em->toAppData($rows[0], new PlayableModel(new PlayableModel()), 'playable');
+        return $playable->set('links', $links)->set('contributions', $contributions);
     }
 
     /**
@@ -61,7 +71,7 @@ class PlayableRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM e_playable;')->fetchAll();
         $playables = [];
         foreach ($results as $row) {
-            $playables[] = $this->em->toAppData($row, $this->model);
+            $playables[] = $this->em->toAppData($row, $this->model, 'playable');
         }
         return $playables;
     }
@@ -71,12 +81,27 @@ class PlayableRepository implements IRepository
         return $this->find($id) ?? throw new EntityNotFoundException();
     }
 
-    public function update(AppObject $playable, ?string $previousId = null, array $linksToRemove = []): void {
+    public function update(AppObject $playable, ?string $previousId = null): void {
         $dbArray = $this->em->toDbValue($playable);
 
         $this->conn->getPdo()->beginTransaction();
         $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_id = :id, playable_name = :name, playable_game_id = :game_id, playable_release_date_time = :release_date_time WHERE playable_id = :previous_id;');
         $stmt->execute($dbArray + ['previous_id' => $previousId ?? $dbArray['id']]);
+
+        foreach ($playable->links as $link) {
+            if (null === $link->id) {
+                $this->linkRepo->add($link);
+            } else {
+                $this->linkRepo->update($link);
+            }
+        }
+        foreach ($playable->contributions as $c) {
+            if (null === $c->id) {
+                $this->contributionRepository->add($c);
+            } else {
+                $this->contributionRepository->update($c);
+            }
+        }
         // foreach ($linksToRemove as $linkId) {
         //     $this->linkRepo->remove($linkId);
         // }

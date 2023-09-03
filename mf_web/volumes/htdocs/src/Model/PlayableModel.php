@@ -2,13 +2,13 @@
 
 namespace MF\Model;
 
-use MF\Constraint\ArrayConstraint;
-use MF\Constraint\IDateTimeConstraint;
-use MF\Constraint\IModel;
-use MF\Constraint\LongStringConstraint;
-use MF\Constraint\SlugConstraint;
+use MF\Framework\Constraints\StringConstraint;
+use MF\Framework\Model\AbstractEntity;
+use MF\Framework\Model\DateTimeModel;
+use MF\Framework\Model\ListModel;
+use MF\Framework\Model\StringModel;
 
-class PlayableModel implements IModel
+class PlayableModel extends AbstractEntity
 {
     public function __construct(
         private ?self $gameModel = null,
@@ -16,26 +16,22 @@ class PlayableModel implements IModel
         private ?ContributionModel $contributionModel = null,
     ) {
     }
-    
-    public function getName(): string {
-        return 'playable';
-    }
 
-    public function getProperties(): array {
+    public function getArrayDefinition(): array {
         $properties = [
-            new ModelProperty('id', new SlugConstraint()),
-            new ModelProperty('name', new LongStringConstraint()),
-            new ModelProperty('release_date_time', new class implements IDateTimeConstraint {}),
-            new ModelProperty('game_id', new SlugConstraint(), isRequired: false),
+            'id' => new StringModel([new StringConstraint(regex: StringConstraint::REGEX_DASHES)]),
+            'name' => new StringModel([new StringConstraint()]),
+            'release_date_time' => new DateTimeModel(),
+            'game_id' => new StringModel([new StringConstraint(regex: StringConstraint::REGEX_DASHES)], true),
         ];
         if (null !== $this->gameModel) {
-            $properties[] = new ModelProperty('game', $this->gameModel);
+            $properties['game'] = $this->gameModel;
         }
         if (null !== $this->playableLinkModel) {
-            $properties[] = new ModelProperty('links', new ArrayConstraint($this->playableLinkModel));
+            $properties['links'] = new ListModel($this->playableLinkModel);
         }
         if (null !== $this->contributionModel) {
-            $properties[] = new ModelProperty('contributions', new ArrayConstraint($this->contributionModel));
+            $properties['contributions'] = new ListModel($this->contributionModel);
         }
         return $properties;
     }

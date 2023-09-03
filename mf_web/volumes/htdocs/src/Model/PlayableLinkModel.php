@@ -2,35 +2,26 @@
 
 namespace MF\Model;
 
-use MF\Constraint\EnumConstraint;
-use MF\Constraint\IModel;
-use MF\Constraint\LongStringConstraint;
-use MF\Constraint\SlugConstraint;
-use MF\Constraint\TextConstraint;
-use MF\Constraint\UintConstraint;
 use MF\Enum\LinkType;
-use MF\Model\ModelProperty;
+use MF\Framework\Constraints\EnumConstraint;
+use MF\Framework\Constraints\RangeConstraint;
+use MF\Framework\Constraints\StringConstraint;
+use MF\Framework\Model\AbstractEntity;
+use MF\Framework\Model\NumberModel;
+use MF\Framework\Model\StringModel;
 
 /**
  * @todo Custom constraint for type and url.
  */
-class PlayableLinkModel implements IModel
+class PlayableLinkModel extends AbstractEntity
 {
-    public function getName(): string {
-        return 'link';
-    }
-
-    public function getProperties(): array {
+    public function getArrayDefinition(): array {
         return [
-            new ModelProperty('id', new UintConstraint(), isGenerated: true, isRequired: false),
-            new ModelProperty('playable_id', new SlugConstraint()),
-            new ModelProperty('name', new LongStringConstraint()),
-            new ModelProperty('type', new EnumConstraint(LinkType::cases())),
-            new ModelProperty('url', new LongStringConstraint()),
+            'id' => new NumberModel([new RangeConstraint()], true),
+            'playable_id' => new StringModel([new StringConstraint(regex: StringConstraint::REGEX_DASHES)]),
+            'name' => new StringModel([new StringConstraint()]),
+            'type' => new StringModel([new EnumConstraint(LinkType::cases())]),
+            'url' => new StringModel([new StringConstraint()]),
         ];
-    }
-
-    public function getExportPrefix(): string {
-        return 'link_';
     }
 }

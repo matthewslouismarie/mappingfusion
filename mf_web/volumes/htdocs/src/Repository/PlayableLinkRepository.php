@@ -36,6 +36,6 @@ class PlayableLinkRepository implements IRepository
 
     public function update(AppObject $link): void {
         $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable_link SET link_playable_id = :playable_id, link_name = :name, link_type = :type, link_url = :url WHERE link_id = :id;');
-        $stmt->execute($this->em->toDbValue($link, 'link'));
+        $stmt->execute($this->em->toDbValue($link));
     }
 }

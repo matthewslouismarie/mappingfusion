@@ -2,15 +2,12 @@
 
 namespace MF\Framework\Type;
 
+use DateTimeInterface;
 use DomainException;
 use InvalidArgumentException;
-use MF\Constraint\INotNullableConstraint;
 use MF\Framework\Constraints\INotNullConstraint;
 use MF\Framework\DataStructures\ConstraintViolation;
-use MF\Framework\Model\IEntity;
 use MF\Framework\Model\IModel;
-use MF\Framework\Model\IString;
-use MF\Framework\Model\StringModel;
 use MF\Framework\Validator\ValidatorFactory;
 
 class ModelValidator
@@ -24,12 +21,7 @@ class ModelValidator
      * @throws InvalidArgumentException If $data is not of the expected class or type.
      * @throws DomainException If $model is unknown.
      */
-    public function validate(mixed $data, IModel $model): array {
-        $constraintViolations = [];
-
-        if (!is_scalar($data) && !is_array($data) && null !== $data) {
-        }
-        
+    public function validate(mixed $data, IModel $model): array {        
         if (null === $data) {
             if (!$model->isNullable()) {
                 return [
@@ -38,36 +30,83 @@ class ModelValidator
                         'Data is not allowed to be null.',
                     ),
                 ];
+            } else {
+                return [];
             }
-        } elseif (is_array($data)) {
+        }
+        if (is_array($data)) {
             $arrayDefinition = $model->getArrayDefinition();
-            if (null === $arrayDefinition) {
-                throw new InvalidArgumentException('The provided model does not provide a definition for arrays.');
-            }
-            if (count($arrayDefinition) !== count($data)) {
-                throw new InvalidArgumentException('The provided array does not have the expected number of properties.');
-            }
-            foreach ($arrayDefinition as $key => $property) {
-                $violations = $this->validate($data[$key], $property);
-                if (count($violations) > 0) {
-                    $constraintViolations[$key] = $violations;
+            $listNodeModel = $model->getListNodeModel();
+            if (null !== $arrayDefinition) {
+                $constraintViolations = [];
+                if (count($arrayDefinition) !== count($data)) {
+                    throw new InvalidArgumentException('The provided array does not have the expected number of properties.');
                 }
+                foreach ($arrayDefinition as $key => $property) {
+                    $violations = $this->validate($data[$key], $property);
+                    if (count($violations) > 0) {
+                        $constraintViolations[$key] = $violations;
+                    }
+                }
+                return $constraintViolations;
+            } elseif (null !== $listNodeModel) {
+                $constraintViolations = [];
+                foreach ($data as $key => $value) {
+                    $violations = $this->validate($value, $listNodeModel);
+                    if (count($violations) > 0) {
+                        $constraintViolations[$key] = key_exists($key, $constraintViolations) ? array_merge_recursive($constraintViolations[$key], $violations) : $violations;
+                    }
+                }
+                return $constraintViolations;
             }
-        } elseif (is_string($data)) {
+        }
+        if (is_string($data)) {
             $stringConstraints = $model->getStringConstraints();
-            if (null === $stringConstraints) {
-                throw new InvalidArgumentException('The provided model does not provide a definition for arrays.');
-            }
-            foreach ($stringConstraints as $c) {
-                $violations = $this->validatorFactory->createValidator($c, $this)->validate($data);
-                if (count($violations) > 0) {
-                    $constraintViolations = array_merge_recursive($violations);
+            if (null !== $stringConstraints) {
+                $constraintViolations = [];
+                foreach ($stringConstraints as $c) {
+                    $violations = $this->validatorFactory->createValidator($c, $this)->validate($data);
+                    if (count($violations) > 0) {
+                        $constraintViolations = array_merge_recursive($constraintViolations, $violations);
+                    }
                 }
+                return $constraintViolations;
             }
-        } else {
-            throw new InvalidArgumentException("Data to be validated must be scalar.");
+        }
+        if (is_numeric($data)) {
+            $numericConstraints = $model->getNumberConstraints();
+            if (null !== $numericConstraints) {
+                $constraintViolations = [];
+                foreach ($numericConstraints as $c) {
+                    $violations = $this->validatorFactory->createValidator($c, $this)->validate($data);
+                    if (count($violations) > 0) {
+                        $constraintViolations = array_merge_recursive($constraintViolations, $violations);
+                    }
+                }
+                return $constraintViolations;
+            }
+        }
+        if ($data instanceof DateTimeInterface) {
+            $constraints = $model->getDateTimeConstraints();
+            if (null !== $constraints) {
+                $constraintViolations = [];
+                foreach ($constraints as $c) {
+                    $violations = $this->validatorFactory->createValidator($c, $this)->validate($data);
+                    if (count($violations) > 0) {
+                        $constraintViolations = array_merge_recursive($constraintViolations, $violations);
+                    }
+                }
+                return $constraintViolations;
+            }
+        }
+        if (is_bool($data)) {
+            if ($model->isBool()) {
+                return [];
+            }
         }
 
-        return $constraintViolations;
+        var_dump($data, $model);
+
+        throw new InvalidArgumentException("Data is not of any type supported by the given model.");
     }
 }

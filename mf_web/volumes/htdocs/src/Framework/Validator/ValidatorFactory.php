@@ -3,9 +3,11 @@
 namespace MF\Framework\Validator;
 
 use DomainException;
+use MF\Framework\Constraints\EnumConstraint;
 use MF\Framework\Constraints\IConstraint;
 use MF\Framework\Constraints\EntityConstraint;
 use MF\Framework\Constraints\INotNullConstraint;
+use MF\Framework\Constraints\INumberConstraint;
 use MF\Framework\Constraints\StringConstraint;
 use MF\Framework\Type\ModelValidator;
 
@@ -23,6 +25,12 @@ class ValidatorFactory
         }
         if ($constraint instanceof StringConstraint) {
             return new StringValidator($constraint);
+        }
+        if ($constraint instanceof EnumConstraint) {
+            return new EnumValidator($constraint);
+        }
+        if ($constraint instanceof INumberConstraint) {
+            return new RangeValidator($constraint);
         }
         throw new DomainException('Constraint of type ' . get_class($constraint) . ' is unknown.');
     }

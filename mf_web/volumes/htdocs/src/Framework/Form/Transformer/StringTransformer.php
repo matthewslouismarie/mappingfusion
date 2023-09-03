@@ -15,7 +15,7 @@ class StringTransformer implements IFormTransformer
      * @return string|null The submitted, non-empty string, or null if the string is empty.
      */
     public function extractValueFromRequest(array $formRawData, array $uploadedFiles): ?string {
-        if (!isset($formRawData[$this->name])) {
+        if (!key_exists($this->name, $formRawData)) {
             throw new MissingInputException($this->name);
         }
         $submittedString = $formRawData[$this->name];

@@ -2,15 +2,17 @@
 
 namespace MF\Framework\Form\Transformer;
 
-use MF\Form\IFormElement;
-use Psr\Http\Message\ServerRequestInterface;
-
-class CheckboxTransformer implements FormTransformer
+class CheckboxTransformer implements IFormTransformer
 {
-    public function extractValueFromRequest(array $formRawData, array $uploadedFiles, string $inputName): bool {
-        if (!isset($formRawData[$inputName])) {
+    public function __construct(
+        private string $name,
+    ) {
+    }
+
+    public function extractValueFromRequest(array $formRawData, array $uploadedFiles): bool {
+        if (!isset($formRawData[$this->name])) {
             return false;
         }
-        return 'on' === $formRawData[$inputName] ? true : false;
+        return 'on' === $formRawData[$this->name] ? true : false;
     }
 }

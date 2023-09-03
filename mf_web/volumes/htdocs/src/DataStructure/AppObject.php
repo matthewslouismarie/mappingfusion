@@ -3,22 +3,27 @@
 namespace MF\DataStructure;
 
 use ArrayAccess;
+use ArrayIterator;
 use BadMethodCallException;
+use IteratorAggregate;
 use MF\Model\KeyName;
+use Traversable;
 
 /**
- * Immutable array that whose values can be accessed like an object property.
+ * Immutable array whose values can be accessed as properties.
  */
-class AppObject implements ArrayAccess
+class AppObject implements ArrayAccess, IteratorAggregate
 {
     private array $data;
 
     /**
      * @param mixed[] $appArray An app array.
-     * @todo Add back validation?
      */
     public function __construct(array $appArray) {
-        $this->data = $appArray;
+        $this->data = [];
+        foreach ($appArray as $key => $value) {
+            $this->data[$key] = is_array($value) ? new self($value) : $value;
+        }
     }
 
     public function __get(string $name): mixed {
@@ -28,6 +33,10 @@ class AppObject implements ArrayAccess
     public function attributeGet(string $offset): mixed {
         $keyName = (new KeyName($offset))->__toString();
         return $this->data[$keyName];
+    }
+
+    public function getIterator(): Traversable {
+        return new ArrayIterator($this->data);
     }
 
     public function offsetExists(mixed $offset): bool {
@@ -72,7 +81,6 @@ class AppObject implements ArrayAccess
                 $isEqual = $value === $appObject[$key];
             }
             if (!$isEqual) {
-                var_dump($value, $appObject[$key]);
                 return false;
             }
         }

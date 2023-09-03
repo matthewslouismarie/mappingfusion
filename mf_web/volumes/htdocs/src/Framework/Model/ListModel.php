@@ -2,13 +2,13 @@
 
 namespace MF\Framework\Model;
 
-class StringModel implements IModel
+class ListModel implements IModel
 {
     /**
      * @param \MF\Framework\Constraints\IConstraint[] $constraints
      */
     public function __construct(
-        private array $constraints = [],
+        private IModel $nodeModel,
         private bool $isNullable = false,
     ) {
     }
@@ -21,16 +21,16 @@ class StringModel implements IModel
         return null;
     }
 
-    public function getListNodeModel(): ?IModel {
-        return null;
+    public function getListNodeModel(): IModel {
+        return $this->nodeModel;
     }
 
     public function getNumberConstraints(): ?array {
         return null;
     }
 
-    public function getStringConstraints(): array {
-        return $this->constraints;
+    public function getStringConstraints(): ?array {
+        return null;
     }
 
     public function isBool(): bool {

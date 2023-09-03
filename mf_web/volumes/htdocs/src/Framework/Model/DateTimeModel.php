@@ -2,15 +2,23 @@
 
 namespace MF\Framework\Model;
 
-abstract class AbstractEntity implements IModel
+class DateTimeModel implements IModel
 {
+    /**
+     * @param \MF\Framework\Constraints\IDateTimeConstraint[] $constraints
+     */
     public function __construct(
-        private bool $nullable = false,
+        private array $constraints = [],
+        private bool $isNullable = false,
     ) {
     }
 
-    public function getDateTimeConstraints(): ?array {
+    public function getArrayDefinition(): ?array {
         return null;
+    }
+
+    public function getDateTimeConstraints(): ?array {
+        return $this->constraints;
     }
 
     public function getListNodeModel(): ?IModel {
@@ -30,6 +38,6 @@ abstract class AbstractEntity implements IModel
     }
 
     public function isNullable(): bool {
-        return $this->nullable;
+        return $this->isNullable;
     }
 }

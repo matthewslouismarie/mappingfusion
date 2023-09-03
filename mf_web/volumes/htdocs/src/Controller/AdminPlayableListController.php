@@ -13,16 +13,10 @@ class AdminPlayableListController implements ControllerInterface
 {
     const ROUTE_ID = 'admin-playable-list';
 
-    private PlayableRepository $repo;
-
-    private TwigService $twig;
-
     public function __construct(
-        PlayableRepository $repo,
-        TwigService $twig,
+        private PlayableRepository $repo,
+        private TwigService $twig,
     ) {
-        $this->repo = $repo;
-        $this->twig = $twig;
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    

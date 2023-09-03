@@ -2,11 +2,15 @@
 
 namespace MF\Framework\Model;
 
-abstract class AbstractEntity implements IModel
+class BoolModel implements IModel
 {
     public function __construct(
-        private bool $nullable = false,
+        private bool $isNullable = false,
     ) {
+    }
+
+    public function getArrayDefinition(): ?array {
+        return null;
     }
 
     public function getDateTimeConstraints(): ?array {
@@ -26,10 +30,10 @@ abstract class AbstractEntity implements IModel
     }
 
     public function isBool(): bool {
-        return false;
+        return true;
     }
 
     public function isNullable(): bool {
-        return $this->nullable;
+        return $this->isNullable;
     }
 }

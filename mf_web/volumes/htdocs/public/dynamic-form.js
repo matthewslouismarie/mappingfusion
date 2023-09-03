@@ -7,7 +7,7 @@ class DynamicForm
     constructor(buttonId, index = 0) {
         this.#button = document.getElementById(buttonId);
         this.#sourceTpl = document.getElementById(this.#button.dataset.source);
-        this.#index = 0;
+        this.#index = index;
     }
 
     init() {

@@ -11,10 +11,10 @@ class AuthorModel extends AbstractEntity
     public function getArrayDefinition(): array {
         return [
             'id' => new StringModel([
-                new StringConstraint(minLength: 1, regex: StringConstraint::REGEX_DASHES),
+                new StringConstraint(regex: StringConstraint::REGEX_DASHES),
             ]),
             'name' => new StringModel([
-                new StringConstraint(minLength: 1),
+                new StringConstraint(),
             ]),
         ];
     }

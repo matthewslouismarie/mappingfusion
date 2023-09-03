@@ -28,10 +28,10 @@ class ArrayTransformer implements IFormTransformer
 
         $value = [];
         foreach ($this->formElements as $key => $transformer) {
-            $value[$key] = $transformer->extractValueFromRequest($requestParsedBody, $uploadedFiles);
+            $value[$key] = $transformer->extractValueFromRequest($data, $uploadedFiles);
         }
         if (null !== $this->csrf) {
-            $this->csrf->extractValueFromRequest($requestParsedBody, $uploadedFiles);
+            $this->csrf->extractValueFromRequest($data, $uploadedFiles);
         }
         return $value;
     }

@@ -8,6 +8,7 @@ use MF\DataStructure\AppObjectFactory;
 use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
 use MF\Framework\Form\FormFactory;
+use MF\Framework\Type\ModelValidator;
 use MF\Model\AuthorModel;
 use MF\Model\Slug;
 use MF\Repository\AuthorRepository;
@@ -26,39 +27,36 @@ class AuthorController implements ControllerInterface
         private AppObjectFactory $appObjectFactory,
         private AuthorModel $model,
         private AuthorRepository $repo,
-        private FormFactory $FormFactory,
+        private FormFactory $formFactory,
+        private ModelValidator $modelValidator,
         private Router $router,
         private TwigService $twig,
     ) {
     }
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $existingAuthor = $this->getAuthorFromRequest($routeParams);
-        $formData = $existingAuthor;
-        $formErrors = [];
+        $requestedId = $routeParams[1] ?? null;
+        $formData = null;
+        $formErrors = null;
 
-        $form = $this->FormFactory->createForm($this->model, formConfig: [
+        $form = $this->formFactory->createForm($this->model, config: [
             'id' => [
                 'required' => false,
             ]
         ]);
 
         if ('POST' === $request->getMethod()) {
-            $submission = $form->extractFromRequest($request->getParsedBody());
-            $formData = $submission->getContent();
-            $formErrors = $submission->getErrors();
+            $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
+            $formData['id'] = $formData['id'] === null && $formData['name'] !== null ? (new Slug($formData['name'], true))->__toString() : $formData['id'];
+            $formErrors = $this->modelValidator->validate($formData, $this->model);
 
-            if (!$submission->hasErrors()) {
-                $formData['id'] = $formData['id'] !== null ? $formData['id'] : (new Slug($formData['name'], true))->__toString();
+            if (0 === count($formErrors)) {
                 try {
-                    if (null === $existingAuthor) {
+                    if (null === $requestedId) {
                         $this->repo->add($formData);
-                        return $this->router->generateRedirect(self::ROUTE_ID, [$formData['id']]);
                     } else {
-                        $this->repo->update($formData, $existingAuthor->id);
-                        if ($existingAuthor->id !== $formData['id']) {
-                            return $this->router->generateRedirect(self::ROUTE_ID, [$formData['id']]);
-                        }
+                        $this->repo->update($formData, $requestedId);
                     }
+                    return $this->router->generateRedirect(self::ROUTE_ID, [$formData['id']]);
                 } catch (PDOException $e) {
                     if ('23000' === $e->getCode()) {
                         $formErrors['id'][] = 'Il existe déjà un auteur avec le même ID.';
@@ -67,6 +65,12 @@ class AuthorController implements ControllerInterface
                     }
                 }
             }
+        } elseif (null !== $requestedId) {
+            $author = $this->repo->find($requestedId);
+            if (null === $author) {
+                throw new NotFoundException();
+            }
+            $formData = $author->toArray();
         }
 
         return new Response(
@@ -75,21 +79,6 @@ class AuthorController implements ControllerInterface
                 'formErrors' => $formErrors,
             ])
         );
-    }
-
-    /**
-     * @throws NotFoundException If no author bears the specified ID.
-     */
-    private function getAuthorFromRequest(array $routeParams): ?AppObject {
-        try {
-            if (key_exists(1, $routeParams)) {
-                return $this->repo->findOne($routeParams[1]);
-            } else {
-                return null;
-            }
-        } catch (OutOfBoundsException $e) {
-            throw new NotFoundException();
-        }
     }
 
     public function getAccessControl(): Clearance {

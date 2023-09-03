@@ -10,6 +10,9 @@ use MF\Enum\LinkType;
 use MF\Exception\Database\EntityNotFoundException;
 use MF\Exception\Http\NotFoundException;
 use MF\Framework\Form\FormFactory;
+use MF\Framework\Form\Transformer\ArrayTransformer;
+use MF\Framework\Form\Transformer\IFormTransformer;
+use MF\Framework\Type\ModelValidator;
 use MF\Model\ContributionModel;
 use MF\Model\PlayableLinkModel;
 use MF\Model\PlayableModel;
@@ -27,12 +30,12 @@ class AdminPlayableController implements ControllerInterface
     const ROUTE_ID = 'manage_playable';
 
     public function __construct(
-        private AuthorRepository $authorRepo,
         private AppObjectFactory $appObjectFactory,
+        private AuthorRepository $authorRepo,
         private FormFactory $formFactory,
-        private PlayableRepository $repo,
+        private ModelValidator $validator,
         private PlayableLinkRepository $linkRepo,
-        private Router $router,
+        private PlayableRepository $repo,
         private TwigService $twig,
     ) {
     }
@@ -42,38 +45,47 @@ class AdminPlayableController implements ControllerInterface
             playableLinkModel: new PlayableLinkModel(),
             contributionModel: new ContributionModel(),
         );
-        $existingPlayable = $this->getPlayable($routeParams);
 
-        $form = $this->formFactory->createForm($model, formConfig: [
+        $playableId = $routeParams[1] ?? null;
+
+        $form = $this->formFactory->createForm($model, config: [
             'id' => [
                 'required' => false,
             ],
             'links' => [
                 'playable_id' => [
-                    'generated' => true,
+                    'ignore' => true,
                 ]
             ],
             'contributions' => [
                 'playable_id' => [
-                    'generated' => true,
+                    'ignore' => true,
                 ]
             ],
         ]);
     
-        $formData = $form->createFromAppArray($existingPlayable->toArray())->getChildren();
+        $formErrors = null;
+        $formData = null;
 
         if ('POST' === $request->getMethod()) {
-            $submission = $form->extractFromRequest($request->getParsedBody());
-            $formData = $submission->getChildren();
+            // Form Data extraction, generation and validation.
+            $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
+            $formData['id'] = $formData['id'] ?? (new Slug($formData['name'], true))->__toString();
+            foreach ($formData['contributions'] as $key => $c) {
+                $formData['contributions'][$key]['playable_id'] = $formData['id'];
+            }
+            foreach ($formData['links'] as $key => $c) {
+                $formData['links'][$key]['playable_id'] = $formData['id'];
+            }
+            $formErrors = $this->validator->validate($formData, $model);
 
-            // if (!$submission->hasErrors()) {
-            //     $submittedData['id'] = $submittedData['id'] ?? (new Slug($submittedData['name'], true))->__toString();
-            //     $playable = $this->appObjectFactory->create($submittedData, new PlayableModel());
-            //     if (null === $existingPlayable) {
-            //         $this->repo->add($playable);
-            //     } else {
-            //         $this->repo->update($playable, $existingPlayable->id);
-            //     }
+            if (0 === count($formErrors)) {
+                $playable = new AppObject($formData);
+                if (null === $playableId) {
+                    $this->repo->add($playable);
+                } else {
+                    $this->repo->update($playable, $playableId);
+                }
             //     foreach ($submittedData['links'] as $link) {
             //         $link['playable_id'] = $playable->id;
             //         if (isset($link['id'])) {
@@ -85,25 +97,24 @@ class AdminPlayableController implements ControllerInterface
             //     if (null === $existingPlayable || $playable->id !== $existingPlayable->id) {
             //         return $this->router->generateRedirect(self::ROUTE_ID, [$playable->id]);
             //     }
-            // }
+            }
+        } elseif (isset($routeParams[1])) {
+            try {
+                $formData = $this->repo->findOne($routeParams[1])->toArray();
+            } catch (EntityNotFoundException $e) {
+                throw new NotFoundException();
+            }
         }
 
         return new Response(
             body: $this->twig->render('playable_form.html.twig', [
                 'authors' => $this->authorRepo->findAll(),
                 'formData' => $formData,
+                'formErrors' => $formErrors,
                 'linkTypes' => LinkType::cases(),
                 'playables' => $this->repo->findAll(),
             ]),
         );
-    }
-
-    private function getPlayable(array $routeParams): ?AppObject {
-        try {
-            return key_exists(1, $routeParams) ? $this->repo->findOne($routeParams[1]) : null;
-        } catch (EntityNotFoundException $e) {
-            throw new NotFoundException();
-        }
     }
 
     public function getAccessControl(): Clearance {
