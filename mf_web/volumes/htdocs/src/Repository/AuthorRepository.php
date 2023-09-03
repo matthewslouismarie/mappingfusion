@@ -17,9 +17,9 @@ class AuthorRepository implements IRepository
     ) {
     }
 
-    public function add(array $authorAppArray): string {
+    public function add(AppObject $author): string {
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_author VALUES (:id, :name);');
-        $stmt->execute($this->em->toDbValue($authorAppArray));
+        $stmt->execute($this->em->toDbValue($author));
         return $this->conn->getPdo()->lastInsertId();
     }
 
@@ -68,8 +68,8 @@ class AuthorRepository implements IRepository
         return $this->find($id);
     }
 
-    public function update(array $authorAppArray, ?string $previousId = null): void {
+    public function update(AppObject $author, ?string $previousId = null): void {
         $stmt = $this->conn->getPdo()->prepare('UPDATE e_author SET author_id = :id, author_name = :name WHERE author_id = :previous_id;');
-        $stmt->execute(['previous_id' => $previousId ?? $authorAppArray['id']] + $this->em->toDbValue($authorAppArray));
+        $stmt->execute(['previous_id' => $previousId ?? $author->id] + $this->em->toDbValue($author));
     }
 }

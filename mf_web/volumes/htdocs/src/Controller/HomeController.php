@@ -13,16 +13,10 @@ class HomeController implements ControllerInterface
 {
     const ROUTE_ID = 'home';
 
-    private ArticleRepository $articleRepo;
-
-    private TwigService $twig;
-
     public function __construct(
-        ArticleRepository $articleRepo,
-        TwigService $twig,
+        private ArticleRepository $articleRepo,
+        private TwigService $twig,
     ) {
-        $this->articleRepo = $articleRepo;
-        $this->twig = $twig;
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {

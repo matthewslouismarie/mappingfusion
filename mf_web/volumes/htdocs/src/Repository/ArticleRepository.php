@@ -83,7 +83,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE article_is_featured = 1;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, $this->model);
+            $articles[] = $this->em->toAppData($article, $this->model, 'article');
         }
         return $articles;
     }

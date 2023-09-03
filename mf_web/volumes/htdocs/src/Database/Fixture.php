@@ -4,13 +4,8 @@ namespace MF\Database;
 
 use DateTimeImmutable;
 use MF\Configuration;
+use MF\DataStructure\AppObject;
 use MF\Enum\LinkType;
-use MF\Model\ArticleModel;
-use MF\Model\CategoryModel;
-use MF\Model\PasswordHash;
-use MF\Model\PlayableLinkModel;
-use MF\Model\PlayableModel;
-use MF\Model\ReviewModel;
 use MF\Repository\ArticleRepository;
 use MF\Repository\AuthorRepository;
 use MF\Repository\CategoryRepository;
@@ -39,99 +34,96 @@ class Fixture
     public function load(): void {
         $this->conn->getPdo()->beginTransaction();
     
-        $root = [
+        $root = new AppObject([
             'id' => 'root',
-            'password_hash' => (new PasswordHash(clear: $this->config->getSetting('rootMemberPwd')))->__toString(),
-        ];
+            'password' => password_hash($this->config->getSetting('rootMemberPwd'), PASSWORD_DEFAULT),
+        ]);
         $this->repoMember->add($root);
 
-        $loulimi = ['id' => 'loulimi', 'name' => 'Loulimi'];
-        $valve = ['id' => 'valve', 'name' => 'Valve'];
-        $scTeam = ['id' => 'sven-co-op-team', 'name' => 'The Sven Co-op Team'];
-        $neophus = ['id' => 'neophus', 'name' => 'Neophus'];
+        $loulimi = new AppObject(['id' => 'loulimi', 'name' => 'Loulimi']);
+        $valve = new AppObject(['id' => 'valve', 'name' => 'Valve']);
+        $scTeam = new AppObject(['id' => 'sven-co-op-team', 'name' => 'The Sven Co-op Team']);
+        $neophus = new AppObject(['id' => 'neophus', 'name' => 'Neophus']);
         $this->repoAuthor->add($loulimi);
         $this->repoAuthor->add($valve);
         $this->repoAuthor->add($scTeam);
         $this->repoAuthor->add($neophus);
 
-        $gs = ['id' => 'goldsource', 'name' => 'GoldSource', 'release_date_time' => new DateTimeImmutable(), 'game_id' => null];
-        $hl = ['id' => 'half-life', 'name' => 'Half-Life', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'goldsource'];
-        $hl2 = ['id' => 'half-life-2', 'name' => 'Half-Life 2', 'release_date_time' => new DateTimeImmutable(), 'game_id' => null];
-        $sc = ['id' => 'sven-co-op', 'name' => 'Sven Co-op', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'goldsource'];
-        $cp = ['id' => 'crossed-paths', 'name' => 'Crossed Paths', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'sven-co-op'];
-        $model = new PlayableModel();
-        $this->repoPlayable->add($this->factory->create($gs, $model));
-        $this->repoPlayable->add($this->factory->create($hl, $model));
-        $this->repoPlayable->add($this->factory->create($hl2, $model));
-        $this->repoPlayable->add($this->factory->create($sc, $model));
-        $this->repoPlayable->add($this->factory->create($cp, $model));
+        $gs = new AppObject(['id' => 'goldsource', 'name' => 'GoldSource', 'release_date_time' => new DateTimeImmutable(), 'game_id' => null]);
+        $hl = new AppObject(['id' => 'half-life', 'name' => 'Half-Life', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'goldsource']);
+        $hl2 = new AppObject(['id' => 'half-life-2', 'name' => 'Half-Life 2', 'release_date_time' => new DateTimeImmutable(), 'game_id' => null]);
+        $sc = new AppObject(['id' => 'sven-co-op', 'name' => 'Sven Co-op', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'goldsource']);
+        $cp = new AppObject(['id' => 'crossed-paths', 'name' => 'Crossed Paths', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'sven-co-op']);
 
-        $linkModel = new PlayableLinkModel();
-        $this->linkRepo->add($this->factory->create([
+        $this->repoPlayable->add($gs);
+        $this->repoPlayable->add($hl);
+        $this->repoPlayable->add($hl2);
+        $this->repoPlayable->add($sc);
+        $this->repoPlayable->add($cp);
+
+        $this->linkRepo->add(new AppObject([
            'id' => null,
            'playable_id' => $sc['id'],
            'name' => 'Homepage',
            'type' => LinkType::HomePage->name,
            'url' => 'https://svencoop.com',
-        ], $linkModel));
-        $this->linkRepo->add($this->factory->create([
+        ]));
+        $this->linkRepo->add(new AppObject([
            'id' => null,
            'playable_id' => $sc['id'],
            'name' => 'Download',
            'type' => LinkType::Download->name,
            'url' => 'https://store.steampowered.com/agecheck/app/225840/',
-        ], $linkModel));
+        ]));
 
-        $this->repoContrib->add([
+        $this->repoContrib->add(new AppObject([
             'id' => null,
             'author_id' => $loulimi['id'],
             'playable_id' => $cp['id'],
             'is_author' => true,
             'summary' => null,
-        ]);
-        $this->repoContrib->add([
+        ]));
+        $this->repoContrib->add(new AppObject([
             'id' => null,
             'author_id' => $loulimi['id'],
             'playable_id' => $cp['id'],
             'is_author' => true,
             'summary' => null,
-        ]);
-        $this->repoContrib->add([
+        ]));
+        $this->repoContrib->add(new AppObject([
             'id' => null,
             'author_id' => $valve['id'],
             'playable_id' => $hl['id'],
             'is_author' => true,
             'summary' => null,
-        ]);
-        $this->repoContrib->add([
+        ]));
+        $this->repoContrib->add(new AppObject([
             'id' => null,
             'author_id' => $valve['id'],
             'playable_id' => $hl2['id'],
             'is_author' => true,
             'summary' => null,
-        ]);
-        $this->repoContrib->add([
+        ]));
+        $this->repoContrib->add(new AppObject([
             'id' => null,
             'author_id' => $scTeam['id'],
             'playable_id' => $sc['id'],
             'is_author' => true,
             'summary' => null,
-        ]);
+        ]));
 
-        $catModel = new CategoryModel();
-        $cat0 = [
+        $cat0 = new AppObject([
             'id' => 'cat',
             'name' => 'Une catégorie',
-        ];
-        $cat1 = [
+        ]);
+        $cat1 = new AppObject([
             'id' => 'another-cat',
             'name' => 'Une autre catégorie',
-        ];
-        $this->repoCat->add($this->factory->create($cat0, $catModel));
-        $this->repoCat->add($this->factory->create($cat1, $catModel));
+        ]);
+        $this->repoCat->add($cat0);
+        $this->repoCat->add($cat1);
 
-        $articleModel = new ArticleModel();
-        $article0 = [
+        $article0 = new AppObject([
             'id' => 'nouvel-article',
             'author_id' => $root['id'],
             'category_id' => $cat0['id'],
@@ -140,12 +132,10 @@ class Fixture
             'title' => 'Crossed Paths v3.8.8',
             'sub_title' => null,
             'cover_filename' => '202111271344571.jpg',
-            'creation_date_time' => new DateTimeImmutable(),
-            'last_update_date_time' => new DateTimeImmutable(),
-        ];
-        $this->repoArticle->add($this->factory->create($article0, $articleModel));
+        ]);
+        $this->repoArticle->add($article0);
         
-        $article1 = [
+        $article1 = new AppObject([
             'id' => 'nouvel-version-tcm',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
@@ -154,12 +144,10 @@ class Fixture
             'title' => 'TCM',
             'sub_title' => '4:9.0',
             'cover_filename' => '202111271344571.jpg',
-            'creation_date_time' => new DateTimeImmutable(),
-            'last_update_date_time' => new DateTimeImmutable(),
-        ];
-        $this->repoArticle->add($this->factory->create($article1, $articleModel));
+        ]);
+        $this->repoArticle->add($article1);
         
-        $article2 = [
+        $article2 = new AppObject([
             'id' => 'prout-lol-xptdr',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
@@ -168,12 +156,10 @@ class Fixture
             'title' => 'Encore un autre article',
             'sub_title' => null,
             'cover_filename' => '202201051906201.jpg',
-            'creation_date_time' => new DateTimeImmutable(),
-            'last_update_date_time' => new DateTimeImmutable(),
-        ];
-        $this->repoArticle->add($this->factory->create($article2, $articleModel));
+        ]);
+        $this->repoArticle->add($article2);
         
-        $article3 = [
+        $article3 = new AppObject([
             'id' => 'bonjour-a-tous',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
@@ -182,13 +168,10 @@ class Fixture
             'title' => 'L’inspiration c’est pas mon truc',
             'sub_title' => 'mais genre pas du tout',
             'cover_filename' => '202111271348081.jpg',
-            'creation_date_time' => new DateTimeImmutable(),
-            'last_update_date_time' => new DateTimeImmutable(),
-        ];
-        $this->repoArticle->add($this->factory->create($article3, $articleModel));
+        ]);
+        $this->repoArticle->add($article3);
 
-        $reviewModel = new ReviewModel();
-        $this->repoReview->add($this->factory->create([
+        $this->repoReview->add(new AppObject([
             'id' => null,
             'article_id' => $article0['id'],
             'playable_id' => $sc['id'],
@@ -196,8 +179,8 @@ class Fixture
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
             'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
             'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
-        ], $reviewModel));
-        $this->repoReview->add($this->factory->create([
+        ]));
+        $this->repoReview->add(new AppObject([
             'id' => null,
             'article_id' => $article1['id'],
             'playable_id' => $sc['id'],
@@ -205,8 +188,8 @@ class Fixture
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
             'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
             'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
-        ], $reviewModel));
-        $this->repoReview->add($this->factory->create([
+        ]));
+        $this->repoReview->add(new AppObject([
             'id' => null,
             'article_id' => $article2['id'],
             'playable_id' => $sc['id'],
@@ -214,8 +197,8 @@ class Fixture
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
             'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
             'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
-        ], $reviewModel));
-        $this->repoReview->add($this->factory->create([
+        ]));
+        $this->repoReview->add(new AppObject([
             'id' => null,
             'article_id' => $article3['id'],
             'playable_id' => $sc['id'],
@@ -223,7 +206,7 @@ class Fixture
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
             'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
             'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
-        ], $reviewModel));
+        ]));
         $this->conn->getPdo()->commit();
     }
 }
