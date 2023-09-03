@@ -49,8 +49,8 @@ class DbEntityManagerTest implements IUnitTest
                 'playable_game_release_date_time' => NULL,
                 'playable_game_game_id' => NULL,
             ],
-            new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel()))
-        );
+            new ArticleModel(new CategoryModel())
+        , 'article');
 
         $expectedAppObject = new AppObject([
             'author_id' => 'root',
@@ -67,7 +67,6 @@ class DbEntityManagerTest implements IUnitTest
                 'id' => 'cat',
                 'name' => 'Une catégorie',
             ]),
-            'review' => null,
         ]);
 
         $tester->assertArrayEquals(

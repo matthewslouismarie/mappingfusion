@@ -5,6 +5,9 @@ namespace MF\Model;
 use MF\Exception\InvalidStringException;
 use Stringable;
 
+/**
+ * @todo Replace with UrlConstraint.
+ */
 class Url implements Stringable
 {
     const MAX_LENGTH = 255;
