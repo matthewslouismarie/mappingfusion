@@ -16,10 +16,11 @@ class PlayableLinkRepository implements IRepository
     ) {
     }
 
-    public function add(AppObject $link): void {
+    public function add(AppObject $link): string {
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable_link VALUES (:id, :playable_id, :name, :type, :url);');
         $dbArray = $this->em->toDbValue($link);
         $stmt->execute($dbArray);
+        return $this->conn->getPdo()->lastInsertId();
     }
 
     public function find(string $id): ?AppObject {
@@ -32,6 +33,17 @@ class PlayableLinkRepository implements IRepository
     public function remove(string $id): void {
         $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_playable_link WHERE link_id = ?;');
         $stmt->execute([$id]);
+    }
+
+    public function filterPlayableLinks(string $playableId, array $linkIds): void {
+        if (0 === count($linkIds)) {
+            $delLinkStmt = $this->conn->getPdo()->prepare("DELETE FROM e_playable_link WHERE link_playable_id = ?;");
+            $delLinkStmt->execute([$playableId]);
+        } else {
+            $inQuery = str_repeat('?,', count($linkIds) - 1) . '?';
+            $delLinkStmt = $this->conn->getPdo()->prepare("DELETE FROM e_playable_link WHERE link_playable_id = ? AND link_id NOT IN ($inQuery);");
+            $delLinkStmt->execute(array_merge_recursive([$playableId], $linkIds));
+        }
     }
 
     public function update(AppObject $link): void {

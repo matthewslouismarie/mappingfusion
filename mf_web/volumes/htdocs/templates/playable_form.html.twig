@@ -48,14 +48,14 @@
     {% endfor %}
     {% endif %}
 
-    <button class="std-button -padded" id="link-form-button" data-type="add-link-form-button" data-location-target="link-form-button" data-template="link-form-template" type="button">Ajouter un lien</button>
+    <button class="std-button -padded" data-type="add-dynamic-form" data-source="link-form-template" data-index="{{ null != formData ? formData.links|length : 0 }}" type="button">Ajouter un lien</button>
 
     {% if formData %}
     {% for c in formData.contributions %}
     {{ _self.contributionForm(authors, loop.index0, c) }}
     {% endfor %}
     {% endif %}
-    <button class="std-button -padded" id="add-contrib-button" data-source="contrib-form-tpl" data-location-target="add-contrib-button" type="button">Ajouter un contributeur</button>
+    <button class="std-button -padded" data-type="add-dynamic-form" data-source="contrib-form-tpl" data-index="{{ null != formData ? formData.contributions|length : 0 }}" type="button">Ajouter un contributeur</button>
 
     <div class="_text -textcentered">
         <button class="std-button -padded" type="submit">Poster</button>
@@ -78,11 +78,9 @@
 {% endblock %}
 
 {% block scriptInit %}
-<script src="{{ app.asset('link-form.js') }}"></script>
 <script src="{{ app.asset('dynamic-form.js') }}"></script>
 <script>
-const linkFormBtn = new LinkFormButton('link-form-button');
-const contribForm = new DynamicForm('add-contrib-button', {% if formData.contributions is defined %}{{ formData.contributions|length }}{% else %}0{% endif %});
+const contribForm = new DynamicForm();
 contribForm.init();
 </script>
 {% endblock %}
@@ -90,7 +88,7 @@ contribForm.init();
 {% macro index(i) %}{{ i ?? '${index}' }}{% endmacro %}
 
 {% macro linkForm(linkTypes, link, linkErrors, i) %}
-<div class="_flex -col -gaps" data-link-form-id="link-form" id="link-form-{{ _self.index(i) }}">
+<div class="_flex -col -gaps" data-type="dynamic-form">
     <div class="form-row">
         <label class="label" for="link-{{ _self.index(i) }}-name">Nom du lien</label>
         <input class="input" id="link-{{ _self.index(i) }}-name" name="links[{{ _self.index(i) }}][name]"{% if link %} value="{{ link.name }}"{% endif %}>
@@ -105,18 +103,20 @@ contribForm.init();
         <label class="label" for="link-{{ _self.index(i) }}-type">Type de lien</label>
         <select class="input" id="link-{{ _self.index(i) }}-type" name="links[{{ _self.index(i) }}][type]">
             {% for t in linkTypes %}
-            <option value="{{ t.value }}"{% if link and link.type == t %} selected{% endif %}>{{ t.value }}</option>
+            <option value="{{ t.value }}"{% if link and link.type == t.value %} selected{% endif %}>{{ t.value }}</option>
             {% endfor %}
         </select>
         {% if linkErrors.type is defined %}{{ errorList(linkErrors.type) }}{% endif %}
     </div>
-    <button class="stb-button" type="button" data-type="delete-link-button" data-form-id="link-form-{{ _self.index(i) }}" {% if link.id is defined %}data-link-id="{{ link.id }}" data-template-id="link-to-remove-template"{% endif %}>Supprimer le lien</button>
+    <div class="form-row">
+        <button class="stb-button" type="button" data-type="remove-dynamic-form-button">Supprimer le lien</button>
+    </div>
     <input class="input" name="links[{{ _self.index(i) }}][id]" type="hidden" value="{{ link.id ?? null }}">
 </div>
 {% endmacro %}
 
 {% macro contributionForm(authors, i, contribution = null, errors = null) %}
-<div data-type="dynamic-form" data-form-type="contribution">
+<div data-type="dynamic-form">
     <div class="form-row">
         <select id="contributions[{{ i }}][author_id]" name="contributions[{{ i }}][author_id]">
             {% for a in authors %}

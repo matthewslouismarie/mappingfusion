@@ -1,29 +1,18 @@
 class DynamicForm
 {
-    #button;
-    #sourceTpl;
-    #index;
-
-    constructor(buttonId, index = 0) {
-        this.#button = document.getElementById(buttonId);
-        this.#sourceTpl = document.getElementById(this.#button.dataset.source);
-        this.#index = index;
-    }
-
     init() {
-        this.#button.onclick = (ev) => {
-            const clone = this.#sourceTpl.content.cloneNode(true);
-            this.formatAttributes(clone, '{{ i }}', this.#index);
-            clone.querySelector('[data-type=remove-dynamic-form-button]').onclick = (ev) => {
-                let currentElement = ev.target;
-                while (currentElement.dataset.type !== 'dynamic-form') {
-                    currentElement = currentElement.parentNode;
-                }
-                currentElement.remove();
+        document.querySelectorAll('[data-type=add-dynamic-form]').forEach((addBtn) => {
+            addBtn.onclick = (ev) => {
+                const clone = document.getElementById(addBtn.dataset.source).content.cloneNode(true);
+                this.formatAttributes(clone, '{{ i }}', addBtn.dataset.index);
+                clone.querySelector('[data-type=remove-dynamic-form-button]').onclick = this.onDelClick;
+                addBtn.parentNode.insertBefore(clone, addBtn);
+                addBtn.dataset.index = addBtn.dataset.index + 1;
             };
-            this.#button.parentNode.insertBefore(clone, this.#button);
-            this.#index += 1;
-        };
+        });
+        document.querySelectorAll('[data-type=remove-dynamic-form-button]').forEach((value) => {
+            value.onclick = this.onDelClick;
+        });
     }
 
     formatAttributes(element, pattern, replacement) {
@@ -38,5 +27,13 @@ class DynamicForm
                 }
             }
         }
+    }
+
+    onDelClick(ev) {
+        let currentElement = ev.target;
+        while (currentElement.dataset.type !== 'dynamic-form') {
+            currentElement = currentElement.parentNode;
+        }
+        currentElement.remove();
     }
 }

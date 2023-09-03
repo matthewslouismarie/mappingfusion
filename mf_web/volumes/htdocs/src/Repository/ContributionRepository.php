@@ -16,9 +16,10 @@ class ContributionRepository implements IRepository
     ) {
     }
 
-    public function add(AppObject $contrib): void {
+    public function add(AppObject $contrib): string {
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_contribution VALUES (:id, :author_id, :playable_id, :is_author, :summary);');
         $stmt->execute($this->em->toDbValue($contrib));
+        return $this->conn->getPdo()->lastInsertId();
     }
 
     public function delete(int $id): void {
@@ -31,6 +32,17 @@ class ContributionRepository implements IRepository
         $stmt->execute([$id]);
         $data = $stmt->fetch();
         return null !== $data ? $this->em->toAppData($data, $this->model, 'contribution') : null;
+    }
+
+    public function filterPlayableContributions(string $playableId, array $ids): void {
+        if (0 === count($ids)) {
+            $delStmt = $this->conn->getPdo()->prepare("DELETE FROM e_contribution WHERE contribution_playable_id = ?;");
+            $delStmt->execute([$playableId]);
+        } else {
+            $inQuery = str_repeat('?,', count($ids) - 1) . '?';
+            $delStmt = $this->conn->getPdo()->prepare("DELETE FROM e_contribution WHERE contribution_playable_id = ? AND contribution_id NOT IN ($inQuery);");
+            $delStmt->execute(array_merge_recursive([$playableId], $ids));
+        }
     }
 
     public function update(AppObject $contrib, ?string $previousId = null) {

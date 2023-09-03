@@ -33,7 +33,7 @@ class PlayableRepository implements IRepository
     }
 
     public function find(string $id): ?AppObject {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_playable WHERE playable_id = ?;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT v_playable.*, game.playable_id AS game_id, game.playable_name AS game_name, game.playable_release_date_time AS game_release_date_time, game.playable_game_id AS game_game_id FROM v_playable LEFT JOIN e_playable AS game ON v_playable.playable_game_id = game.playable_id WHERE v_playable.playable_id = ?;');
         $stmt->execute([$id]);
 
         if (0 === $stmt->rowCount()) {
@@ -87,34 +87,28 @@ class PlayableRepository implements IRepository
         $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_id = :id, playable_name = :name, playable_game_id = :game_id, playable_release_date_time = :release_date_time WHERE playable_id = :previous_id;');
         $stmt->execute($dbArray + ['previous_id' => $previousId ?? $dbArray['id']]);
 
+        $linkIds = [];
         foreach ($playable->links as $link) {
             if (null === $link->id) {
-                $this->linkRepo->add($link);
+                $linkIds[] = $this->linkRepo->add($link);
             } else {
                 $this->linkRepo->update($link);
+                $linkIds[] = $link->id;
             }
         }
+        $this->linkRepo->filterPlayableLinks($playable->id, $linkIds);
+
+        $contribIds = [];
         foreach ($playable->contributions as $c) {
             if (null === $c->id) {
-                $this->contributionRepository->add($c);
+                $contribIds[] = $this->contributionRepository->add($c);
             } else {
                 $this->contributionRepository->update($c);
+                $contribIds[] = $c->id;
             }
         }
-        // foreach ($linksToRemove as $linkId) {
-        //     $this->linkRepo->remove($linkId);
-        // }
-        // if (key_exists('links', $dbArray)) {
-        //     foreach ($dbArray['links'] as $link) {
-        //         if (null === $link['id']) {
-        //             $this->linkRepo->add($link);
-        //         } else {
-        //             $this->linkRepo->update($link);
-        //         }
-        //     }
-        //     $linkStmt = $this->conn->getPdo()->prepare('DELETE FROM e_playable_line WHERE link_playable_id = :playable_id AND link_id NOT IN :links;');
-        //     $linkStmt->execute(['links' => array_map(fn ($value) => $value['id'], $dbArray['links']), 'playable_id' => $dbArray['id']]);
-        // }
+        $this->contributionRepository->filterPlayableContributions($playable->id, $contribIds);
+
 
         $this->conn->getPdo()->commit();
     }
