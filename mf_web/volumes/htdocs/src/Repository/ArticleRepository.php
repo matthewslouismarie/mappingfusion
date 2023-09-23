@@ -23,7 +23,6 @@ class ArticleRepository implements IRepository
     ) {
         $this->model = new ArticleModel(
             categoryModel: new CategoryModel(),
-            reviewModel: new ReviewModel(),
         );
     }
 

@@ -31,7 +31,7 @@
             {% for r in relatedArticles %}
             <li class="item">
                 <a class="link _gap -gap-row-xs" href="#">
-                    <img alt="{{ r.title }}" class="image"{% if r.cover_filename is defined %} {{ app.imgAttr(r.cover_filename, true, null, 110)|raw }}{% endif %}>
+                    <img class="image" {{ app.imgAttr(r.title, r.cover_filename, true, null, 110)|raw }}>
                     <div class="_text -text-s">{{ r.title }}</div>
                 </a>
             </li>

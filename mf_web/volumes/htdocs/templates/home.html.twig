@@ -4,9 +4,10 @@
 
 {% block title %}Acceuil{% endblock %}
 
+{% block description %}Actualité et tests dans l’univers Half-Life !{% endblock %}
+
 {% block resources %}
 <link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
-<script src="https://unpkg.com/@glidejs/glide@3.6.0/dist/glide.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -36,7 +37,7 @@
     <section class="site-maps-and-mods-tests">
         <div class="_wrapper _gap -gap-row-l2 _padding -padding-vert-l2">
             <div class="section-heading -white">
-                <img alt="Tests maps et mods" class="image" {{ app.imgAttr('tests_icon.svg', false, 116, 107)|raw }}>
+                <img class="image" {{ app.imgAttr('Tests maps et mods', 'tests_icon.svg', false, 116, 107)|raw }}>
                 <h2 class="text _textxl">
                     <span class="bold">Tests maps et mods<br></span>
                     <span class="regular">proposés par l’équipe</span>
@@ -64,7 +65,7 @@
     <section class="site-section-news-articles">
         <div class="_wrapper _gap -gap-row-l _padding -padding-hori-mobile -padding-vert-xl">
             <div class="section-heading -inline -white">
-                <img alt="Les dernières actualités" class="image" {{ app.imgAttr('news.svg', false, 107, 103)|raw }}>
+                <img class="image" {{ app.imgAttr('Actualités', 'news.svg', false, 107, 103)|raw }}>
                 <h2 class="text _textxl">
                     <span class="regular">Les dernières </span><span class="bold">actualités</span>
                 </h2>
@@ -119,6 +120,7 @@
 {% endblock %}
 
 {% block scriptInit %}
+<script src="https://unpkg.com/@glidejs/glide@3.6.0/dist/glide.js"></script>
 <script>
   new Glide('.glide', {gap: 0}).mount()
 </script>

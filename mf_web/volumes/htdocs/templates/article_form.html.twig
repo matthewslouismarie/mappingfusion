@@ -37,7 +37,7 @@
         {% if formData and formData.cover_filename %}
         <input name="cover_filename_previous" type="hidden" value="{{ formData.cover_filename }}">
         <p>Couverture actuelle : {{ formData.cover_filename }}.</p>
-        <img alt="Image actuelle de couverture de l’article" class="image" {{ app.imgAttr(formData.cover_filename, true, 300)|raw }}>
+        <img class="image" {{ app.imgAttr('Couverture actuelle', formData.cover_filename, true, 300)|raw }}>
         {% endif %}
         {% if formErrors %}{{ errorList( formErrors.cover_filename ?? null) }}{% endif %}
     </div>

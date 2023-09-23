@@ -45,12 +45,12 @@ class TemplateHelper
         return $foundImages;
     }
 
-    public function getImgAttr(string $filename, bool $isResource = true, ?int $width = null, ?int $height = null): string {
+    public function getImgAttr(string $alt, string $filename, bool $isResource = true, ?int $width = null, ?int $height = null): string {
         $filePathOnDisk =  realpath(dirname(__FILE__) . '/../../public/' . ($isResource ? 'uploaded/' : '') . $filename);
         $dimensions = getimagesize($filePathOnDisk);
 
         $srcValue = $isResource ? $this->getResource($filename) : $this->getAsset($filename);
-        $attr = "src=\"{$srcValue}\"";
+        $attr = "alt=\"{$alt}\" src=\"{$srcValue}\"";
 
         if ((null === $width || null === $height) && false !== $dimensions) {
             if (null !== $width) {

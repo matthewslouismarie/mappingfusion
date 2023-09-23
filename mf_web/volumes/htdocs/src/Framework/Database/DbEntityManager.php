@@ -69,6 +69,7 @@ class DbEntityManager
                 return null;
             }
         }
+
         throw new InvalidArgumentException('$dbData is not of any type supported by the model.');
     }
 
