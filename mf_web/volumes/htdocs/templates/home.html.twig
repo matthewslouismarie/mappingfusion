@@ -36,7 +36,7 @@
     <section class="site-maps-and-mods-tests">
         <div class="_wrapper _gap -gap-row-l2 _padding -padding-vert-l2">
             <div class="section-heading -white">
-                <img alt="Tests maps et mods" class="image" src="{{ app.asset('tests_icon.svg') }}">
+                <img alt="Tests maps et mods" class="image" {{ app.imgAttr('tests_icon.svg', false, 116, 107)|raw }}>
                 <h2 class="text _textxl">
                     <span class="bold">Tests maps et mods<br></span>
                     <span class="regular">proposés par l’équipe</span>
@@ -64,7 +64,7 @@
     <section class="site-section-news-articles">
         <div class="_wrapper _gap -gap-row-l _padding -padding-hori-mobile -padding-vert-xl">
             <div class="section-heading -inline -white">
-                <img alt="Les dernières actualités" class="image" src="{{ app.asset('news.svg') }}">
+                <img alt="Les dernières actualités" class="image" {{ app.imgAttr('news.svg', false, 107, 103)|raw }}>
                 <h2 class="text _textxl">
                     <span class="regular">Les dernières </span><span class="bold">actualités</span>
                 </h2>

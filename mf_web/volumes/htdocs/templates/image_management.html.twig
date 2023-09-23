@@ -17,7 +17,7 @@
 <ul class="std-mosaic-list">
     {% for i in images %}
     <li class="item">
-        <img class="img" src="{{ app.resource(i) }}">
+        <img class="img" {{ app.imgAttr(i, true, null, 200)|raw }}>
         <em>{{ i }}</em>
         <form method="post">
             <input name="image-to-delete" type="hidden" value="{{ i }}">

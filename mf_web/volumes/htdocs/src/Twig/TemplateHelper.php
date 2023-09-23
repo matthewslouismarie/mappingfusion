@@ -45,6 +45,31 @@ class TemplateHelper
         return $foundImages;
     }
 
+    public function getImgAttr(string $filename, bool $isResource = true, ?int $width = null, ?int $height = null): string {
+        $filePathOnDisk =  realpath(dirname(__FILE__) . '/../../public/' . ($isResource ? 'uploaded/' : '') . $filename);
+        $dimensions = getimagesize($filePathOnDisk);
+
+        $srcValue = $isResource ? $this->getResource($filename) : $this->getAsset($filename);
+        $attr = "src=\"{$srcValue}\"";
+
+        if ((null === $width || null === $height) && false !== $dimensions) {
+            if (null !== $width) {
+                $height = $dimensions[1] * $width / $dimensions[0];
+            } elseif (null !== $height) {
+                $width = $dimensions[0] * $height / $dimensions[1];
+            } else {
+                $width = $dimensions[0];
+                $height = $dimensions[1];
+            }
+        }
+
+        if (null !== $width && null !== $height) {
+            $attr .= " width=\"{$width}px\" height=\"{$height}px\"";
+        }
+
+        return $attr;
+    }
+
     public function getLinkTypes(): array {
         return LinkType::cases();
     }

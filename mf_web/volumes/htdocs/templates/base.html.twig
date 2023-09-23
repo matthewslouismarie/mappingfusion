@@ -51,7 +51,7 @@
         <header class="site-header">
             <div class="_wrapper _gap -gap-col-l _padding -padding-hori-mobile" id="menu-container">
                 <a class="logo" href="{{ app.router.generateUrl('home') }}">
-                    <img alt="Mapping-Fusion" class="img" src="{{ app.asset('mapping-fusion-logo.png') }}">
+                    <img alt="Mapping-Fusion" class="img" {{ app.imgAttr('mapping-fusion-logo.svg', false, 107, 103)|raw }}>
                 </a>
                 <div class="text _gap -gap-row-s2" id="menu">
                     <p class="intro _textm">Communauté francophone sur l’univers d’<strong>Half-Life et le modding pour Goldsource et Source</strong>.</p>
@@ -59,7 +59,7 @@
                         <li class="item -search">
                             <form class="form" rel="search" id="search-form" data-form-action="{{ app.router.generateUrl('search') }}" method="post">
                                 <div class="std-interactive -search">
-                                    <img class="icon" alt="Recherche" src="{{ app.asset('magnifying-glass.svg') }}">
+                                    <img class="icon" alt="Recherche" {{ app.imgAttr('magnifying-glass.svg', false, 20, 24)|raw }}>
                                     <input class="input _texts" name="search-query" type="search" placeholder="Votre recherche" value="{{ searchQuery ?? "" }}" data-type="search-field">
                                 </div>
                             </form>
@@ -73,7 +73,7 @@
                     </ul>
                 </div>                
                 <button class="button" id="menu-button">
-                    <img alt="Menu" class="img" src="{{ app.asset('dropdown-menu-icon.svg') }}">
+                    <img alt="Menu" class="img" {{ app.imgAttr('dropdown-menu-icon.svg', false, 48, 34)|raw }}>
                 </button>
             </div>
         </header>
@@ -90,7 +90,7 @@
 
         <footer class="site-footer">
             <div class="_wrapper">
-                <img class="img" src="{{ app.asset('mapping-fusion-logo-transparent.svg') }}">
+                <img class="img" {{ app.imgAttr('mapping-fusion-logo-transparent.svg', false, 189, 94)|raw }}>
                 <nav>
                     <ul class="std-inline-list _texts">
                         <li class="item">
@@ -110,12 +110,12 @@
                         </li>
                         <li class="item -img">
                             <a class="link" href="">
-                                <img class="img" src="{{ app.asset('facebook-logo-transparent.svg') }}">
+                                <img class="img" {{ app.imgAttr('facebook-logo-transparent.svg', false, 12, 24)|raw }}>
                             </a>
                         </li>
                         <li class="item -img">
                             <a class="link" href="">
-                                <img class="img" src="{{ app.asset('discord-logo-transparent.svg') }}">
+                                <img class="img" {{ app.imgAttr('discord-logo-transparent.svg', false, 25, 19)|raw }}>
                             </a>
                         </li>
                     </ul>
