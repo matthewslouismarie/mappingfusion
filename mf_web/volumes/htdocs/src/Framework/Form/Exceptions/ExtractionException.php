@@ -19,6 +19,7 @@ class ExtractionException extends InvalidArgumentException
     ) {
         parent::__construct($message, $code, $previous);
     }
+
     /**
      * @return string A message to display to the user.
      */

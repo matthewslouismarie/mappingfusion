@@ -12,13 +12,18 @@ class UploadedImageValidator implements IValidator
     ) {
     }
 
+    /**
+     * @todo Refactor.
+     * @todo Check that the image does not already exist.
+     */
     public function validate(mixed $data): array {
         $violations = [];
-        if (1 !== preg_match('/' . IUploadedImageConstraint::FILENAME_REGEX . '/', $data)) {
-            $violations[] = new ConstraintViolation($this->constraint, 'Filename does not have the correct pattern.');
-        }
-        if (strlen($data) > IUploadedImageConstraint::FILENAME_MAX_LENGTH) {
-            $violations[] = new ConstraintViolation($this->constraint, 'Filename is too long.');
+        if (is_array($data)) {
+
+        } else {
+            if (strlen($data) > IUploadedImageConstraint::FILENAME_MAX_LENGTH) {
+                $violations[] = new ConstraintViolation($this->constraint, 'Filename is too long.');
+            }
         }
         
         return $violations;
