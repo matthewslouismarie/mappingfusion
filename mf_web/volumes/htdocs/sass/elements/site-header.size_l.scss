@@ -1,0 +1,30 @@
+.site-header {
+    > ._wrapper {
+        > .logo > .img {
+            height: 124px;
+        }
+
+        > .text {                
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            > .intro {
+                color: #19577a;
+            }
+
+            > .header-menu {
+                align-items: center;
+                justify-content: space-between;
+
+                > .item {
+                    flex: 1 1 auto;
+                }
+
+                > .item.-search {
+                    flex: 2 1 auto;
+                }
+            }
+        }
+    }
+}

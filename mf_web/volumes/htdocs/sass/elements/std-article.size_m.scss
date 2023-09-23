@@ -1,0 +1,28 @@
+.std-article {
+    > .columns {
+        flex-direction: row;
+
+        > .nav {
+            order: 1;
+            position: relative;
+            left: -30%;
+            width: 30%;
+            flex: 0 0 auto;
+
+            > .article-nav {
+                position: sticky;
+                top: 18px;
+            }
+        }
+
+        > .content {
+            flex: 0 0 100%;
+
+            > .glide,
+            > .sectioncontent,
+            > .intro > .sectioncontent {
+                width: 70dvw;
+            }
+        }
+    }
+}

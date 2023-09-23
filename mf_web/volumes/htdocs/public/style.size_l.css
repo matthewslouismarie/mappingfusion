@@ -1,0 +1,55 @@
+._wrapper {
+  width: 80%;
+}
+._wrappers {
+  width: 40%;
+}
+.article-advice {
+  flex-direction: row;
+  align-items: stretch;
+}
+.article-advice > .img {
+  flex: 0 0;
+}
+.article-advice > .text > .heading {
+  text-align: left;
+}
+.site-header > ._wrapper > .logo > .img {
+  height: 124px;
+}
+.site-header > ._wrapper > .text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.site-header > ._wrapper > .text > .intro {
+  color: #19577a;
+}
+.site-header > ._wrapper > .text > .header-menu {
+  align-items: center;
+  justify-content: space-between;
+}
+.site-header > ._wrapper > .text > .header-menu > .item {
+  flex: 1 1 auto;
+}
+.site-header > ._wrapper > .text > .header-menu > .item.-search {
+  flex: 2 1 auto;
+}
+.site-social-networks > .button > .text {
+  display: block;
+  text-align: center;
+}
+.site-social-networks > .button > .text > .line {
+  display: block;
+}
+.site-social-networks > .button > .text > .line.-bold {
+  font-weight: 700;
+}
+.std-article > .columns > .nav {
+  left: -25%;
+  width: 256px;
+}
+.std-article > .columns > .content > .glide, .std-article > .columns > .content > .sectioncontent, .std-article > .columns > .content .intro > .sectioncontent {
+  width: 50dvw;
+  margin: auto;
+}

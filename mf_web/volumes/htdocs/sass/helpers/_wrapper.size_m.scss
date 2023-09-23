@@ -1,0 +1,13 @@
+._wrapper {
+    margin: auto;
+    max-width: 90rem;
+    width: 85%;
+
+    &.-s {
+        max-width: 75rem;
+    }
+
+    &.-xs {
+        max-width: 65rem;
+    }
+}

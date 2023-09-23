@@ -1,0 +1,11 @@
+.std-interactive {
+    padding: 8px 20px;
+
+    &.-search {
+        gap: 8px;
+
+        > .icon {
+            height: $txt-font-size-s;
+        }
+    }
+}

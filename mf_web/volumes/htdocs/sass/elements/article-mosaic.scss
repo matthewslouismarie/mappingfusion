@@ -53,13 +53,4 @@
             font-weight: $txt-weight-light;
         }
     }
-
-    @media (min-width: $screen-size-m) {
-        flex-direction: row;
-
-        > .left {
-            flex: 0 0 auto;
-            width: 316px;
-        }
-    }
 }

@@ -48,33 +48,4 @@
             }
         }
     }
-
-    @media (min-width: $screen-size-m) {
-        > ._wrapper {
-            gap: 2%;
-
-            > .left,
-            > .right {
-                flex-basis: 48%;
-            }
-        }
-    }
-
-    @media (min-width: $screen-size-l2) {
-        > ._wrapper {
-            > .left {   
-                background: no-repeat url('barney-transparent.svg') top 20px right / 163px 365px;
-                padding-right: 296px;
-                background-repeat: no-repeat;
-            }
-
-            > .right {
-                background: url('munition-transparent.svg') no-repeat top 130px right 87px / 98px 110px, url('grenade-transparent.svg') no-repeat top 78px right / 61px 90px;
-
-                > .item.-sc {
-                    padding-right: 183px;
-                }
-            }
-        }
-    }
 }

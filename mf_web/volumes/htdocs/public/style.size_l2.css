@@ -1,0 +1,43 @@
+._wrapper {
+  width: 75%;
+}
+.site-section-beginners > ._wrapper > .left {
+  background: no-repeat url("barney-transparent.svg") top 20px right / 163px 365px;
+  padding-right: 296px;
+  background-repeat: no-repeat;
+}
+.site-section-beginners > ._wrapper > .right {
+  background: url("munition-transparent.svg") no-repeat top 130px right 87px / 98px 110px, url("grenade-transparent.svg") no-repeat top 78px right / 61px 90px;
+}
+.site-section-beginners > ._wrapper > .right > .item.-sc {
+  padding-right: 183px;
+}
+.site-section-news-articles > ._wrapper {
+  background: url("crowbar-transparent.svg") no-repeat top 20px left / 207px 123px, url("gauss-transparent.svg") no-repeat top 103px left 121px / 313px 87px, url("bullsquid-transparent.svg") no-repeat top 44px right 89px / 285px 162px;
+}
+.site-section-news-articles > ._wrapper > .list {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.site-section-news-articles > ._wrapper > .list > .item {
+  flex: 0 0 48%;
+  max-width: 48%;
+}
+.std-article > .columns > .nav {
+  left: -25%;
+}
+.std-article > .columns > .content > .glide, .std-article > .columns > .content > .sectioncontent, .std-article > .columns > .content .intro > .sectioncontent {
+  width: 50dvw;
+  margin: auto;
+}
+.std-review.-summary > .box > .prosandcons {
+  flex-direction: row;
+  gap: 16px;
+}
+.std-review.-summary > .box > .prosandcons > .part {
+  flex: 1 1 50%;
+}
+.std-interactive.-search > .icon {
+  height: 1rem;
+}

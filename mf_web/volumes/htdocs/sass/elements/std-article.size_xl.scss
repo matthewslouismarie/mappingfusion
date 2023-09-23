@@ -1,0 +1,14 @@
+.std-article {
+    > .columns {
+        > .nav {
+            left: -30%;
+        }
+
+        > .content > .glide,
+        > .content > .sectioncontent,
+        > .content .intro > .sectioncontent {
+            width: 40dvw;
+            margin: auto;
+        }
+    }
+}

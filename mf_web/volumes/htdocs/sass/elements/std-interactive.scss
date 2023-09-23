@@ -30,32 +30,4 @@
             outline: none;
         }
     }
-
-    @media (min-width: $screen-size-s) {
-        padding: 8px 20px;
-
-        &.-search {
-            gap: 8px;
-
-            > .icon {
-                height: $txt-font-size-s;
-            }
-        }
-    }
-
-    @media (min-width: $screen-size-l2) {
-        &.-search {
-            > .icon {
-                height: $txt-font-size-m;
-            }
-        }
-    }
-
-    @media (min-width: $screen-size-xl) {
-        &.-search {
-            > .icon {
-                height: $txt-font-size-l;
-            }
-        }
-    }
 }

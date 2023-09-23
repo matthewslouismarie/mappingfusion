@@ -19,24 +19,4 @@
             }
         }
     }
-
-    @media (min-width: $screen-size-l2) {
-        > ._wrapper {
-            background: url('crowbar-transparent.svg') no-repeat top 20px left / 207px 123px,
-                url('gauss-transparent.svg') no-repeat top 103px left 121px / 313px 87px,
-                url('bullsquid-transparent.svg') no-repeat top 44px right 89px / 285px 162px
-            ;
-
-            > .list {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: space-between;
-
-                > .item {
-                    flex: 0 0 48%;
-                    max-width: 48%;
-                }
-            }
-        }
-    }
 }

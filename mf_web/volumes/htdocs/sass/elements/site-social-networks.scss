@@ -30,21 +30,4 @@
             display: none;
         }
     }
-
-    @media (min-width: $screen-size-l) {
-        > .button {
-            > .text {
-                display: block;
-                text-align: center;
-    
-                > .line {
-                    display: block;
-    
-                    &.-bold {
-                        font-weight: $txt-weight-bold;
-                    }
-                }
-            }
-        }
-    }
 }

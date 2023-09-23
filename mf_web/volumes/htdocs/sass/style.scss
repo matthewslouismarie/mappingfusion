@@ -7,55 +7,7 @@
  * standard elements (std-…): Classes for specific HTML structures and more complex formatting. They can adapt to various resolutions.
  */
 
-$area-height-l: 40vh;
-$area-size-s: 3rem;
-$block-border-width: 0.5rem;
-$border-m: 6px;
-$border-s: 3px;
-$border-xs: 1.5px;
-$btn-l-height: 6rem;
-$color-black: #000000;
-$color-dark: #1e1e1e;
-$color-blue-0: #3d9cce;
-$color-blue-05: #72c5f0;
-$color-blue-1: #428ab4;
-$color-blue-2: #19577a;
-$color-blue-3: #0c4b6e;
-$color-grey: #f2f2f2;
-$color-white: #ffffff;
-$gap-xs: 12px;
-$gap-s: 16px;
-$gap-s2: 20px;
-$gap-m: 24px;
-$gap-l: 32px;
-$gap-l2: 40px;
-$gap-xl: 64px;
-
-$gap-xxl: 128px;
-$icon-size-s: 16rem;
-$icon-size-xs: 6rem;
-$icon-size-xxs: 3rem;
-$img-size-s: 256px;
-$img-size-xs: 128px;
-$img-size-xxs: 64px;
-$screen-size-l: 1024px;
-$screen-size-m: 768px;
-$screen-size-s: 425px;
-$screen-size-l2: 1440px;
-$screen-size-xl: 1920px;
-$screen-size-xxl: 2560px;
-$txt-area-width-s: 30rem;
-$txt-font-size-l: 1.2rem;
-$txt-font-size-l2: 1.5rem;
-$txt-font-size-m: 1rem;
-$txt-font-size-s: 0.8rem;
-$txt-font-size-xl: 1.7rem;
-$txt-font-size-xs: 0.5rem;
-$txt-shadow-blur-l: 6.4px;
-$txt-weight-bold: 700;
-$txt-weight-light: 300;
-$txt-weight-regular: 400;
-$txt-weight-semi-bold: 600;
+@import 'vars.scss';
 
 @import 'reset.scss';
 
@@ -72,8 +24,6 @@ $txt-weight-semi-bold: 600;
 @import 'helpers/_texts.scss';
 @import 'helpers/_textxl.scss';
 @import 'helpers/_textxxl.scss';
-@import 'helpers/_wrapper.scss';
-@import 'helpers/_wrappers.scss';
 
 @import 'glide/glide.scss';
 

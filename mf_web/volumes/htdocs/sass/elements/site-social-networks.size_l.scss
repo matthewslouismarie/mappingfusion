@@ -1,0 +1,16 @@
+.site-social-networks {
+    > .button {
+        > .text {
+            display: block;
+            text-align: center;
+
+            > .line {
+                display: block;
+
+                &.-bold {
+                    font-weight: $txt-weight-bold;
+                }
+            }
+        }
+    }
+}

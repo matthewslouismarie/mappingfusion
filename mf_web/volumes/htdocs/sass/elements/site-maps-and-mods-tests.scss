@@ -17,16 +17,4 @@
             }
         }
     }
-
-    @media (min-width: $screen-size-m) {
-        > ._wrapper {
-            background: url('headcrab-transparent.svg') no-repeat top 206px left 160px  / 160px 144px, url('marine-transparent.svg') no-repeat top 86px right 46px / 208px 296px;
-
-            > .list {
-                flex-direction: row;
-                justify-content: space-between;
-                flex-wrap: wrap;
-            }
-        }
-    }
 }

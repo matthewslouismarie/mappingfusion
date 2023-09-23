@@ -44,12 +44,4 @@
             font-weight: $txt-weight-bold;
         }
     }
-
-    @media (min-width: $screen-size-s) {
-        &.-withicon {
-            > .text {
-                display: block;
-            }
-        }
-    }
 }

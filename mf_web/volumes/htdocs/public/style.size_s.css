@@ -1,0 +1,16 @@
+._wrappers {
+  width: 60%;
+  margin: auto;
+}
+.std-button.-withicon > .text {
+  display: block;
+}
+.std-interactive {
+  padding: 8px 20px;
+}
+.std-interactive.-search {
+  gap: 8px;
+}
+.std-interactive.-search > .icon {
+  height: 0.8rem;
+}

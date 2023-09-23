@@ -82,31 +82,4 @@
             }
         }
     }
-
-    @media (min-width: $screen-size-m) {    
-        $bullet-height: $img-size-xs / 2 + $border-s * 2;
-
-        &.-arrows {
-            > .controls {    
-                .button {
-                    &.-left {
-                        transform: translateX(-50%);
-                    }
-
-                    &.-right {
-                        transform: translateX(-50%);
-                    }
-                }
-            }
-        }
-
-        > .glide__bullets {
-            gap: 42px;
-
-            > .glide__bullet {
-                width: 236px;
-                height: 92px;
-            }
-        }
-    }
 }

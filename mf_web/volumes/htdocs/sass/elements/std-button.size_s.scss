@@ -1,0 +1,7 @@
+.std-button {
+    &.-withicon {
+        > .text {
+            display: block;
+        }
+    }
+}

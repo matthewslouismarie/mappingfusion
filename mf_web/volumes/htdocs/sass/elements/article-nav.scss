@@ -47,39 +47,4 @@
             }
         }
     }
-
-    @media (min-width: $screen-size-m) {
-        flex: 0 0 16%;
-
-        background: none;
-                
-        > .frame {
-            background-color: $color-blue-3;
-            flex: 0 0 auto;
-
-            &.-articlenav {
-                display: unset;
-                color: $color-blue-05;
-                text-align: right;
-
-                > .list > .item {
-                    border-right: 8px solid;
-                    padding-left: 0;
-
-                    &.-active {
-                        color: $color-white;
-                        font-weight: $txt-weight-bold;
-                    }
-                }
-            }
-
-            > .list {
-                flex-direction: column;
-
-                > .item > .list > .std-button {
-                    font-weight: $txt-weight-semi-bold;
-                }
-            }
-        }
-    }
 }

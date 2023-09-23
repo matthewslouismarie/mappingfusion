@@ -1,0 +1,14 @@
+.std-review {
+    &.-summary {
+        > .box {
+            > .prosandcons {
+                flex-direction: row;
+                gap: $gap-s;
+
+                > .part {
+                    flex: 1 1 50%;
+                }
+            }
+        }
+    }
+}

@@ -7,6 +7,11 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{{ app.asset('style.css') }}">
+        <link rel="stylesheet" href="{{ app.asset('style.size_s.css') }}" media="(min-width: 425px)">
+        <link rel="stylesheet" href="{{ app.asset('style.size_m.css') }}" media="(min-width: 768px)">
+        <link rel="stylesheet" href="{{ app.asset('style.size_l.css') }}" media="(min-width: 1024px)">
+        <link rel="stylesheet" href="{{ app.asset('style.size_l2.css') }}" media="(min-width: 1440px)">
+        <link rel="stylesheet" href="{{ app.asset('style.size_xl.css') }}" media="(min-width: 1920px)">
         <link rel="icon" href="{{ app.asset('mapping-fusion-favicon.png') }}">
         <title>{% block title %}{% endblock %} - Mapping-Fusion</title>
         {% block resources %}{% endblock %}

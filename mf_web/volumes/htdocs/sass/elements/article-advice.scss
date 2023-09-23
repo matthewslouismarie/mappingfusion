@@ -11,19 +11,4 @@
             color: $color-white;
         }
     }
-
-    @media (min-width: $screen-size-l) {
-        flex-direction: row;
-        align-items: stretch;
-
-        > .img {
-            flex: 0 0;
-        }
-
-        > .text {
-            > .heading {
-                text-align: left;
-            }
-        }
-    }
 }

@@ -15,10 +15,4 @@
             color: $color-blue-1;
         }
     }
-
-    @media (min-width: $screen-size-m) {
-        flex-direction: row;
-        flex-wrap: wrap;
-        column-gap: $gap-l;
-    }
 }

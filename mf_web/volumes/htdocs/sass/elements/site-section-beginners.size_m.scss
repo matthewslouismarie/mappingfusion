@@ -1,0 +1,10 @@
+.site-section-beginners {
+    > ._wrapper {
+        gap: 2%;
+
+        > .left,
+        > .right {
+            flex-basis: 48%;
+        }
+    }
+}
