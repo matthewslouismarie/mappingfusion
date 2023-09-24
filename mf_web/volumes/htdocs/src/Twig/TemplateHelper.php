@@ -51,7 +51,7 @@ class TemplateHelper
         $attr = "alt=\"{$alt}\" src=\"{$srcValue}\"";
 
         $filePathOnDisk =  realpath(dirname(__FILE__) . '/../../public/' . ($isResource ? 'uploaded/' : '') . $filename);
-        if (null !== $filePathOnDisk && '' !== $filePathOnDisk) {
+        if (false !== $filePathOnDisk) {
             $dimensions = getimagesize($filePathOnDisk);
             if ((null === $width || null === $height) && false !== $dimensions) {
                 if (null !== $width) {
