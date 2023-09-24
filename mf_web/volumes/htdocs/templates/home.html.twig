@@ -17,7 +17,7 @@
             <ul class="glide__slides">
             {% for a in featured_articles %}
                 <li class="glide__slide">
-                    <a class="link _textxxl" href="{{ app.router.generateUrl('article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.cover_filename) }});">
+                    <a class="link _txt -txtxl" href="{{ app.router.generateUrl('article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.cover_filename) }});">
                         {% if a.sub_title %}<div class="sub-title">{{ app.mk.format(a.sub_title)|raw }}</div>{% endif %}
                         <div class="title">{{ app.mk.format(a.title)|raw }}</div>
                     </a>
@@ -38,9 +38,9 @@
         <div class="_wrapper _gap -gap-row-l2 _padding -padding-vert-l2">
             <div class="section-heading -white">
                 <img class="image" {{ app.imgAttr('Tests maps et mods', 'tests_icon.svg', false, 116, 107)|raw }}>
-                <h2 class="text _textxl">
-                    <span class="bold">Tests maps et mods<br></span>
-                    <span class="regular">proposés par l’équipe</span>
+                <h2 class="text _txt -txtl">
+                    <div class="line _txt -bold">Tests maps et mods<br></div>
+                    <div class="line">proposés par l’équipe</div>
                 </h2>
             </div>
             <ul class="list">
@@ -48,15 +48,15 @@
                 <li class="item">
                     <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.resource(r.cover_filename) }}');"{% endif %} href="{{ app.router.generateUrl('article', [r.id]) }}">
                         <div class="content">
-                            <span class="playable _textl">{{ r.review.playable.name }}</span>
-                            <span class="std-badge _texts">{{ r.review.playable.name }}</span>
+                            <span class="playable _txt -txtl">{{ r.review.playable.name }}</span>
+                            <span class="std-badge _txt -txts">{{ r.review.playable.name }}</span>
                         </div>
                     </a>
                 </li>
                 {% endfor %}
             </ul>
-            <a class="std-button -padded -white" href="{{ app.router.generateUrl('reviews') }}">
-                <div class="text _textm">
+            <a class="std-button -white" href="{{ app.router.generateUrl('reviews') }}">
+                <div class="text _txt -txtm">
                     <span class="bold">Voir plus de tests</span>
                 </div>
             </a>
@@ -66,7 +66,7 @@
         <div class="_wrapper _gap -gap-row-l _padding -padding-hori-mobile -padding-vert-xl">
             <div class="section-heading -inline -white">
                 <img class="image" {{ app.imgAttr('Actualités', 'news.svg', false, 107, 103)|raw }}>
-                <h2 class="text _textxl">
+                <h2 class="text _txt -txtl">
                     <span class="regular">Les dernières </span><span class="bold">actualités</span>
                 </h2>
             </div>
@@ -76,8 +76,8 @@
                 {% endfor %}
             </ul>
             
-            <a class="std-button -padded -white" href="{{ app.router.generateUrl('articles') }}">
-                <div class="text _textm">
+            <a class="std-button -white" href="{{ app.router.generateUrl('articles') }}">
+                <div class="text _txt -txtm">
                     <span class="bold">Voir plus d’articles</span>
                 </div>
             </a>
@@ -86,28 +86,28 @@
     
     <section class="site-section-beginners">
         <div class="_wrapper _gap -gap-row-l _padding -padding-hori-mobile">
-            <div class="left _textxl _gap -gap-row-l _padding -padding-vert-xl">
+            <div class="left _txt -txtl _gap -gap-row-l _padding -padding-vert-xl">
                 <h2 class="title">Nouveau et un peu perdu ?<br>Pas de panique !</h2>
                 <p class="text">Consulte dès à présent <em>tous nos dossiers explicatifs</em> pour bien <em>comprendre comment fonctionnent Half-Life et ses mods</em>.</p>
             </div>
             <dl class="right _gap -gap-row-l _padding -padding-vert-xl">
                 <div class="item -sc _gap -gap-row-s2">
-                    <dt class="subject _textm">Fonctionnement Sven Co-op</dt>
-                    <dd class="text _textm">Guide d’installation, lancement de partie, création de serveurs, etc…</dd>
+                    <dt class="subject _txt -txtm">Fonctionnement Sven Co-op</dt>
+                    <dd class="text _txt -txtm">Guide d’installation, lancement de partie, création de serveurs, etc…</dd>
                     <dd>
-                        <a class="std-button -padded -white" href="{{ app.router.generateUrl('reviews') }}">
-                            <div class="text _texts">
+                        <a class="std-button -white" href="{{ app.router.generateUrl('reviews') }}">
+                            <div class="text _txt -txts">
                                 <span class="bold">En savoir plus</span>
                             </div>
                         </a>
                     </dd>
                 </div>
                 <div class="item -mods _gap -gap-row-s2">
-                    <dt class="subject _textm">Installation de mods</dt>
-                    <dd class="text _textm">Installation des mods pour Half-Life et Half-Life 2</dd>
+                    <dt class="subject _txt -txtm">Installation de mods</dt>
+                    <dd class="text _txt -txtm">Installation des mods pour Half-Life et Half-Life 2</dd>
                     <dd>
-                        <a class="std-button -padded -white" href="#">
-                            <div class="text _texts">
+                        <a class="std-button -white" href="#">
+                            <div class="text _txt -txts">
                                 <span class="bold">Voir plus de tests</span>
                             </div>
                         </a>

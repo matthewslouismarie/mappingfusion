@@ -1,4 +1,4 @@
-._text {
+._txt {
     &.-bold {
         font-weight: $txt-weight-bold;
     }
@@ -7,19 +7,19 @@
         text-align: center;
     }
 
-    &.-text-s {
+    &.-txts {
         font-size: 16px;
     }
 
-    &.-text-m {
+    &.-txtm {
         font-size: 20px;
     }
 
-    &.-text-l {
+    &.-txtl {
         font-size: 25px;
     }
 
-    &.-text-xl {
+    &.-txtxl {
         font-size: 35px;
     }
 }

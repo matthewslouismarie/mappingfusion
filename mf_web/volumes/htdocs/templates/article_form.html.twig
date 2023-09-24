@@ -51,7 +51,7 @@
         <textarea class="input -textarea" id="p-content" name="body" required>{{ formData.body ?? null }}</textarea>
         {% if formErrors %}{{ errorList( formErrors.body ?? null) }}{% endif %}
     </div>
-    <button class="std-button -padded" type="submit">Poster</button>
+    <button class="std-button" type="submit">Poster</button>
     {{ csrf(app) }}
 </form>
 {% endblock %}

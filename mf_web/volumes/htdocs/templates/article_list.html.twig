@@ -5,9 +5,9 @@
 {% block title %}Liste des articles{% endblock %}
 
 {% block body %}
-<div class="_wrapper _flex -col _gap -gap-row-xl _padding -padding-hori-mobile -padding-vert-xl">
+<div class="_wrapper _flex -col _gap -gap-row-xl _padding -padding-hori-mobile -padding-vert-l">
 
-    <h1 class="section-heading -inline -white _text -text-xl">
+    <h1 class="section-heading -inline -white _txt -txtxl">
         <img class="image" {{ app.imgAttr('Actualités', 'news.svg', false, 107, 103)|raw }}>
         <div class="text">
             <span class="regular">Liste des </span>
@@ -21,11 +21,9 @@
         {% endfor %}
     </ul>
 
-    <div class="_text -textcentered">
+    <div class="_txt -textcentered">
         <a class="std-button -darkblue -padded" href="{{ app.router.generateUrl('reviews') }}">
-            <div class="text _text -text-m">
-                <span class="bold">Retour à l’accueil</span>
-            </div>
+            <div class="text _txt -bold -txtm">Retour à l’accueil</div>
         </a>
     </div>
 </div>

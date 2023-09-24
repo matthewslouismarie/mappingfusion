@@ -5,17 +5,15 @@
     border: $border-xs solid $color-white;
     justify-content: center;
 
-    &.-padded {
-        @include asymetric-padding;
-    }
+    @include asymetric-padding;
 
     &.-blue {
-        background-color: #19577a;
-        color: #ffffff;
+        background-color: $color-blue-2;
+        color: $color-white;
     }
 
     &.-darkblue {
-        background-color: #0c4b6e;
+        background-color: $color-blue-3;
     }
 
     &.-transparent {
@@ -27,8 +25,8 @@
     }
 
     &.-white {
-        background-color: #ffffff;
-        color: #0b4b6e;
+        background-color: $color-white;
+        color: $color-blue-25;
     }
 
     &.-withicon {
@@ -39,9 +37,5 @@
 
     > .text {
         text-align: center;
-
-        > .bold {
-            font-weight: $txt-weight-bold;
-        }
     }
 }

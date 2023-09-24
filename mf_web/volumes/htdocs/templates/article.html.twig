@@ -19,7 +19,7 @@
         <div class="article-cover" style="background-image: url('{{ app.resource(article.cover_filename) }}');">
             <div class="content">
                 <div class="_wrapper">
-                    <h1 class="title _text -text-xl">{{ article.title }}</h1>
+                    <h1 class="title _txt -txtxl">{{ article.title }}</h1>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
                 <div class="intro _flex -col _gap -gap-row-m _padding -padding-hori-mobile -padding-vert-l2" id="review-intro">
                     <div class="sectioncontent _padding -padding-hori-s _flex -col _gap -gap-row-l">
 
-                        <dl class="std-metadata _text -text-m">
+                        <dl class="std-metadata _txt -txtm">
                             <div class="item _flex _gap -gap-col-xs">
                                 <dt class="term">Jeu :</dt> <dd class="def">{{ article.review.playable.name }}</dd>
                             </div>
@@ -46,7 +46,7 @@
                             </div>
                         </dl>
 
-                        <p class="_text -text-s">{{ article.review.body }}</p>
+                        <p class="_txt -txts">{{ article.review.body }}</p>
 
                         {{ review(app.mk, article.review.playable, article.review) }}
                     </div>
@@ -90,8 +90,8 @@
                     {# @todo Should be a background #}
                         <img class="img" {{ app.imgAttr('Le conseil Mapping-Fusion', 'mapping-fusion-advice.svg', false, 125, 106)|raw }}>
                         <div class="text _flex -col _gap -gap-row-s">
-                            <h2 class="heading _text -text-l">Le petit conseil pour les mappeurs de Mapping Fusion</h2>
-                            <p class="text _text -text-m">Le level design et l’éclairage étant très réussi, nous vous recommandons de jouer à ce MOD qui reste un très bonne source d’inspiration pour créer vos maps ! (structure, type de textures, mis en lumière etc...)</p>
+                            <h2 class="heading _txt -txtl">Le petit conseil pour les mappeurs de Mapping Fusion</h2>
+                            <p class="text _txt -txtm">Le level design et l’éclairage étant très réussi, nous vous recommandons de jouer à ce MOD qui reste un très bonne source d’inspiration pour créer vos maps ! (structure, type de textures, mis en lumière etc...)</p>
                         </div>
                     </aside>
                 </div>

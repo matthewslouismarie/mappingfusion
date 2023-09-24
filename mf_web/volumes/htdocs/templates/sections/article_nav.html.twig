@@ -1,7 +1,7 @@
 {% macro articleNav(app, article, relatedArticles) %}
 <nav class="article-nav _gap -gap-row-s2 _padding -padding-vert-l -padding-hori-s">
     <div class="frame -articlenav _padding -padding-hori-s2 -padding-vert-s">
-        <ul class="list _text -text-m">
+        <ul class="list _txt -txtm">
             <li class="item _padding -padding-s" data-type="toc-item">
                 <a class="link -active" href="#review-intro">Présentation</a>
             </li>
@@ -21,27 +21,27 @@
 
     <a href="#" class="std-button -upper -white _padding -padding-vert-s">
         <div class="text">
-            <span class="bold _text -text-m">Comment installer un mod</span>
+            <span class="bold _txt -txtm">Comment installer un mod</span>
         </div>
     </a>
 
     <div class="frame -related _gap -gap-row-m _padding -padding-hori-s2 -padding-vert-s">
-        <h2 class="heading _text -text-m ">Tests et articles similaires</h2>
+        <h2 class="heading _txt -txtm ">Tests et articles similaires</h2>
         <ul class="list _gap -gap-col-xs -gap-row-s2">
             {% for r in relatedArticles %}
             <li class="item">
                 <a class="link _gap -gap-row-xs" href="#">
                     <img class="image" {{ app.imgAttr(r.title, r.cover_filename, true, null, 110)|raw }}>
-                    <div class="_text -text-s">{{ r.title }}</div>
+                    <div class="_txt -txts">{{ r.title }}</div>
                 </a>
             </li>
             {% endfor %}
             <li class="item">
                 <div class="list _gap -gap-row-s">
-                    <a class="std-button -s -transparent _padding -padding-xs _text -text-s" href="{{ app.router.generateUrl('review_list') }}">
+                    <a class="std-button -s -transparent _padding -padding-xs _txt -txts" href="{{ app.router.generateUrl('review_list') }}">
                         <span class="text">Voir plus de tests</span>
                     </a>
-                    <a class="std-button -s -transparent _padding -padding-xs _text -text-s" href="#">
+                    <a class="std-button -s -transparent _padding -padding-xs _txt -txts" href="#">
                         <span class="text">Voir + d’actualité</span>
                     </a>
                 </div>

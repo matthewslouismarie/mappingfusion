@@ -48,17 +48,17 @@
     {% endfor %}
     {% endif %}
 
-    <button class="std-button -padded" data-type="add-dynamic-form" data-source="link-form-template" data-index="{{ null != formData ? formData.links|length : 0 }}" type="button">Ajouter un lien</button>
+    <button class="std-button" data-type="add-dynamic-form" data-source="link-form-template" data-index="{{ null != formData ? formData.links|length : 0 }}" type="button">Ajouter un lien</button>
 
     {% if formData %}
     {% for c in formData.contributions %}
     {{ _self.contributionForm(authors, loop.index0, c) }}
     {% endfor %}
     {% endif %}
-    <button class="std-button -padded" data-type="add-dynamic-form" data-source="contrib-form-tpl" data-index="{{ null != formData ? formData.contributions|length : 0 }}" type="button">Ajouter un contributeur</button>
+    <button class="std-button" data-type="add-dynamic-form" data-source="contrib-form-tpl" data-index="{{ null != formData ? formData.contributions|length : 0 }}" type="button">Ajouter un contributeur</button>
 
-    <div class="_text -textcentered">
-        <button class="std-button -padded" type="submit">Poster</button>
+    <div class="_txt -textcentered">
+        <button class="std-button" type="submit">Poster</button>
     </div>
 
     {{ csrf(app) }}
@@ -139,7 +139,7 @@ contribForm.init();
     </div>
 
     <div class="form-row">
-        <button class="std-button -padded" data-type="remove-dynamic-form-button" type="button">
+        <button class="std-button" data-type="remove-dynamic-form-button" type="button">
             <div class="text">Supprimer</div>
         </button>
     </div>

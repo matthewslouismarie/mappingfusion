@@ -22,8 +22,8 @@
         <input class="input" id="password" name="password" type="password">
         {% if formErrors %}{{ errorList(formErrors.password )}}{% endif %}
     </div>
-    <button class="std-button -padded" type="submit">
-        <div class="text _text -bold">Mettre à jour</div>
+    <button class="std-button" type="submit">
+        <div class="text _txt -bold">Mettre à jour</div>
     </button>
     {{ csrf(app) }}
 </form>
