@@ -1,11 +1,11 @@
 .article-mosaic {
     display: flex;
-    flex-direction: column;
-    row-gap: 32px;
 
     > .left,
     > .right {
-        height: 208px;
+        height: 160px;
+        flex: 1 1 auto;
+        width: 50%;
     }
 
     > .left {
@@ -17,6 +17,7 @@
 
         > .std-badge {
             transform: translateX(18px) translateY(50%);
+            max-width: 80%;
         }
     }
 

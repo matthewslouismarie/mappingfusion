@@ -1,5 +1,6 @@
 {% macro articleNav(app, article, relatedArticles) %}
 <nav class="article-nav _gap -gap-row-s2 _padding -padding-vert-l -padding-hori-s">
+    {% if article.review is defined %}
     <div class="frame -articlenav _padding -padding-hori-s2 -padding-vert-s">
         <ul class="list _txt -txtm">
             <li class="item _padding -padding-s" data-type="toc-item">
@@ -19,11 +20,13 @@
         </ul>
     </div>
 
-    <a href="#" class="std-button -upper -white _padding -padding-vert-s">
+    <a href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}" class="std-button -upper -white _padding -padding-vert-s">
         <div class="text">
-            <span class="bold _txt -txtm">Comment installer un mod</span>
+            <span class="bold _txt -bold -txtm">Comment installer un mod</span>
         </div>
     </a>
+
+    {% endif %}
 
     <div class="frame -related _gap -gap-row-m _padding -padding-hori-s2 -padding-vert-s">
         <h2 class="heading _txt -txtm ">Tests et articles similaires</h2>
@@ -38,10 +41,10 @@
             {% endfor %}
             <li class="item">
                 <div class="list _gap -gap-row-s">
-                    <a class="std-button -s -transparent _padding -padding-xs _txt -txts" href="{{ app.router.generateUrl('review_list') }}">
+                    <a class="std-button -s -transparent _padding -padding-xs _txt -txts" href="{{ app.router.generateUrl('reviews') }}">
                         <span class="text">Voir plus de tests</span>
                     </a>
-                    <a class="std-button -s -transparent _padding -padding-xs _txt -txts" href="#">
+                    <a class="std-button -s -transparent _padding -padding-xs _txt -txts" href="{{ app.router.generateUrl('articles') }}">
                         <span class="text">Voir + d’actualité</span>
                     </a>
                 </div>

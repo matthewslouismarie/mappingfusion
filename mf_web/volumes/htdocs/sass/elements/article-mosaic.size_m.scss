@@ -1,8 +1,7 @@
 .article-mosaic {
-    flex-direction: row;
+    // flex-direction: row;
 
     > .left {
-        flex: 0 0 auto;
-        width: 316px;
+        max-width: 316px;
     }
 }

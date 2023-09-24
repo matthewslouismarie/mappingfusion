@@ -1,25 +1,20 @@
 .section-heading {
     display: flex;
+    align-items: center;
     flex-direction: column;
     gap: 8px;
 
     text-align: center;
-    align-items: center;
 
     &.-white {
         > .text {
             color: $color-white;
+            font-weight: $txt-weight-regular;
         }
     }
 
     > .image {
         width: 118px;
         height: auto;
-    }
-
-    > .text {
-        > .regular {
-            font-weight: $txt-weight-regular;
-        }
     }
 }

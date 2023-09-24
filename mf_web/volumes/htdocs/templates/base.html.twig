@@ -70,7 +70,7 @@
                             <a class="std-interactive _txt -txts">Nouveau sur Sven Co-op ?</a>
                         </li>
                         <li class="item">
-                            <a class="std-interactive _txt -txts">Comment installer un mod Half-Life</a>
+                            <a class="std-interactive _txt -txts" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">Comment installer un mod Half-Life</a>
                         </li>
                     </ul>
                 </div>                
@@ -96,27 +96,27 @@
                 <nav>
                     <ul class="std-inline-list _txt -txts">
                         <li class="item">
-                            <a class="link" href="">Nouveautés</a>
+                            <a class="link" href="{{ app.router.generateUrl('home') }}">Nouveautés</a>
                         </li>
                         <li class="item">
-                            <a class="link" href="">Tests maps et mods</a>
+                            <a class="link" href="{{ app.router.generateUrl('reviews') }}">Tests maps et mods</a>
                         </li>
                         <li class="item">
-                            <a class="link" href="">Les derniers articles</a>
+                            <a class="link" href="{{ app.router.generateUrl('articles') }}">Les derniers articles</a>
                         </li>
                         <li class="item">
-                            <a class="link" href="">Fonctionnement Sven Co-op</a>
+                            <a class="link" href="{{ app.router.generateUrl('article', ['guide-sven-co-op']) }}">Fonctionnement Sven Co-op</a>
                         </li>
                         <li class="item">
-                            <a class="link" href="">Installation de mods</a>
+                            <a class="link" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">Installation de mods</a>
                         </li>
                         <li class="item -img">
-                            <a class="link" href="">
+                            <a class="link" href="https://www.facebook.com/halflifeetmods/">
                                 <img class="img" {{ app.imgAttr('Facebook', 'facebook-logo-transparent.svg', false, 12, 24)|raw }}>
                             </a>
                         </li>
                         <li class="item -img">
-                            <a class="link" href="">
+                            <a class="link" href="https://discord.com/invite/nXmXKHBD">
                                 <img class="img" {{ app.imgAttr('Discord', 'discord-logo-transparent.svg', false, 25, 19)|raw }}>
                             </a>
                         </li>
