@@ -1,6 +1,8 @@
 .std-badge {
     @include asymetric-padding;
     display: inline-block;
+
     background-color: #3D9CCE;
     color: #ffffff;
+    text-align: center;
 }
