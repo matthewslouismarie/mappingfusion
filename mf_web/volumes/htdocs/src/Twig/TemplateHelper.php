@@ -46,20 +46,22 @@ class TemplateHelper
     }
 
     public function getImgAttr(string $alt, string $filename, bool $isResource = true, ?int $width = null, ?int $height = null): string {
-        $filePathOnDisk =  realpath(dirname(__FILE__) . '/../../public/' . ($isResource ? 'uploaded/' : '') . $filename);
-        $dimensions = getimagesize($filePathOnDisk);
 
         $srcValue = $isResource ? $this->getResource($filename) : $this->getAsset($filename);
         $attr = "alt=\"{$alt}\" src=\"{$srcValue}\"";
 
-        if ((null === $width || null === $height) && false !== $dimensions) {
-            if (null !== $width) {
-                $height = $dimensions[1] * $width / $dimensions[0];
-            } elseif (null !== $height) {
-                $width = $dimensions[0] * $height / $dimensions[1];
-            } else {
-                $width = $dimensions[0];
-                $height = $dimensions[1];
+        $filePathOnDisk =  realpath(dirname(__FILE__) . '/../../public/' . ($isResource ? 'uploaded/' : '') . $filename);
+        if (null !== $filePathOnDisk && '' !== $filePathOnDisk) {
+            $dimensions = getimagesize($filePathOnDisk);
+            if ((null === $width || null === $height) && false !== $dimensions) {
+                if (null !== $width) {
+                    $height = $dimensions[1] * $width / $dimensions[0];
+                } elseif (null !== $height) {
+                    $width = $dimensions[0] * $height / $dimensions[1];
+                } else {
+                    $width = $dimensions[0];
+                    $height = $dimensions[1];
+                }
             }
         }
 
