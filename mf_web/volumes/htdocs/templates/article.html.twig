@@ -84,11 +84,14 @@
                     {{ review(app, article.review.playable, article.review, '-summary') }}
                 </div>
 
+                {% if app.mk.formatArticleBody(article.body).advice is defined %}
                 <div class="sectioncontent _padding -padding-hori-s -padding-vert-l">
                     <aside class="article-advice">
                         {{ app.mk.formatArticleBody(article.body).advice|raw }}
                     </aside>
                 </div>
+                {% endif %}
+
                 {% endif %}
             </div>
         </div>
