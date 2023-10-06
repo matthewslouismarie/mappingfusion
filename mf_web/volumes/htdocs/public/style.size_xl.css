@@ -1,3 +1,6 @@
+._wrapper {
+  width: 75%;
+}
 .std-article > .columns > .nav {
   left: -30%;
 }
