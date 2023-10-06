@@ -35,6 +35,10 @@ class DbEntityManager
                 foreach ($model->getArrayDefinition() as $key => $property) {
                     if (null !== $property->getArrayDefinition()) {
                         $appArray[$key] = $this->toAppData($dbData, $property, $key);
+                    } elseif (null !== $property->getListNodeModel()) {
+                        $subPrefix = 's' === substr($key, strlen($key) - 1) ? $subPrefix = substr($key, 0, strlen($key) - 1) : $key;
+
+                        $appArray[$key] = $this->toAppData($dbData[$key], $property, $subPrefix);
                     } else {
                         $appArray[$key] = $this->toAppData(
                             $dbData[$prefix . '_' . $key],
@@ -47,6 +51,12 @@ class DbEntityManager
                 } else {
                     return new AppObject($appArray);
                 }
+            } elseif (null !== $model->getListNodeModel()) {
+                $appArray = [];
+                foreach ($dbData as $row) {
+                    $appArray[] = $this->toAppData($row, $model->getListNodeModel(), $prefix);
+                }
+                return $appArray;
             }
         }
         if (is_numeric($dbData)) {

@@ -48,7 +48,7 @@
 
                         <p class="_txt -txts">{{ article.review.body }}</p>
 
-                        {{ review(app.mk, article.review.playable, article.review) }}
+                        {{ review(app, article.review.playable, article.review) }}
                     </div>
                 </div>
                 {% endif %}
@@ -81,7 +81,7 @@
 
                 {% if article.review is defined %}
                 <div class="sectioncontent _padding -padding-hori-s -padding-vert-l" id="review-summary">
-                    {{ review(app.mk, article.review.playable, article.review, '-summary') }}
+                    {{ review(app, article.review.playable, article.review, '-summary') }}
                 </div>
 
                 <div class="sectioncontent _padding -padding-hori-s -padding-vert-l">

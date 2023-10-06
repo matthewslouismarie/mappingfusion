@@ -1,4 +1,4 @@
-{% macro review(mk, playable, review, variant) %}
+{% macro review(app, playable, review, variant) %}
     <div class="std-review{% if variant %} {{ variant }}{% endif %}">
         <div class="box _padding -padding-m">
             <div class="std-rating-container">
@@ -11,7 +11,7 @@
 
             {% if variant == '-summary' %}
             <div class="body">
-                {{ mk.format(review.body)|raw }}
+                {{ app.mk.format(review.body)|raw }}
             </div>
             {% endif %}
 
@@ -19,27 +19,27 @@
                 <div class="part -pros _flex -col _gap -gap-row-s">
                     <h3 class="subheading _txt -txtl">Les plus</h3>
                     <div class="markdown -pros">
-                        {% if review.pros %}{{ mk.format(review.pros)|raw }}{% else %}Rien à afficher.{% endif %}
+                        {% if review.pros %}{{ app.mk.format(review.pros)|raw }}{% else %}Rien à afficher.{% endif %}
                     </div>
                 </div>
 
                 <div class="part -cons _flex -col _gap -gap-row-s">
                     <h3 class="subheading _txt -txtl">Les moins</h3>
                     <div class="markdown -cons">
-                        {% if review.cons %}{{ mk.format(review.cons)|raw }}{% else %}Rien à afficher.{% endif %}
+                        {% if review.cons %}{{ app.mk.format(review.cons)|raw }}{% else %}Rien à afficher.{% endif %}
                     </div>
                 </div>
             </div>
         </div>
     
         <div class="relatedlinks">
-            <a class="std-button -s -white" href="#">
-                <div class="text">
-                    <span class="bold">Page de téléchargement ModDB</span>
-                </div>
+            {% for l in review.playable.links %}
+            <a class="std-button -s -white" href="{{ l.url }}">
+                <div class="text _txt -bold">{{ l.name }}</div>
             </a>
-            <a class="std-button -s -blue" href="#">
-                <div class="text">Voir plus de tests</div>
+            {% endfor %}
+            <a class="std-button -s -blue" href="{{ app.router.generateUrl('reviews') }}">
+                <div class="text _txt -bold">Voir plus de tests</div>
             </a>
         </div>
     </div>

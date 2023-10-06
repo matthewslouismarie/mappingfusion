@@ -6,6 +6,7 @@ use MF\Database\DatabaseManager;
 use MF\Framework\Database\DbEntityManager;
 use MF\Framework\DataStructures\AppObject;
 use MF\Model\CategoryModel;
+use MF\Model\PlayableLinkModel;
 use MF\Session\SessionManager;
 use MF\Model\ArticleModel;
 use MF\Model\PlayableModel;
@@ -38,18 +39,35 @@ class ArticleRepository implements IRepository
     }
 
     public function find(string $id): ?AppObject {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_article WHERE article_id = ? LIMIT 1;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_article LEFT JOIN e_playable_link ON playable_id = link_playable_id WHERE article_id = ? LIMIT 1;');
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
+
         if (0 === count($data)) {
             return null;
-        } elseif (1 === count($data)) {
-            $reviewModel = null !== $data[0]['review_id'] ? new ReviewModel(new PlayableModel()) : null;
-            return $this->em->toAppData($data[0], new ArticleModel(new CategoryModel(), $reviewModel), 'article');
-        } else {
-            throw new UnexpectedValueException();
         }
+
+        $links = [];
+        $linkModel = new PlayableLinkModel();
+        $reviewModel = null;
+
+        if (null === $reviewModel && null !== $data[0]['review_id']) {
+            $reviewModel = new ReviewModel(new PlayableModel(playableLinkModel: new PlayableLinkModel()));
+        }
+
+        $linkIds = [];
+        foreach ($data as $row) {
+            if (null !== $row['link_id'] && !in_array($row['link_id'], $linkIds, true)) {
+                $linkIds[] = $row['link_id'];
+                // $links[] = $this->em->toAppData($row, $linkModel, 'link');
+                $links[] = $row;
+            }
+        }
+
+        $data[0]['links'] = $links;
+
+        return $this->em->toAppData($data[0], new ArticleModel(new CategoryModel(), $reviewModel), 'article');
     }
 
     public function findAll(): array {
