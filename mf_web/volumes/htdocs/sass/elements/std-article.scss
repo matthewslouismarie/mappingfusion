@@ -8,5 +8,9 @@
                 background-color: $color-blue-3;
             }
         }
+
+        > .nav {
+            order: 1;
+        }
     }
 }
