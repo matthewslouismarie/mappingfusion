@@ -17,7 +17,6 @@ use MF\Controller\ArticleListController;
 use MF\Controller\AuthorController;
 use MF\Controller\CategoryAdminController;
 use MF\Controller\CategoryListAdminController;
-use MF\Controller\ControllerInterface;
 use MF\Controller\HomeController;
 use MF\Controller\ImageManagementController;
 use MF\Controller\LoginController;
@@ -28,6 +27,7 @@ use MF\Controller\ReviewController;
 use MF\Controller\ReviewListController;
 use MF\Controller\SearchController;
 use MF\Enum\Clearance;
+use MF\Exception\Http\NotFoundException;
 use MF\Session\SessionManager;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -103,6 +103,17 @@ class Kernel
                 ]),
             );
         }
-        return $controller->generateResponse($request, $this->extractRouteParams($request));
+
+        try {
+            return $controller->generateResponse($request, $this->extractRouteParams($request));
+        } catch (NotFoundException $e) {
+            return new Response(
+                status: 404,
+                body: $this->twig->render('error.html.twig', [
+                    'message' => 'Cette page n’existe pas.',
+                    'title' => 'Page non existante',
+                ]),
+            );
+        }
     }
 }
