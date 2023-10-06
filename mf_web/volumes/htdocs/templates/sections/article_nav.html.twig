@@ -32,12 +32,14 @@
         <h2 class="heading _txt -txtm ">Tests et articles similaires</h2>
         <ul class="list _gap -gap-col-xs -gap-row-s2">
             {% for r in relatedArticles %}
+            {% if loop.index0 < 3 %}
             <li class="item">
                 <a class="link _gap -gap-row-xs" href="{{ app.router.generateUrl('article', [r.id]) }}">
                     <img class="image" {{ app.imgAttr(r.title, r.cover_filename, true, null, 110)|raw }}>
                     <div class="_txt -txts">{{ r.title }}</div>
                 </a>
             </li>
+            {% endif %}
             {% endfor %}
             <li class="item">
                 <div class="list _gap -gap-row-s">
