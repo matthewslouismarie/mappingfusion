@@ -1,14 +1,14 @@
 .article-advice {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+    padding: 16px 16px 16px 125px + 16*2px;
+    background: no-repeat url("mapping-fusion-advice.svg") center left 16px / 125px 106px, $color-blue-1;
 
-    background-color: $color-blue-1;
+    > h2 {
+        color: $color-white;
+        font-size: 25px;
+        font-weight: bold;
+    }
 
-    > .text {
-        > .heading {
-            text-align: center;
-            color: $color-white;
-        }
+    > p {
+        font-size: 19px;
     }
 }

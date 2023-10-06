@@ -55,7 +55,7 @@
 
                 <div class="sectioncontent _padding -padding-hori-s -padding-vert-l" id="article-body">
                     <div class="std-markdown-container">
-                        {{ app.mk.format(article.body)|raw }}
+                        {{ app.mk.formatArticleBody(article.body).main|raw }}
                     </div>
                 </div>
 
@@ -85,13 +85,8 @@
                 </div>
 
                 <div class="sectioncontent _padding -padding-hori-s -padding-vert-l">
-                    <aside class="article-advice _flex _gap -gap-col-s _padding -padding-s">
-                    {# @todo Should be a background #}
-                        <img class="img" {{ app.imgAttr('Le conseil Mapping-Fusion', 'mapping-fusion-advice.svg', false, 125, 106)|raw }}>
-                        <div class="text _flex -col _gap -gap-row-s">
-                            <h2 class="heading _txt -txtl">Le petit conseil pour les mappeurs de Mapping Fusion</h2>
-                            <p class="text _txt -txtm">Le level design et l’éclairage étant très réussi, nous vous recommandons de jouer à ce MOD qui reste un très bonne source d’inspiration pour créer vos maps ! (structure, type de textures, mis en lumière etc...)</p>
-                        </div>
+                    <aside class="article-advice">
+                        {{ app.mk.formatArticleBody(article.body).advice|raw }}
                     </aside>
                 </div>
                 {% endif %}
