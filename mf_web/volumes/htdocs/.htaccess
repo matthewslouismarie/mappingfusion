@@ -6,7 +6,7 @@ RewriteRule ^(.*)$ index.php?route_params=$1 [QSA,L]
 ExpiresDefault "access plus 31536000 seconds"
 Header set Cache-Control "must-revalidate"
 
-<FilesMatch "\.(ico|jpeg|png|gif|swf|css|gz|js|webp|svg)\?.+">
+<FilesMatch "\.(ico|jpeg|png|gif|swf|css|gz|js|webp|svg)">
     Header set Cache-Control "max-age=31536000, immutable"
 </FilesMatch>
 
