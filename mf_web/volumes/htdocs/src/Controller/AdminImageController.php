@@ -5,11 +5,10 @@ namespace MF\Controller;
 use GuzzleHttp\Psr7\Response;
 use MF\Enum\Clearance;
 use MF\Framework\Form\Transformer\FileTransformer;
-use MF\Model\SlugFilename;
 use MF\TwigService;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ImageManagementController implements ControllerInterface
+class AdminImageController implements ControllerInterface
 {
     const ROUTE_ID = 'manage-images';
 

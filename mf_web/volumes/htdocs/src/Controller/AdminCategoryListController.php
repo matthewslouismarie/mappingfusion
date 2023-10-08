@@ -9,7 +9,7 @@ use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class CategoryListAdminController implements ControllerInterface
+class AdminCategoryListController implements ControllerInterface
 {
     const ROUTE_ID = 'admin-category-list';
 

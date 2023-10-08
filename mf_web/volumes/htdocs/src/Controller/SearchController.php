@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class SearchController implements ControllerInterface
 {
-    const ROUTE_ID = 'search';
+    const ROUTE_ID = 'recherche';
 
     public function __construct(
         private TwigService $twig,

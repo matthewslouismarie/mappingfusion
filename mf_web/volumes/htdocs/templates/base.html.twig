@@ -58,7 +58,7 @@
                     <p class="intro _txt -txtm">Communauté francophone sur l’univers d’<strong>Half-Life et le modding pour Goldsource et Source</strong>.</p>
                     <ul class="header-menu _gap -gap-col-l">
                         <li class="item -search">
-                            <form class="form" rel="search" id="search-form" data-form-action="{{ app.router.generateUrl('search') }}" method="post">
+                            <form class="form" rel="search" id="search-form" data-form-action="{{ app.router.generateUrl('recherche') }}" method="post">
                                 <div class="std-interactive -search">
                                     <img class="icon" {{ app.imgAttr('Rechercher', 'magnifying-glass.svg', false, 20, 24)|raw }}>
                                     <input class="input _txt -txts" name="search-query" type="search" placeholder="Votre recherche" value="{{ searchQuery ?? "" }}" data-type="search-field">
@@ -98,7 +98,7 @@
                             <a class="link" href="{{ app.router.generateUrl('home') }}">Nouveautés</a>
                         </li>
                         <li class="item">
-                            <a class="link" href="{{ app.router.generateUrl('reviews') }}">Tests maps et mods</a>
+                            <a class="link" href="{{ app.router.generateUrl('tests') }}">Tests maps et mods</a>
                         </li>
                         <li class="item">
                             <a class="link" href="{{ app.router.generateUrl('articles') }}">Les derniers articles</a>

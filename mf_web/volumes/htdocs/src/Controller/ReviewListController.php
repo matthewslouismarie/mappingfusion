@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ReviewListController implements ControllerInterface
 {
-    const ROUTE_ID = 'reviews';
+    const ROUTE_ID = 'tests';
 
     public function __construct(
         private ArticleRepository $repo,

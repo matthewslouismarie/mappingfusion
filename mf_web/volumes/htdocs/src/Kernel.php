@@ -13,11 +13,11 @@ use MF\Controller\AdminReviewListController;
 use MF\Controller\AdminTestController;
 use MF\Controller\ArticleController;
 use MF\Controller\ArticleListController;
-use MF\Controller\AuthorController;
-use MF\Controller\CategoryAdminController;
-use MF\Controller\CategoryListAdminController;
+use MF\Controller\AdminAuthorController;
+use MF\Controller\AdminCategoryController;
+use MF\Controller\AdminCategoryListController;
 use MF\Controller\HomeController;
-use MF\Controller\ImageManagementController;
+use MF\Controller\AdminImageController;
 use MF\Controller\LoginController;
 use MF\Controller\LogoutController;
 use MF\Controller\ProfileController;
@@ -46,15 +46,15 @@ class Kernel
         AdminTestController::ROUTE_ID => AdminTestController::class,
         ArticleController::ROUTE_ID => ArticleController::class,
         ArticleListController::ROUTE_ID => ArticleListController::class,
-        AuthorController::ROUTE_ID => AuthorController::class,
-        CategoryAdminController::ROUTE_ID => CategoryAdminController::class,
-        CategoryListAdminController::ROUTE_ID => CategoryListAdminController::class,
+        AdminAuthorController::ROUTE_ID => AdminAuthorController::class,
+        AdminCategoryController::ROUTE_ID => AdminCategoryController::class,
+        AdminCategoryListController::ROUTE_ID => AdminCategoryListController::class,
         HomeController::ROUTE_ID => HomeController::class,
-        ImageManagementController::ROUTE_ID => ImageManagementController::class,
+        AdminImageController::ROUTE_ID => AdminImageController::class,
         LoginController::ROUTE_ID => LoginController::class,
         LogoutController::ROUTE_ID => LogoutController::class,
         ProfileController::ROUTE_ID => ProfileController::class,
-        RegistrationController::ROUTE_ID => RegistrationController::class,
+        // RegistrationController::ROUTE_ID => RegistrationController::class,
         ReviewController::ROUTE_ID => ReviewController::class,
         ReviewListController::ROUTE_ID => ReviewListController::class,
         SearchController::ROUTE_ID => SearchController::class,

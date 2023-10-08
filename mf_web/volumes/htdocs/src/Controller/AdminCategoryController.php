@@ -16,7 +16,7 @@ use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class CategoryAdminController implements ControllerInterface
+class AdminCategoryController implements ControllerInterface
 {
     const ROUTE_ID = 'manage_category';
 

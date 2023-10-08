@@ -16,7 +16,7 @@ use PDOException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AuthorController implements ControllerInterface
+class AdminAuthorController implements ControllerInterface
 {
     const ROUTE_ID = 'manage_author';
 

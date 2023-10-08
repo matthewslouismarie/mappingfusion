@@ -15,7 +15,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class LoginController implements ControllerInterface
 {
-    const ROUTE_ID = 'login';
+    const ROUTE_ID = 'accès-g-man';
 
     public function __construct(
         private FormFactory $formFactory,
