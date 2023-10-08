@@ -6,7 +6,7 @@
         <meta name="description" content="{% block description %}{% endblock %}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link disabled id="montserrat-font" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{{ app.asset('style.css') }}">
         <link rel="stylesheet" href="{{ app.asset('style.size_s.css') }}" media="(min-width: 425px)">
         <link rel="stylesheet" href="{{ app.asset('style.size_m.css') }}" media="(min-width: 768px)">
@@ -128,6 +128,7 @@
         {% endblock %}
         <script src="{{ app.asset('menu.js') }}"></script>
         <script>
+            document.getElementById('montserrat-font').disabled = false;
             const menu = new Menu('menu-button', 'menu-container', 'menu', 'search-form');
             menu.init();
         </script>
