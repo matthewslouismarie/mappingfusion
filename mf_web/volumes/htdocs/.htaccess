@@ -2,7 +2,7 @@ RewriteEngine On
 RewriteRule ^public\/(.*)$ public/$1 [QSA,L]
 RewriteRule ^(.*)$ index.php?route_params=$1 [QSA,L]
 
-Header set Cache-Control "must-revalidate"
+Header set Cache-Control "must-revalidate, max-age=31536000"
 
 ExpireActive On
 ExpiresDefault "access plus 31536000 seconds"
