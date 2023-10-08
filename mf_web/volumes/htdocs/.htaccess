@@ -2,15 +2,10 @@ RewriteEngine On
 RewriteRule ^public\/(.*)$ public/$1 [QSA,L]
 RewriteRule ^(.*)$ index.php?route_params=$1 [QSA,L]
 
-ExpireActive On
-ExpiresDefault "access plus 31536000 seconds"
-ExpiresByType text/html "access plus 2 seconds"
+#ExpireActive On
+#ExpiresDefault "access plus 31536000 seconds"
 
-<FilesMatch "^[^\.]+$">
-    Header set Cache-Control "must-revalidate,  max-age=120"
-</FilesMatch>
-
-<FilesMatch "\.(js)|(svg)|(webp)">
+<FilesMatch "\.(css)|(js)|(svg)|(webp)|(jpg)|(jpeg)|(png)">
     Header set Cache-Control "max-age=31536000, immutable"
 </FilesMatch>
 
