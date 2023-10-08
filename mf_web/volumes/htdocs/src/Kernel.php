@@ -20,12 +20,13 @@ use MF\Controller\HomeController;
 use MF\Controller\ImageManagementController;
 use MF\Controller\LoginController;
 use MF\Controller\LogoutController;
-use MF\Controller\PlayableController;
+use MF\Controller\ProfileController;
 use MF\Controller\RegistrationController;
 use MF\Controller\ReviewController;
 use MF\Controller\ReviewListController;
 use MF\Controller\SearchController;
 use MF\Enum\Clearance;
+use MF\Exception\Http\BadRequestException;
 use MF\Exception\Http\NotFoundException;
 use MF\Session\SessionManager;
 use Psr\Container\ContainerInterface;
@@ -52,7 +53,7 @@ class Kernel
         ImageManagementController::ROUTE_ID => ImageManagementController::class,
         LoginController::ROUTE_ID => LoginController::class,
         LogoutController::ROUTE_ID => LogoutController::class,
-        PlayableController::ROUTE_ID => PlayableController::class,
+        ProfileController::ROUTE_ID => ProfileController::class,
         RegistrationController::ROUTE_ID => RegistrationController::class,
         ReviewController::ROUTE_ID => ReviewController::class,
         ReviewListController::ROUTE_ID => ReviewListController::class,
@@ -107,6 +108,14 @@ class Kernel
         } catch (NotFoundException $e) {
             return new Response(
                 status: 404,
+                body: $this->twig->render('error.html.twig', [
+                    'message' => 'Cette page n’existe pas.',
+                    'title' => 'Page non existante',
+                ]),
+            );
+        } catch (BadRequestException $e) {
+            return new Response(
+                status: 400,
                 body: $this->twig->render('error.html.twig', [
                     'message' => 'Cette page n’existe pas.',
                     'title' => 'Page non existante',

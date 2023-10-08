@@ -42,7 +42,7 @@ class ArticleRepository implements IRepository
 
     public function find(string $id, bool $fetchPlayableContributors = false): ?AppObject {
 
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_article LEFT OUTER JOIN v_playable ON v_article.playable_id = v_playable.playable_id WHERE article_id = ?;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT v_article.*, v_playable.* FROM v_article LEFT OUTER JOIN v_playable ON v_article.playable_id = v_playable.playable_id WHERE article_id = ?;');
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
@@ -57,6 +57,7 @@ class ArticleRepository implements IRepository
 
         if (null !== $data[0]['review_id']) {
             $reviewModel = new ReviewModel(new PlayableModel(
+                gameModel: new PlayableModel(),
                 contributionModel: $fetchPlayableContributors ? new ContributionModel(new AuthorModel()) : null,
                 playableLinkModel: new PlayableLinkModel(),
             ));
@@ -98,6 +99,19 @@ class ArticleRepository implements IRepository
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel())), 'article');
+        }
+        return $articles;
+    }
+
+    /**
+     * @return AppObject[]
+     */
+    public function findArticlesFrom(string $memberId): array {
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_article WHERE article_author_id = ?;');
+        $stmt->execute([$memberId]);
+        $articles = [];
+        foreach ($stmt->fetchAll() as $article) {
+            $articles[] = $this->em->toAppData($article, new ArticleModel(), 'article');
         }
         return $articles;
     }

@@ -14,17 +14,17 @@
 {% block body %}
 {# @todo micro data attributes #}
 <div class="page-article">
-    <div class="std-article" itemscope itemtype={% if article.review is defined %}"https://schema.org/ReviewNewsArticle"{% else %}"https://schema.org/NewsArticle"{% endif %}>
+    <div class="std-article">
 
-        <div class="article-cover" style="background-image: url('{{ app.resource(article.cover_filename) }}');" itemprop="image" content="{{ app.resource(article.cover_filename) }}">
+        <div class="article-cover" id="article-cover" style="background-image: url('{{ app.resource(article.cover_filename) }}');" itemprop="image" content="{{ app.resource(article.cover_filename) }}">
             <div class="content">
                 <hrgoup class="heading _wrapper">
                     <a class="link" href="{{ app.router.generateUrl('article', [article.id]) }}" itemprop="url">
-                        <h1 class="title _txt -txtxl" itemprop="name">
+                        <h1 class="title _txt -txtxl" itemprop="headline">
                             {{ article.title }}
                         </h1>
                         {% if article.sub_title %}
-                        <h2 class="subtitle" itemprop="headline">{{ article.sub_title }}</h2>
+                        <h2 class="subtitle" itemprop="alternativeHeadline">{{ article.sub_title }}</h2>
                         {% endif %}
                     </a>
                 </hgroup>
@@ -38,26 +38,41 @@
 
             <div class="content">
                 {% if article.review is defined %}
-                <div class="intro _flex -col _gap -gap-row-m _padding -padding-hori-mobile -padding-vert-l2" id="review-intro">
+                <div class="intro _flex -col _gap -gap-row-m _padding -padding-hori-mobile -padding-vert-l2">
                     <div class="sectioncontent _padding -padding-hori-s _flex -col _gap -gap-row-l">
 
-                        <dl class="std-metadata _txt -txtm">
+                        <dl class="std-metadata _txt -txtm" id="playable-object">
                             <div class="item _flex _gap -gap-col-xs">
                                 <dt class="term">Jeu :</dt>
-                                <dd class="def" itemprop="itemReviewed" itemscope itemtype="https://schema.org/Game">
-                                    <a href="{{ app.router.generateUrl('playable', [article.review.playable.id]) }}" itemprop="url">
-                                        <span itemprop="name">{{ article.review.playable.name }}</span>
-                                    </a>
+                                <dd class="def">
+                                    <span itemprop="name">{{ article.review.playable.name }}</span>
                                 </dd>
                             </div>
                             <div class="item _flex _gap -gap-col-xs">
-                                <dt class="term">Développeur :</dt>
-                                <dd class="def">{% for c in article.review.playable.contributions %}{% if not loop.first %}, {% endif %}{{ c.author.name }}{% endfor %}</dd>
+                                <dt class="term">Auteurs :</dt>
+                                <dd class="def">
+                                    {% for c in article.review.playable.contributions %}
+                                    {% if c.is_author %}
+                                    {% if not loop.first %}, {% endif %}
+                                    <span itemprop="creator" itemscope itemtype="https://schema.org/Person">
+                                        <span itemprop="name">{{ c.author.name }}</span>
+                                    </span>
+                                    {% endif %}
+                                    {% endfor %}
+                                </dd>
                             </div>
                             <div class="item _flex _gap -gap-col-xs">
                                 <dt class="term">Date de sortie :</dt>
-                                <dd class="def">{{ article.review.playable.release_date_time|date('Y') }}</dd>
+                                <dd class="def" itemprop="datePublished">{{ article.review.playable.release_date_time|date('Y') }}</dd>
                             </div>
+                            {% if article.review.playable.game %}
+                            <div class="item _flex _gap -gap-col-xs">
+                                <dt class="term">Moteur :</dt>
+                                <dd class="def" itemprop="isBasedOn" itemscope itemtype="https://schema.org/VideoGame">
+                                    <span itemprop="name">{{ article.review.playable.game.name }}</span>
+                                </dd>
+                            </div>
+                            {% endif %}
                         </dl>
 
                         <p class="_txt -txts">{{ article.review.body }}</p>
@@ -67,8 +82,15 @@
                 </div>
                 {% endif %}
 
-                <div class="sectioncontent _padding -padding-hori-s -padding-vert-l" id="article-body">
-                    <div class="std-markdown-container" itemprop="text" itemprop="articleBody"{% if article.review is defined %} itemprop="reviewBody"{% endif %}>
+                <div
+                    class="sectioncontent _padding -padding-hori-s -padding-vert-l"
+                    id="article-body"
+                    itemscope
+                    itemtype={% if article.review is defined %}"https://schema.org/ReviewNewsArticle"{% else %}"https://schema.org/NewsArticle"{% endif %}
+                    itemref="{% if article.review is defined %}review-box {% endif %}article-cover article-metadata"
+                >
+                    <meta itemprop="itemReviewed" itemscope itemtype="https://schema.org/VideoGame" itemref="playable-object playable-links">
+                    <div class="std-markdown-container" itemprop="articleBody">
                         {{ app.mk.formatArticleBody(article.body).main|raw }}
                     </div>
                 </div>
@@ -108,7 +130,7 @@
                 {% endif %}
 
 
-                <div class="sectioncontent _padding -padding-hori-s -padding-vert-l">
+                <div class="sectioncontent _padding -padding-hori-s -padding-vert-l" id="article-metadata">
                     <dl class="std-metadata _txt -txtm">
                         <div class="item _flex _gap -gap-col-xs">
                             <dt class="term">Édité le :</dt>
@@ -121,7 +143,7 @@
                         <div class="item _flex _gap -gap-col-xs">
                             <dt class="term">Rédigé par :</dt>
                             <dd class="def" itemprop="author" itemscope itemtype="https://schema.org/Person">
-                                <a href="{{ app.router.generateUrl('author', [article.author_id]) }}" itemprop="url">
+                                <a href="{{ app.router.generateUrl('membre', [article.author_id]) }}" itemprop="url">
                                     <span itemprop="name">{{ article.author_id }}</span>
                                 </a>
                             </dd>

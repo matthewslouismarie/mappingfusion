@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% from 'macros/csrf_input.html.twig' import csrf %}
+{% from 'macros/error_list.html.twig' import errorList %}
+
+{% block title %}{{ member.id }}{% endblock %}
+
+{% block bodyContent %}
+<article itemscope itemid="{{ member.id }}" itemtype="https://schema.org/Person">
+    <a href="{{ app.router.generateUrl('membre', [member.id]) }}" itemprop="url">
+        <h1 class="_txt -txtxl" itemprop="name">{{ member.id }}</h1>
+    </a>
+</article>
+
+{% if articles|length > 0 %}
+<ul>
+    {% for a in articles %}
+    <li>
+        <a href="{{ app.router.generateUrl('article', [a.id]) }}">{{ a.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

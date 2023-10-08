@@ -20,4 +20,8 @@
     &.-gaps {
         gap: $gap-s;
     }
+
+    &.-row {
+        flex-direction: row;
+    }
 }

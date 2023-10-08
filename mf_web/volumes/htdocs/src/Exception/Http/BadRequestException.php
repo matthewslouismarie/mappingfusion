@@ -2,8 +2,12 @@
 
 namespace MF\Exception\Http;
 
-use InvalidArgumentException;
+use MF\Framework\Http\Exception\IHttpException;
+use RuntimeException;
 
-class BadRequestException extends InvalidArgumentException
+class BadRequestException extends RuntimeException implements IHttpException
 {
+    public function getStatusCode(): int {
+        return 400;
+    }
 }

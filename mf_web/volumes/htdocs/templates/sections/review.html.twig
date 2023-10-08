@@ -1,6 +1,6 @@
 {% macro review(app, playable, review, variant, metadata) %}
     <div class="std-review{% if variant %} {{ variant }}{% endif %}">
-        <div class="box _padding -padding-m">
+        <div class="box _padding -padding-m" id="review-box">
             <div class="std-rating-container">
                 <div class="rating"{% if metadata %} itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating"{% endif %}>
                     {% if metadata %}<meta itemprop="worstRating" content="1">{% endif %}
@@ -12,7 +12,7 @@
             <h2 class="heading _padding _txt -txtl">{{ playable.name }} : l’avis de l’équipe</h2>
 
             {% if variant == '-summary' %}
-            <div class="body"{% if metadata %} itemprop="description"{% endif %}>
+            <div class="body"{% if metadata %} itemprop="reviewBody"{% endif %}>
                 {{ app.mk.format(review.body)|raw }}
             </div>
             {% endif %}
@@ -34,9 +34,9 @@
             </div>
         </div>
     
-        <div class="relatedlinks">
+        <div class="relatedlinks" id="playable-links">
             {% for l in review.playable.links %}
-            <a class="std-button -s -white" href="{{ l.url }}">
+            <a class="std-button -s -white" href="{{ l.url }}" id="pl-{{ l.url }}"{% if l.type == 'download' %} itemprop="downloadUrl"{% elseif l.type == 'homepage' %} itemprop="sameAs"{% endif %}>
                 <div class="text _txt -bold">{{ l.name }}</div>
             </a>
             {% endfor %}
