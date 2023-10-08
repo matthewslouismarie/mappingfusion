@@ -23,7 +23,7 @@ class ArticleController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $article = $this->repo->find($routeParams[1]);
+        $article = $this->repo->find($routeParams[1], true);
 
         if (null === $article) {
             throw new NotFoundException();
@@ -32,7 +32,6 @@ class ArticleController implements ControllerInterface
         return new Response(
             body: $this->twig->render('article.html.twig', [
                 'article' => $article,
-                'authors' => isset($article->review) ? $this->authorRepo->findAuthorsOf($article->review['playable_id']) : null,
                 'relatedArticles' => $this->repo->findRelatedArticles($article),
             ]),
         );

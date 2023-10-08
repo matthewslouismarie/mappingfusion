@@ -14,12 +14,12 @@
     {% endif %}
     <div class="form-row">
         <label class="label" for="id">Nom d’utilisateur :</label>
-        <input class="input" id="id" name="id" required value="{{ formData['id'] }}">
+        <input class="input" id="id" name="id" autocomplete="username" required value="{{ formData['id'] }}">
         {% if formErrors %}{{ errorList(formErrors.id )}}{% endif %}
     </div>
     <div class="form-row">
         <label class="label" for="password">Mot de passe :</label>
-        <input class="input" id="password" name="password" type="password">
+        <input class="input" id="password" name="password" autocomplete="current-password" type="password">
         {% if formErrors %}{{ errorList(formErrors.password )}}{% endif %}
     </div>
     <button class="std-button" type="submit">

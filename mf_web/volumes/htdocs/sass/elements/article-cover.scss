@@ -5,16 +5,20 @@
     > .content {
         background: url('blue-shadow.png') repeat-x bottom left / auto 50%;
 
-        > ._wrapper {
+        > .heading {
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 486px;
 
-            > .title {
-                color: $color-white;
-                text-align: center;
-                font-weight: $txt-weight-semi-bold;
+            text-align: center;
+            font-weight: $txt-weight-semi-bold;
+
+            > .link {
+                > .subtitle,
+                > .title {
+                    color: $color-white;
+                }
             }
         }
     }

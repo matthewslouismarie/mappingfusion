@@ -6,13 +6,9 @@ use MF\Framework\Constraints\IUploadedImageConstraint;
 use MF\Framework\Model\AbstractEntity;
 use MF\Framework\Model\BoolModel;
 use MF\Framework\Model\DateTimeModel;
-use MF\Framework\Model\IModel;
 use MF\Framework\Model\SlugModel;
 use MF\Framework\Model\StringModel;
 
-/**
- * @todo Create factory for article entities?
- */
 class ArticleModel extends AbstractEntity
 {
     public function __construct(

@@ -7,7 +7,6 @@ use MF\Controller\AccountController;
 use MF\Controller\AdminArticleController;
 use MF\Controller\AdminArticleListController;
 use MF\Controller\AdminAuthorListController;
-use MF\Controller\AdminContributionController;
 use MF\Controller\AdminPlayableController;
 use MF\Controller\AdminPlayableListController;
 use MF\Controller\AdminReviewListController;
@@ -40,7 +39,6 @@ class Kernel
         AdminArticleController::ROUTE_ID => AdminArticleController::class,
         AdminArticleListController::ROUTE_ID => AdminArticleListController::class,
         AdminAuthorListController::ROUTE_ID => AdminAuthorListController::class,
-        AdminContributionController::ROUTE_ID => AdminContributionController::class,
         AdminPlayableController::ROUTE_ID => AdminPlayableController::class,
         AdminPlayableListController::ROUTE_ID => AdminPlayableListController::class,
         AdminReviewListController::ROUTE_ID => AdminReviewListController::class,

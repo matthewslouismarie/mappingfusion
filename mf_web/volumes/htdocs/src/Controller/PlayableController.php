@@ -19,7 +19,7 @@ class PlayableController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): Response {
-        $id = $request->getQueryParams()['id'];
+        $id = $routeParams[0];
         $playable = $this->repo->find($id);
     
         return new Response(body: $this->twig->render('playable.html.twig', [

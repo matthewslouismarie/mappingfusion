@@ -28,9 +28,6 @@ class AccountController implements ControllerInterface
     ) {
     }    
 
-    /**
-     * @todo Use standard form.
-     */
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $model = (new MemberModel())->removeProperty('password')->addProperty('password', new StringModel(isNullable: true));
 
