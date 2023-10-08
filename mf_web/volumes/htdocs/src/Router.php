@@ -9,6 +9,7 @@ class Router
 {
     public function __construct(
         private Configuration $config,
+        private TwigService $twig,
     ) {
     }
 
@@ -27,5 +28,15 @@ class Router
 
     public function generateRedirect(string $routeId, $parameters = []): ResponseInterface {
         return new Response(302, ['Location' => $this->generateUrl($routeId, $parameters)]);
+    }
+
+    public function createResponse(
+        string $templatePath,
+        array $params,
+    ) {
+        return new Response(
+            status: 200,
+            body: $this->twig->render($templatePath, $params),
+        );
     }
 }
