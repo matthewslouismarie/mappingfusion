@@ -3,11 +3,11 @@ class DynamicForm
     init() {
         document.querySelectorAll('[data-type=add-dynamic-form]').forEach((addBtn) => {
             addBtn.onclick = (ev) => {
-                const clone = document.getElementById(addBtn.dataset.source).content.cloneNode(true);
-                this.formatAttributes(clone, '{{ i }}', addBtn.dataset.index);
-                clone.querySelector('[data-type=remove-dynamic-form-button]').onclick = this.onDelClick;
-                addBtn.parentNode.insertBefore(clone, addBtn);
-                addBtn.dataset.index = addBtn.dataset.index + 1;
+                const tplClone = document.getElementById(addBtn.dataset.templateId).content.cloneNode(true);
+                this.formatAttributes(tplClone, '{{ i }}', addBtn.dataset.index);
+                tplClone.querySelector('[data-type=remove-dynamic-form-button]').onclick = this.onDelClick;
+                addBtn.parentNode.insertBefore(tplClone, addBtn);
+                addBtn.dataset.index = parseInt(addBtn.dataset.index) + 1;
             };
         });
         document.querySelectorAll('[data-type=remove-dynamic-form-button]').forEach((value) => {

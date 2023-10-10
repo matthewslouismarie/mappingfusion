@@ -44,18 +44,18 @@
     
     {% if formData %}
     {% for key, link in formData.links %}
-    {{ _self.linkForm(app.linkTypes, link, formErrors.links[key] ?? [], loop.index0) }}
+    {{ _self.linkForm(app.linkTypes, loop.index0, link, formErrors.links[key] ?? []) }}
     {% endfor %}
     {% endif %}
 
-    <button class="std-button" data-type="add-dynamic-form" data-source="link-form-template" data-index="{{ null != formData ? formData.links|length : 0 }}" type="button">Ajouter un lien</button>
+    <button class="std-button" data-type="add-dynamic-form" data-template-id="link-form-template" data-index="{{ null != formData ? formData.links|length : 0 }}" type="button">Ajouter un lien</button>
 
     {% if formData %}
     {% for c in formData.contributions %}
     {{ _self.contributionForm(authors, loop.index0, c) }}
     {% endfor %}
     {% endif %}
-    <button class="std-button" data-type="add-dynamic-form" data-source="contrib-form-tpl" data-index="{{ null != formData ? formData.contributions|length : 0 }}" type="button">Ajouter un contributeur</button>
+    <button class="std-button" data-type="add-dynamic-form" data-template-id="contrib-form-tpl" data-index="{{ null != formData ? formData.contributions|length : 0 }}" type="button">Ajouter un contributeur</button>
 
     <div class="_txt -textcentered">
         <button class="std-button" type="submit">Poster</button>
@@ -87,21 +87,21 @@ contribForm.init();
 
 {% macro index(i) %}{{ i ?? '${index}' }}{% endmacro %}
 
-{% macro linkForm(linkTypes, link, linkErrors, i) %}
+{% macro linkForm(linkTypes, i = '{{ i }}', link = null, linkErrors = null) %}
 <div class="_flex -col -gaps" data-type="dynamic-form">
     <div class="form-row">
-        <label class="label" for="link-{{ _self.index(i) }}-name">Nom du lien</label>
-        <input class="input" id="link-{{ _self.index(i) }}-name" name="links[{{ _self.index(i) }}][name]"{% if link %} value="{{ link.name }}"{% endif %}>
+        <label class="label" for="link-{{ i }}-name">Nom du lien</label>
+        <input class="input" id="link-{{ i }}-name" name="links[{{ i }}][name]"{% if link %} value="{{ link.name }}"{% endif %}>
         {% if linkErrors.name is defined %}{{ errorList(linkErrors.name) }}{% endif %}
     </div>
     <div class="form-row">
-        <label class="label" for="link-{{ _self.index(i) }}-url">URL du lien</label>
-        <input class="input" id="link-{{ _self.index(i) }}-url" name="links[{{ _self.index(i) }}][url]"{% if link %} value="{{ link.url }}"{% endif %}>
+        <label class="label" for="link-{{ i }}-url">URL du lien</label>
+        <input class="input" id="link-{{ i }}-url" name="links[{{ i }}][url]"{% if link %} value="{{ link.url }}"{% endif %}>
         {% if linkErrors.url is defined %}{{ errorList(linkErrors.url) }}{% endif %}
     </div>
     <div class="form-row">
-        <label class="label" for="link-{{ _self.index(i) }}-type">Type de lien</label>
-        <select class="input" id="link-{{ _self.index(i) }}-type" name="links[{{ _self.index(i) }}][type]">
+        <label class="label" for="link-{{ i }}-type">Type de lien</label>
+        <select class="input" id="link-{{ i }}-type" name="links[{{ i }}][type]">
             {% for t in linkTypes %}
             <option value="{{ t.value }}"{% if link and link.type == t.value %} selected{% endif %}>{{ t.value }}</option>
             {% endfor %}
@@ -111,11 +111,11 @@ contribForm.init();
     <div class="form-row">
         <button class="stb-button" type="button" data-type="remove-dynamic-form-button">Supprimer le lien</button>
     </div>
-    <input class="input" name="links[{{ _self.index(i) }}][id]" type="hidden" value="{{ link.id ?? null }}">
+    <input class="input" name="links[{{ i }}][id]" type="hidden" value="{{ link.id ?? null }}">
 </div>
 {% endmacro %}
 
-{% macro contributionForm(authors, i, contribution = null, errors = null) %}
+{% macro contributionForm(authors, i = '{{ i }}', contribution = null, errors = null) %}
 <div data-type="dynamic-form">
     <div class="form-row">
         <select id="contributions[{{ i }}][author_id]" name="contributions[{{ i }}][author_id]">
