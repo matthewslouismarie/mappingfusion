@@ -63,8 +63,9 @@ class AdminArticleController implements ControllerInterface
 
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
-            $formData['id'] = $formData['id'] ?? null !== $formData['title'] ? (new Slug($formData['title'], true))->__toString() : null;
+            $formData['id'] = $formData['id'] ?? (null !== $formData['title'] ? (new Slug($formData['title'], true))->__toString() : null);
             $formData['author_id'] = $this->session->getCurrentMemberUsername();
+
             $formErrors = $this->modelValidator->validate($formData, $this->model);
     
             if (0 === count($formErrors)) {
