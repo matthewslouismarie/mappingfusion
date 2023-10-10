@@ -36,9 +36,9 @@ class MemberRepository implements IRepository
         }
     }
 
-    public function updateMember(AppObject $member): void {
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_member SET member_password = :password WHERE member_id = :id');
-        $stmt->execute($this->em->toDbValue($member));
+    public function updateMember(AppObject $member, string $oldId): void {
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_member SET member_id = ?, member_password = ? WHERE member_id = ?;');
+        $stmt->execute([$member->id, $member->password, $oldId]);
     }
 
     public function updateId(string $oldId, string $newId): void {

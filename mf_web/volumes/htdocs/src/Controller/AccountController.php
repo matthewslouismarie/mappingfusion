@@ -29,9 +29,15 @@ class AccountController implements ControllerInterface
     }    
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $model = (new MemberModel())->removeProperty('password')->addProperty('password', new StringModel(isNullable: true));
+        $model = (new MemberModel())
+            ->removeProperty('password')
+            ->addProperty('password', new StringModel(isNullable: true))
+        ;
 
-        $formData = null;
+        $formData = [
+            'id' => $this->session->getCurrentMemberUsername(),
+            'password' => null,
+        ];
         $formErrors = null;
         $success = null;
         $form = $this->formFactory->createForm($model);
@@ -42,7 +48,7 @@ class AccountController implements ControllerInterface
                 if (null !== $formData['password']) {
                     $success = 'Votre compte a été mis à jour.';
                     $formData['password'] =  password_hash($formData['password'], PASSWORD_DEFAULT);
-                    $this->repo->updateMember(new AppObject($formData));
+                    $this->repo->updateMember(new AppObject($formData), $this->session->getCurrentMemberUsername());
                     $this->session->setCurrentMemberUsername($formData['id']);
                 } else {
                     $this->repo->updateId($this->session->getCurrentMemberUsername(), $formData['id']);
@@ -50,12 +56,8 @@ class AccountController implements ControllerInterface
                     $this->session->setCurrentMemberUsername($formData['id']);
                 }
             }
-        } else {
-            $formData = [
-                'id' => $this->session->getCurrentMemberUsername(),
-                'password' => null,
-            ];
         }
+
         return new Response(body: $this->twig->render('account.html.twig', [
             'success' => $success,
             'formData' => $formData,
