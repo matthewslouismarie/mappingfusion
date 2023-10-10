@@ -34,12 +34,16 @@ class DbEntityManager
                 $appArray = [];
                 foreach ($model->getArrayDefinition() as $key => $property) {
                     if (null !== $property->getArrayDefinition()) {
+                        // echo "<br>";
+                        // var_dump($key, get_class($property), gettype($dbData));
                         $appArray[$key] = $this->toAppData($dbData, $property, $key);
                     } elseif (null !== $property->getListNodeModel()) {
                         $subPrefix = 's' === substr($key, strlen($key) - 1) ? $subPrefix = substr($key, 0, strlen($key) - 1) : $key;
 
                         $appArray[$key] = $this->toAppData($dbData[$key], $property, $subPrefix);
                     } else {
+                        // echo "<br>";
+                        // var_dump($key, get_class($property), $prefix . '_' . $key, $dbData[$prefix . '_' . $key]);
                         $appArray[$key] = $this->toAppData(
                             $dbData[$prefix . '_' . $key],
                             $property,
@@ -80,7 +84,10 @@ class DbEntityManager
             }
         }
 
-        throw new InvalidArgumentException('$dbData is not of any type supported by the model.');
+        throw new InvalidArgumentException(
+            '$dbData is not of any type supported by the "' . get_class($model) . "\" with prefix \"{$prefix}\".\n" .
+            var_export($dbData, true)
+        );
     }
 
     /**
