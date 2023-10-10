@@ -36,6 +36,10 @@ class TemplateHelper
         return $date->format('Y-M-D');
     }
 
+    public function getHomeUrl(): string {
+        return $this->config->getSetting('homeUrl');
+    }
+
     public function getImages(string $text): array {
         $foundImages = [];
         foreach ($this->file->getUploadedImages() as $image) {
