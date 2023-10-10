@@ -126,7 +126,7 @@ class ArticleRepository implements IRepository
     }
 
     public function findFeatured(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE article_is_featured = 1;');
+        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE article_is_featured = 1 ORDER BY article_last_update_date_time DESC;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = $this->em->toAppData($article, $this->model, 'article');
