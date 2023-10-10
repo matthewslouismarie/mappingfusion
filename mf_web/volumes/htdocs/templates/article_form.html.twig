@@ -46,6 +46,11 @@
         <label class="label" for="is-featured">Mettre à la une</label>
         {% if formErrors %}{{ errorList( formErrors.is_featured ?? null) }}{% endif %}
     </div>
+    <div class="form-row -checkbox">
+        <input class="input" id="is-published" name="is_published" type="checkbox"{% if formData and formData.is_published %} checked{% endif %}>
+        <label class="label" for="is-published">Publier</label>
+        {% if formErrors %}{{ errorList( formErrors.is_published ?? null) }}{% endif %}
+    </div>
     <div class="form-row">
         <label class="label" for="p-content">Contenu de l’article</label>
         <textarea class="input -textarea" id="p-content" name="body" required>{{ formData.body ?? null }}</textarea>

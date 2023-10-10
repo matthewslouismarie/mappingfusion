@@ -78,7 +78,7 @@ class AdminArticleController implements ControllerInterface
                 return $this->router->generateRedirect(self::ROUTE_ID, [$article->id]);
             }
         } elseif (null !== $requestedId) {
-            $formData = $this->repo->find($requestedId)?->toArray();
+            $formData = $this->repo->find($requestedId, onlyPublished: false)?->toArray();
             if (null === $formData) {
                 throw new NotFoundException();
             }

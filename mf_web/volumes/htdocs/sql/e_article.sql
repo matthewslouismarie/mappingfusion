@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS e_article (
     article_category_id VARCHAR(%1$s) NOT NULL,
     article_body TEXT NOT NULL,
     article_is_featured BOOLEAN NOT NULL,
+    article_is_published BOOLEAN NOT NULL,
     article_sub_title VARCHAR(%1$s),
     article_title VARCHAR(%1$s) NOT NULL CHECK(article_title != ''),
     article_cover_filename VARCHAR(%1$s) NOT NULL CHECK (article_cover_filename REGEXP '%3$s'),

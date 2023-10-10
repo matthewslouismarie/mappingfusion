@@ -31,7 +31,7 @@ class ArticleRepository implements IRepository
 
     public function add(AppObject $appObject): void {
         $dbArray = $this->em->toDbValue($appObject);
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article SET article_id = :id, article_author_id = :author_id, article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_sub_title = :sub_title, article_title = :title, article_cover_filename = :cover_filename;');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article SET article_id = :id, article_author_id = :author_id, article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_sub_title = :sub_title, article_title = :title, article_cover_filename = :cover_filename;');
         $stmt->execute($dbArray);
     }
 
@@ -40,9 +40,10 @@ class ArticleRepository implements IRepository
         $stmt->execute([$id]);
     }
 
-    public function find(string $id, bool $fetchPlayableContributors = false): ?AppObject {
+    public function find(string $id, bool $fetchPlayableContributors = false, bool $onlyPublished = true): ?AppObject {
+        $wherePublished = $onlyPublished ? 'AND article_is_published = 1' : '';
 
-        $stmt = $this->conn->getPdo()->prepare('SELECT v_article.*, v_playable.* FROM v_article LEFT OUTER JOIN v_playable ON v_article.playable_id = v_playable.playable_id WHERE article_id = ?;');
+        $stmt = $this->conn->getPdo()->prepare("SELECT v_article.*, v_playable.* FROM v_article LEFT OUTER JOIN v_playable ON v_article.playable_id = v_playable.playable_id WHERE article_id = ? $wherePublished;");
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
@@ -82,8 +83,10 @@ class ArticleRepository implements IRepository
         return $this->em->toAppData($data[0], new ArticleModel(new CategoryModel(), $reviewModel), 'article');
     }
 
-    public function findAll(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM v_article;')->fetchAll();
+    public function findAll(bool $onlyPublished = true): array {
+        $wherePublished = $onlyPublished ? 'WHERE article_is_published = 1' : '';
+
+        $results = $this->conn->getPdo()->query("SELECT * FROM v_article {$wherePublished};")->fetchAll();
         $entities = [];
         foreach ($results as $r) {
             $entities[] = $this->em->toAppData($r, new ArticleModel(new CategoryModel()), 'article');
@@ -94,8 +97,9 @@ class ArticleRepository implements IRepository
     /**
      * @return AppObject[]
      */
-    public function findAllReviews(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;');
+    public function findAllReviews(bool $onlyPublished = true): array {
+        $wherePublished = $onlyPublished ? 'AND article_is_published = 1' : '';
+        $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE review_id IS NOT NULL $wherePublished;");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel())), 'article');
@@ -107,7 +111,7 @@ class ArticleRepository implements IRepository
      * @return AppObject[]
      */
     public function findArticlesFrom(string $memberId): array {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_article WHERE article_author_id = ?;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_article WHERE article_is_published = 1 AND article_author_id = ?;');
         $stmt->execute([$memberId]);
         $articles = [];
         foreach ($stmt->fetchAll() as $article) {
@@ -126,7 +130,7 @@ class ArticleRepository implements IRepository
     }
 
     public function findFeatured(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE article_is_featured = 1 ORDER BY article_last_update_date_time DESC;');
+        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE article_is_featured = 1 AND article_is_published = 1 ORDER BY article_last_update_date_time DESC;');
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = $this->em->toAppData($article, $this->model, 'article');
@@ -138,8 +142,8 @@ class ArticleRepository implements IRepository
      * @return AppObject[]
      */
     public function findLastArticles(int $limit = 8, bool $onlyReviews = false): array {
-        $whereClause = $onlyReviews ? 'WHERE article_review_id IS NOT NULL' : '';
-        $results = $this->conn->getPdo()->query("SELECT * FROM v_article {$whereClause} ORDER BY article_last_update_date_time DESC LIMIT {$limit};");
+        $whereClause = $onlyReviews ? 'AND article_review_id IS NOT NULL' : '';
+        $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE article_is_published = 1 {$whereClause} ORDER BY article_last_update_date_time DESC LIMIT {$limit};");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel()), 'article');
@@ -151,7 +155,7 @@ class ArticleRepository implements IRepository
      * @return AppObject[]
      */
     public function findLastReviews(): array {
-        $results = $this->conn->getPdo()->query("SELECT *, playable_game_id AS game_id, playable_game_name AS game_name, playable_game_release_date_time AS game_release_date_time, NULL AS game_game_id FROM v_article WHERE review_id IS NOT NULL ORDER BY article_last_update_date_time DESC LIMIT 4;");
+        $results = $this->conn->getPdo()->query("SELECT *, playable_game_id AS game_id, playable_game_name AS game_name, playable_game_release_date_time AS game_release_date_time, NULL AS game_game_id FROM v_article WHERE article_is_published = 1 AND review_id IS NOT NULL ORDER BY article_last_update_date_time DESC LIMIT 4;");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel(new PlayableModel()))), 'article');
@@ -171,7 +175,7 @@ class ArticleRepository implements IRepository
      * @return AppObject[]
      */
     public function findRelatedArticles(AppObject $article): array {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_article WHERE article_category_id = :category_id AND article_id != :id;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_article WHERE article_is_published = 1 AND article_category_id = :category_id AND article_id != :id;');
         $stmt->execute(['category_id' => $article->category_id, 'id' => $article->id]);
         $relatedArticles = [];
         foreach ($stmt->fetchAll() as $row) {
@@ -182,12 +186,13 @@ class ArticleRepository implements IRepository
 
     public function updateArticle(AppObject $appObject, ?string $previousId = null): void {
         $dbArray = $this->em->toDbValue($appObject);
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_id = ?, article_category_id = ?, article_body = ?, article_is_featured = ?, article_title = ?, article_sub_title = ?, article_cover_filename = ?, article_last_update_date_time = NOW() WHERE article_id = ?;');
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_id = ?, article_category_id = ?, article_body = ?, article_is_featured = ?, article_is_published = ?, article_title = ?, article_sub_title = ?, article_cover_filename = ?, article_last_update_date_time = NOW() WHERE article_id = ?;');
         $parameters = [
             $dbArray['id'],
             $dbArray['category_id'],
             $dbArray['body'],
             $dbArray['is_featured'],
+            $dbArray['is_published'],
             $dbArray['title'],
             $dbArray['sub_title'],
             $dbArray['cover_filename'],

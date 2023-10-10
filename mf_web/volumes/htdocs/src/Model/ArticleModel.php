@@ -21,6 +21,7 @@ class ArticleModel extends AbstractEntity
             'category_id' => new SlugModel(),
             'body' => new StringModel([]),
             'is_featured' => new BoolModel(),
+            'is_published' => new BoolModel(),
             'title' => new StringModel(),
             'sub_title' => new StringModel(isNullable: true),
             'cover_filename' => new StringModel([new class implements IUploadedImageConstraint {}]),

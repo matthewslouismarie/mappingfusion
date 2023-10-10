@@ -21,7 +21,7 @@ class AdminArticleListController implements ControllerInterface
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
         return new Response(body: $this->twig->render('admin_article_list.html.twig', [
-            'articles' => $this->repo->findAll(),
+            'articles' => $this->repo->findAll(false),
         ]));
     }
 
