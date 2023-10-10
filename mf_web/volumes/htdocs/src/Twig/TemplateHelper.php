@@ -11,6 +11,7 @@ use MF\Framework\Form\IFormExtractor;
 use MF\Session\SessionManager;
 use MF\MarkdownService;
 use MF\Router;
+use UnexpectedValueException;
 
 class TemplateHelper
 {
@@ -45,9 +46,9 @@ class TemplateHelper
         return $foundImages;
     }
 
-    public function getImgAttr(string $alt, string $filename, bool $isResource = true, ?int $width = null, ?int $height = null): string {
+    public function getImgAttr(string $alt, string $filename, bool $isResource = true, ?int $width = null, ?int $height = null, bool $smallImg = false): string {
 
-        $srcValue = $isResource ? $this->getResource($filename) : $this->getAsset($filename);
+        $srcValue = $isResource ? ($smallImg ? $this->getSmallImage($filename) : $this->getResource($filename)) : $this->getAsset($filename);
         $attr = "alt=\"{$alt}\" src=\"{$srcValue}\"";
 
         $filePathOnDisk =  realpath(dirname(__FILE__) . '/../../public/' . ($isResource ? 'uploaded/' : '') . $filename);
@@ -95,6 +96,17 @@ class TemplateHelper
 
     public function getSession(): SessionManager {
         return $this->session;
+    }
+    
+    public function getSmallImage(string $filename): string {
+        $parts = explode('.', $filename);
+        if (count($parts) < 2) {
+            throw new UnexpectedValueException('There should be at least one dot in the filename (preceding the extension).');
+        }
+        $fileExtension = $parts[count($parts) - 1];
+        $filenameNoExtension = substr($filename, 0, strlen($filename) - strlen($fileExtension) - 1);
+        $publicUrl = $this->getPublicUrl();
+        return "$publicUrl/uploaded/$filenameNoExtension.small.$fileExtension";
     }
 
     public function isDev(): bool {

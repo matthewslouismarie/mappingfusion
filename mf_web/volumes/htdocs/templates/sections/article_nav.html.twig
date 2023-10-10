@@ -35,7 +35,7 @@
             {% if loop.index0 < 3 %}
             <li class="item">
                 <a class="link _gap -gap-row-xs" href="{{ app.router.generateUrl('article', [r.id]) }}">
-                    <img class="image" {{ app.imgAttr(r.title, r.cover_filename, true, null, 110)|raw }}>
+                    <img class="image" {{ app.imgAttr(r.title, r.cover_filename, true, null, 110, true)|raw }}>
                     <div class="_txt -txts">{{ r.title }}</div>
                 </a>
             </li>

@@ -28,7 +28,7 @@
         </div>
         <div class="glide__bullets" data-glide-el="controls[nav]">
             {% for a in featured_articles %}
-            <button aria-label="{{ featured_articles[loop.index0].title }}" class="glide__bullet" data-glide-dir="={{ loop.index0 }}" style="background-image: url('{{ app.resource(featured_articles[loop.index0].cover_filename) }}');" type="button">
+            <button aria-label="{{ featured_articles[loop.index0].title }}" class="glide__bullet" data-glide-dir="={{ loop.index0 }}" style="background-image: url('{{ app.smallImage(featured_articles[loop.index0].cover_filename) }}');" type="button">
                 <div class="image" ></div>
             </button>
             {% endfor %}
@@ -47,7 +47,7 @@
             <ul class="list">
                 {% for r in last_reviews %}
                 <li class="item">
-                    <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.resource(r.cover_filename) }}');"{% endif %} href="{{ app.router.generateUrl('article', [r.id]) }}">
+                    <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.smallImage(r.cover_filename) }}');"{% endif %} href="{{ app.router.generateUrl('article', [r.id]) }}">
                         <div class="content">
                             <span class="playable _txt -txtl">{{ r.review.playable.name }}</span>
                             {% if r.review.playable.game is defined %}<span class="std-badge _txt -txts">{{ r.review.playable.game.name }}</span>{% endif %}
