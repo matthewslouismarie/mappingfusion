@@ -62,8 +62,8 @@ class FileTransformer implements IFormTransformer
             $smallImgDestinationPath = "{$this->destinationFolder}/{$uploadedFileName}.small.webp";
             if (!file_exists($destinationPath)) {
                 if('image/webp' !== $file->getClientMediaType()) {
-                    $gdImage = imagecreatefromstring($file->getStream());
-                    imagewebp($gdImage, $destinationPath, 95);
+                    $streamGdImg = imagecreatefromstring($file->getStream());
+                    imagewebp($streamGdImg, $destinationPath, 95);
                 } else {
                     $file->moveTo($destinationPath);
                 }
@@ -74,7 +74,7 @@ class FileTransformer implements IFormTransformer
 
                 list($newWidth, $newHeight) = [round($width * $scale), round($height * $scale)];
 
-
+                $gdImage = imagecreatefromwebp($destinationPath);
                 $smallImg = imagecreatetruecolor($newWidth, $newHeight);
 
                 imagecopyresized($smallImg, $gdImage, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
