@@ -24,6 +24,7 @@ class PlayableRepository implements IRepository
     public function add(AppObject $playable): void {
         $dbArray = $this->em->toDbValue($playable);
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:id, :name, :release_date_time, :game_id);');
+        var_dump($dbArray);
         $stmt->execute($dbArray);
     }
 

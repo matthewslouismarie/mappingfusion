@@ -27,8 +27,8 @@
             <select class="input" id="game-id" name="game_id">
                 <option value=""></option>
                 {% for p in playables %}
-                {% if formData and p.id != formData.id %}
-                <option value="{{ p.id }}"{% if formData.game_id == p.id %} selected{% endif %}>{{ p.name }}</option>
+                {% if formData == null or p.id != formData.id %}
+                <option value="{{ p.id }}"{% if formData and formData.game_id == p.id %} selected{% endif %}>{{ p.name }}</option>
                 {% endif %}
                 {% endfor %}
             </select>
@@ -36,8 +36,8 @@
         </div>
 
         <div class="form-row">
-            <label class="label" for="release-date-time">Date de publication (optionnel)</label>
-            <input class="input" id="release-date-time" name="release_date_time" type="datetime-local" value="{{ formData.release_date_time.format('Y-m-d H:i') ?? null }}">
+            <label class="label" for="release-date-time">Date de publication</label>
+            <input class="input" id="release-date-time" name="release_date_time" required type="datetime-local" value="{{ formData.release_date_time.format('Y-m-d H:i') ?? null }}">
             {{ errorList(formErrors.release_date_time ?? null )}}
         </div>
     </div>
