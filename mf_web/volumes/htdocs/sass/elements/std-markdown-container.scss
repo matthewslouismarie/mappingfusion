@@ -15,4 +15,40 @@
         font-style: italic;
         background-color: $color-blue-0;
     }
+
+    a {
+        text-decoration: underline;
+        font-style: italic;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+
+    h1 {
+        margin-bottom: $gap-l2;
+        font-size: $txt-font-size-xl;
+    }
+
+    h2 {
+        margin-bottom: $gap-l;
+        font-size: $txt-font-size-l2;
+    }
+
+    h3,
+    h4,
+    h5 {
+        margin-bottom: $gap-m;
+        font-size: $txt-font-size-l;
+    }
+
+    p,
+    li {
+        margin-bottom: $gap-s2;
+    }
+
+    ol,
+    ul {
+        padding-left: $gap-m;
+    }
 }
