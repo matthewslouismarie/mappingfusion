@@ -15,4 +15,12 @@
             color: $color-blue-1;
         }
     }
+
+    &.-allblue {
+        > .item {
+            > .def {
+                color: $color-blue-0;
+            }
+        }
+    }
 }

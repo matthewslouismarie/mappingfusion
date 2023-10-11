@@ -41,11 +41,12 @@
         justify-content: center;
     
         > .glide__bullet {
-            border: 5px solid transparent;
             transform: translateY(-100%);
-            width: 118px;
-            height: 46px;
             z-index: 2;
+
+            border: 5px solid transparent;
+            width: 180px;
+            height: 102px;
 
             background-clip: content-box;
             background-size: cover;

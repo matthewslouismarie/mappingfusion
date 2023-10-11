@@ -17,6 +17,10 @@
         font-weight: $txt-weight-semi-bold;
         background-color: #00000099;
         transition: background-color 0.2s ease;
+
+        > .playable {
+            text-align: center;
+        }
     }
 
     &:hover {

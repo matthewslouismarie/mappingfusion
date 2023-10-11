@@ -22,7 +22,9 @@
         }
 
         &.-img {
-            padding-left: 0;
+            display: inline-flex;
+            gap: 32px;
+            justify-content: center;
         }
     }
 }
