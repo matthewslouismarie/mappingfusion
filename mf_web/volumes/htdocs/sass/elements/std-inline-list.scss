@@ -1,9 +1,9 @@
 .std-inline-list {
     display: flex;
-    flex-wrap: wrap;
     gap: 22px;
     justify-content: center;
-    list-style-type: "-";
+    text-align: center;
+    flex-direction: column;
 
     > .item {
         padding-left: 16px;

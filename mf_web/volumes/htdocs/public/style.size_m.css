@@ -63,6 +63,11 @@
 .std-article > .columns > .content > .glide, .std-article > .columns > .content > .sectioncontent, .std-article > .columns > .content > .intro > .sectioncontent {
   width: 70dvw;
 }
+.std-inline-list {
+  list-style-type: "-";
+  flex-wrap: wrap;
+  flex-direction: row;
+}
 .std-metadata {
   flex-direction: row;
   flex-wrap: wrap;
