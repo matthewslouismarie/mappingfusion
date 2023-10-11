@@ -51,6 +51,7 @@
             background-clip: content-box;
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
 
             &.glide__bullet--active {
                 border-color: #3d9cce;
