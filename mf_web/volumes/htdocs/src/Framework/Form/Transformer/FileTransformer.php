@@ -2,6 +2,8 @@
 
 namespace MF\Framework\Form\Transformer;
 
+use GdImage;
+use MF\Framework\DataStructures\Filename;
 use MF\Framework\Form\Exceptions\IllegalUserInputException;
 use MF\Framework\Form\Exceptions\MissingInputException;
 use Psr\Http\Message\UploadedFileInterface;
@@ -59,7 +61,6 @@ class FileTransformer implements IFormTransformer
         if (0 === $file->getError()) {
             $uploadedFileName = pathinfo($file->getClientFilename(), PATHINFO_FILENAME);
             $destinationPath = "{$this->destinationFolder}/{$uploadedFileName}.webp";
-            $smallImgDestinationPath = "{$this->destinationFolder}/{$uploadedFileName}.small.webp";
             if (!file_exists($destinationPath)) {
                 if('image/webp' !== $file->getClientMediaType()) {
                     $streamGdImg = imagecreatefromstring($file->getStream());
@@ -68,17 +69,8 @@ class FileTransformer implements IFormTransformer
                     $file->moveTo($destinationPath);
                 }
 
-                list($width, $height) = getimagesize($destinationPath);
-
-                $scale = max(316 / $width, 208 / $height);
-
-                list($newWidth, $newHeight) = [round($width * $scale), round($height * $scale)];
-
-                $gdImage = imagecreatefromwebp($destinationPath);
-                $smallImg = imagecreatetruecolor($newWidth, $newHeight);
-
-                imagecopyresized($smallImg, $gdImage, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-                imagewebp($smallImg, $smallImgDestinationPath, 75);
+                $this->createThumbnail(new Filename($destinationPath), 'small', 316, 208, 75);
+                $this->createThumbnail(new Filename($destinationPath), 'medium', 720, 502, 85);
             }
             return pathinfo($destinationPath)['basename'];
         } elseif (4 === $file->getError()) {
@@ -86,5 +78,25 @@ class FileTransformer implements IFormTransformer
         } else {
             throw new UnexpectedValueException();
         }
+    }
+
+    private function createThumbnail(Filename $originalPath, string $suffix, int $minWidth, int $minHeight, int $quality) {
+        $originalImg = imagecreatefromwebp($originalPath);
+
+        list($width, $height) = [imagesx($originalImg), imagesy($originalImg)];
+
+        $scale = max($minWidth / $width, $minHeight / $height);
+
+        list($newWidth, $newHeight) = [round($width * $scale), round($height * $scale)];
+
+        $thumbnail = imagecreatetruecolor($newWidth, $newHeight);
+
+        imagecopyresized($thumbnail, $originalImg, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+        imagewebp(
+            $thumbnail,
+            $originalPath->getFilenameNoExtension() . '.' . $suffix . '.' . $originalPath->getExtension(),
+            $quality,
+        );
     }
 }

@@ -5,6 +5,7 @@ namespace MF\Twig;
 use DateTimeInterface;
 use MF\Configuration;
 use MF\Enum\LinkType;
+use MF\Framework\DataStructures\Filename;
 use MF\Framework\Form\FormFactory;
 use MF\Framework\File\FileService;
 use MF\Framework\Form\IFormExtractor;
@@ -103,14 +104,19 @@ class TemplateHelper
     }
     
     public function getSmallImage(string $filename): string {
-        $parts = explode('.', $filename);
-        if (count($parts) < 2) {
-            throw new UnexpectedValueException('There should be at least one dot in the filename (preceding the extension).');
-        }
-        $fileExtension = $parts[count($parts) - 1];
-        $filenameNoExtension = substr($filename, 0, strlen($filename) - strlen($fileExtension) - 1);
+        $filenameObject = new Filename($filename);
+        $fileExtension = $filenameObject->getExtension();
+        $filenameNoExtension = $filenameObject->getFilenameNoExtension();
         $publicUrl = $this->getPublicUrl();
         return "$publicUrl/uploaded/$filenameNoExtension.small.$fileExtension";
+    }
+    
+    public function getMediumImage(string $filename): string {
+        $filenameObject = new Filename($filename);
+        $fileExtension = $filenameObject->getExtension();
+        $filenameNoExtension = $filenameObject->getFilenameNoExtension();
+        $publicUrl = $this->getPublicUrl();
+        return "$publicUrl/uploaded/$filenameNoExtension.medium.$fileExtension";
     }
 
     public function isDev(): bool {

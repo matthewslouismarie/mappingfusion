@@ -1,0 +1,33 @@
+<?php
+
+namespace MF\Framework\DataStructures;
+
+use Stringable;
+
+class Filename implements Stringable
+{
+    private string $extension;
+
+    private string $filenameNoExtension;
+
+    public function __construct(string $filename) {
+        $parts = explode('.', $filename);
+        if (count($parts) < 2) {
+            throw new UnexpectedValueException('There should be at least one dot in the filename (preceding the extension).');
+        }
+        $this->extension = $parts[count($parts) - 1];
+        $this->filenameNoExtension = substr($filename, 0, strlen($filename) - strlen($this->extension) - 1);
+    }
+
+    public function getExtension(): string {
+        return $this->extension;
+    }
+
+    public function getFilenameNoExtension(): string {
+        return $this->filenameNoExtension;
+    }
+
+    public function __toString(): string {
+        return $this->filenameNoExtension . '.' . $this->extension;
+    }
+}
