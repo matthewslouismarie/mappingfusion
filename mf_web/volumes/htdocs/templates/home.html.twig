@@ -17,8 +17,8 @@
         <div class="glide__track" data-glide-el="track">
             <ul class="glide__slides">
             {% for a in featured_articles %}
-                <li class="glide__slide">
-                    <a class="link _txt -txtxl" href="{{ app.router.generateUrl('article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.cover_filename) }});">
+                <li class="glide__slide" itemscope itemtype="https://schema.org/Article">
+                    <a class="link _txt -txtxl" href="{{ app.router.generateUrl('article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.cover_filename) }});" itemprop="url">
                         {% if a.sub_title %}<div class="sub-title">{{ app.mk.format(a.sub_title)|raw }}</div>{% endif %}
                         <div class="title">{{ app.mk.format(a.title)|raw }}</div>
                     </a>
@@ -46,10 +46,10 @@
             </div>
             <ul class="list">
                 {% for r in last_reviews %}
-                <li class="item">
-                    <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.smallImage(r.cover_filename) }}');"{% endif %} href="{{ app.router.generateUrl('article', [r.id]) }}">
+                <li class="item" itemscope itemtype="https://schema.org/Article">
+                    <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.smallImage(r.cover_filename) }}');"{% endif %} href="{{ app.router.generateUrl('article', [r.id]) }}" itemprop="url">
                         <div class="content">
-                            <span class="playable _txt -txtl">{{ r.review.playable.name }}</span>
+                            <span class="playable _txt -txtl" itemprop="about">{{ r.review.playable.name }}</span>
                             {% if r.review.playable.game is defined %}<span class="std-badge _txt -txts">{{ r.review.playable.game.name }}</span>{% endif %}
                         </div>
                     </a>

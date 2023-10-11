@@ -4,8 +4,8 @@
 
 {% block bodyContent %}
 <article itemscope itemtype="https://schema.org/VideoGame">
-    <a href="{{ app.router.generateUrl('jeu', playable.id) }}" itemtype="url">
-        <h1 itemtype="name">{{ playable.name }}</h1>
+    <a href="{{ app.router.generateUrl('jeu', playable.id) }}" itemprop="url">
+        <h1 itemprop="name">{{ playable.name }}</h1>
     </a>
 </article>
 {# <dl>

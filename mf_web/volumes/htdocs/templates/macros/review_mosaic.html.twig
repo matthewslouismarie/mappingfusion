@@ -1,7 +1,8 @@
 {% macro reviewMosaic(article, app) %}
-<a class="review-mosaic" href="{{ app.router.generateUrl('article', {id: article.id}) }}">
+<a class="review-mosaic" href="{{ app.router.generateUrl('article', {id: article.id}) }}" itemscope itemtype="https://schema.org/Article">
+    <link itemprop="url" href="{{ app.router.generateUrl('article', {id: article.id}) }}">
     <div class="img"{% if article.cover_filename %} style="background-image: url('{{ app.smallImage(article.cover_filename) }}');"{% endif %}>
-        <em class="std-badge">{{ article.review.playable.name }}</em>
+        <em class="std-badge" itemprop="about">{{ article.review.playable.name }}</em>
     </div>
     <div class="text">
         <div class="left">

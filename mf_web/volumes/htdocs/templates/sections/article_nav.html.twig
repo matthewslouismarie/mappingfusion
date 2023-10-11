@@ -33,10 +33,10 @@
         <ul class="list _gap -gap-col-xs -gap-row-s2">
             {% for r in relatedArticles %}
             {% if loop.index0 < 3 %}
-            <li class="item">
-                <a class="link _gap -gap-row-xs" href="{{ app.router.generateUrl('article', [r.id]) }}">
-                    <img class="image" {{ app.imgAttr(r.title, r.cover_filename, true, null, 110, true)|raw }}>
-                    <div class="_txt -txts">{{ r.title }}</div>
+            <li class="item" itemscope itemtype="https://schema.org/Article">
+                <a class="link _gap -gap-row-xs" href="{{ app.router.generateUrl('article', [r.id]) }}" itemtype="url">
+                    <img class="image" {{ app.imgAttr(r.title, r.cover_filename, true, null, 110, true)|raw }} itemprop="image">
+                    <div class="_txt -txts" itemprop="headline">{{ r.title }}</div>
                 </a>
             </li>
             {% endif %}

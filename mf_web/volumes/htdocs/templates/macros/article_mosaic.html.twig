@@ -1,10 +1,11 @@
 {% macro articleMosaic(a, app) %}
-<a class="article-mosaic _gap -gap-col-s" href="{{ app.router.generateUrl('article', {id: a.id}) }}">
+<a class="article-mosaic _gap -gap-col-s" href="{{ app.router.generateUrl('article', {id: a.id}) }}" itemscope itemtype="https://schema.org/Article">
+    <link itemprop="url" href="{{ app.router.generateUrl('article', {id: a.id}) }}">
     <div class="left"{% if a.cover_filename %} style="background-image: url('{{ app.smallImage(a.cover_filename) }}');"{% endif %}>
         <em class="std-badge _txt -txts">{{ a.category.name }}</em>
     </div>
     <div class="right _gap -gap-row-xs">
-        <h3 class="title _txt -txtm">{{ app.mk.getText(a.title) }}</h3>
+        <h3 class="title _txt -txtm" itemprop="headline">{{ a.title }}</h3>
         <p class="date _txt -txts">Le {{ a.last_update_date_time.format('d/m/y') }}</p>
         <div class="excerpt _txt -txts">
             {{ app.shorten(app.mk.getText(a.body), 80, '…') }}

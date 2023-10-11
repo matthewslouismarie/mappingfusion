@@ -63,7 +63,9 @@
                             </div>
                             <div class="item _flex _gap -gap-col-xs">
                                 <dt class="term">Date de sortie :</dt>
-                                <dd class="def" itemprop="datePublished">{{ article.review.playable.release_date_time|date('Y') }}</dd>
+                                <dd class="def">
+                                    <time itemprop="datePublished" datetime="{{ article.review.playable.release_date_time|date('Y-m-d\\TH:i') }}">{{ article.review.playable.release_date_time|date('Y') }}</time>
+                                </dd>
                             </div>
                             {% if article.review.playable.game %}
                             <div class="item _flex _gap -gap-col-xs">
@@ -134,11 +136,15 @@
                     <dl class="std-metadata _txt -txtm">
                         <div class="item _flex _gap -gap-col-xs">
                             <dt class="term">Édité le :</dt>
-                            <dd class="def" itemprop="dateModified">{{ article.last_update_date_time|date('Y-m-d H:i:s') }}</dd>
+                            <dd class="def">
+                                <time itemprop="dateModified" datetime="{{ article.last_update_date_time|date('Y-m-d\\TH:i') }}">{{ article.last_update_date_time|date('Y-m-d H:i:s') }}</time>
+                            </dd>
                         </div>
                         <div class="item _flex _gap -gap-col-xs">
                             <dt class="term">Publié le :</dt>
-                            <dd class="def" itemprop="dateCreated">{{ article.creation_date_time|date('Y-m-d H:i:s') }}</dd>
+                            <dd class="def">
+                                <time itemprop="dateCreated" datetime="{{ article.creation_date_time|date('Y-m-d\\TH:i') }}">{{ article.creation_date_time|date('Y-m-d H:i:s') }}</time>
+                            </dd>
                         </div>
                         <div class="item _flex _gap -gap-col-xs">
                             <dt class="term">Rédigé par :</dt>
