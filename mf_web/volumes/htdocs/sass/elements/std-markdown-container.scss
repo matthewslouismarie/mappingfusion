@@ -6,10 +6,12 @@
     }
 
     img + em {
-        display: inline-block;
+        display: block;
+        width: fit-content;
         max-width: 50%;
         padding: $gap-s;
-        transform: translateX(5%) translateY(-50%);
+        transform: translateX($gap-s2) translateY(-$gap-s2 * 2);
+        margin-bottom: -$gap-s * 3;
 
         font-weight: $txt-weight-regular;
         font-style: italic;
@@ -43,7 +45,9 @@
     }
 
     p,
-    li {
+    li,
+    ol,
+    img {
         margin-bottom: $gap-s2;
     }
 
