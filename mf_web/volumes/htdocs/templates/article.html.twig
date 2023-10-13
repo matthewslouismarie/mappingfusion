@@ -93,7 +93,7 @@
                     itemtype={% if article.review is defined %}"https://schema.org/ReviewNewsArticle"{% else %}"https://schema.org/NewsArticle"{% endif %}
                     itemref="{% if article.review is defined %}review-box {% endif %}article-cover article-metadata"
                 >
-                    <meta itemprop="itemReviewed" itemscope itemtype="https://schema.org/VideoGame" itemref="playable-object playable-links">
+                    {% if article.review is defined %}<meta itemprop="itemReviewed" itemscope itemtype="https://schema.org/VideoGame" itemref="playable-object playable-links">{% endif %}
                     <div class="std-markdown-container" itemprop="articleBody">
                         {{ app.mk.formatArticleBody(article.body).main|raw }}
                     </div>
