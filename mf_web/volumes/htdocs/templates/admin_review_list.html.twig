@@ -2,6 +2,8 @@
 
 {% block title %}Liste des tests{% endblock %}
 
+{% block index %}<meta name="robots" content="noindex">{% endblock %}
+
 {% block bodyContent %}
 <a class="link" href="{{ app.router.generateUrl('gestion-de-tests') }}">Créer un nouveau test</a>
 

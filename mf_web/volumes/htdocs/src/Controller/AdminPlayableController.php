@@ -94,7 +94,7 @@ class AdminPlayableController implements ControllerInterface
         }
 
         return new Response(
-            body: $this->twig->render('playable_form.html.twig', [
+            body: $this->twig->render('admin_playable_form.html.twig', [
                 'authors' => $this->authorRepo->findAll(),
                 'formData' => $formData,
                 'formErrors' => $formErrors,

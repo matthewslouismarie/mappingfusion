@@ -11,6 +11,8 @@
 
 {% block title %}{{ article.title }}{% endblock %}
 
+{% block description %}{{ app.shorten(app.mk.getText(article.body), 265, '…') }}{% endblock %}
+
 {% block body %}
 {# @todo micro data attributes #}
 <div class="page-article">
@@ -133,7 +135,7 @@
 
 
                 <div class="sectioncontent _padding -padding-hori-s -padding-vert-l" id="article-metadata">
-                    <dl class="std-metadata -allblue _txt -txts">
+                    <dl class="std-metadata _txt -txts">
                         <div class="item _flex _gap -gap-col-xs">
                             <dt class="term">Édité le :</dt>
                             <dd class="def">
@@ -160,7 +162,7 @@
         </div>
     </div>
 
-    {% include 'sections/social-medias-all.html.twig' %}
+    {% include 'sections/social-networks-all.html.twig' %}
 
     {% include 'sections/beginners-all.html.twig' %}
 </div>

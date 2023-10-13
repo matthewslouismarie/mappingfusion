@@ -2,6 +2,8 @@
 
 {% block title %}Gérer les articles{% endblock %}
 
+{% block index %}<meta name="robots" content="noindex">{% endblock %}
+
 {% block bodyContent %}
 <h1>Gestion des articles</h1>
 <a class="link" href="{{ app.router.generateUrl('manage-article') }}">Créer un nouvel article</a>

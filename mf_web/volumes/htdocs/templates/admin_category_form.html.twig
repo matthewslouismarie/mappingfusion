@@ -5,6 +5,8 @@
 
 {% block title %}Édition de catégorie{% endblock %}
 
+{% block index %}<meta name="robots" content="noindex">{% endblock %}
+
 {% block bodyContent %}
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post"{% if app.dev %} novalidate{% endif %}>
     <div class="form-row">

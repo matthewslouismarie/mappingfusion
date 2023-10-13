@@ -62,7 +62,7 @@ class AdminCategoryController implements ControllerInterface
             }
         }
 
-        return new Response(body: $this->twig->render('category_form.html.twig', [
+        return new Response(body: $this->twig->render('admin_category_form.html.twig', [
             'formData' => $formData,
             'formErrors' => $formErrors,
         ]));

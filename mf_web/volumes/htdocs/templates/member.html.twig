@@ -5,6 +5,8 @@
 
 {% block title %}{{ member.id }}{% endblock %}
 
+{% block description %}Profil du membre {{ member.id }}{% endblock %}
+
 {% block bodyContent %}
 <article itemscope itemid="{{ member.id }}" itemtype="https://schema.org/Person">
     <a href="{{ app.router.generateUrl('membre', [member.id]) }}" itemprop="url">

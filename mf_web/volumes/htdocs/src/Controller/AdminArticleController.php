@@ -84,7 +84,7 @@ class AdminArticleController implements ControllerInterface
             }
         }
 
-        return new Response(body: $this->twig->render('article_form.html.twig', [
+        return new Response(body: $this->twig->render('admin_article_form.html.twig', [
             'categories' => $this->catRepo->findAll(),
             'formData' => $formData,
             'formErrors' => $formErrors,

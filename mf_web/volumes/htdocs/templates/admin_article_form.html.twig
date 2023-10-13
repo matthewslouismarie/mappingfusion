@@ -5,6 +5,8 @@
 
 {% block title %}{{ formData ? 'Édition d’article' ?? 'Nouvel article' }}{% endblock %}
 
+{% block index %}<meta name="robots" content="noindex">{% endblock %}
+
 {% block bodyContent %}
 <h1>{{ formData ? 'Édition d’article' ?? 'Nouvel article' }}</h1>
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post"{% if app.isDev %} novalidate{% endif %}>

@@ -2,6 +2,8 @@
 
 {% block title %}Gérer les mods{% endblock %}
 
+{% block index %}<meta name="robots" content="noindex">{% endblock %}
+
 {% block bodyContent %}
 <a class="link" href="{{ app.router.generateUrl('manage_playable') }}">Créer un nouveau mod</a>
 <ul>

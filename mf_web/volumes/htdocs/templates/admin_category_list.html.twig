@@ -2,6 +2,8 @@
 
 {% block title %}Liste des catégories{% endblock %}
 
+{% block index %}<meta name="robots" content="noindex">{% endblock %}
+
 {% block bodyContent %}
 <a class="link" href="{{ app.router.generateUrl('manage_category') }}">Créer une nouvelle catégorie</a>
 <ul>

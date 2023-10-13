@@ -61,7 +61,7 @@ class ReviewController implements ControllerInterface
             }
         }
 
-        return new Response(body: $this->twig->render('review_form.html.twig', [
+        return new Response(body: $this->twig->render('admin_review_form.html.twig', [
             'formData' => $formData,
             'formErrors' => $formErrors,
             'playables' => $this->playableRepo->findAll(),

@@ -70,7 +70,7 @@ class AdminAuthorController implements ControllerInterface
         }
 
         return new Response(
-            body: $this->twig->render('author_form.html.twig', [
+            body: $this->twig->render('admin_author_form.html.twig', [
                 'formData' => $formData,
                 'formErrors' => $formErrors,
             ])
