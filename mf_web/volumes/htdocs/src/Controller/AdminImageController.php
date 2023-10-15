@@ -4,6 +4,7 @@ namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
 use MF\Enum\Clearance;
+use MF\Framework\DataStructures\Filename;
 use MF\Framework\Form\Transformer\FileTransformer;
 use MF\TwigService;
 use Psr\Http\Message\ServerRequestInterface;
@@ -27,7 +28,17 @@ class AdminImageController implements ControllerInterface
         if ('POST' === $request->getMethod()) {
             $imgToDelete = $request->getParsedBody()['image-to-delete'] ?? null;
             if (null !== $imgToDelete) {
-                $deletion = unlink($this->uploaded . $imgToDelete);
+                $filename = new Filename($imgToDelete);
+                $deletion = unlink($this->uploaded . $filename->__toString());
+
+                $smallImgFilename = $this->uploaded . $filename->getFilenameNoExtension() . '.small.webp';
+                if (file_exists($smallImgFilename)) {
+                    unlink($smallImgFilename);
+                }
+                $mediumImgFilename = $this->uploaded . $filename->getFilenameNoExtension() . '.medium.webp';
+                if (file_exists($mediumImgFilename)) {
+                    unlink($mediumImgFilename);
+                }
                 if ($deletion) {
                     $successes[] = 'Le fichier a été supprimé.';
                 }
