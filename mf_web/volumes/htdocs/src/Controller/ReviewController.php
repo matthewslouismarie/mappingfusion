@@ -47,12 +47,12 @@ class ReviewController implements ControllerInterface
             if (0 === count($formErrors)) {
                 $review = new AppObject($formData);
                 if (null === $requestedId) {
-                    $id = $this->repo->add($review);
+                    $requestedId = $this->repo->add($review);
                 } else {
                     $this->repo->update($review);
                 }
 
-                return $this->router->generateRedirect(self::ROUTE_ID, [$id]);
+                return $this->router->generateRedirect(self::ROUTE_ID, [$requestedId]);
             }
         } elseif (null !== $requestedId) {
             $formData = $this->repo->find($requestedId)?->toArray();
