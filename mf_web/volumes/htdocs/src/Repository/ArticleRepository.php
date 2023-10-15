@@ -186,9 +186,10 @@ class ArticleRepository implements IRepository
 
     public function updateArticle(AppObject $appObject, ?string $previousId = null): void {
         $dbArray = $this->em->toDbValue($appObject);
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_id = ?, article_category_id = ?, article_body = ?, article_is_featured = ?, article_is_published = ?, article_title = ?, article_sub_title = ?, article_cover_filename = ?, article_last_update_date_time = NOW() WHERE article_id = ?;');
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_id = ?, article_author_id = ?, article_category_id = ?, article_body = ?, article_is_featured = ?, article_is_published = ?, article_title = ?, article_sub_title = ?, article_cover_filename = ?, article_last_update_date_time = NOW() WHERE article_id = ?;');
         $parameters = [
             $dbArray['id'],
+            $dbArray['author_id'],
             $dbArray['category_id'],
             $dbArray['body'],
             $dbArray['is_featured'],
