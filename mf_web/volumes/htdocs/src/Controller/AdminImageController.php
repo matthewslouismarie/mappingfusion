@@ -37,7 +37,7 @@ class AdminImageController implements ControllerInterface
             }
         }
 
-        $listOfFiles = scandir($this->uploaded);
+        $listOfFiles = array_filter(scandir($this->uploaded), fn ($value) => !str_contains($value, '.medium.') && !str_contains($value, '.small.'));
         $images = array_filter($listOfFiles, function ($value) {
             return 1 === preg_match('/^.+\.(jpg)|(jpeg)|(png)|(webp)$/', $value);
         });

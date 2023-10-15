@@ -16,7 +16,7 @@
         <button class="std-button">Mettre en ligne</button>
     </div>
 </form>
-<ul class="std-mosaic-list">
+<ul class="std-mosaic-list -twoperrow">
     {% for i in images %}
     <li class="item">
         <img class="img" {{ app.imgAttr(i, i, true, null, 200)|raw }}>
