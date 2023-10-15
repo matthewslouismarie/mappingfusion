@@ -22,7 +22,12 @@ class UploadedImageValidator implements IValidator
 
         } else {
             if (strlen($data) > IUploadedImageConstraint::FILENAME_MAX_LENGTH) {
-                $violations[] = new ConstraintViolation($this->constraint, 'Filename is too long.');
+                $violations[] = new ConstraintViolation($this->constraint, 'Le nom du fichier est trop long.');
+            }
+            $nameParts = explode('.', $data);
+            
+            if (1 !== preg_match('/' . IUploadedImageConstraint::FILENAME_REGEX . '/', $data)) {
+                $violations[] = new ConstraintViolation($this->constraint, 'Le nom du fichier n’a pas le bon format.');
             }
         }
         

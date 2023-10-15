@@ -6,6 +6,7 @@ use GdImage;
 use MF\Framework\DataStructures\Filename;
 use MF\Framework\Form\Exceptions\IllegalUserInputException;
 use MF\Framework\Form\Exceptions\MissingInputException;
+use MF\Model\Slug;
 use Psr\Http\Message\UploadedFileInterface;
 use UnexpectedValueException;
 
@@ -60,7 +61,8 @@ class FileTransformer implements IFormTransformer
     private function saveUploadedImage(UploadedFileInterface $file): null|string {
         if (0 === $file->getError()) {
             $uploadedFileName = pathinfo($file->getClientFilename(), PATHINFO_FILENAME);
-            $destinationPath = "{$this->destinationFolder}/{$uploadedFileName}.webp";
+            $newFilename = (new Slug($uploadedFileName, true, true))->__toString();
+            $destinationPath = "{$this->destinationFolder}/{$newFilename}.webp";
             if (!file_exists($destinationPath)) {
                 if('image/webp' !== $file->getClientMediaType()) {
                     $streamGdImg = imagecreatefromstring($file->getStream());
