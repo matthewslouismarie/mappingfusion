@@ -28,20 +28,17 @@
     }
 
     h1 {
-        margin-bottom: $gap-l2;
-        font-size: $txt-font-size-xl;
+        @include h1;
     }
 
     h2 {
-        margin-bottom: $gap-l;
-        font-size: $txt-font-size-l2;
+        @include h2;
     }
 
     h3,
     h4,
     h5 {
-        margin-bottom: $gap-m;
-        font-size: $txt-font-size-l;
+        @include h3;
     }
 
     p,

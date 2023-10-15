@@ -6,55 +6,60 @@
 {% block title %}Nouveau test{% endblock %}
 
 {% block bodyContent %}
-<div class="_flex -col -gapl">
-    <h1>Édition de test</h1>
-    <form autocomplete="on" class="std-form _flex -gap" enctype="multipart/form-data" method="post"{% if app.dev %} novalidate{% endif %}>
-        <div class="form-row">
-            <label class="label" for="playable-id">ID du jeu ou mod testé</label>
-            <select id="playable-id" name="playable_id" required>
-                {% for p in playables %}
-                <option value="{{ p.id }}"{% if formData and formData.playable_id == p.id %} selected="selected"{% endif %}>{{ p.name }}</option>
-                {% endfor %}
-            </select>
-            {{ errorList(formErrors.playable_id ?? null )}}
-        </div>
-        <div class="form-row">
-            <label class="label" for="article-id">ID de l’article parent</label>
-            <select id="article-id" name="article_id" required>
-                {% if formData and formData.article_id %}
-                <option value="{{ formData.article_id  }}" selected="selected">{{ formData.article_id }}</option>
-                {% endif %}
-                {% for a in availableArticles %}
-                {% if null == formData or a.id != formData.article_id %}
-                <option value="{{ a.id }}">{{ a.title }}</option>
-                {% endif %}
-                {% endfor %}
-            </select>
-            {{ errorList(formErrors.article_id ?? null )}}
-        </div>
-        <div class="form-row">
-            <label class="label" for="rating">Note (de 1 à 5)</label>
-            <input class="input" id="rating" name="rating" inputmode="decimal" min="1" max="5" required step="1" type="number"{% if formData %} value="{{ formData.rating }}"{% endif %}>
-            {{ errorList(formErrors.rating ?? null )}}
-        </div>
-        <div class="form-row">
-            <label class="label" for="body">Avis final</label>
-            <textarea class="input" id="body" name="body">{% if formData %}{{ formData.body }}{% endif %}</textarea>
-            {{ errorList(formErrors.body ?? null )}}
-        </div>
-        <div class="form-row">
-            <label class="label" for="cons">Points négatifs</label>
-            <textarea class="input" id="cons" name="cons">{% if formData %}{{ formData.cons }}{% endif %}</textarea>
-            {{ errorList(formErrors.cons ?? null )}}
-        </div>
-        <div class="form-row">
-            <label class="label" for="p-pros">Points positifs</label>
-            <textarea class="input" id="pros" name="pros">{% if formData %}{{ formData.pros }}{% endif %}</textarea>
-            {{ errorList(formErrors.pros ?? null )}}
-        </div>
-        <button type="submit">Poster</button>
-        <input name="id" type="hidden"{% if formData %} value="{{ formData.id }}"{% endif %}>
-        {{ csrf(app) }}
-    </form>
-</div>
+<h1 class="_h1">Édition de test</h1>
+<form autocomplete="on" class="std-form _flex -gap" enctype="multipart/form-data" method="post"{% if app.dev %} novalidate{% endif %}>
+    <div class="form-row -titled">
+        <label class="label" for="playable-id">ID du jeu ou mod testé</label>
+        <select id="playable-id" name="playable_id" required>
+            {% for p in playables %}
+            <option value="{{ p.id }}"{% if formData and formData.playable_id == p.id %} selected="selected"{% endif %}>{{ p.name }}</option>
+            {% endfor %}
+        </select>
+        {{ errorList(formErrors.playable_id ?? null )}}
+    </div>
+
+    <div class="form-row -titled">
+        <label class="label" for="article-id">ID de l’article parent</label>
+        <select id="article-id" name="article_id" required>
+            {% if formData and formData.article_id %}
+            <option value="{{ formData.article_id  }}" selected="selected">{{ formData.article_id }}</option>
+            {% endif %}
+            {% for a in availableArticles %}
+            {% if null == formData or a.id != formData.article_id %}
+            <option value="{{ a.id }}">{{ a.title }}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+        {{ errorList(formErrors.article_id ?? null )}}
+    </div>
+
+    <div class="form-row -titled">
+        <label class="label" for="rating">Note (de 1 à 5)</label>
+        <input class="input" id="rating" name="rating" inputmode="decimal" min="1" max="5" required step="1" type="number"{% if formData %} value="{{ formData.rating }}"{% endif %}>
+        {{ errorList(formErrors.rating ?? null )}}
+    </div>
+
+    <div class="form-row -titled">
+        <label class="label" for="body">Avis final</label>
+        <textarea class="input -textarea" id="body" name="body">{% if formData %}{{ formData.body }}{% endif %}</textarea>
+        {{ errorList(formErrors.body ?? null )}}
+    </div>
+
+    <div class="form-row -titled">
+        <label class="label" for="cons">Points négatifs</label>
+        <textarea class="input -textarea" id="cons" name="cons">{% if formData %}{{ formData.cons }}{% endif %}</textarea>
+        {{ errorList(formErrors.cons ?? null )}}
+    </div>
+
+    <div class="form-row -titled">
+        <label class="label" for="pros">Points positifs</label>
+        <textarea class="input -textarea" id="pros" name="pros">{% if formData %}{{ formData.pros }}{% endif %}</textarea>
+        {{ errorList(formErrors.pros ?? null )}}
+    </div>
+
+    <button class="std-button" type="submit">Poster</button>
+
+    <input name="id" type="hidden"{% if formData %} value="{{ formData.id }}"{% endif %}>
+    {{ csrf(app) }}
+</form>
 {% endblock %}

@@ -7,3 +7,23 @@
 @mixin asymetric-padding {
     padding: 1% 4%;
 }
+
+@mixin h1 {
+    margin-bottom: $gap-l;
+    font-size: $txt-font-size-xl;
+    color: $color-blue-0;
+    font-weight: $txt-weight-bold;
+}
+
+@mixin h2 {
+    margin-bottom: $gap-l;
+    font-size: $txt-font-size-l2;
+    color: $color-blue-0;
+    font-weight: $txt-weight-semi-bold;
+}
+
+@mixin h3 {
+    margin-bottom: $gap-m;
+    font-size: $txt-font-size-l;
+    color: $color-blue-0;
+}

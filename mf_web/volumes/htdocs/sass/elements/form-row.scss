@@ -9,6 +9,13 @@
         }
     }
 
+    &.-titled {
+        > .label {
+            @include h2;
+            margin-bottom: $gap-xs;
+        }
+    }
+
     &.-checkbox {
         > .input,
         > .label {
