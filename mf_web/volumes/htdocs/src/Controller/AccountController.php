@@ -39,27 +39,25 @@ class AccountController implements ControllerInterface
             'password' => null,
         ];
         $formErrors = null;
-        $success = null;
         $form = $this->formFactory->createForm($model);
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
             $formErrors = $this->modelValidator->validate($formData, $model);
             if (0 === count($formErrors)) {
                 if (null !== $formData['password']) {
-                    $success = 'Votre compte a été mis à jour.';
+                    $this->session->addMessage('Votre compte a été mis à jour.');
                     $formData['password'] =  password_hash($formData['password'], PASSWORD_DEFAULT);
                     $this->repo->updateMember(new AppObject($formData), $this->session->getCurrentMemberUsername());
                     $this->session->setCurrentMemberUsername($formData['id']);
                 } else {
                     $this->repo->updateId($this->session->getCurrentMemberUsername(), $formData['id']);
-                    $success = 'Votre nom d’utilisateur a été mis à jour.';
+                    $this->session->addMessage('Votre nom d’utilisateur a été mis à jour.');
                     $this->session->setCurrentMemberUsername($formData['id']);
                 }
             }
         }
 
         return new Response(body: $this->twig->render('account.html.twig', [
-            'success' => $success,
             'formData' => $formData,
             'formErrors' => $formErrors,
         ]));

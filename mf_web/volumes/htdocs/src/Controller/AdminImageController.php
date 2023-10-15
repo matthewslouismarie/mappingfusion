@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Response;
 use MF\Enum\Clearance;
 use MF\Framework\DataStructures\Filename;
 use MF\Framework\Form\Transformer\FileTransformer;
+use MF\Session\SessionManager;
 use MF\TwigService;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -13,9 +14,11 @@ class AdminImageController implements ControllerInterface
 {
     const ROUTE_ID = 'manage-images';
 
+    private string $uploaded;
+
     public function __construct(
+        private SessionManager $sessionManager,
         private TwigService $twig,
-        private string $uploaded = '',
     ) {
         $this->uploaded = dirname(__FILE__) . '/../../public/uploaded/';
     }
@@ -24,7 +27,6 @@ class AdminImageController implements ControllerInterface
      * @todo Use form with validation and success messages.
      */
     public function generateResponse(ServerRequestInterface $request, array $routeParams): Response {
-        $successes = [];
         if ('POST' === $request->getMethod()) {
             $imgToDelete = $request->getParsedBody()['image-to-delete'] ?? null;
             if (null !== $imgToDelete) {
@@ -40,11 +42,12 @@ class AdminImageController implements ControllerInterface
                     unlink($mediumImgFilename);
                 }
                 if ($deletion) {
-                    $successes[] = 'Le fichier a été supprimé.';
+                    $this->sessionManager->addMessage('Le fichier a été supprimé.');
                 }
             } else {
                 $transformer = new FileTransformer('images');
                 $transformer->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
+                $this->sessionManager->addMessage('Le fichier a bien été ajouté.');
             }
         }
 
@@ -55,7 +58,6 @@ class AdminImageController implements ControllerInterface
 
         return new Response(body: $this->twig->render('image_management.html.twig', [
             'images' => $images,
-            'successes' => $successes,
         ]));
     }
 

@@ -11,9 +11,6 @@
 {# @todo autocomplete attributes #}
 <h1>Mon Compte</h1>
 <form class="std-form" autocomplete="on" method="post"{% if app.dev %} novalidate{% endif %}>
-    {% if success %}
-    {{ success }}
-    {% endif %}
     <div class="form-row">
         <label class="label" for="id">Nom d’utilisateur :</label>
         <input class="input" id="id" name="id" autocomplete="username" required value="{{ formData['id'] }}">
