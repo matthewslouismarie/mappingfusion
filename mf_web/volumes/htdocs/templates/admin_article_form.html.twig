@@ -8,6 +8,7 @@
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
+
 <h1>{{ formData ? 'Édition d’article' ?? 'Nouvel article' }}</h1>
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post"{% if app.isDev %} novalidate{% endif %}>
     <div class="form-row">
@@ -58,6 +59,15 @@
         <textarea class="input -textarea" id="p-content" name="body" required>{{ formData.body ?? null }}</textarea>
         {% if formErrors %}{{ errorList( formErrors.body ?? null) }}{% endif %}
     </div>
+    
+    {% if formData and formData.id %}
+    <div class="form-row -checkbox">
+        <input class="input" id="update-author" name="update_author" type="checkbox">
+        <label class="label" for="update-author">Mettre « {{ app.session.currentMemberUsername }} » comme auteur</label>
+        {% if formErrors %}{{ errorList( formErrors.is_featured ?? null) }}{% endif %}
+    </div>
+    {% endif %}
+
     <button class="std-button" type="submit">Poster</button>
     {{ csrf(app) }}
 </form>

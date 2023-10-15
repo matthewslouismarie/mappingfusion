@@ -45,9 +45,9 @@ class AdminArticleController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $requestedId = $routeParams[1] ?? null;
         $formData = null;
         $formErrors = null;
+        $requestedId = $routeParams[1] ?? null;
 
         $form = $this->formFactory->createForm(
             $this->model,
@@ -59,7 +59,8 @@ class AdminArticleController implements ControllerInterface
                     'ignore' => true,
                 ],
             ],
-        );
+        )
+        ;
 
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
@@ -73,7 +74,13 @@ class AdminArticleController implements ControllerInterface
                 if (null === $requestedId) {
                     $this->repo->add($article);
                 } else {
-                    $this->repo->updateArticle($article, $requestedId);
+                    if (isset($request->getParsedBody()['update_author']) && 'on' === $request->getParsedBody()['update_author']) {
+                        $this->session->addMessage('Article mis à jour et auteur modifié.');
+                        $this->repo->updateArticle($article, $requestedId);
+                    } else {
+                        $this->session->addMessage('Article mis à jour.');
+                        $this->repo->updateArticle($article, $requestedId, false);
+                    }
                 }
                 return $this->router->generateRedirect(self::ROUTE_ID, [$article->id]);
             }

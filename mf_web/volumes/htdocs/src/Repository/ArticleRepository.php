@@ -184,22 +184,15 @@ class ArticleRepository implements IRepository
         return $relatedArticles;
     }
 
-    public function updateArticle(AppObject $appObject, ?string $previousId = null): void {
+    public function updateArticle(AppObject $appObject, ?string $previousId = null, bool $updateAuthor = false): void {
         $dbArray = $this->em->toDbValue($appObject);
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_id = ?, article_author_id = ?, article_category_id = ?, article_body = ?, article_is_featured = ?, article_is_published = ?, article_title = ?, article_sub_title = ?, article_cover_filename = ?, article_last_update_date_time = NOW() WHERE article_id = ?;');
-        $parameters = [
-            $dbArray['id'],
-            $dbArray['author_id'],
-            $dbArray['category_id'],
-            $dbArray['body'],
-            $dbArray['is_featured'],
-            $dbArray['is_published'],
-            $dbArray['title'],
-            $dbArray['sub_title'],
-            $dbArray['cover_filename'],
-            $previousId ?? $dbArray['id'],
-        ];
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_id = :id, ' . ($updateAuthor ? 'article_author_id = :author_id, ' : '') . 'article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_title = :title, article_sub_title = :sub_title, article_cover_filename = :cover_filename, article_last_update_date_time = NOW() WHERE article_id = :old_id;');
+        
+        if (!$updateAuthor) {
+            unset($dbArray['author_id']);
+        }
+        $dbArray['old_id'] = $previousId ?? $dbArray['id'];
 
-        $stmt->execute($parameters);
+        $stmt->execute($dbArray);
     }
 }

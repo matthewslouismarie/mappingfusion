@@ -80,6 +80,10 @@
             </div>
         </header>
 
+        {% for msg in app.session.getAndDeleteMessages() %}
+        <aside class="std-info-message _padding -padding-vert-l">{{ msg }}</aside>
+        {% endfor %}
+
         <main class="site-main">
             {% block body %}
             <div class="_padded -a">
