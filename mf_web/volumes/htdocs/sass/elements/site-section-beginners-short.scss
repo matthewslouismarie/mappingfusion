@@ -9,5 +9,13 @@
         > .text {
             text-align: center;
         }
+
+        > .links {
+            display: flex;
+            flex-direction: column;
+            gap: $gap-m;
+            justify-content: center;
+            width: 100%;
+        }
     }
 }

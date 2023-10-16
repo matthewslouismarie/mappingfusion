@@ -1,8 +1,14 @@
 <aside class="site-section-beginners-short _padding -padding-vert-l2 -padding-hori-mobile">
     <div class="_wrapper -xs _flex -col _gap -gap-row-l2 ">
         <p class="text _rtxt -txtl">Consulte également <strong class="_txt -bold">tous nos dossiers explicatifs</strong> pour bien <strong class="_txt -bold">comprendre comment installer un Mod</strong></p>
-        <a class="std-button -white _txt -txtm2" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">
-            <div class="text _txt -bold">Installation de Mods</div>
-        </a>
+    
+        <div class="links">
+            <a class="std-button -white _txt -txtm2" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">
+                <div class="text _txt -bold">Installation de Mods</div>
+            </a>
+            <a class="std-button -white _txt -txtm2" href="{{ app.router.generateUrl('article', ['guide-sven-co-op']) }}">
+                <div class="text _txt -bold">Guide Sven Co-op</div>
+            </a>
+        </div>
     </div>
 </aside>
