@@ -21,7 +21,6 @@ use MF\Controller\AdminImageController;
 use MF\Controller\LoginController;
 use MF\Controller\LogoutController;
 use MF\Controller\ProfileController;
-use MF\Controller\RegistrationController;
 use MF\Controller\ReviewController;
 use MF\Controller\ReviewListController;
 use MF\Controller\SearchController;
