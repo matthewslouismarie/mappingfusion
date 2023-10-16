@@ -76,10 +76,10 @@ class AdminArticleController implements ControllerInterface
                 } else {
                     if (isset($request->getParsedBody()['update_author']) && 'on' === $request->getParsedBody()['update_author']) {
                         $this->session->addMessage('Article mis à jour et auteur modifié.');
-                        $this->repo->updateArticle($article, $requestedId);
+                        $this->repo->updateArticle($article, $requestedId, true);
                     } else {
                         $this->session->addMessage('Article mis à jour.');
-                        $this->repo->updateArticle($article, $requestedId, false);
+                        $this->repo->updateArticle($article, $requestedId);
                     }
                 }
                 return $this->router->generateRedirect(self::ROUTE_ID, [$article->id]);
