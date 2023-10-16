@@ -8,10 +8,10 @@
     img + em {
         display: block;
         width: fit-content;
-        max-width: 50%;
-        padding: $gap-s;
+        max-width: 90%;
+        padding: $gap-xs;
         transform: translateX($gap-s2) translateY(-$gap-s2 * 2);
-        margin-bottom: -$gap-s * 3;
+        margin-bottom: -$gap-s2 * 2;
 
         font-weight: $txt-weight-regular;
         font-style: italic;
