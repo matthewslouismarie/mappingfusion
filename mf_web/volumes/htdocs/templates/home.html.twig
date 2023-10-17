@@ -7,7 +7,8 @@
 {% block description %}Bienvenue sur la page d’acceuil de Mapping-Fusion, une communauté francophone rassemblé autour de Sven Co-op, Half-Life et de ses mods !{% endblock %}
 
 {% block resources %}
-<link rel="canonical" href="{{ app.homeUrl() }}" />
+{# @todo Mettre itemid vers Sven Co-op, Half-Life, Modding, etc. <meta itemprop="about" content="Modding GoldSource"> #}
+<link rel="canonical" href="{{ app.homeUrl() }}">
 <link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
 {% endblock %}
 

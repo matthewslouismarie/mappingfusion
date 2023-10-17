@@ -78,6 +78,10 @@ class TemplateHelper
         return $attr;
     }
 
+    public function getItemId(string $url = ''): string {
+        return 'mappingfusion.fr';
+    }
+
     public function getLinkTypes(): array {
         return LinkType::cases();
     }

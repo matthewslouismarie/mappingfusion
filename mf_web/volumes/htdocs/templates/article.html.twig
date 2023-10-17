@@ -11,10 +11,12 @@
 
 {% block title %}{{ article.title }}{% endblock %}
 
-{% block description %}{{ app.shorten(app.mk.getText(article.body), 265, '…') }}{% endblock %}
+{% block description %}{{ app.shorten(app.mk.getText(article.body), 128, '…') }}{% endblock %}
 
 {% block body %}
-{# @todo micro data attributes #}
+{# @todo https://schema.org/HowTo #}
+{# https://schema.org/Review #}
+{# https://schema.org/VideoGame #}
 <div class="page-article">
     <div class="std-article">
 

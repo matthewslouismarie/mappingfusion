@@ -6,6 +6,9 @@ use MF\Framework\Constraints\StringConstraint;
 use MF\Framework\Model\AbstractEntity;
 use MF\Framework\Model\StringModel;
 
+/**
+ * @todo Merge with author?
+ */
 class MemberModel extends AbstractEntity
 {
     public function __construct() {

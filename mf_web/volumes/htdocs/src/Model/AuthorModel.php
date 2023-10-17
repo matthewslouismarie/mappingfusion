@@ -6,6 +6,10 @@ use MF\Framework\Constraints\StringConstraint;
 use MF\Framework\Model\AbstractEntity;
 use MF\Framework\Model\StringModel;
 
+/**
+ * @todo Add knowsAbout, memberOf, image
+ * @todo Rename to Person
+ */
 class AuthorModel extends AbstractEntity
 {
     public function __construct() {
