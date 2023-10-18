@@ -30,7 +30,7 @@
         <div class="glide__bullets" data-glide-el="controls[nav]">
             {% for a in featured_articles %}
             <button aria-label="{{ featured_articles[loop.index0].title }}" class="glide__bullet" data-glide-dir="={{ loop.index0 }}" style="background-image: url('{{ app.smallImage(featured_articles[loop.index0].cover_filename) }}');" type="button">
-                <div class="image" ></div>
+                <span class="image"></span>
             </button>
             {% endfor %}
         </div>
@@ -41,8 +41,8 @@
             <div class="section-heading -white">
                 <img class="image" {{ app.imgAttr('Tests maps et mods', 'tests_icon.svg', false, 116, 107)|raw }}>
                 <h2 class="text _txt -txtl">
-                    <div class="line _txt -bold">Tests maps et mods<br></div>
-                    <div class="line">proposés par l’équipe</div>
+                    <span class="line _txt -bold">Tests maps et mods<br></span>
+                    <span class="line">proposés par l’équipe</span>
                 </h2>
             </div>
             <ul class="list">

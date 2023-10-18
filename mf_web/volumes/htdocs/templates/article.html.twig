@@ -22,16 +22,16 @@
 
         <div class="article-cover" id="article-cover" style="background-image: url('{{ app.resource(article.cover_filename) }}');" itemprop="image" content="{{ app.resource(article.cover_filename) }}">
             <div class="content">
-                <hrgoup class="heading _wrapper">
+                <div class="heading _wrapper">
                     <a class="link" href="{{ app.router.generateUrl('article', [article.id]) }}" itemprop="url">
-                        <h1 class="title _txt -txtxl"itemprop="headline name">
+                        <h1 class="title _txt -txtxl" itemprop="headline name">
                             {{ article.title }}
                         </h1>
                         {% if article.sub_title %}
                         <h2 class="subtitle" itemprop="alternativeHeadline">{{ article.sub_title }}</h2>
                         {% endif %}
                     </a>
-                </hgroup>
+                </div>
             </div>
         </div>
 
@@ -195,7 +195,7 @@
 <div class="_hidden" itemscope itemid="{{ app.router.generateUrl('article', [article.id]) }}" itemtype="https://schema.org/WebPage" itemref="article-metadata web-page-description web-page-related-links web-page-title">
     {# @todo breadcrumb with links #}
     <meta itemprop="breadcrumb" content="Mapping-Fusion > Articles">
-    <meta itemprop="mainEntity" itemscope itemid="{{ app.articleItemId(article.id) }}">
+    <meta itemprop="mainEntity" itemscope itemtype={% if article.review is defined %}"https://schema.org/ReviewNewsArticle"{% else %}"https://schema.org/NewsArticle"{% endif %} itemid="{{ app.articleItemId(article.id) }}">
     <time itemprop="lastReviewed" datetime="{{ article.last_update_date_time|date('Y-m-d\\TH:i') }}Z">{{ article.last_update_date_time|date('Y-m-d H:i:s') }}</time>
     <link itemprop="image" href="{{ app.resource(article.cover_filename) }}">
     <meta itemprop="identifier" content="{{ app.articleItemId(article.id) }}">

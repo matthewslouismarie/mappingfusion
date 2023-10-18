@@ -69,9 +69,9 @@ class TemplateHelper
             $dimensions = getimagesize($filePathOnDisk);
             if ((null === $width || null === $height) && false !== $dimensions) {
                 if (null !== $width) {
-                    $height = $dimensions[1] * $width / $dimensions[0];
+                    $height = round($dimensions[1] * $width / $dimensions[0]);
                 } elseif (null !== $height) {
-                    $width = $dimensions[0] * $height / $dimensions[1];
+                    $width = round($dimensions[0] * $height / $dimensions[1]);
                 } else {
                     $width = $dimensions[0];
                     $height = $dimensions[1];
@@ -80,7 +80,7 @@ class TemplateHelper
         }
 
         if (null !== $width && null !== $height) {
-            $attr .= " width=\"{$width}px\" height=\"{$height}px\"";
+            $attr .= " width=\"{$width}\" height=\"{$height}\"";
         }
 
         return $attr;
