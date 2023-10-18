@@ -34,14 +34,6 @@ class AdminImageController implements ControllerInterface
                 $filename = new Filename($imgToDelete);
                 $deletion = unlink($this->uploaded . $filename->__toString());
 
-                $smallImgFilename = $this->uploaded . $filename->getFilenameNoExtension() . '.small.webp';
-                if (file_exists($smallImgFilename)) {
-                    unlink($smallImgFilename);
-                }
-                $mediumImgFilename = $this->uploaded . $filename->getFilenameNoExtension() . '.medium.webp';
-                if (file_exists($mediumImgFilename)) {
-                    unlink($mediumImgFilename);
-                }
                 if ($deletion) {
                     $this->sessionManager->addMessage('Le fichier a été supprimé.');
                 }
