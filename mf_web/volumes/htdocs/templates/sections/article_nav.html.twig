@@ -20,7 +20,7 @@
         </ul>
     </div>
 
-    <a href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}" class="std-button -upper -white _padding -padding-vert-s">
+    <a class="std-button -upper -white _padding -padding-vert-s" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">
         <div class="text">
             <span class="bold _txt -bold -txtm">Comment installer un mod</span>
         </div>
@@ -30,13 +30,13 @@
 
     <div class="frame -related _gap -gap-row-m _padding -padding-hori-s2 -padding-vert-s">
         <h2 class="heading _txt -txtm ">Tests et articles similaires</h2>
-        <ul class="list _gap -gap-col-xs -gap-row-s2">
+        <ul class="list _gap -gap-col-xs -gap-row-s2" id="web-page-related-links">
             {% for r in relatedArticles %}
             {% if loop.index0 < 3 %}
-            <li class="item" itemscope itemtype="https://schema.org/Article">
-                <a class="link _gap -gap-row-xs" href="{{ app.router.generateUrl('article', [r.id]) }}" itemtype="url">
-                    <img class="image" {{ app.imgAttr(r.title, r.cover_filename, true, null, 110, true)|raw }} itemprop="image">
-                    <div class="_txt -txts" itemprop="headline">{{ r.title }}</div>
+            <li class="item">
+                <a class="link _gap -gap-row-xs" itemprop="relatedLink" href="{{ app.router.generateUrl('article', [r.id]) }}">
+                    <img class="image" {{ app.imgAttr(r.title, r.cover_filename, true, null, 110, true)|raw }}>
+                    <div class="_txt -txts">{{ r.title }}</div>
                 </a>
             </li>
             {% endif %}

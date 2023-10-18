@@ -14,7 +14,6 @@ use MF\Model\ArticleModel;
 use MF\Model\PlayableModel;
 use MF\Model\ReviewModel;
 use OutOfBoundsException;
-use UnexpectedValueException;
 
 class ArticleRepository implements IRepository
 {

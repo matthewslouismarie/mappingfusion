@@ -17,14 +17,14 @@
 {# @todo https://schema.org/HowTo #}
 {# https://schema.org/Review #}
 {# https://schema.org/VideoGame #}
-<div class="page-article">
+<div class="page-article" id="article">
     <div class="std-article">
 
         <div class="article-cover" id="article-cover" style="background-image: url('{{ app.resource(article.cover_filename) }}');" itemprop="image" content="{{ app.resource(article.cover_filename) }}">
             <div class="content">
                 <hrgoup class="heading _wrapper">
                     <a class="link" href="{{ app.router.generateUrl('article', [article.id]) }}" itemprop="url">
-                        <h1 class="title _txt -txtxl" itemprop="headline">
+                        <h1 class="title _txt -txtxl"itemprop="headline name">
                             {{ article.title }}
                         </h1>
                         {% if article.sub_title %}
@@ -46,6 +46,7 @@
                     <div class="sectioncontent _padding -padding-hori-s _flex -col _gap -gap-row-l">
 
                         <dl class="std-metadata _txt -txtm" id="playable-object">
+                            <meta itemprop="identifier" content="{{ article.review.playable.id }}">
                             <div class="item _flex _gap -gap-col-xs">
                                 <dt class="term">Jeu :</dt>
                                 <dd class="def">
@@ -58,8 +59,10 @@
                                     {% for c in article.review.playable.contributions %}
                                     {% if c.is_author %}
                                     {% if not loop.first %}<span class="comma">, </span>{% endif %}
+                                    {# @todo Make sure it is not an organisation #}
                                     <span itemprop="creator" itemscope itemtype="https://schema.org/Person">
                                         <span itemprop="name">{{ c.author.name }}</span>
+                                        <meta itemprop="identifier" content="{{ c.author.id }}">
                                     </span>
                                     {% endif %}
                                     {% endfor %}
@@ -68,7 +71,7 @@
                             <div class="item _flex _gap -gap-col-xs">
                                 <dt class="term">Date de sortie :</dt>
                                 <dd class="def">
-                                    <time itemprop="datePublished" datetime="{{ article.review.playable.release_date_time|date('Y-m-d\\TH:i') }}">{{ article.review.playable.release_date_time|date('Y') }}</time>
+                                    <time itemprop="datePublished" datetime="{{ article.review.playable.release_date_time|date('Y-m-d\\TH:i') }}Z">{{ article.review.playable.release_date_time|date('Y') }}</time>
                                 </dd>
                             </div>
                             {% if article.review.playable.game %}
@@ -76,6 +79,7 @@
                                 <dt class="term">Moteur :</dt>
                                 <dd class="def" itemprop="isBasedOn" itemscope itemtype="https://schema.org/VideoGame">
                                     <span itemprop="name">{{ article.review.playable.game.name }}</span>
+                                    <meta itemprop="identifier" content="{{ article.review.playable.game_id }}">
                                 </dd>
                             </div>
                             {% endif %}
@@ -92,6 +96,7 @@
                     class="sectioncontent _padding -padding-hori-s -padding-vert-l"
                     id="article-body"
                     itemscope
+                    itemid="{{ app.articleItemId(article.id) }}"
                     itemtype={% if article.review is defined %}"https://schema.org/ReviewNewsArticle"{% else %}"https://schema.org/NewsArticle"{% endif %}
                     itemref="{% if article.review is defined %}review-box {% endif %}article-cover article-metadata"
                 >
@@ -141,18 +146,19 @@
                         <div class="item _flex _gap -gap-col-xs">
                             <dt class="term">Édité le :</dt>
                             <dd class="def">
-                                <time itemprop="dateModified" datetime="{{ article.last_update_date_time|date('Y-m-d\\TH:i') }}">{{ article.last_update_date_time|date('Y-m-d H:i:s') }}</time>
+                                <time itemprop="dateModified" datetime="{{ article.last_update_date_time|date('Y-m-d\\TH:i') }}Z">{{ article.last_update_date_time|date('Y-m-d H:i:s') }}</time>
                             </dd>
                         </div>
                         <div class="item _flex _gap -gap-col-xs">
                             <dt class="term">Publié le :</dt>
                             <dd class="def">
-                                <time itemprop="dateCreated" datetime="{{ article.creation_date_time|date('Y-m-d\\TH:i') }}">{{ article.creation_date_time|date('Y-m-d H:i:s') }}</time>
+                                <time itemprop="dateCreated" datetime="{{ article.creation_date_time|date('Y-m-d\\TH:i') }}Z">{{ article.creation_date_time|date('Y-m-d H:i:s') }}</time>
                             </dd>
                         </div>
                         <div class="item _flex _gap -gap-col-xs">
                             <dt class="term">Rédigé par :</dt>
                             <dd class="def" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                                <meta itemprop="identifier" content="{{ article.author_id }}">
                                 <a href="{{ app.router.generateUrl('membre', [article.author_id]) }}" itemprop="url">
                                     <span itemprop="name">{{ article.author_id }}</span>
                                 </a>
@@ -183,4 +189,17 @@
     const reviewMenu = new ReviewMenu();
     reviewMenu.init();
 </script>
+{% endblock %}
+
+{% block additionalMeta %}
+<div class="_hidden" itemscope itemid="{{ app.router.generateUrl('article', [article.id]) }}" itemtype="https://schema.org/WebPage" itemref="article-metadata web-page-description web-page-related-links web-page-title">
+    {# @todo breadcrumb with links #}
+    <meta itemprop="breadcrumb" content="Mapping-Fusion > Articles">
+    <meta itemprop="mainEntity" itemscope itemid="{{ app.articleItemId(article.id) }}">
+    <time itemprop="lastReviewed" datetime="{{ article.last_update_date_time|date('Y-m-d\\TH:i') }}Z">{{ article.last_update_date_time|date('Y-m-d H:i:s') }}</time>
+    <link itemprop="image" href="{{ app.resource(article.cover_filename) }}">
+    <meta itemprop="identifier" content="{{ app.articleItemId(article.id) }}">
+    <meta itemprop="timeRequired" content="{{ app.estimateReadingTime(article.body) }}M">
+    <meta itemprop="isAccessibleForFree" content="https://schema.org/True">
+</div>
 {% endblock %}

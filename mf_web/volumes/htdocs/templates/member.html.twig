@@ -8,9 +8,9 @@
 {% block description %}Profil du membre {{ member.id }}{% endblock %}
 
 {% block bodyContent %}
-<article itemscope itemid="{{ member.id }}" itemtype="https://schema.org/Person">
+<article itemscope itemtype="https://schema.org/Person">
     <a href="{{ app.router.generateUrl('membre', [member.id]) }}" itemprop="url">
-        <h1 class="_txt -txtxl" itemprop="name">{{ member.id }}</h1>
+        <h1 class="_txt -txtxl" itemprop="identifier name">{{ member.id }}</h1>
     </a>
 </article>
 

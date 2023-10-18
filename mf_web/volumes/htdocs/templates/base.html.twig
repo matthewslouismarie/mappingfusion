@@ -1,10 +1,9 @@
 {% apply spaceless %}<!DOCTYPE html>
-<html lang="fr" itemscope itemtype="https://schema.org/WebSite" itemid="{{ app.itemId() }}">
-    <head>
+<html lang="fr">
+    <head id="document-head">
         <meta charset="utf-8">
         <link disabled id="montserrat-font" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-        <link itemprop="thumbnailUrl" href="{{ app.getAsset('mapping-fusion-logo.svg') }}">
-        <link itemprop="url" href="{{ app.homeUrl() }}">
+
         <link rel="icon" href="{{ app.asset('mapping-fusion-favicon.png') }}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,14 +13,13 @@
         <link rel="stylesheet" href="{{ app.asset('style.size_m.css') }}" media="(min-width: 768px)">
         <link rel="stylesheet" href="{{ app.asset('style.size_s.css') }}" media="(min-width: 425px)">
         <link rel="stylesheet" href="{{ app.asset('style.size_xl.css') }}" media="(min-width: 1920px)">
-        <meta itemprop="isAccessibleForFree" content="true">
-        <meta itemprop="name" content="Mapping-Fusion">
-        <meta name="description" itemprop="abstract" content="{% block description %}Tests et tutoriels pour Half-Life et Sven Co-op !{% endblock %}">
+        <meta id="web-page-description" name="description" itemprop="description" content="{% block description %}Tests et tutoriels pour Half-Life et Sven Co-op !{% endblock %}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title itemprop="headline">{% block title %}{% endblock %} - Mapping-Fusion</title>
+        <title id="web-page-title" itemprop="name">{% block title %}{% endblock %} - Mapping-Fusion</title>
         {% block index %}{% endblock %}
         {% block resources %}{% endblock %}
     </head>
+    {# @todo Add https://schema.org/BreadcrumbList #}
     <body class="site-body">
         {% if app.session.currentMemberUsername %}
         <nav class="site-admin-nav">
@@ -133,12 +131,16 @@
 
         {% block scriptInit %}
         {% endblock %}
+
         <script src="{{ app.asset('menu.js') }}"></script>
         <script>
             document.getElementById('montserrat-font').disabled = false;
             const menu = new Menu('menu-button', 'menu-container', 'menu', 'search-form');
             menu.init();
         </script>
+
+        {% block additionalMeta %}
+        {% endblock %}
     </body>
 </html>
 {% endapply %}

@@ -27,6 +27,14 @@ class TemplateHelper
     ) {
     }
 
+    public function estimateReadingTime(string $text): int {
+        return round(str_word_count($text) / 238);
+    }
+
+    public function getArticleItemId(string $id): string {
+        return $this->getItemID() . "/article/{$id}#article";
+    }
+
     public function getAsset(string $filename): string {
         $publicUrl = $this->getPublicUrl();
         $version = filemtime(dirname(__FILE__) . '/../../public/' . $filename);
@@ -56,7 +64,7 @@ class TemplateHelper
         $srcValue = $isResource ? ($smallImg ? $this->getSmallImage($filename) : $this->getResource($filename)) : $this->getAsset($filename);
         $attr = "alt=\"{$alt}\" src=\"{$srcValue}\"";
 
-        $filePathOnDisk =  realpath(dirname(__FILE__) . '/../../public/' . ($isResource ? 'uploaded/' : '') . $filename);
+        $filePathOnDisk =  $isResource ? $this->getPathOfResource($filename) : $this->getPathOfPublicFile($filename);
         if (false !== $filePathOnDisk) {
             $dimensions = getimagesize($filePathOnDisk);
             if ((null === $width || null === $height) && false !== $dimensions) {
@@ -79,7 +87,7 @@ class TemplateHelper
     }
 
     public function getItemId(string $url = ''): string {
-        return 'mappingfusion.fr';
+        return "mappingfusion.fr{$url}";
     }
 
     public function getLinkTypes(): array {
@@ -88,6 +96,14 @@ class TemplateHelper
 
     public function getMk(): MarkdownService {
         return $this->mk;
+    }
+
+    public function getPathOfResource(string $filename): string {
+        return realpath(dirname(__FILE__) . '/../../public/uploaded/' . $filename);
+    }
+
+    public function getPathOfPublicFile(string $filename): string {
+        return realpath(dirname(__FILE__) . '/../../public/' . $filename);
     }
 
     public function getPublicUrl(): string {
@@ -105,6 +121,10 @@ class TemplateHelper
 
     public function getSession(): SessionManager {
         return $this->session;
+    }
+
+    public function getSha256(string $path): string {
+        return hash_file('sha256', $this->getPathOfResource($path));
     }
     
     public function getSmallImage(string $filename): string {
