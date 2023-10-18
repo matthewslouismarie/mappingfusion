@@ -3,7 +3,7 @@
     background-size: cover;
 
     > .content {
-        background: url('blue-shadow.png') repeat-x bottom left / auto 50%;
+        background: url('blue-shadow.png') repeat-x bottom -1px left / auto 50%;
 
         > .heading {
             display: flex;
