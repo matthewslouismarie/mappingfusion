@@ -14,14 +14,19 @@ class FileTransformer implements IFormTransformer
 {
     const PREVIOUS_SUFFIX = '_previous';
 
+    private bool $createThumbnails;
+
     private string $name;
 
     private string $destinationFolder;
+
     public function __construct(
         string $name,
+        bool $createThumbnails = true,
     ) {
         $this->name = $name;
         $this->destinationFolder = dirname(__FILE__) . "/../../../../public/uploaded/";
+        $this->createThumbnails = $createThumbnails;
     }
 
     /**
@@ -63,17 +68,26 @@ class FileTransformer implements IFormTransformer
             $uploadedFileName = pathinfo($file->getClientFilename(), PATHINFO_FILENAME);
             $newFilename = (new Slug($uploadedFileName, true, true))->__toString();
             $destinationPath = "{$this->destinationFolder}/{$newFilename}.webp";
-            if (!file_exists($destinationPath)) {
-                if('image/webp' !== $file->getClientMediaType()) {
-                    $streamGdImg = imagecreatefromstring($file->getStream());
-                    imagewebp($streamGdImg, $destinationPath, 95);
-                } else {
-                    $file->moveTo($destinationPath);
-                }
 
+            $i = 0;
+            while (file_exists($destinationPath)) {
+                $destinationPath = "{$this->destinationFolder}/{$newFilename}-{$i}.webp";
+                $i++;
+            }
+
+            if('image/webp' !== $file->getClientMediaType()) {
+                $streamGdImg = imagecreatefromstring($file->getStream());
+                imagewebp($streamGdImg, $destinationPath, 95);
+            } else {
+                $file->moveTo($destinationPath);
+            }
+
+
+            if ($this->createThumbnails) {
                 $this->createThumbnail(new Filename($destinationPath), 'small', 316, 208, 75);
                 $this->createThumbnail(new Filename($destinationPath), 'medium', 720, 502, 85);
             }
+
             return pathinfo($destinationPath)['basename'];
         } elseif (4 === $file->getError()) {
             return null;

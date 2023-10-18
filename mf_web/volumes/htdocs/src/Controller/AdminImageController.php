@@ -5,6 +5,7 @@ namespace MF\Controller;
 use GuzzleHttp\Psr7\Response;
 use MF\Enum\Clearance;
 use MF\Framework\DataStructures\Filename;
+use MF\Framework\Form\Transformer\CheckboxTransformer;
 use MF\Framework\Form\Transformer\FileTransformer;
 use MF\Session\SessionManager;
 use MF\TwigService;
@@ -45,13 +46,16 @@ class AdminImageController implements ControllerInterface
                     $this->sessionManager->addMessage('Le fichier a été supprimé.');
                 }
             } else {
-                $transformer = new FileTransformer('images');
+                $createThumbnails = (new CheckboxTransformer('create_thumbnails'))->extractValueFromRequest($request->getParsedBody(), []);
+                $transformer = new FileTransformer('images', $createThumbnails);
+                
                 $transformer->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
                 $this->sessionManager->addMessage('Le fichier a bien été ajouté.');
             }
         }
 
-        $listOfFiles = array_filter(scandir($this->uploaded), fn ($value) => !str_contains($value, '.medium.') && !str_contains($value, '.small.'));
+        // $listOfFiles = array_filter(scandir($this->uploaded), fn ($value) => !str_contains($value, '.medium.') && !str_contains($value, '.small.'));
+        $listOfFiles = scandir($this->uploaded);
         $images = array_filter($listOfFiles, function ($value) {
             return 1 === preg_match('/^.+\.(jpg)|(jpeg)|(png)|(webp)$/', $value);
         });
