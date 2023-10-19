@@ -5,6 +5,7 @@ namespace MF\Controller;
 use GuzzleHttp\Psr7\Response;
 use MF\Enum\Clearance;
 use MF\Framework\DataStructures\Filename;
+use MF\Framework\File\FileService;
 use MF\Framework\Form\Transformer\CheckboxTransformer;
 use MF\Framework\Form\Transformer\FileTransformer;
 use MF\Session\SessionManager;
@@ -18,6 +19,7 @@ class AdminImageController implements ControllerInterface
     private string $uploaded;
 
     public function __construct(
+        private FileService $fileService,
         private SessionManager $sessionManager,
         private TwigService $twig,
     ) {
@@ -47,10 +49,7 @@ class AdminImageController implements ControllerInterface
         }
 
         // $listOfFiles = array_filter(scandir($this->uploaded), fn ($value) => !str_contains($value, '.medium.') && !str_contains($value, '.small.'));
-        $listOfFiles = scandir($this->uploaded);
-        $images = array_filter($listOfFiles, function ($value) {
-            return 1 === preg_match('/^.+\.(jpg)|(jpeg)|(png)|(webp)$/', $value);
-        });
+        $images = $this->fileService->getUploadedImages();
 
         return new Response(body: $this->twig->render('image_management.html.twig', [
             'images' => $images,

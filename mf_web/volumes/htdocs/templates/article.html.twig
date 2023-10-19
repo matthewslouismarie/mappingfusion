@@ -113,9 +113,9 @@
                     </div>
                     <div class="glide__track" data-glide-el="track">
                         <ul class="glide__slides">
-                            {% for i in app.getImages(article.body) %}
+                            {% for url in app.getImages(article.body) %}
                             <li class="glide__slide">
-                                <a class="link" href="{{ app.resource(i) }}" style="background-image: url({{ app.resource(i) }});"></a>
+                                <a class="link" href="{{ url }}" style="background-image: url({{ url }});"></a>
                             </li>
                             {% endfor %}
                         </ul>

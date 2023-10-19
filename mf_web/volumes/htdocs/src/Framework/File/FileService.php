@@ -1,6 +1,7 @@
 <?php
 
 namespace MF\Framework\File;
+use MF\Framework\Constraints\IUploadedImageConstraint;
 
 class FileService
 {
@@ -11,10 +12,10 @@ class FileService
      */
     public function getUploadedImages(): array {
         $listOfFiles = scandir(dirname(__FILE__) . '/../../../public/uploaded/');
-        return array_filter($listOfFiles, function ($value) {
-            $parts = explode('.', $value);
-            $nParts = count($parts);
-            return $nParts > 1 && in_array($parts[$nParts - 1], ['jpg', 'jpeg', 'png'], true);
-        });
+
+        return array_filter(
+            $listOfFiles,
+            fn ($value) => 1 === preg_match('/' . IUploadedImageConstraint::FILENAME_REGEX . '/', $value),
+        );
     }
 }

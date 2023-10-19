@@ -6,13 +6,11 @@ use DateTimeInterface;
 use MF\Configuration;
 use MF\Enum\LinkType;
 use MF\Framework\DataStructures\Filename;
-use MF\Framework\Form\FormFactory;
 use MF\Framework\File\FileService;
 use MF\Framework\Form\IFormExtractor;
 use MF\Session\SessionManager;
 use MF\MarkdownService;
 use MF\Router;
-use UnexpectedValueException;
 
 class TemplateHelper
 {
@@ -20,10 +18,10 @@ class TemplateHelper
 
     public function __construct(
         private Configuration $config,
+        private FileService $fileService,
         private MarkdownService $mk,
         private Router $router,
         private SessionManager $session,
-        private FileService $file,
     ) {
     }
 
@@ -51,11 +49,9 @@ class TemplateHelper
 
     public function getImages(string $text): array {
         $foundImages = [];
-        foreach ($this->file->getUploadedImages() as $image) {
-            if (str_contains($text, $image)) {
-                $foundImages[] = $image;
-            }
-        }
+
+        preg_match('/(?<=<!---img )(.+)(?= -->)/', $text, $foundImages);
+
         return $foundImages;
     }
 
