@@ -50,9 +50,9 @@ class TemplateHelper
     public function getImages(string $text): array {
         $foundImages = [];
 
-        preg_match('/(?<=<!---img )(.+)(?= -->)/', $text, $foundImages);
+        preg_match_all('/(?<=<!---img )(.+)(?= -->)/', $text, $foundImages);
 
-        return $foundImages;
+        return $foundImages[0];
     }
 
     public function getImgAttr(string $alt, string $filename, bool $isResource = true, ?int $width = null, ?int $height = null, bool $smallImg = false): string {
