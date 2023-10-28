@@ -186,7 +186,7 @@ class Fixture
             'body' => '',
             'is_featured' => false,
             'is_published' => true,
-            'title' => '',
+            'title' => 'Just another title',
             'sub_title' => null,
             'cover_filename' => '202111271348081.jpg',
             'thumbnail_filename' => '2021112713481.jpg',
