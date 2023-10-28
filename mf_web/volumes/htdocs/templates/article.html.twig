@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
 <script src="https://unpkg.com/@glidejs/glide@3.6.0/dist/glide.js"></script>
 <script src="{{ app.asset('review-menu.js') }}"></script>
+<meta property="og:description" content="{{ app.shorten(app.mk.getText(article.body), 128, '…') }}">
 <meta property="og:type" content="article">
 <meta property="og:published_time" content="{{ article.creation_date_time|date('Y-m-d\\TH:i') }}Z">
 <meta property="og:modified_time" content="{{ article.last_update_date_time|date('Y-m-d\\TH:i') }}Z">
