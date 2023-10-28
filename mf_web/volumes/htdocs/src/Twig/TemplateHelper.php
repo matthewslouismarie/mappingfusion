@@ -127,8 +127,9 @@ class TemplateHelper
     }
 
     public function getResource(string $filename): string {
+        $homeUrl = $this->getHomeUrl();
         $publicUrl = $this->getPublicUrl();
-        return "$publicUrl/uploaded/$filename";
+        return "$homeUrl$publicUrl/uploaded/$filename";
     }
 
     public function getRouter(): Router {
