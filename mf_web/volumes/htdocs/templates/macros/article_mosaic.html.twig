@@ -1,7 +1,7 @@
 {% macro articleMosaic(a, app) %}
 <a class="article-mosaic _gap -gap-col-s" href="{{ app.router.generateUrl('article', {id: a.id}) }}" itemscope itemid="{{ app.articleItemId(a.id) }}" itemtype="https://schema.org/Article">
     <link itemprop="url" href="{{ app.router.generateUrl('article', {id: a.id}) }}">
-    <div class="left"{% if a.cover_filename %} style="background-image: url('{{ app.articleThumbnail(a) }}');"{% endif %}>
+    <div class="left"{% if a.cover_filename %} style="background-image: url('{{ app.thumbnailUrl(a) }}');"{% endif %}>
         <em class="std-badge _txt -txts">{{ a.category.name }}</em>
     </div>
     <div class="right _gap -gap-row-xs">

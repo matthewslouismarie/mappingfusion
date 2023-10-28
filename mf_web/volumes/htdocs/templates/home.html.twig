@@ -7,10 +7,10 @@
 {% block description %}Bienvenue sur la page d’acceuil de Mapping-Fusion, une communauté francophone rassemblé autour de Sven Co-op, Half-Life et de ses mods !{% endblock %}
 
 {% block resources %}
-<link rel="canonical" href="{{ app.homeUrl() }}">
+<link rel="canonical" href="{{ app.conf.homeUrl }}">
 <link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
 <meta property="og:type" content="website">
-<meta property="og:url" content="{{ app.homeUrl() }}">
+<meta property="og:url" content="{{ app.conf.homeUrl }}">
 <meta property="og:image" content="{{ app.asset('mapping-fusion-logo.svg') }}">
 <meta property="og:image:width" content="107">
 <meta property="og:image:height" content="103">
@@ -35,7 +35,7 @@
         </div>
         <div class="glide__bullets" data-glide-el="controls[nav]">
             {% for a in featured_articles %}
-            <button aria-label="{{ featured_articles[loop.index0].title }}" class="glide__bullet" data-glide-dir="={{ loop.index0 }}" style="background-image: url('{{ app.articleThumbnail(featured_articles[loop.index0]) }}');" type="button">
+            <button aria-label="{{ featured_articles[loop.index0].title }}" class="glide__bullet" data-glide-dir="={{ loop.index0 }}" style="background-image: url('{{ app.thumbnailUrl(featured_articles[loop.index0]) }}');" type="button">
                 <span class="image"></span>
             </button>
             {% endfor %}
@@ -54,7 +54,7 @@
             <ul class="list">
                 {% for r in last_reviews %}
                 <li class="item" itemscope itemid="{{ app.articleItemId(r.id) }}">
-                    <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.articleThumbnail(r) }}');"{% endif %} href="{{ app.router.generateUrl('article', [r.id]) }}">
+                    <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.thumbnailUrl(r) }}');"{% endif %} href="{{ app.router.generateUrl('article', [r.id]) }}">
                         <div class="content">
                             <span class="playable _txt -txtl">{{ r.review.playable.name }}</span>
                             {% if r.review.playable.game is defined %}<span class="std-badge _txt -txts">{{ r.review.playable.game.name }}</span>{% endif %}

@@ -18,6 +18,7 @@ $tplHelper = $container->get(TemplateHelper::class);
 $urls = [
     $router->generateUrl(HomeController::ROUTE_ID),
     $router->generateUrl(ArticleController::ROUTE_ID, ['nouvel-version-tcm']),
+    $router->generateUrl(ArticleController::ROUTE_ID, ['article-with-thumbnail']),
     $tplHelper->getAsset('bullsquid-transparent.svg'),
     $tplHelper->getAsset('style.css'),
     $tplHelper->getResource('202111271344571.jpg'),

@@ -132,6 +132,7 @@ class Fixture
             'title' => 'Crossed Paths v3.8.8',
             'sub_title' => null,
             'cover_filename' => '202111271344571.jpg',
+            'thumbnail_filename' => null,
         ]);
         $this->repoArticle->add($article0);
         
@@ -144,6 +145,7 @@ class Fixture
             'title' => 'TCM',
             'sub_title' => '4:9.0',
             'cover_filename' => '202111271344571.jpg',
+            'thumbnail_filename' => null,
         ]);
         $this->repoArticle->add($article1);
         
@@ -156,6 +158,7 @@ class Fixture
             'title' => 'Encore un autre article',
             'sub_title' => null,
             'cover_filename' => '202201051906201.jpg',
+            'thumbnail_filename' => null,
         ]);
         $this->repoArticle->add($article2);
         
@@ -168,8 +171,21 @@ class Fixture
             'title' => 'L’inspiration c’est pas mon truc',
             'sub_title' => 'mais genre pas du tout',
             'cover_filename' => '202111271348081.jpg',
+            'thumbnail_filename' => null,
         ]);
         $this->repoArticle->add($article3);
+
+        $this->repoArticle->add(new AppObject([
+            'id' => 'article-with-thumbnail',
+            'author_id' => $root['id'],
+            'category_id' => $cat1['id'],
+            'body' => '',
+            'is_featured' => false,
+            'title' => '',
+            'sub_title' => null,
+            'cover_filename' => '202111271348081.jpg',
+            'thumbnail_filename' => '2021112713481.jpg',
+        ]));
 
         $this->repoReview->add(new AppObject([
             'id' => null,

@@ -9,12 +9,23 @@ class Configuration
     public function __construct() {
         $this->env = json_decode(file_get_contents(dirname(__FILE__) . '/../.env.json'), true);
     }
+    public function getBoolSetting(string $key): bool {
+        return $this->env[$key];
+    }
+
+    public function getHomeUrl(): string {
+        return $this->getSetting('homeUrl');
+    }
+
+    public function getPublicUrl(): string {
+        return $this->getSetting('publicUrl');
+    }
 
     public function getSetting(string $key): string {
         return $this->env[$key];
     }
 
-    public function getBoolSetting(string $key): bool {
-        return $this->env[$key];
+    public function isDev(): bool {
+        return $this->getBoolSetting('dev');
     }
 }

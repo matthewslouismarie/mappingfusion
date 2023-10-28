@@ -6,7 +6,6 @@ use DateTimeInterface;
 use MF\Configuration;
 use MF\Enum\LinkType;
 use MF\Framework\DataStructures\AppObject;
-use MF\Framework\DataStructures\Filename;
 use MF\Framework\File\FileService;
 use MF\Framework\Form\IFormExtractor;
 use MF\Session\SessionManager;
@@ -21,6 +20,7 @@ class TemplateHelper
         private Configuration $config,
         private FileService $fileService,
         private MarkdownService $mk,
+        private ResourceManager $resourceManager,
         private Router $router,
         private SessionManager $session,
     ) {
@@ -34,26 +34,28 @@ class TemplateHelper
         return $this->getItemID() . "/article/{$id}#article";
     }
 
-    public function getArticleThumbnail(AppObject $article): string {
-        if (null !== $article->thumbnail_filename) {
-            return $this->getSmallImage($article->thumbnail_filename);
-        } else {
-            return $this->getSmallImage($article->cover_filename);
-        }
+    public function getThumbnail(AppObject $article): string {
+        $original = $article->thumbnail_filename ?? $article->cover_filename;
+    
+        return $this->resourceManager->getSmallFilename($original);
+    }
+
+    public function getThumbnailUrl(AppObject $article): string {
+        return $this->getResource($this->getThumbnail($article));
     }
 
     public function getAsset(string $filename): string {
-        $publicUrl = $this->getPublicUrl();
+        $publicUrl = $this->config->getPublicUrl();
         $version = filemtime(dirname(__FILE__) . '/../../public/' . $filename);
         return "$publicUrl/$filename?version=$version";
     }
 
-    public function getDate(DateTimeInterface $date): string {
-        return $date->format('Y-M-D');
+    public function getConf(): Configuration {
+        return $this->config;
     }
 
-    public function getHomeUrl(): string {
-        return $this->config->getSetting('homeUrl');
+    public function getDate(DateTimeInterface $date): string {
+        return $date->format('Y-M-D');
     }
 
     public function getImages(string $text): array {
@@ -66,10 +68,14 @@ class TemplateHelper
 
     public function getImgAttr(string $alt, string $filename, bool $isResource = true, ?int $width = null, ?int $height = null, bool $smallImg = false): string {
 
-        $srcValue = $isResource ? ($smallImg ? $this->getSmallImage($filename) : $this->getResource($filename)) : $this->getAsset($filename);
+        if ($isResource && $smallImg) {
+            $filename = $this->resourceManager->getSmallFilename($filename);
+        }
+
+        $srcValue = $isResource ? $this->getResource($filename) : $this->getAsset($filename);
         $attr = "alt=\"{$alt}\" src=\"{$srcValue}\"";
 
-        $filePathOnDisk =  $isResource ? $this->getPathOfResource($filename) : $this->getPathOfPublicFile($filename);
+        $filePathOnDisk =  $isResource ? $this->resourceManager->getResourcePath($filename) : $this->getPathOfPublicFile($filename);
         if (false !== $filePathOnDisk) {
             $dimensions = getimagesize($filePathOnDisk);
             if ((null === $width || null === $height) && false !== $dimensions) {
@@ -91,17 +97,6 @@ class TemplateHelper
         return $attr;
     }
 
-    public function getResourceDimensions(string $filename): ?array {
-        $filePathOnDisk =  $this->getPathOfResource($filename);
-        if (false !== $filePathOnDisk) {
-            $dimensions = getimagesize($filePathOnDisk);
-            if (false !== $dimensions) {
-                return $dimensions;
-            }
-        }
-        return null;
-    }
-
     public function getItemId(string $url = ''): string {
         return "mappingfusion.fr{$url}";
     }
@@ -114,22 +109,16 @@ class TemplateHelper
         return $this->mk;
     }
 
-    public function getPathOfResource(string $filename): bool|string {
-        return realpath(dirname(__FILE__) . '/../../public/uploaded/' . $filename);
-    }
-
     public function getPathOfPublicFile(string $filename): bool|string {
         return realpath(dirname(__FILE__) . '/../../public/' . $filename);
     }
 
-    public function getPublicUrl(): string {
-        return $this->config->getSetting('publicUrl');
+    public function getResource(string $filename): string {
+        return $this->resourceManager->getResourceUrl($filename);
     }
 
-    public function getResource(string $filename): string {
-        $homeUrl = $this->getHomeUrl();
-        $publicUrl = $this->getPublicUrl();
-        return "$homeUrl$publicUrl/uploaded/$filename";
+    public function getRm(): ResourceManager {
+        return $this->resourceManager;
     }
 
     public function getRouter(): Router {
@@ -141,27 +130,7 @@ class TemplateHelper
     }
 
     public function getSha256(string $path): string {
-        return hash_file('sha256', $this->getPathOfResource($path));
-    }
-    
-    public function getSmallImage(string $filename): string {
-        $filenameObject = new Filename($filename);
-        $fileExtension = $filenameObject->getExtension();
-        $filenameNoExtension = $filenameObject->getFilenameNoExtension();
-        $publicUrl = $this->getPublicUrl();
-        return "$publicUrl/uploaded/$filenameNoExtension.small.$fileExtension";
-    }
-    
-    public function getMediumImage(string $filename): string {
-        $filenameObject = new Filename($filename);
-        $fileExtension = $filenameObject->getExtension();
-        $filenameNoExtension = $filenameObject->getFilenameNoExtension();
-        $publicUrl = $this->getPublicUrl();
-        return "$publicUrl/uploaded/$filenameNoExtension.medium.$fileExtension";
-    }
-
-    public function isDev(): bool {
-        return $this->config->getBoolSetting('dev');
+        return hash_file('sha256', $this->resourceManager->getResourcePath($path));
     }
 
     public function shorten(string $string, int $nCharacters, string $suffix) {

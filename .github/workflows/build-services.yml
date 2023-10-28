@@ -19,4 +19,6 @@ jobs:
       - name: Running other tests
         run: docker-compose exec -T mf_web php -f tests/tester.php "MF\Test\DbEntityManagerTest"
       - name: Running integration test
-        run: docker-compose exec -T mf_web php -f scripts/tests.php
+        run: |
+          docker-compose exec -T mf_web php -f scripts/fixtures.php
+          docker-compose exec -T mf_web php -f scripts/tests.php
