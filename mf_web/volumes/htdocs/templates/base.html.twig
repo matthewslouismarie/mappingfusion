@@ -16,6 +16,7 @@
         <meta id="web-page-description" name="description" itemprop="description" content="{% block description %}Tests et tutoriels pour Half-Life et Sven Co-op !{% endblock %}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title id="web-page-title" itemprop="name">{% block title %}{% endblock %} - Mapping-Fusion</title>
+        <meta property="og:title" content="{{ block('title') }}">
         {% block index %}{% endblock %}
         {% block resources %}{% endblock %}
     </head>

@@ -9,6 +9,9 @@
 {% block resources %}
 <link rel="canonical" href="{{ app.homeUrl() }}">
 <link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ app.homeUrl() }}">
+<meta property="og:image" content="{{ app.asset('mapping-fusion-logo.svg') }}">
 {% endblock %}
 
 {% block body %}
