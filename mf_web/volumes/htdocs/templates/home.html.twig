@@ -7,7 +7,6 @@
 {% block description %}Bienvenue sur la page d’acceuil de Mapping-Fusion, une communauté francophone rassemblé autour de Sven Co-op, Half-Life et de ses mods !{% endblock %}
 
 {% block resources %}
-{# @todo Mettre itemid vers Sven Co-op, Half-Life, Modding, etc. <meta itemprop="about" content="Modding GoldSource"> #}
 <link rel="canonical" href="{{ app.homeUrl() }}">
 <link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
 {% endblock %}
@@ -18,8 +17,8 @@
         <div class="glide__track" data-glide-el="track">
             <ul class="glide__slides">
             {% for a in featured_articles %}
-                <li class="glide__slide" itemscope itemid="{{ app.articleItemId(a.id) }}" itemtype="https://schema.org/Article">
-                    <a class="link _txt -txtxl" href="{{ app.router.generateUrl('article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.cover_filename) }});" itemprop="url">
+                <li class="glide__slide" itemscope itemid="{{ app.articleItemId(a.id) }}">
+                    <a class="link _txt -txtxl" href="{{ app.router.generateUrl('article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.cover_filename) }});">
                         {% if a.sub_title %}<div class="sub-title">{{ app.mk.format(a.sub_title)|raw }}</div>{% endif %}
                         <div class="title">{{ app.mk.format(a.title)|raw }}</div>
                     </a>
@@ -47,10 +46,10 @@
             </div>
             <ul class="list">
                 {% for r in last_reviews %}
-                <li class="item" itemscope itemid="{{ app.articleItemId(r.id) }}" itemtype="https://schema.org/Article">
-                    <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.articleThumbnail(r) }}');"{% endif %} href="{{ app.router.generateUrl('article', [r.id]) }}" itemprop="url">
+                <li class="item" itemscope itemid="{{ app.articleItemId(r.id) }}">
+                    <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.articleThumbnail(r) }}');"{% endif %} href="{{ app.router.generateUrl('article', [r.id]) }}">
                         <div class="content">
-                            <span class="playable _txt -txtl" itemprop="about">{{ r.review.playable.name }}</span>
+                            <span class="playable _txt -txtl">{{ r.review.playable.name }}</span>
                             {% if r.review.playable.game is defined %}<span class="std-badge _txt -txts">{{ r.review.playable.game.name }}</span>{% endif %}
                         </div>
                     </a>
@@ -123,14 +122,4 @@
 <script>
   new Glide('.glide', {gap: 0}).mount()
 </script>
-{% endblock %}
-
-{% block additionalMeta %}
-<div class="_hidden" itemscope itemid="{{ app.homeUrl() }}" itemtype="https://schema.org/WebSite">   
-    <meta itemprop="isAccessibleForFree" content="true">
-    <meta itemprop="headline name" content="Mapping-Fusion">
-    {# @todo Use ImageObject #}
-    <link itemprop="thumbnailUrl" href="{{ app.getAsset('mapping-fusion-logo.svg') }}">
-    <link itemprop="url" href="{{ app.homeUrl() }}">
-</div>
 {% endblock %}
