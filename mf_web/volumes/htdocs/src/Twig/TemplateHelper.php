@@ -91,6 +91,17 @@ class TemplateHelper
         return $attr;
     }
 
+    public function getResourceDimensions(string $filename): ?array {
+        $filePathOnDisk =  $this->getPathOfResource($filename);
+        if (false !== $filePathOnDisk) {
+            $dimensions = getimagesize($filePathOnDisk);
+            if (false !== $dimensions) {
+                return $dimensions;
+            }
+        }
+        return null;
+    }
+
     public function getItemId(string $url = ''): string {
         return "mappingfusion.fr{$url}";
     }
