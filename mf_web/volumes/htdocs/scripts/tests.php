@@ -1,5 +1,6 @@
 <?php
 
+use MF\Controller\ArticleController;
 use MF\Controller\HomeController;
 use MF\Model\KeyName;
 use MF\Router;
@@ -16,6 +17,7 @@ $tplHelper = $container->get(TemplateHelper::class);
 
 $urls = [
     $router->generateUrl(HomeController::ROUTE_ID),
+    $router->generateUrl(ArticleController::ROUTE_ID, ['nouvel-version-tcm']),
     $tplHelper->getAsset('bullsquid-transparent.svg'),
     $tplHelper->getAsset('style.css'),
     $tplHelper->getResource('202111271344571.jpg'),
