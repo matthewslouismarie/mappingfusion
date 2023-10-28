@@ -94,11 +94,11 @@ class TemplateHelper
         return $this->mk;
     }
 
-    public function getPathOfResource(string $filename): string {
+    public function getPathOfResource(string $filename): bool|string {
         return realpath(dirname(__FILE__) . '/../../public/uploaded/' . $filename);
     }
 
-    public function getPathOfPublicFile(string $filename): string {
+    public function getPathOfPublicFile(string $filename): bool|string {
         return realpath(dirname(__FILE__) . '/../../public/' . $filename);
     }
 
