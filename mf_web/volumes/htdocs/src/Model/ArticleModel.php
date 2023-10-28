@@ -27,6 +27,7 @@ class ArticleModel extends AbstractEntity
             'cover_filename' => new StringModel([new class implements IUploadedImageConstraint {}]),
             'creation_date_time' => new DateTimeModel(),
             'last_update_date_time' => new DateTimeModel(),
+            'thumbnail_filename' => new StringModel([new class implements IUploadedImageConstraint {}], true),
         ];
         if (null !== $reviewModel) {
             $properties['review'] = $reviewModel;

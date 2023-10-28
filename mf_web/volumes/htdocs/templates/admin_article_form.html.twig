@@ -44,6 +44,16 @@
         {% endif %}
         {% if formErrors %}{{ errorList( formErrors.cover_filename ?? null) }}{% endif %}
     </div>
+    <div class="form-row -singleimage">
+        <label class="label" for="thumbnail-filename">Miniature</label>
+        <input accept="image/*" class="input" id="thumbnail-filename" name="thumbnail_filename" type="file">
+        {% if formData and formData.thumbnail_filename %}
+        <input name="thumbnail_filename_previous" type="hidden" value="{{ formData.thumbnail_filename }}">
+        <p>Miniature actuelle : {{ formData.thumbnail_filename }}.</p>
+        <img class="image" {{ app.imgAttr('Miniature actuelle', formData.thumbnail_filename, true, 300)|raw }}>
+        {% endif %}
+        {% if formErrors %}{{ errorList( formErrors.thumbnail_filename ?? null) }}{% endif %}
+    </div>
     <div class="form-row -checkbox">
         <input class="input" id="is-featured" name="is_featured" type="checkbox"{% if formData and formData.is_featured %} checked{% endif %}>
         <label class="label" for="is-featured">Mettre à la une</label>

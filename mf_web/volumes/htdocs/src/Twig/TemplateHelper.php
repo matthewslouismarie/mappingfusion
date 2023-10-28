@@ -5,6 +5,7 @@ namespace MF\Twig;
 use DateTimeInterface;
 use MF\Configuration;
 use MF\Enum\LinkType;
+use MF\Framework\DataStructures\AppObject;
 use MF\Framework\DataStructures\Filename;
 use MF\Framework\File\FileService;
 use MF\Framework\Form\IFormExtractor;
@@ -31,6 +32,14 @@ class TemplateHelper
 
     public function getArticleItemId(string $id): string {
         return $this->getItemID() . "/article/{$id}#article";
+    }
+
+    public function getArticleThumbnail(AppObject $article): string {
+        if (null !== $article->thumbnail_filename) {
+            return $this->getSmallImage($article->thumbnail_filename);
+        } else {
+            return $this->getSmallImage($article->cover_filename);
+        }
     }
 
     public function getAsset(string $filename): string {

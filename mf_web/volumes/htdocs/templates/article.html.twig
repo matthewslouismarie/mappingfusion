@@ -107,23 +107,26 @@
                 </div>
 
                 {% if app.getImages(article.body) %}
-                <div class="glide -arrows _padding -padding-vert-l -padding-s" id="article-images">
-                    <div class="controls" data-glide-el="controls">
-                        <button class="button -left" data-glide-dir="<"></button>
+                <section class="section _padding -padding-vert-l -padding-s" id="article-images">
+                    <h2 class="_h1">Galerie d’images</h2>
+                    <div class="glide -arrows">
+                        <div class="controls" data-glide-el="controls">
+                            <button class="button -left" data-glide-dir="<"></button>
+                        </div>
+                        <div class="glide__track" data-glide-el="track">
+                            <ul class="glide__slides">
+                                {% for url in app.getImages(article.body) %}
+                                <li class="glide__slide">
+                                    <a class="link" href="{{ url }}" style="background-image: url({{ url }});"></a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="controls" data-glide-el="controls">
+                            <button class="button -right" data-glide-dir=">"></button>
+                        </div>
                     </div>
-                    <div class="glide__track" data-glide-el="track">
-                        <ul class="glide__slides">
-                            {% for url in app.getImages(article.body) %}
-                            <li class="glide__slide">
-                                <a class="link" href="{{ url }}" style="background-image: url({{ url }});"></a>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="controls" data-glide-el="controls">
-                        <button class="button -right" data-glide-dir=">"></button>
-                    </div>
-                </div>
+                </section>
                 {% endif %}
 
                 {% if article.review is defined %}
