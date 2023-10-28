@@ -189,8 +189,10 @@
     glide.mount();
     {% endif %}
 
-    const reviewMenu = new ReviewMenu();
-    reviewMenu.init();
+    window.addEventListener('load', function () {
+        const reviewMenu = new ReviewMenu();
+        reviewMenu.init();
+    })
 </script>
 {% endblock %}
 
