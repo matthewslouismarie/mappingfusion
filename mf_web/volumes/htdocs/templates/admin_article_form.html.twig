@@ -95,6 +95,9 @@
 
 {% block scriptInit %}
 <script>
-var simplemde = new SimpleMDE({ element: document.getElementById("content") });
+var simplemde = new SimpleMDE({
+    element: document.getElementById("content"),
+    spellChecker: false,
+});
 </script>
 {% endblock %}
