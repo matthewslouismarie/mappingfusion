@@ -10,8 +10,12 @@ class FileService
      * @todo Assume that filenames are in lowercase.
      * @todo Hard-coded file extensions.
      */
-    public function getUploadedImages(): array {
+    public function getUploadedImages(bool $includeThumbnails = true): array {
         $listOfFiles = scandir(dirname(__FILE__) . '/../../../public/uploaded/');
+
+        if (!$includeThumbnails) {
+            $listOfFiles = array_filter($listOfFiles, fn ($value) => !str_contains($value, '.medium.') && !str_contains($value, '.small.'));
+        }
 
         return array_filter(
             $listOfFiles,
