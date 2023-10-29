@@ -95,6 +95,7 @@ class AdminArticleController implements ControllerInterface
             'categories' => $this->catRepo->findAll(),
             'formData' => $formData,
             'formErrors' => $formErrors,
+            'requestedId' => $requestedId,
         ]));
     }
 

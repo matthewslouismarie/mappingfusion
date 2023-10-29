@@ -5,11 +5,17 @@
 
 {% block title %}{{ formData ? 'Édition d’article' ?? 'Nouvel article' }}{% endblock %}
 
+{% block resources %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+{% endblock %}
+
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
 
 <h1>{{ formData ? 'Édition d’article' ?? 'Nouvel article' }}</h1>
+
 <form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="form-row">
         <label class="label" for="id">ID (généré automatiquement)</label>
@@ -65,8 +71,8 @@
         {% if formErrors %}{{ errorList( formErrors.is_published ?? null) }}{% endif %}
     </div>
     <div class="form-row">
-        <label class="label" for="p-content">Contenu de l’article</label>
-        <textarea class="input -textarea" id="p-content" name="body" required>{{ formData.body ?? null }}</textarea>
+        <label class="label" for="content">Contenu de l’article</label>
+        <textarea class="input -textarea" id="content" name="body" required>{{ formData.body ?? null }}</textarea>
         {% if formErrors %}{{ errorList( formErrors.body ?? null) }}{% endif %}
     </div>
     
@@ -80,5 +86,15 @@
 
     <button class="std-button" type="submit">Poster</button>
     {{ csrf(app) }}
+
+    {% if requestedId %}
+    <a class="std-button" href="{{ app.router.generateUrl('article', [requestedId]) }}">Visualiser l’article</a>
+    {% endif %}
 </form>
+{% endblock %}
+
+{% block scriptInit %}
+<script>
+var simplemde = new SimpleMDE({ element: document.getElementById("content") });
+</script>
 {% endblock %}

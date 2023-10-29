@@ -47,4 +47,5 @@
  - insert "dossiers exlicatifs" plus gros
  - text insert réseaux socieux plus gros
  - lien plus de tests, plus d’actualité dans page articles
- - 
+ - se renseigner sur build-services.yml
+ - ajouter check constraint sur article_thumbnail_filename
