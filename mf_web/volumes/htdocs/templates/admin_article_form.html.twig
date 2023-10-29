@@ -10,7 +10,7 @@
 {% block bodyContent %}
 
 <h1>{{ formData ? 'Édition d’article' ?? 'Nouvel article' }}</h1>
-<form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post"{% if app.confapp.conf.dev %} novalidate{% endif %}>
+<form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="form-row">
         <label class="label" for="id">ID (généré automatiquement)</label>
         <input class="input" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
