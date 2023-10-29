@@ -8,7 +8,7 @@
 {% block bodyContent %}
 <h1>{% if formData %}Édition de {{ formData.name }}{% else %}Nouveau jeu{% endif %}</h1>
 
-<form class="std-form" autocomplete="on" enctype="multipart/form-data" method="post"{% if appapp.conf.dev %} novalidate{% endif %}>
+<form class="std-form" autocomplete="on" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="_flex -col -gaps">
         <div class="form-row">
             <label class="label" for="id">ID (générée automatiquement)</label>
