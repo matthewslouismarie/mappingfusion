@@ -4,11 +4,12 @@
             left: -30%;
         }
 
-        > .content > .glide,
-        > .content > .sectioncontent,
-        > .content .intro > .sectioncontent {
-            width: 40dvw;
-            margin: auto;
+        > .content {
+            > .intro > .sectioncontent,
+            > .section,
+            > .sectioncontent {
+                width: 40dvw;
+            }
         }
     }
 }

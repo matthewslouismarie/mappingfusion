@@ -5,11 +5,14 @@
             width: 256px;
         }
 
-        > .content > .section,
-        > .content > .sectioncontent,
-        > .content .intro > .sectioncontent {
-            width: 50dvw;
-            margin: auto;
+        > .content {
+            > .glide,
+            > .section,
+            > .sectioncontent,
+            > .intro > .sectioncontent {
+                width: 50dvw;
+                margin: auto;
+            }
         }
     }
 }

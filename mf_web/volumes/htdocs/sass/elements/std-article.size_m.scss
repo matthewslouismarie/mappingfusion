@@ -18,9 +18,9 @@
         > .content {
             flex: 0 0 100%;
 
-            > .glide,
-            > .sectioncontent,
-            > .intro > .sectioncontent {
+            > .intro > .sectioncontent,
+            > .section,
+            > .sectioncontent {
                 width: 70dvw;
             }
         }
