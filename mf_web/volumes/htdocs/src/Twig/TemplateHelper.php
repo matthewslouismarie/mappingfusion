@@ -3,6 +3,7 @@
 namespace MF\Twig;
 
 use DateTimeInterface;
+use IteratorAggregate;
 use MF\Configuration;
 use MF\Enum\LinkType;
 use MF\Framework\DataStructures\AppObject;
@@ -131,6 +132,15 @@ class TemplateHelper
 
     public function getSha256(string $path): string {
         return hash_file('sha256', $this->resourceManager->getResourcePath($path));
+    }
+
+    public function hasLinks(string $linkType, IteratorAggregate $links): bool {
+        foreach ($links as $l) {
+            if ($l->type == $linkType) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function shorten(string $string, int $nCharacters, string $suffix) {

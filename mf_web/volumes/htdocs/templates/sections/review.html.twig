@@ -35,9 +35,9 @@
         </div>
     
         <div class="relatedlinks _txt"{% if metadata %} id="playable-links"{% endif %}>
-            {{ _self.links('download', review.playable.links) }}
-            {{ _self.links('homepage', review.playable.links) }}
-            {{ _self.links('other', review.playable.links) }}
+            {{ _self.links(app, 'download', review.playable.links) }}
+            {{ _self.links(app, 'homepage', review.playable.links) }}
+            {{ _self.links(app, 'other', review.playable.links) }}
             <a class="std-button -blue -p" href="{{ app.router.generateUrl('tests') }}">
                 <div class="text _txt -bold">Voir plus de tests</div>
             </a>
@@ -45,7 +45,8 @@
     </div>
 {% endmacro %}
 
-{% macro links(linkType, links) %}
+{% macro links(app, linkType, links) %}
+{% if app.hasLinks(linkType, links) %}
 <ul class="list -dormant">
     <button class="std-button -p" data-type="opener">
         <div class="text _txt -bold">{% if linkType == 'download' %}Télécharger{% elseif linkType == 'homepage' %}Site officiel{% else %}Autre{%endif%}</div>
@@ -58,4 +59,5 @@
     {% endif %}
     {% endfor %}
 </ul>
+{% endif %}
 {% endmacro %}
