@@ -34,15 +34,28 @@
             </div>
         </div>
     
-        <div class="relatedlinks"{% if metadata %} id="playable-links"{% endif %}>
-            {% for l in review.playable.links %}
-            <a class="std-button -s -white" href="{{ l.url }}" id="pl-{{ l.url }}"{% if l.type == 'download' %} itemprop="downloadUrl"{% elseif l.type == 'homepage' %} itemprop="sameAs"{% endif %}>
-                <div class="text _txt -bold">{{ l.name }}</div>
-            </a>
-            {% endfor %}
-            <a class="std-button -s -blue" href="{{ app.router.generateUrl('tests') }}">
+        <div class="relatedlinks _txt"{% if metadata %} id="playable-links"{% endif %}>
+            {{ _self.links('download', review.playable.links) }}
+            {{ _self.links('homepage', review.playable.links) }}
+            {{ _self.links('other', review.playable.links) }}
+            <a class="std-button -blue -p" href="{{ app.router.generateUrl('tests') }}">
                 <div class="text _txt -bold">Voir plus de tests</div>
             </a>
         </div>
     </div>
+{% endmacro %}
+
+{% macro links(linkType, links) %}
+<ul class="list -dormant">
+    <button class="std-button -p" data-type="opener">
+        <div class="text _txt -bold">{% if linkType == 'download' %}Télécharger{% elseif linkType == 'homepage' %}Site officiel{% else %}Autre{%endif%}</div>
+    </button>
+    {% for l in links %}
+    {% if l.type == linkType %}
+    <a class="link" href="{{ l.url }}" id="pl-{{ l.url }}"{% if l.type == 'download' %} itemprop="downloadUrl"{% elseif l.type == 'homepage' %} itemprop="sameAs"{% endif %}>
+        <div class="text _txt -bold">{{ l.name }}</div>
+    </a>
+    {% endif %}
+    {% endfor %}
+</ul>
 {% endmacro %}

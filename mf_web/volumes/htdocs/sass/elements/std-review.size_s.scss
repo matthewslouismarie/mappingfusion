@@ -1,0 +1,25 @@
+.std-review {
+    > .relatedlinks {
+        height: 0;
+        gap: 16px;
+        font-size: 14px;
+
+        > .list > .std-button,
+        > .std-button {
+            padding: 5px 15px;
+        }
+
+        > .list {
+            > .link {
+                padding: 0 15px;
+            }
+
+            &:hover,
+            &:not(.-dormant) {
+                > .link {
+                    padding: 5px 15px;
+                }
+            }
+        }
+    }
+}
