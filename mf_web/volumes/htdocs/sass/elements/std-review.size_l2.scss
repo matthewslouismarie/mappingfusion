@@ -11,4 +11,21 @@
             }
         }
     }
+    
+    > .relatedlinks {
+        > .list > .std-button,
+        > .std-button {
+            font-size: $r-font-size-l;
+        }
+
+        > .-moretests {
+            display: block;
+        }
+
+        > .list {
+            > .link {
+                font-size: $r-font-size-l;
+            }
+        }
+    }
 }

@@ -207,17 +207,6 @@
         const reviewMenu = new ReviewMenu();
         reviewMenu.init();
     })
-
-    document.querySelectorAll('[data-type="opener"]').forEach((e) => {
-        e.onclick = function (ev) {
-            const p = e.parentNode;
-            if (p.classList.contains('-dormant')) {
-                p.classList.remove('-dormant');
-            } else {
-                p.classList.add('-dormant');
-            }
-        }
-    })
 </script>
 {% endblock %}
 

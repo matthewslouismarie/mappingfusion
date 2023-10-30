@@ -1,23 +1,20 @@
 .std-review {
     > .relatedlinks {
-        height: 0;
-        gap: 16px;
-        font-size: 14px;
+        gap: $gap-s;
 
         > .list > .std-button,
         > .std-button {
-            padding: 5px 15px;
+            padding: $gap-xxs $gap-s;
         }
 
         > .list {
             > .link {
-                padding: 0 15px;
+                padding: 0 $gap-s;
             }
 
-            &:hover,
-            &:not(.-dormant) {
+            &:hover {
                 > .link {
-                    padding: 5px 15px;
+                    padding: $gap-xxs $gap-s;
                 }
             }
         }

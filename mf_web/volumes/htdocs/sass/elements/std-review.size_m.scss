@@ -1,25 +1,28 @@
 .std-review {
     > .relatedlinks {
-        height: 0;
-        gap: 16px;
+        > .std-button {
+            border-radius: $border-radius-s;
+        }
 
         > .list > .std-button,
         > .std-button {
-            padding: 5px 15px;
-            border-radius: $border-radius-btn;
-            font-size: 16px;
+            font-size: $r-font-size-m;
         }
 
         > .list {
-            > .link {
-                padding: 0 15px;
-                font-size: 16px;
+            > .std-button {
+                border-radius: $border-radius-s;
             }
 
-            &:hover,
-            &:not(.-dormant) {
-                > .link {
-                    padding: 5px 15px;
+            > .link {
+                font-size: $r-font-size-m;
+            }
+
+            &:hover {
+                border-radius: 0 0 $border-radius-s $border-radius-s;
+
+                > .std-button {
+                    border-radius: $border-radius-s $border-radius-s 0 0;
                 }
             }
         }
