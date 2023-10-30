@@ -96,7 +96,11 @@
 {% block scriptInit %}
 <script>
 var simplemde = new SimpleMDE({
-    autosave: true,
+    autosave: {
+        enabled: true,
+        delay: 5000,
+        uniqueId: "{{ requestedId }}",
+    },
     element: document.getElementById("content"),
     spellChecker: false,
 });
