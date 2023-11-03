@@ -5,6 +5,7 @@ namespace MF\Model;
 use MF\Framework\Constraints\StringConstraint;
 use Stringable;
 use UnexpectedValueException;
+use voku\helper\ASCII;
 
 class Slug implements Stringable
 {
@@ -12,7 +13,7 @@ class Slug implements Stringable
 
     public function __construct(string $value, bool $transform = false, bool $allowEmpty = false) {
         if ($transform) {
-            $this->value = substr(preg_replace('/[^a-z0-9\-]|(--)|(^-)|(-$)/', '', preg_replace('/[ _]|(--)/', '-', strtolower($value))), 0, StringConstraint::MAX_LENGTH);
+            $this->value = substr(ASCII::to_slugify($value), 0, StringConstraint::MAX_LENGTH);
         } else {
             $this->value = $value;
         }
