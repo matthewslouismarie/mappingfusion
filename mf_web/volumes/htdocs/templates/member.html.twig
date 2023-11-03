@@ -15,6 +15,7 @@
 </article>
 
 {% if articles|length > 0 %}
+<p>{{ member.id }} a publié les articles suivants :</p>
 <ul>
     {% for a in articles %}
     <li>
@@ -22,5 +23,7 @@
     </li>
     {% endfor %}
 </ul>
+{% else %}
+<p>{{ member.id }} n’a publié aucun article. Allez hop, faut s’y mettre !</p>
 {% endif %}
 {% endblock %}
