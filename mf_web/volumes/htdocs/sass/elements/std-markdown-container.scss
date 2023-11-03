@@ -1,5 +1,7 @@
 .std-markdown-container {
     overflow-wrap: break-word;
+    line-height: 1.4em;
+    font-size: 18px;
 
     img {
         display: block;
@@ -61,10 +63,5 @@
     ol,
     img {
         margin-bottom: $gap-s2;
-    }
-
-    p {
-        line-height: 1.4em;
-        font-size: 18px;
     }
 }
