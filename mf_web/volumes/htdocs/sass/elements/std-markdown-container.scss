@@ -41,11 +41,10 @@
         @include h3;
     }
 
-    p,
-    li,
-    ol,
-    img {
-        margin-bottom: $gap-s2;
+    iframe {
+        max-width: 100%;
+        height: unset;
+        aspect-ratio: 16 / 9;
     }
 
     ol,
@@ -55,5 +54,17 @@
 
     ul {
         list-style-type: circle;
+    }
+
+    p,
+    li,
+    ol,
+    img {
+        margin-bottom: $gap-s2;
+    }
+
+    p {
+        line-height: 1.4em;
+        font-size: 18px;
     }
 }
