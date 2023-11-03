@@ -11,6 +11,7 @@
 {% block resources %}
 <link rel="canonical" href="{{ app.conf.homeUrl }}">
 <link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
+<meta property="og:description" content="{{ block('description') }}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ app.conf.homeUrl }}">
 <meta property="og:image" content="{{ app.asset('mf-logo-transparent.webp') }}">
