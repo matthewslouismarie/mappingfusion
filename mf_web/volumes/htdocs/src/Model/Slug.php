@@ -13,7 +13,7 @@ class Slug implements Stringable
 
     public function __construct(string $value, bool $transform = false, bool $allowEmpty = false) {
         if ($transform) {
-            $this->value = substr(ASCII::to_slugify($value), 0, StringConstraint::MAX_LENGTH);
+            $this->value = substr(ASCII::to_slugify($value, language: 'fr'), 0, StringConstraint::MAX_LENGTH);
         } else {
             $this->value = $value;
         }
