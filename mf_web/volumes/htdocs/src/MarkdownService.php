@@ -6,7 +6,7 @@ use Michelf\Markdown;
 
 class MarkdownService
 {
-    const ADVICE_MARKER = '<!-- Conseil -->';
+    const ADVICE_MARKER = '<!--- Conseil -->';
 
     private Markdown $parser;
 
