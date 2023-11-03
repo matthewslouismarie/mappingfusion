@@ -147,6 +147,7 @@
                 <div class="sectioncontent _padding -padding-hori-s -padding-vert-l" id="review-summary">
                     {{ review(app, article.review.playable, article.review, '-summary', false) }}
                 </div>
+                {% endif %}
 
                 {% if app.mk.formatArticleBody(article.body).advice %}
                 <div class="sectioncontent _padding -padding-hori-s -padding-vert-l">
@@ -154,7 +155,6 @@
                         {{ app.mk.formatArticleBody(article.body).advice|raw }}
                     </aside>
                 </div>
-                {% endif %}
                 {% endif %}
 
 
