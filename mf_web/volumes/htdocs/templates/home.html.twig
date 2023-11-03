@@ -2,7 +2,9 @@
 
 {% from 'macros/article_mosaic.html.twig' import articleMosaic %}
 
-{% block title %}Acceuil{% endblock %}
+{% block title %}Mapping-Fusion{% endblock %}
+
+{% block suffix %}{% endblock %}
 
 {% block description %}Bienvenue sur la page d’acceuil de Mapping-Fusion, une communauté francophone rassemblé autour de Sven Co-op, Half-Life et de ses mods !{% endblock %}
 
@@ -11,10 +13,10 @@
 <link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ app.conf.homeUrl }}">
-<meta property="og:image" content="{{ app.asset('mf-logo-transparent.png') }}">
-<meta property="og:image:width" content="107">
-<meta property="og:image:height" content="103">
-<meta property="og:image:type" content="image/png">
+<meta property="og:image" content="{{ app.asset('mf-logo-transparent.webp') }}">
+<meta property="og:image:width" content="400">
+<meta property="og:image:height" content="400">
+<meta property="og:image:type" content="image/webp">
 <meta property="og:image:alt" content="Logo de Mapping-Fusion">
 {% endblock %}
 
