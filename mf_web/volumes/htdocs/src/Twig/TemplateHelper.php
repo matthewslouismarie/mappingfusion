@@ -46,9 +46,10 @@ class TemplateHelper
     }
 
     public function getAsset(string $filename): string {
+        $websiteUrl = $this->config->getHomeUrl();
         $publicUrl = $this->config->getPublicUrl();
         $version = filemtime(dirname(__FILE__) . '/../../public/' . $filename);
-        return "$publicUrl/$filename?version=$version";
+        return "$websiteUrl$publicUrl/$filename?version=$version";
     }
 
     public function getConf(): Configuration {
