@@ -6,6 +6,7 @@
 {% block resources %}
 <link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
 <script src="https://unpkg.com/@glidejs/glide@3.6.0/dist/glide.js"></script>
+<script src="{{ app.asset('img-previewer.js') }}"></script>
 <script src="{{ app.asset('review-menu.js') }}"></script>
 <meta property="og:description" content="{{ app.shorten(app.mk.getText(article.body), 128, '…') }}">
 <meta property="og:type" content="article">
@@ -191,6 +192,10 @@
 
     {% include 'sections/beginners-all.html.twig' %}
 </div>
+
+<div class="img-preview-container -hidden" id="img-preview-container">
+    <button class="std-button" data-type="btn">Fermer</button>
+</div>
 {% endblock %}
 
 {% block scriptInit %}
@@ -206,7 +211,10 @@
     window.addEventListener('load', function () {
         const reviewMenu = new ReviewMenu();
         reviewMenu.init();
-    })
+    });
+
+    const previewer = new ImgPreviewer('img-preview-container');
+    previewer.init(document.querySelectorAll('.std-markdown-container img, .glide__slide > .link'));
 </script>
 {% endblock %}
 
