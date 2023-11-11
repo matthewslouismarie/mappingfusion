@@ -20,8 +20,10 @@
     > .link {
         max-width: 98dvw;
         max-height: 98dvh;
+
         > .img {
             display: block;
+            max-height: 100%;
             box-shadow: 0 0 $shadow-m $color-black;
         }
     }
