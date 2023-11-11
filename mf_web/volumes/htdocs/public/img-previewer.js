@@ -58,7 +58,7 @@ class ImgPreviewer
         this.#img.src = src;
         this.#img.alt = alt;
         this.#container.classList.remove('-hidden');
-        this.#link.focus();
+        this.#btn.focus();
     }
 
     hide() {
