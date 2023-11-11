@@ -21,6 +21,7 @@
         color: $color-white;
         font-size: $r-font-size-s;
         font-style: italic;
+        text-shadow: 0 0 $shadow-s $color-black;
     }
 
     > .link {
