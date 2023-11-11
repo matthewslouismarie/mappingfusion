@@ -1,11 +1,13 @@
 class ImgPreviewer
 {
+    #btn;
     #container;
     #link;
     #img;
 
     constructor(containerId) {
         this.#container = document.getElementById(containerId);
+        this.#btn = this.#container.querySelector('[data-type=btn]');
         this.#link = undefined;
         this.#img = undefined;
     }
@@ -19,7 +21,12 @@ class ImgPreviewer
                 this.hide();
             }
         };
-        this.#container.querySelector('[data-type=btn]').onclick = () => this.hide();
+        this.#btn.onclick = () => this.hide();
+        this.#container.addEventListener('focusout', (ev) => {
+            if (!this.#container.contains(ev.relatedTarget)) {
+                this.hide();
+            }
+        });
         document.body.addEventListener('keydown', (e) => {
             if (e.key == "Escape") {
                 this.hide();
@@ -28,7 +35,6 @@ class ImgPreviewer
     }
 
     display(ev) {
-        console.log(ev.target);
         if (ev.target instanceof HTMLImageElement) {
             var src = ev.target.src;
             var alt = ev.target.alt;
@@ -52,6 +58,7 @@ class ImgPreviewer
         this.#img.src = src;
         this.#img.alt = alt;
         this.#container.classList.remove('-hidden');
+        this.#link.focus();
     }
 
     hide() {
