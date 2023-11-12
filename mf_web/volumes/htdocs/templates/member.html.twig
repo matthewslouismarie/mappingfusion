@@ -1,29 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% from 'macros/csrf_input.html.twig' import csrf %}
-{% from 'macros/error_list.html.twig' import errorList %}
+{% from 'macros/article_mosaic.html.twig' import articleMosaic %}
 
-{% block title %}{{ member.id }}{% endblock %}
+{% block title %}{{ name }}{% endblock %}
 
-{% block description %}Profil du membre {{ member.id }}{% endblock %}
+{% block description %}Profil de {{ name }}{% endblock %}
 
 {% block bodyContent %}
 <article itemscope itemtype="https://schema.org/Person">
     <a href="{{ app.router.generateUrl('membre', [member.id]) }}" itemprop="url">
-        <h1 class="_txt -txtxl" itemprop="identifier name">{{ member.id }}</h1>
+        <h1 class="_txt -txtxl" itemprop="identifier name">{{ name }}</h1>
     </a>
 </article>
 
+<h2>Articles</h2>
 {% if articles|length > 0 %}
-<p>{{ member.id }} a publié les articles suivants :</p>
-<ul>
+<p>{{ name }} a publié les articles suivants :</p>
+<ul class="std-mosaic-list -oneperrow _marginm -mgbottom">
     {% for a in articles %}
-    <li>
-        <a href="{{ app.router.generateUrl('article', [a.id]) }}">{{ a.title }}</a>
-    </li>
+    <li class="item">{{ articleMosaic(a, app) }}</li>
     {% endfor %}
 </ul>
 {% else %}
-<p>{{ member.id }} n’a publié aucun article. Allez hop, faut s’y mettre !</p>
+<p>{{ name }} n’a publié aucun article. Allez hop, faut s’y mettre !</p>
+{% endif %}
+<h2>Maps et mods</h2>
+{% if null != playables %}
+<p>{{ name }} est l’auteur ou un des contributeurs des maps et mods suivants :</p>
+<ul>
+    {% for p in playables %}
+    <li>{{ p.name }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>{{ name }} n’a créé aucun mod ou aucune map. La honte !</p>
 {% endif %}
 {% endblock %}

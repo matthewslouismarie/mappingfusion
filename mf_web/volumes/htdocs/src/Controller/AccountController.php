@@ -8,6 +8,7 @@ use MF\Framework\Form\FormFactory;
 use MF\Framework\Model\StringModel;
 use MF\Framework\Type\ModelValidator;
 use MF\Model\MemberModel;
+use MF\Repository\AuthorRepository;
 use MF\Session\SessionManager;
 use MF\Repository\MemberRepository;
 use GuzzleHttp\Psr7\Response;
@@ -20,6 +21,7 @@ class AccountController implements ControllerInterface
     const ROUTE_ID = 'manage-account';
 
     public function __construct(
+        private AuthorRepository $authorRepository,
         private FormFactory $formFactory,
         private MemberRepository $repo,
         private ModelValidator $modelValidator,
@@ -45,21 +47,22 @@ class AccountController implements ControllerInterface
             $formErrors = $this->modelValidator->validate($formData, $model);
             if (0 === count($formErrors)) {
                 if (null !== $formData['password']) {
-                    $this->session->addMessage('Votre compte a été mis à jour.');
                     $formData['password'] =  password_hash($formData['password'], PASSWORD_DEFAULT);
-                    $this->repo->updateMember(new AppObject($formData), $this->session->getCurrentMemberUsername());
-                    $this->session->setCurrentMemberUsername($formData['id']);
+                    $this->repo->update($formData, $this->session->getCurrentMemberUsername());
                 } else {
-                    $this->repo->updateId($this->session->getCurrentMemberUsername(), $formData['id']);
-                    $this->session->addMessage('Votre nom d’utilisateur a été mis à jour.');
-                    $this->session->setCurrentMemberUsername($formData['id']);
+                    $this->repo->update($formData, $this->session->getCurrentMemberUsername(), false);
                 }
+                $this->session->setCurrentMemberUsername($formData['id']);
+                $this->session->addMessage('Votre compte a été mis à jour.');
             }
+        } else {
+            $formData = $this->repo->find($this->session->getCurrentMemberUsername());
         }
 
         return new Response(body: $this->twig->render('account.html.twig', [
             'formData' => $formData,
             'formErrors' => $formErrors,
+            'authors' => $this->authorRepository->findAll(),
         ]));
     }
 

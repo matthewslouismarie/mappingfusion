@@ -21,6 +21,16 @@
         <input class="input" id="password" name="password" autocomplete="current-password" type="password">
         {% if formErrors.password is defined %}{{ errorList(formErrors.password )}}{% endif %}
     </div>
+    <div class="form-row">
+        <label class="label" for="author-id">Auteur associé</label>
+        <select id="author-id" name="author_id">
+            <option></option>
+            {% for a in authors %}
+            <option value="{{ a.id }}"{% if formData and a.id == formData.author_id %} selected{% endif %}>{{ a.name }}</option>
+            {% endfor %}
+        </select>
+        {% if formErrors %}{{ errorList( formErrors.author_id ?? null) }}{% endif %}
+    </div>
     <button class="std-button" type="submit">
         <div class="text _txt -bold">Mettre à jour</div>
     </button>

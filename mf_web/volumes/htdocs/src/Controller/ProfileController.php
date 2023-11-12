@@ -8,6 +8,7 @@ use MF\Exception\Http\BadRequestException;
 use MF\Exception\Http\NotFoundException;
 use MF\Repository\ArticleRepository;
 use MF\Repository\MemberRepository;
+use MF\Repository\PlayableRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,6 +20,7 @@ class ProfileController implements ControllerInterface
     public function __construct(
         private ArticleRepository $articleRepository,
         private MemberRepository $repo,
+        private PlayableRepository $playableRepository,
         private TwigService $twig,
     ) {
     }
@@ -39,6 +41,8 @@ class ProfileController implements ControllerInterface
             body: $this->twig->render('member.html.twig', [
                 'articles' => $articles,
                 'member' => $member,
+                'name' => null !== $member->author_id ? $member->author->name : $member->id,
+                'playables' => $member->author_id ? $this->playableRepository->findFrom($member->author_id) : null,
             ])
         );
     }

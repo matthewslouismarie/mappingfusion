@@ -27,7 +27,7 @@ class LoginController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $model = new MemberModel();
+        $model = (new MemberModel())->removeProperty('author_id');
         $form = $this->formFactory->createTransformer($model);
         $formErrors = [];
         $formData = null;

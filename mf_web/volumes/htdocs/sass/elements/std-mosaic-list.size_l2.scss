@@ -1,5 +1,5 @@
 .std-mosaic-list {
-    &:not(.-twoperrow) {
+    &:not(.-twoperrow):not(.-oneperrow) {
         > .item {
             width: 30%;
         }

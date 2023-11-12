@@ -76,6 +76,19 @@ class PlayableRepository implements IRepository
         return $playables;
     }
 
+    /**
+     * @return AppObject[]
+     */
+    public function findFrom(string $authorId): array {
+        $stmt = $this->conn->getPdo()->prepare('SELECT DISTINCT * FROM v_playable WHERE author_id = ? GROUP BY playable_id;');
+        $stmt->execute([$authorId]);
+        $playables = [];
+        foreach ($stmt->fetchAll() as $row) {
+            $playables[] = $this->em->toAppData($row, $this->model, 'playable');
+        }
+        return $playables;
+    }
+
     public function findOne(string $id): AppObject {
 
         return $this->find($id) ?? throw new EntityNotFoundException();

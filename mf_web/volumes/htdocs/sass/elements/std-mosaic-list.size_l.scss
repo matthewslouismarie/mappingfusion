@@ -1,7 +1,9 @@
 .std-mosaic-list {
-    column-gap: 4%;
-
-    > .item {
-        width: 48%;
+    &:not(.-oneperrow) {
+        column-gap: 4%;
+    
+        > .item {
+            width: 48%;
+        }
     }
 }

@@ -114,7 +114,7 @@ class ArticleRepository implements IRepository
         $stmt->execute([$memberId]);
         $articles = [];
         foreach ($stmt->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, new ArticleModel(), 'article');
+            $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel()), 'article');
         }
         return $articles;
     }
