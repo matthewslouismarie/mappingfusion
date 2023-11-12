@@ -5,8 +5,10 @@
     top: 0;
     z-index: $z-index-img-preview;
     
-    width: 100dvw;
-    height: 100dvh;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
     overflow: hidden;
 
     background: $color-blue-4-transparent;
@@ -17,11 +19,21 @@
     gap: $gap-s;
     justify-content: center;
 
-    > .advice {
-        color: $color-white;
-        font-size: $r-font-size-s;
-        font-style: italic;
-        text-shadow: 0 0 $shadow-s $color-black;
+    > .text {    
+        position: fixed;
+        bottom: $gap-s;
+
+        display: flex;
+        flex-direction: column;
+        gap: $gap-s;
+        align-items: center;
+
+        > .advice {
+            color: $color-white;
+            font-size: $r-font-size-s;
+            font-style: italic;
+            text-shadow: 0 0 $shadow-xs $color-black;
+        }
     }
 
     > .link {
@@ -33,11 +45,6 @@
             max-height: 100%;
             box-shadow: 0 0 $shadow-m $color-black;
         }
-    }
-
-    > .std-button {
-        position: fixed;
-        bottom: $gap-s;
     }
 
     &.-hidden {
