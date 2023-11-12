@@ -194,10 +194,10 @@
 </div>
 
 <div class="img-preview-container -hidden" id="img-preview-container">
-    <div class="text">
-        <p class="advice">Re-cliquez sur l’image pour la voir en grand.</p>
-        <button class="std-button" data-type="btn">Fermer</button>
-    </div>
+    <button class="invisible -gotostart" data-type="focus-guard" data-direction="end">Aller à la fin</button>
+    <p class="advice">Re-cliquez sur l’image pour la voir en grand.</p>
+    <button class="std-button" data-type="btn">Fermer</button>
+    <button class="invisible -gotoend" data-type="focus-guard" data-direction="start">Revenir au début</button>
 </div>
 {% endblock %}
 

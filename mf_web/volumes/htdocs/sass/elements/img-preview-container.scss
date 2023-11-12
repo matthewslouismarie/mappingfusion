@@ -1,4 +1,5 @@
 .img-preview-container {
+    all: unset;
     
     position: fixed;
     left: 0;
@@ -18,6 +19,22 @@
     align-items: center;
     gap: $gap-s;
     justify-content: center;
+
+    > .invisible {
+        position: fixed;
+        font-size: $r-font-size-s;
+        background: none;
+        opacity: 0;
+        border: none;
+
+        &.-gotostart {
+            top: 0;
+        }
+
+        &.-gotoend {
+            bottom: 0;
+        }
+    }
 
     > .text {    
         position: fixed;

@@ -22,11 +22,24 @@ class ImgPreviewer
             }
         };
         this.#btn.onclick = () => this.hide();
-        this.#container.addEventListener('focusout', (ev) => {
-            if (!this.#container.contains(ev.relatedTarget)) {
+
+        document.addEventListener('focus', (ev) => {
+            if (this.#container.contains(ev.target)) {
+                if (ev.target.dataset.type == 'focus-guard') {
+                    ev.preventDefault();
+                    ev.stopImmediatePropagation();
+                    ev.stopPropagation();
+                    if (ev.target.dataset.direction == 'end') {
+                        this.#btn.focus();
+                    } else if (ev.target.dataset.direction == 'start') {
+                        this.#link.focus();
+                    }
+                }
+            } else {
                 this.hide();
             }
-        });
+        }, true);
+
         document.body.addEventListener('keydown', (e) => {
             if (e.key == "Escape") {
                 this.hide();
