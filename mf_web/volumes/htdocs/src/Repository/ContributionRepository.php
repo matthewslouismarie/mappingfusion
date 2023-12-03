@@ -34,7 +34,7 @@ class ContributionRepository implements IRepository
         return null !== $data ? $this->em->toAppData($data, $this->model, 'contribution') : null;
     }
 
-    public function filterPlayableContributions(string $playableId, array $ids): void {
+    public function filterOutPlayableContributions(string $playableId, array $ids): void {
         if (0 === count($ids)) {
             $delStmt = $this->conn->getPdo()->prepare("DELETE FROM e_contribution WHERE contribution_playable_id = ?;");
             $delStmt->execute([$playableId]);

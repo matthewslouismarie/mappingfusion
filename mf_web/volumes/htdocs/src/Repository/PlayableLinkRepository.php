@@ -35,7 +35,7 @@ class PlayableLinkRepository implements IRepository
         $stmt->execute([$id]);
     }
 
-    public function filterPlayableLinks(string $playableId, array $linkIds): void {
+    public function filterOutPlayableLinks(string $playableId, array $linkIds): void {
         if (0 === count($linkIds)) {
             $delLinkStmt = $this->conn->getPdo()->prepare("DELETE FROM e_playable_link WHERE link_playable_id = ?;");
             $delLinkStmt->execute([$playableId]);

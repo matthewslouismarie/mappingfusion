@@ -79,9 +79,9 @@ class AdminPlayableController implements ControllerInterface
             if (0 === count($formErrors)) {
                 $playable = new AppObject($formData);
                 if (null === $playableId) {
-                    $this->repo->add($playable);
+                    $this->repo->addOrUpdate($playable, add: true);
                 } else {
-                    $this->repo->update($playable, $playableId);
+                    $this->repo->addOrUpdate($playable, $playableId);
                 }
                 return $this->router->generateRedirect(self::ROUTE_ID, [$playable->id]);
             }
