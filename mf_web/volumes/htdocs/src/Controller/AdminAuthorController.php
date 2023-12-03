@@ -5,6 +5,7 @@ namespace MF\Controller;
 use GuzzleHttp\Psr7\Response;
 use MF\Enum\Clearance;
 use MF\Exception\Http\NotFoundException;
+use MF\Framework\DataStructures\AppObject;
 use MF\Framework\Form\FormFactory;
 use MF\Framework\Type\ModelValidator;
 use MF\Model\AuthorModel;
@@ -47,11 +48,12 @@ class AdminAuthorController implements ControllerInterface
             $formErrors = $this->modelValidator->validate($formData, $this->model);
 
             if (0 === count($formErrors)) {
+                $author = new AppObject($formData); 
                 try {
                     if (null === $requestedId) {
-                        $this->repo->add($formData);
+                        $this->repo->add($author);
                     } else {
-                        $this->repo->update($formData, $requestedId);
+                        $this->repo->update($author, $requestedId);
                     }
                     return $this->router->generateRedirect(self::ROUTE_ID, [$formData['id']]);
                 } catch (PDOException $e) {
