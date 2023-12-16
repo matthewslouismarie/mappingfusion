@@ -37,7 +37,7 @@
 
         <div class="form-row">
             <label class="label" for="release-date-time">Date de publication</label>
-            <input class="input" id="release-date-time" name="release_date_time" required type="datetime-local" value="{{ formData.release_date_time.format('Y-m-d H:i') ?? null }}">
+            <input class="input" id="release-date-time" name="release_date_time" required type="date" value="{{ formData.release_date_time.format('Y-m-d') ?? null }}">
             {{ errorList(formErrors.release_date_time ?? null )}}
         </div>
     </div>
