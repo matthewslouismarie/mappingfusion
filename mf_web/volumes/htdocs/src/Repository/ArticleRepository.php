@@ -8,6 +8,7 @@ use MF\Framework\DataStructures\AppObject;
 use MF\Model\AuthorModel;
 use MF\Model\CategoryModel;
 use MF\Model\ContributionModel;
+use MF\Model\MemberModel;
 use MF\Model\PlayableLinkModel;
 use MF\Session\SessionManager;
 use MF\Model\ArticleModel;
@@ -42,7 +43,7 @@ class ArticleRepository implements IRepository
     public function find(string $id, bool $fetchPlayableContributors = false, bool $onlyPublished = true): ?AppObject {
         $wherePublished = $onlyPublished ? 'AND article_is_published = 1' : '';
 
-        $stmt = $this->conn->getPdo()->prepare("SELECT v_article.*, v_playable.* FROM v_article LEFT OUTER JOIN v_playable ON v_article.playable_id = v_playable.playable_id WHERE article_id = ? $wherePublished;");
+        $stmt = $this->conn->getPdo()->prepare("SELECT v_article.*, v_playable.*, v_person.* FROM v_article LEFT OUTER JOIN v_playable ON v_article.playable_id = v_playable.playable_id LEFT JOIN v_person ON v_article.article_author_id = v_person.member_id WHERE article_id = ? $wherePublished;");
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
@@ -79,7 +80,8 @@ class ArticleRepository implements IRepository
         $data[0]['links'] = $links;
         $data[0]['contributions'] = $contribs;
 
-        return $this->em->toAppData($data[0], new ArticleModel(new CategoryModel(), $reviewModel), 'article');
+        $memberModel = new MemberModel(new AuthorModel());
+        return $this->em->toAppData($data[0], new ArticleModel(categoryModel: new CategoryModel(), memberModel: $memberModel, reviewModel: $reviewModel), 'article');
     }
 
     public function findAll(bool $onlyPublished = true): array {
@@ -88,7 +90,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article {$wherePublished};")->fetchAll();
         $entities = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppData($r, new ArticleModel(new CategoryModel()), 'article');
+            $entities[] = $this->em->toAppData($r, new ArticleModel(categoryModel: new CategoryModel()), 'article');
         }
         return $entities;
     }
@@ -101,7 +103,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query("SELECT *, playable_game_id AS game_id, playable_game_name AS game_name, playable_game_release_date_time AS game_release_date_time, NULL AS game_game_id FROM v_article WHERE review_id IS NOT NULL $wherePublished;");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel(new PlayableModel()))), 'article');
+            $articles[] = $this->em->toAppData($article, new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel(new PlayableModel()))), 'article');
         }
         return $articles;
     }
@@ -114,7 +116,7 @@ class ArticleRepository implements IRepository
         $stmt->execute([$memberId]);
         $articles = [];
         foreach ($stmt->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel()), 'article');
+            $articles[] = $this->em->toAppData($article, new ArticleModel(categoryModel: new CategoryModel()), 'article');
         }
         return $articles;
     }
@@ -145,7 +147,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE article_is_published = 1 {$whereClause} ORDER BY article_creation_date_time DESC LIMIT {$limit};");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel()), 'article');
+            $articles[] = $this->em->toAppData($article, new ArticleModel(categoryModel: new CategoryModel()), 'article');
         }
         return $articles;
     }
@@ -157,7 +159,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query("SELECT *, playable_game_id AS game_id, playable_game_name AS game_name, playable_game_release_date_time AS game_release_date_time, NULL AS game_game_id FROM v_article WHERE article_is_published = 1 AND review_id IS NOT NULL ORDER BY article_creation_date_time DESC LIMIT 4;");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, new ArticleModel(new CategoryModel(), new ReviewModel(new PlayableModel(new PlayableModel()))), 'article');
+            $articles[] = $this->em->toAppData($article, new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel(new PlayableModel()))), 'article');
         }
         return $articles;
     }

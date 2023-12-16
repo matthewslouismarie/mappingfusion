@@ -51,7 +51,7 @@ class DbEntityManagerTest implements IUnitTest
                 'playable_game_release_date_time' => NULL,
                 'playable_game_game_id' => NULL,
             ],
-            new ArticleModel(new CategoryModel())
+            new ArticleModel(categoryModel: new CategoryModel())
         , 'article');
 
         $expectedAppObject = new AppObject([

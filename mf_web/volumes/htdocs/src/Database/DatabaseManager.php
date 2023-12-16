@@ -43,6 +43,7 @@ class DatabaseManager
     
             $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_article.sql'));
             $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_playable.sql'));
+            $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_person.sql'));
         }
     }
 

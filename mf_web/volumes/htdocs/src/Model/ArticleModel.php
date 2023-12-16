@@ -13,6 +13,7 @@ class ArticleModel extends AbstractEntity
 {
     public function __construct(
         ?CategoryModel $categoryModel = null,
+        ?MemberModel $memberModel = null,
         ?ReviewModel $reviewModel = null,
     ) {
         $properties = [
@@ -34,6 +35,9 @@ class ArticleModel extends AbstractEntity
         }
         if (null !== $categoryModel) {
             $properties['category'] = $categoryModel;
+        }
+        if (null !== $memberModel) {
+            $properties['member'] = $memberModel;
         }
         parent::__construct($properties);
     }
