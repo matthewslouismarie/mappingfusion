@@ -33,14 +33,8 @@ class Fixture
 
     public function load(): void {
         $this->conn->getPdo()->beginTransaction();
-    
-        $root = new AppObject([
-            'id' => 'root',
-            'password' => password_hash($this->config->getSetting('rootMemberPwd'), PASSWORD_DEFAULT),
-        ]);
-        $this->repoMember->add($root);
 
-        $loulimi = new AppObject(['id' => 'loulimi', 'name' => 'Loulimi']);
+        $loulimi = new AppObject(['id' => 'root', 'name' => 'Root']);
         $valve = new AppObject(['id' => 'valve', 'name' => 'Valve']);
         $scTeam = new AppObject(['id' => 'sven-co-op-team', 'name' => 'The Sven Co-op Team']);
         $neophus = new AppObject(['id' => 'neophus', 'name' => 'Neophus']);
@@ -48,6 +42,13 @@ class Fixture
         $this->repoAuthor->add($valve);
         $this->repoAuthor->add($scTeam);
         $this->repoAuthor->add($neophus);
+
+        $root = new AppObject([
+            'id' => 'root',
+            'password' => password_hash($this->config->getSetting('rootMemberPwd'), PASSWORD_DEFAULT),
+            'author_id' => 'root',
+        ]);
+        $this->repoMember->add($root);
 
         $gs = new AppObject(['id' => 'goldsource', 'name' => 'GoldSource', 'release_date_time' => new DateTimeImmutable(), 'game_id' => null]);
         $hl = new AppObject(['id' => 'half-life', 'name' => 'Half-Life', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'goldsource']);

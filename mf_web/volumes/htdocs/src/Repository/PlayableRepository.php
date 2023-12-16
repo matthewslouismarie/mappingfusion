@@ -21,6 +21,50 @@ class PlayableRepository implements IRepository
     ) {
     }
 
+    public function add(AppObject $playable): void {
+        $dbArray = $this->em->toDbValue($playable);
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:id, :name, :release_date_time, :game_id);');
+        $stmt->execute($dbArray);
+        $playable->set('id', $this->conn->getPdo()->lastInsertId());
+    }
+
+    public function addOrUpdate(AppObject $playable, ?string $previousId = null, bool $add = false): void {
+        $dbArray = $this->em->toDbValue($playable);
+
+        $this->conn->getPdo()->beginTransaction();
+        if ($add) {
+            $this->add($playable);
+        } else {
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_id = :id, playable_name = :name, playable_game_id = :game_id, playable_release_date_time = :release_date_time WHERE playable_id = :previous_id;');
+            $stmt->execute($dbArray + ['previous_id' => $previousId ?? $dbArray['id']]);
+        }
+
+        $linkIds = [];
+        foreach ($playable->links as $link) {
+            $link = $link->set('playable_id', $playable->id);
+            if (null === $link->id) {
+                $linkIds[] = $this->linkRepo->add($link);
+            } else {
+                $this->linkRepo->update($link);
+                $linkIds[] = $link->id;
+            }
+        }
+        $this->linkRepo->filterOutPlayableLinks($playable->id, $linkIds);
+
+        $contribIds = [];
+        foreach ($playable->contributions as $c) {
+            if (null === $c->id) {
+                $contribIds[] = $this->contributionRepository->add($c);
+            } else {
+                $this->contributionRepository->update($c);
+                $contribIds[] = $c->id;
+            }
+        }
+        $this->contributionRepository->filterOutPlayableContributions($playable->id, $contribIds);
+
+        $this->conn->getPdo()->commit();
+    }
+
     public function delete(string $id): void {
         $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_playable WHERE playable_id = ?;');
         $stmt->execute([$id]);
@@ -85,44 +129,5 @@ class PlayableRepository implements IRepository
     public function findOne(string $id): AppObject {
 
         return $this->find($id) ?? throw new EntityNotFoundException();
-    }
-
-    public function addOrUpdate(AppObject $playable, ?string $previousId = null, bool $add = false): void {
-        $dbArray = $this->em->toDbValue($playable);
-
-        $this->conn->getPdo()->beginTransaction();
-        if ($add) {
-            $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:id, :name, :release_date_time, :game_id);');
-            $stmt->execute($dbArray);
-            $playable->set('id', $this->conn->getPdo()->lastInsertId());
-        } else {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_id = :id, playable_name = :name, playable_game_id = :game_id, playable_release_date_time = :release_date_time WHERE playable_id = :previous_id;');
-            $stmt->execute($dbArray + ['previous_id' => $previousId ?? $dbArray['id']]);
-        }
-
-        $linkIds = [];
-        foreach ($playable->links as $link) {
-            $link = $link->set('playable_id', $playable->id);
-            if (null === $link->id) {
-                $linkIds[] = $this->linkRepo->add($link);
-            } else {
-                $this->linkRepo->update($link);
-                $linkIds[] = $link->id;
-            }
-        }
-        $this->linkRepo->filterOutPlayableLinks($playable->id, $linkIds);
-
-        $contribIds = [];
-        foreach ($playable->contributions as $c) {
-            if (null === $c->id) {
-                $contribIds[] = $this->contributionRepository->add($c);
-            } else {
-                $this->contributionRepository->update($c);
-                $contribIds[] = $c->id;
-            }
-        }
-        $this->contributionRepository->filterOutPlayableContributions($playable->id, $contribIds);
-
-        $this->conn->getPdo()->commit();
     }
 }

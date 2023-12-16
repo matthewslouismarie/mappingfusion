@@ -19,7 +19,7 @@ class MemberRepository implements IRepository
     }
 
     public function add(AppObject $member): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_member VALUES (:id, :password)');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_member VALUES (:id, :password, :author_id )');
         $stmt->execute($this->em->toDbValue($member));
     }
 
