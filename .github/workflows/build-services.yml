@@ -24,5 +24,5 @@ jobs:
           docker-compose exec -T mf_web php -f scripts/tests.php
       - name: Running code static analysis
         run: |
-        cd mf_web/volumes
-        docker run --rm -v ./htdocs:/app ghcr.io/phpstan/phpstan analyse src/
+          cd mf_web/volumes
+          docker run --rm -v ./htdocs:/app ghcr.io/phpstan/phpstan analyse src/
