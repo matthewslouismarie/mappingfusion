@@ -43,7 +43,7 @@ class ArticleRepository implements IRepository
     public function find(string $id, bool $fetchPlayableContributors = false, bool $onlyPublished = true): ?AppObject {
         $wherePublished = $onlyPublished ? 'AND article_is_published = 1' : '';
 
-        $stmt = $this->conn->getPdo()->prepare("SELECT v_article.*, v_playable.*, v_person.* FROM v_article LEFT OUTER JOIN v_playable ON v_article.playable_id = v_playable.playable_id LEFT JOIN v_person ON v_article.article_author_id = v_person.member_id WHERE article_id = ? $wherePublished;");
+        $stmt = $this->conn->getPdo()->prepare("SELECT v_article.*, v_playable.*, v_person.author_id AS redactor_id, v_person.author_name AS redactor_name FROM v_article LEFT OUTER JOIN v_playable ON v_article.playable_id = v_playable.playable_id LEFT JOIN v_person ON v_article.article_author_id = v_person.member_id WHERE article_id = ? $wherePublished;");
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
@@ -80,8 +80,12 @@ class ArticleRepository implements IRepository
         $data[0]['links'] = $links;
         $data[0]['contributions'] = $contribs;
 
-        $memberModel = new MemberModel(new AuthorModel());
-        return $this->em->toAppData($data[0], new ArticleModel(categoryModel: new CategoryModel(), memberModel: $memberModel, reviewModel: $reviewModel), 'article');
+        $articleModel = new ArticleModel(
+            authorModel: new AuthorModel(),
+            categoryModel: new CategoryModel(),
+            reviewModel: $reviewModel,
+        );
+        return $this->em->toAppData($data[0], $articleModel, 'article');
     }
 
     public function findAll(bool $onlyPublished = true): array {

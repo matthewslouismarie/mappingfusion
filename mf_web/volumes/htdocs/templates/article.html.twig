@@ -176,9 +176,9 @@
                         <div class="item _flex _gap -gap-col-xs">
                             <dt class="term">Rédigé par :</dt>
                             <dd class="def" itemprop="author" itemscope itemtype="https://schema.org/Person">
-                                <meta itemprop="identifier" content="{{ article.member.author.id }}">
-                                <a href="{{ app.router.generateUrl('membre', [article.member.author.id]) }}" itemprop="url">
-                                    <span itemprop="name">{{ article.member.author.name }}</span>
+                                <meta itemprop="identifier" content="{{ article.redactor.id }}">
+                                <a href="{{ app.router.generateUrl('membre', [article.redactor.id]) }}" itemprop="url">
+                                    <span itemprop="name">{{ article.redactor.name }}</span>
                                 </a>
                             </dd>
                         </div>

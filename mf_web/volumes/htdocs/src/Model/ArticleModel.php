@@ -12,8 +12,8 @@ use MF\Framework\Model\StringModel;
 class ArticleModel extends AbstractEntity
 {
     public function __construct(
+        ?AuthorModel $authorModel = null,
         ?CategoryModel $categoryModel = null,
-        ?MemberModel $memberModel = null,
         ?ReviewModel $reviewModel = null,
     ) {
         $properties = [
@@ -36,8 +36,8 @@ class ArticleModel extends AbstractEntity
         if (null !== $categoryModel) {
             $properties['category'] = $categoryModel;
         }
-        if (null !== $memberModel) {
-            $properties['member'] = $memberModel;
+        if (null !== $authorModel) {
+            $properties['redactor'] = $authorModel;
         }
         parent::__construct($properties);
     }
