@@ -7,7 +7,7 @@ use MF\Framework\Form\Exceptions\ExtractionException;
 class ArrayTransformer implements IFormTransformer
 {
     /**
-     * @param \MF\Framework\Form\IFormElement $formElements
+     * @param array<IFormTransformer> $formElements
      */
     public function __construct(
         private array $formElements,

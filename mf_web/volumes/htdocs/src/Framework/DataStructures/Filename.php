@@ -3,6 +3,7 @@
 namespace MF\Framework\DataStructures;
 
 use Stringable;
+use UnexpectedValueException;
 
 class Filename implements Stringable
 {

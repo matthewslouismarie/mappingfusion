@@ -8,15 +8,13 @@ use MF\Configuration;
 use MF\Enum\LinkType;
 use MF\Framework\DataStructures\AppObject;
 use MF\Framework\File\FileService;
-use MF\Framework\Form\IFormExtractor;
 use MF\Session\SessionManager;
 use MF\MarkdownService;
 use MF\Router;
+use UnexpectedValueException;
 
 class TemplateHelper
 {
-    private IFormExtractor $csrf;
-
     public function __construct(
         private Configuration $config,
         private FileService $fileService,
@@ -28,7 +26,7 @@ class TemplateHelper
     }
 
     public function estimateReadingTime(string $text): int {
-        return round(str_word_count($text) / 238);
+        return (int) round(str_word_count($text) / 238);
     }
 
     public function getArticleItemId(string $id): string {
@@ -103,6 +101,9 @@ class TemplateHelper
         return "mappingfusion.fr{$url}";
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getLinkTypes(): array {
         return LinkType::cases();
     }
@@ -132,7 +133,11 @@ class TemplateHelper
     }
 
     public function getSha256(string $path): string {
-        return hash_file('sha256', $this->resourceManager->getResourcePath($path));
+        $hash = hash_file('sha256', $this->resourceManager->getResourcePath($path));
+        if (false === $hash) {
+            throw new UnexpectedValueException();
+        }
+        return $hash;
     }
 
     public function hasLinks(string $linkType, IteratorAggregate $links): bool {
@@ -144,7 +149,7 @@ class TemplateHelper
         return false;
     }
 
-    public function shorten(string $string, int $nCharacters, string $suffix) {
+    public function shorten(string $string, int $nCharacters, string $suffix): string {
         return mb_substr($string, 0, $nCharacters) . $suffix;
     }
 }

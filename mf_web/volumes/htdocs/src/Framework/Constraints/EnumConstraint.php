@@ -6,9 +6,6 @@ class EnumConstraint implements IStringConstraint
 {
     private array $values;
 
-    /**
-     * @param string[] $values
-     */
     public function __construct(
         private array $enumCases,
     ) {

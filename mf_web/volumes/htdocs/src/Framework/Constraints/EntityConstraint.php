@@ -8,7 +8,7 @@ use MF\Framework\Model\IModel;
 class EntityConstraint implements IConstraint
 {
     /**
-     * @param \MF\Framework\Model\IModel
+     * @param array<IModel> $properties
      */
     public function __construct(
         private array $properties,
@@ -21,7 +21,7 @@ class EntityConstraint implements IConstraint
     }
 
     /**
-     * @return \MF\Framework\Model\IModel[] An array of properties, indexed by property name.
+     * @return array<IModel> An array of properties, indexed by property name.
      */
     public function getProperties(): array {
         return $this->properties;

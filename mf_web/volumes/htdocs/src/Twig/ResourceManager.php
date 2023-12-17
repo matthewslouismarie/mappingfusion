@@ -2,6 +2,7 @@
 
 namespace MF\Twig;
 
+use InvalidArgumentException;
 use MF\Configuration;
 use MF\Framework\DataStructures\Filename;
 
@@ -16,6 +17,9 @@ class ResourceManager
         return file_exists($this->getResourcePath($filename));
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function getResourceDimensions(string $filename): ?array {
         $filePathOnDisk =  $this->getResourcePath($filename);
         if (false !== $filePathOnDisk) {
@@ -27,8 +31,12 @@ class ResourceManager
         return null;
     }
 
-    public function getResourcePath(string $filename): bool|string {
-        return realpath(dirname(__FILE__) . '/../../public/uploaded/' . $filename);
+    public function getResourcePath(string $filename): string {
+        $path = realpath(dirname(__FILE__) . '/../../public/uploaded/' . $filename);
+        if (false === $path) {
+            throw new InvalidArgumentException();
+        }
+        return $path;
     }
 
     public function getResourceUrl(string $filename): string {

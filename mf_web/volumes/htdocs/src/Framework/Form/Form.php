@@ -4,6 +4,7 @@ namespace MF\Framework\Form;
 
 use InvalidArgumentException;
 use MF\Framework\Form\DataStructures\FormArray;
+use MF\Framework\Form\DataStructures\StdFormData;
 
 /**
  * Extracts a FormArray from HTTP requests, and converts arrays into FormArray-s.
@@ -38,18 +39,6 @@ class Form implements IFormExtractor
         $this->ignoreValueOf = $ignoreValueOf;
     }
 
-    public function createFromAppArray(array $appArray): FormArray {
-        $submissions = [];
-        foreach ($appArray as $key => $value) {
-            if (is_array($value)) {
-                $submissions[$key] = $this->createFromAppArray($value);
-            } else {
-                $submissions[$key] = new StdFormData($value);
-            }
-        }
-        return new FormArray($submissions);
-    }
-
     public function extractFromRequest(array $requestParsedBody, ?array $uploadedFiles = null): FormArray {
         $formDatas = [];
         foreach ($this->children as $child) {
@@ -63,30 +52,5 @@ class Form implements IFormExtractor
             }
         }
         return new FormArray($formDatas);
-    }
-
-    public function extractNoValidate(array $requestFormData, ?array $uploadedFiles = null): array {
-        $formArray = [];
-        foreach ($this->children as $child) {
-            if ($child->getName() === $this->ignoreValueOf) {
-                $child->extractFromRequest($requestFormData, $uploadedFiles ?? []);
-            } else {
-                $formArray[$child->getName()] = $child->extractFromRequest($requestFormData, $uploadedFiles ?? [])->getContent();
-            }
-        }
-        return $formArray;
-    }
-
-    public function getChild(string $id): IFormElement {
-        foreach ($this->children as $child) {
-            if ($child->getName() === $id) {
-                return $child;
-            }
-        }
-        throw new RuntimeException();
-    }
-
-    public function getChildren(): array {
-        return $this->children;
     }
 }

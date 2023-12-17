@@ -2,10 +2,13 @@
 
 namespace MF\Framework\Form\DataStructures;
 
+/*
+* @todo Remove unused methods?
+*/
 class FormArray implements IFormData
 {
     /**
-     * @param \MF\Framework\Form\DataStructures\IFormData[] An array of submissions, indexed by the name of the form element that extracted it.
+     * @param array<IFormData> $submissions An array of submissions, indexed by the name of the form element that extracted it.
      */
     public function __construct(
         private array $submissions,
@@ -26,7 +29,7 @@ class FormArray implements IFormData
     }
 
     /**
-     * @return \MF\Framework\Form\DataStructures\IFormData[]
+     * @return array<IFormData>
      */
     public function getChildren(): array {
         return $this->submissions;

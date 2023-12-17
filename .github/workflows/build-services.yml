@@ -4,6 +4,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
+      - name: Running code static analysis
+        run: docker run --rm -v mf_web/volumes/htdocs:/app ghcr.io/phpstan/phpstan analyse
       - name: Create the Docker configuration file
         run: cp .env.dist .env
       - name: Create the web app configuration file

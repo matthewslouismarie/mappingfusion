@@ -4,9 +4,6 @@ namespace MF\Framework\Model;
 
 class ListModel implements IModel
 {
-    /**
-     * @param \MF\Framework\Constraints\IConstraint[] $constraints
-     */
     public function __construct(
         private IModel $nodeModel,
         private bool $isNullable = false,
