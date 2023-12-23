@@ -28,7 +28,7 @@ class SearchController implements ControllerInterface
         $query = '';
         $articles = [];
         if (str_contains($uriQuery, self::SEARCH_FORM_NAME . '=')) {
-            $queryStr = substr($uriQuery, strlen(self::SEARCH_FORM_NAME . '='));
+            $queryStr = urldecode(substr($uriQuery, strlen(self::SEARCH_FORM_NAME . '=')));
             $query = new SearchQuery($queryStr);
             if (count($query->getKeywords()) > 0) {
                 $articles = $this->articleRepository->searchArticles($query);
