@@ -25,6 +25,9 @@ class ArticleController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+        if (!key_exists(1, $routeParams)) {
+            throw new NotFoundException();
+        }
         $article = $this->repo->find($routeParams[1], true, !$this->sessionManager->isUserLoggedIn());
 
         if (null === $article) {
