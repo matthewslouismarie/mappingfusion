@@ -5,10 +5,12 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use MF\Framework\Database\DbEntityManager;
 use MF\Framework\DataStructures\AppObject;
+use MF\Framework\DataStructures\Searchable;
+use MF\Framework\DataStructures\SearchQuery;
+use MF\Framework\SearchEngine\SearchEngine;
 use MF\Model\AuthorModel;
 use MF\Model\CategoryModel;
 use MF\Model\ContributionModel;
-use MF\Model\MemberModel;
 use MF\Model\PlayableLinkModel;
 use MF\Session\SessionManager;
 use MF\Model\ArticleModel;
@@ -22,6 +24,7 @@ class ArticleRepository implements IRepository
         private ArticleModel $model,
         private DatabaseManager $conn,
         private DbEntityManager $em,
+        private SearchEngine $searchEngine,
         private SessionManager $session,
     ) {
         $this->model = new ArticleModel(
@@ -196,6 +199,42 @@ class ArticleRepository implements IRepository
             $relatedArticles[] = $this->em->toAppData($row, new ArticleModel(), 'article');
         }
         return $relatedArticles;
+    }
+
+    /**
+     * @return array<AppObject>
+     */
+    public function searchArticles(SearchQuery $searchQuery, float $minRanking = 0.1) {
+        $sqlQuery = 'SELECT * FROM v_article WHERE';
+        $parameters = [];
+        for ($i = 0; $i < count($searchQuery->getKeywords()); $i++) {
+            if ($i > 0) {
+                $sqlQuery .= " OR";
+            }
+            $sqlQuery .= " (article_title LIKE :kw{$i}" .
+                " OR article_sub_title LIKE :kw{$i}" .
+                " OR article_body LIKE :kw{$i})"
+            ;
+            $parameters["kw{$i}"] = "%{$searchQuery->getKeywords()[$i]}%";
+        }
+
+        $stmt = $this->conn->getPdo()->prepare($sqlQuery);
+        $stmt->execute($parameters);
+        $searchables = [
+            new Searchable('body', .7),
+            new Searchable('sub_title', .95),
+            new Searchable('title', 1),
+        ];
+        $results = [];
+        foreach ($stmt->fetchAll() as $row) {
+            $a = $this->em->toAppData($row, new ArticleModel(categoryModel: new CategoryModel()), 'article');
+            $ranking = $this->searchEngine->rankResult($searchQuery, $a, $searchables);
+            if ($ranking >= $minRanking) {
+                $results[] = $a->set('ranking', $ranking);
+            }
+        }
+        usort($results, fn ($a, $b) => $b->ranking - $a->ranking);
+        return $results;
     }
 
     public function updateArticle(AppObject $appObject, ?string $previousId = null, bool $updateAuthor = false): void {

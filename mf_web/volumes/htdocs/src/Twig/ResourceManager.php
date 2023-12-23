@@ -8,16 +8,23 @@ use MF\Framework\DataStructures\Filename;
 
 class ResourceManager
 {
-    private string $uploadedFolderPath;
+    private string $assetFolderPath;
+
+    private string $resourceFolderPath;
 
     public function __construct(
         private Configuration $config,
     ) {
-        $this->uploadedFolderPath = realpath(dirname(__FILE__) . '/../../public/uploaded');
+        $this->assetFolderPath = realpath(dirname(__FILE__) . '/../../public');
+        $this->resourceFolderPath = realpath(dirname(__FILE__) . '/../../public/uploaded');
     }
 
     public function exists(string $filename): bool {
         return file_exists($this->getResourcePath($filename));
+    }
+
+    public function getAssetPath(string $filename): string {
+        return $this->assetFolderPath . '/' . $filename;
     }
 
     /**
@@ -39,11 +46,7 @@ class ResourceManager
      * filename, even if the resource does not exist.
      */
     public function getResourcePath(string $filename): string {
-        $path = $this->uploadedFolderPath . '/' . $filename;
-        if (false === $path) {
-            throw new InvalidArgumentException();
-        }
-        return $path;
+        return $this->resourceFolderPath . '/' . $filename;
     }
 
     public function getResourceUrl(string $filename): string {

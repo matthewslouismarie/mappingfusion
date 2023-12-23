@@ -66,18 +66,19 @@ class TemplateHelper
         return $foundImages[0];
     }
 
-    public function getImgAttr(string $alt, string $filename, bool $isResource = true, ?int $width = null, ?int $height = null, bool $smallImg = false): string {
+    public function getImgAttr(string $alt, string $filename, bool $isResource = true, ?int $width = null, ?int $height = null, bool $smallImg = false): ?string {
 
         if ($isResource && $smallImg) {
             $filename = $this->resourceManager->getSmallFilename($filename);
         }
 
+        $imgPath =  $isResource ? $this->resourceManager->getResourcePath($filename) : $this->resourceManager->getAssetPath($filename);
+
         $srcValue = $isResource ? $this->getResource($filename) : $this->getAsset($filename);
         $attr = "alt=\"{$alt}\" src=\"{$srcValue}\"";
 
-        $filePathOnDisk =  $isResource ? $this->resourceManager->getResourcePath($filename) : $this->getPathOfPublicFile($filename);
-        if (false !== $filePathOnDisk) {
-            $dimensions = getimagesize($filePathOnDisk);
+        if (false !== file_exists($imgPath)) {
+            $dimensions = getimagesize($imgPath);
             if ((null === $width || null === $height) && false !== $dimensions) {
                 if (null !== $width) {
                     $height = round($dimensions[1] * $width / $dimensions[0]);
@@ -110,10 +111,6 @@ class TemplateHelper
 
     public function getMk(): MarkdownService {
         return $this->mk;
-    }
-
-    public function getPathOfPublicFile(string $filename): bool|string {
-        return realpath(dirname(__FILE__) . '/../../public/' . $filename);
     }
 
     public function getResource(string $filename): string {

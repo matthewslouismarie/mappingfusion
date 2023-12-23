@@ -64,7 +64,7 @@
                     <p class="intro _txt -txtm" itemprop="description">Communauté francophone sur l’univers d’<strong itemprop="about">Half-Life et le modding pour Goldsource et Source</strong>.</p>
                     <ul class="header-menu _gap -gap-col-l">
                         <li class="item -search">
-                            <form class="form" rel="search" id="search-form" data-form-action="{{ app.router.generateUrl('recherche') }}" method="post">
+                            <form class="form" id="search-form" action="{{ app.router.generateUrl('recherche') }}" method="get" rel="search">
                                 <div class="std-interactive -search">
                                     <img class="icon" {{ app.imgAttr('Rechercher', 'magnifying-glass.svg', false, 20, 24)|raw }}>
                                     <input class="input _txt -txts" name="search-query" type="search" placeholder="Votre recherche" value="{{ searchQuery ?? "" }}" data-type="search-field">

@@ -1,18 +1,33 @@
 {% extends 'base.html.twig' %}
 
+{% from 'macros/article_mosaic.html.twig' import articleMosaic %}
+
 {% block title %}{{ searchQuery ?? 'Nouvelle recherche' }}{% endblock %}
 
-{% block description %}Résultats de la recherche : {{ searchQuery }}{% endblock %}
-
-{% block body %}
-<div class="_paddedsection -a">
-    <div class="_wrapper">
-        <div class="gcse-searchresults-only"></div>
-    </div>
-</div>
+{% block index %}
+<meta name="robots" content="noindex">
 {% endblock %}
 
-{% block scriptInit %}
-<script async src="https://cse.google.com/cse.js?cx=a30c7537205384c3a">
-</script>
+{% block description %}Résultats pour : {{ searchQuery }}{% endblock %}
+
+{% block body %}
+<div class="page-section">
+    <div class="_wrapper">
+        {% if articles %}
+        <h1 class="_h1">Résultats pour : « {{ searchQuery }} »</h1>
+
+        <ul class="std-mosaic-list -oneperrow _marginm -mgbottom">
+            {% for a in articles %}
+            {% if app.conf.dev %}
+            <li class="item">{{ a.ranking }}</li>
+            {% endif %}
+            <li class="item">{{ articleMosaic(a, app) }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <h1 class="_h1">Aucun résultat</h1>
+        <p>Aucun article ne correspond à cette recherche.</p>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

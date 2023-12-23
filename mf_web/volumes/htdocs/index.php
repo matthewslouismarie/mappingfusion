@@ -1,7 +1,5 @@
 <?php
 
-// @todo Cache-Control: max-age=31536000
-
 declare(strict_types=1);
 
 set_error_handler(function ($errNo, $errStr, $errFile, $errLine) {
