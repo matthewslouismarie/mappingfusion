@@ -40,9 +40,6 @@ class SearchQuery
             }
         }
         $this->keywords = ($keywords);
-        if (count($this->keywords) < 1) {
-            throw new UnexpectedValueException();
-        }
     }
 
     public function __toString(): string {
