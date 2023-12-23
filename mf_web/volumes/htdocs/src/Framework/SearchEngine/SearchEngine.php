@@ -8,8 +8,8 @@ use MF\Framework\DataStructures\SearchQuery;
 class SearchEngine
 {
     /**
-     * @param array<string, mixed> $result
-     * @param array<Searchable> $searchables
+     * @param ArrayAccess<string, mixed> $result
+     * @param array<\MF\Framework\DataStructures\Searchable> $searchables
      */
     public function rankResult(
             SearchQuery $query,
