@@ -70,7 +70,7 @@ class Kernel
      * @return array<string>
      */
     public function extractRouteParams(ServerRequestInterface $request): array {
-        $parts = explode('/', $request->getUri()->getPath());
+        $parts = array_map(fn ($e) => urldecode($e), explode('/', $request->getUri()->getPath()));
         if (1 === count($parts) && '' === $parts[0]) {
             return $parts;
         } else {
