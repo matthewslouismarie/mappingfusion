@@ -8,9 +8,12 @@ use MF\Framework\DataStructures\Filename;
 
 class ResourceManager
 {
+    private string $uploadedFolderPath;
+
     public function __construct(
         private Configuration $config,
     ) {
+        $this->uploadedFolderPath = realpath(dirname(__FILE__) . '/../../public/uploaded');
     }
 
     public function exists(string $filename): bool {
@@ -31,8 +34,12 @@ class ResourceManager
         return null;
     }
 
+    /**
+     * @return string The predicted path of the resource specified by the
+     * filename, even if the resource does not exist.
+     */
     public function getResourcePath(string $filename): string {
-        $path = realpath(dirname(__FILE__) . '/../../public/uploaded/' . $filename);
+        $path = $this->uploadedFolderPath . '/' . $filename;
         if (false === $path) {
             throw new InvalidArgumentException();
         }

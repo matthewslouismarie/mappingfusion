@@ -13,10 +13,11 @@ class Filename implements Stringable
 
     public function __construct(string $filename) {
         $parts = explode('.', $filename);
-        if (count($parts) < 2) {
+        $nParts = count($parts);
+        if ($nParts < 2) {
             throw new UnexpectedValueException('There should be at least one dot in the filename (preceding the extension).');
         }
-        $this->extension = $parts[count($parts) - 1];
+        $this->extension = $parts[$nParts - 1];
         $this->filenameNoExtension = substr($filename, 0, strlen($filename) - strlen($this->extension) - 1);
     }
 
