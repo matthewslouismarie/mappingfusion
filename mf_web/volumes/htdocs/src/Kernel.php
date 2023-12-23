@@ -66,11 +66,16 @@ class Kernel
     ) {
     }
 
+    /**
+     * @return array<string>
+     */
     public function extractRouteParams(ServerRequestInterface $request): array {
-        $routeParams = $request->getQueryParams()['route_params'];
-        $routeParams = str_replace('&', '/', $routeParams);
-        $routeParams = str_replace('?', '/', $routeParams);
-        return explode('/', $routeParams);
+        $parts = explode('/', $request->getUri()->getPath());
+        if (1 === count($parts) && '' === $parts[0]) {
+            return $parts;
+        } else {
+            return array_slice($parts, 1);
+        }
     }
 
     /**

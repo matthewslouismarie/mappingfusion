@@ -35,9 +35,7 @@ if (CLI_ID === php_sapi_name()) {
     
     $requestManager = $container->get(Kernel::class);
 
-    $routeParams = $requestManager->extractRouteParams($request);
-
-    $routeId = $routeParams[0];
+    $routeId = $requestManager->extractRouteParams($request)[0];
     
     $response = $requestManager->generateResponse($routeId, $request);
     
