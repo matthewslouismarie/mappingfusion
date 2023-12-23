@@ -2,7 +2,7 @@
 
 namespace MF\Framework\DataStructures;
 
-use Ds\Set;
+use UnexpectedValueException;
 
 class SearchQuery
 {
@@ -40,6 +40,9 @@ class SearchQuery
             }
         }
         $this->keywords = array_unique($keywords);
+        if (count($this->keywords) < 1) {
+            throw new UnexpectedValueException();
+        }
     }
 
     public function __toString(): string {
