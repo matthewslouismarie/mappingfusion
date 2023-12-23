@@ -100,7 +100,7 @@ class ArticleRepository implements IRepository
     }
 
     public function findAllNonReviews(): array {
-        $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE review_id IS NULL AND article_is_published = 1 ORDER BY article_creation_date_time;")->fetchAll();
+        $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE review_id IS NULL AND article_is_published = 1 ORDER BY article_creation_date_time DESC;")->fetchAll();
         $entities = [];
         foreach ($results as $r) {
             $entities[] = $this->em->toAppData($r, new ArticleModel(categoryModel: new CategoryModel()), 'article');
