@@ -39,7 +39,7 @@ class SearchQuery
                 $keywords[] = $modifiedQuery[$i];
             }
         }
-        $this->keywords = array_unique($keywords);
+        $this->keywords = ($keywords);
         if (count($this->keywords) < 1) {
             throw new UnexpectedValueException();
         }
