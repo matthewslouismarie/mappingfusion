@@ -22,7 +22,7 @@ class SearchController implements ControllerInterface
      * @todo There must be a better way to extract $queryStr.
      */
     public function generateResponse(ServerRequestInterface $request, array $routeParams): Response {
-        $queryStr = substr($request->getQueryParams()['route_params'], strlen(self::ROUTE_ID . '?search-query='));
+        $queryStr = substr($routeParams[1], strlen('search-query'));
         $query = new SearchQuery($queryStr);
         $articles = $this->articleRepository->searchArticles($query);
         return new Response(body: $this->twig->render('search_results_list.html.twig', [
