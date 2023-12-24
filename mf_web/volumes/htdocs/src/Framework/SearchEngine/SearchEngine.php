@@ -8,12 +8,12 @@ use MF\Framework\DataStructures\SearchQuery;
 class SearchEngine
 {
     /**
-     * @param ArrayAccess<string, mixed> $result
+     * @param array<string, string> $result
      * @param array<\MF\Framework\DataStructures\Searchable> $searchables
      */
     public function rankResult(
             SearchQuery $query,
-            ArrayAccess $result,
+            array $result,
             array $searchables,
         ): float {
         $rank = .0;

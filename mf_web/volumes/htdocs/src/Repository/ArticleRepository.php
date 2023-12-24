@@ -213,8 +213,12 @@ class ArticleRepository implements IRepository
             }
             $sqlQuery .= " (article_title LIKE :kw{$i}" .
                 " OR article_sub_title LIKE :kw{$i}" .
-                " OR article_body LIKE :kw{$i})"
-            ;
+                " OR article_body LIKE :kw{$i}" .
+                " OR playable_name LIKE :kw{$i}" .
+                " OR review_body LIKE :kw{$i}" .
+                " OR review_cons LIKE :kw{$i}" .
+                " OR review_pros LIKE :kw{$i}" .
+            ")";
             $parameters["kw{$i}"] = "%{$searchQuery->getKeywords()[$i]}%";
         }
         $sqlQuery .= ')';
@@ -222,15 +226,20 @@ class ArticleRepository implements IRepository
         $stmt = $this->conn->getPdo()->prepare($sqlQuery);
         $stmt->execute($parameters);
         $searchables = [
-            new Searchable('body', .7),
-            new Searchable('sub_title', .95),
-            new Searchable('title', 1),
+            new Searchable('article_title', 1),
+            new Searchable('article_sub_title', .95),
+            new Searchable('article_body', .7),
+            new Searchable('playable_name', 1),
+            new Searchable('review_body', 0.8),
+            new Searchable('review_cons', .7),
+            new Searchable('review_pros', .7),
         ];
+        $articleModel = new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel()));
         $results = [];
         foreach ($stmt->fetchAll() as $row) {
-            $a = $this->em->toAppData($row, new ArticleModel(categoryModel: new CategoryModel()), 'article');
-            $ranking = $this->searchEngine->rankResult($searchQuery, $a, $searchables);
+            $ranking = $this->searchEngine->rankResult($searchQuery, $row, $searchables);
             if ($ranking >= $minRanking) {
+                $a = $this->em->toAppData($row, $articleModel, 'article');
                 $results[] = $a->set('ranking', $ranking);
             }
         }
