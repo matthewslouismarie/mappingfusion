@@ -8,6 +8,7 @@
 {% block resources %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script src="{{ app.getAsset('unsaved-changes.js') }}"></script>
 {% endblock %}
 
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
@@ -16,7 +17,7 @@
 
 <h1>{{ formData ? 'Édition d’article' ?? 'Nouvel article' }}</h1>
 
-<form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
+<form autocomplete="on" class="std-form" id="article-form" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="form-row">
         <label class="label" for="id">ID (généré automatiquement)</label>
         <input class="input" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
@@ -84,7 +85,7 @@
     </div>
     {% endif %}
 
-    <button class="std-button" type="submit">Poster</button>
+    <button class="std-button" id="submit-button" type="submit">Poster</button>
     {{ csrf(app) }}
 
     {% if requestedId %}
@@ -95,14 +96,43 @@
 
 {% block scriptInit %}
 <script>
+
+{% if requestedId %}
+const autosaveDateTimeKey = 'mf-article-{{ requestedId }}-last-update';
+let autosaveDateTime = null;
+lastUpdateDateTime = new Date({{ lastUpdateDateTimeUtc }});
+
+if (null !== localStorage.getItem(autosaveDateTimeKey)) {
+    autosaveDateTime = new Date(parseInt(localStorage.getItem(autosaveDateTimeKey)));
+}
+if (lastUpdateDateTime > autosaveDateTime) {
+    const autosaveKey = `smde_{{ requestedId }}`;
+    localStorage.removeItem(autosaveKey);
+}
+{% endif %}
+
 var simplemde = new SimpleMDE({
+    {% if requestedId %}
     autosave: {
         enabled: true,
         delay: 5000,
         uniqueId: "{{ requestedId }}",
     },
+    {% endif %}
     element: document.getElementById("content"),
     spellChecker: false,
 });
+const changes = new UnsavedChanges('submit-button', 'article-form');
+simplemde.codemirror.on('change', function() {
+    changes.init();
+});
+{% if requestedId %}
+    simplemde.codemirror.on("change", function () {
+        localStorage.setItem("mf-article-{{ formData.id }}-last-update", Date.now());
+    });
+{% endif %}
+document.getElementById('content').addEventListener('input', function() {
+    changes.init();
+}, false);
 </script>
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace MF\Controller;
 
+use DateTimeZone;
 use MF\Framework\Database\DbEntityManager;
 use MF\Framework\DataStructures\AppObject;
 use MF\Enum\Clearance;
@@ -47,6 +48,7 @@ class AdminArticleController implements ControllerInterface
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $formData = null;
         $formErrors = null;
+        $lastUpdateDateTimeUtc = null;
         $requestedId = $routeParams[1] ?? null;
 
         $form = $this->formFactory->createForm(
@@ -66,7 +68,7 @@ class AdminArticleController implements ControllerInterface
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
             $formData['id'] = $formData['id'] ?? (null !== $formData['title'] ? (new Slug($formData['title'], true))->__toString() : null);
             $formData['author_id'] = $this->session->getCurrentMemberUsername();
-
+            $lastUpdateDateTimeUtc = time() * 1000;
             $formErrors = $this->modelValidator->validate($formData, $this->model);
     
             if (0 === count($formErrors)) {
@@ -86,9 +88,8 @@ class AdminArticleController implements ControllerInterface
             }
         } elseif (null !== $requestedId) {
             $formData = $this->repo->find($requestedId, onlyPublished: false)?->toArray();
-            if (null === $formData) {
-                throw new NotFoundException();
-            }
+            $lastUpdateDateTime = $formData['last_update_date_time'];
+            $lastUpdateDateTimeUtc = $lastUpdateDateTime->getTimestamp() * 1000;
         }
 
         return new Response(body: $this->twig->render('admin_article_form.html.twig', [
@@ -96,6 +97,7 @@ class AdminArticleController implements ControllerInterface
             'formData' => $formData,
             'formErrors' => $formErrors,
             'requestedId' => $requestedId,
+            'lastUpdateDateTimeUtc' => $lastUpdateDateTimeUtc,
         ]));
     }
 
