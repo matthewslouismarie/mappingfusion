@@ -21,7 +21,7 @@ class SearchEngine
             if (null !== $result[$s->getName()]) {
                 $k = 0;
                 foreach ($query->getKeywords() as $kw) {
-                    if (str_contains($result[$s->getName()], $kw)) {
+                    if (false !== stripos($result[$s->getName()], $kw)) {
                         $k += mb_strlen($kw);
                     }
                 }
