@@ -32,11 +32,12 @@ class SearchQuery
         $keywords = [];
         for ($i = 0; $i < count($modifiedQuery); $i++) {
             if ($i % 2 == 0) {
-                $convertedQuery = str_replace(self::ACCEPTED_DELIMITERS, self::SEPARATOR, $modifiedQuery[$i]);
+                $lowerStr = mb_strtolower($modifiedQuery[$i]);
+                $convertedQuery = str_replace(self::ACCEPTED_DELIMITERS, self::SEPARATOR, $lowerStr);
                 $convertedQuery = preg_replace("#[[:punct:]]#", self::SEPARATOR, $convertedQuery);
                 $keywords = array_merge($keywords, array_filter(explode(self::SEPARATOR, $convertedQuery)));
             } elseif ('' !== $modifiedQuery[$i]) {
-                $keywords[] = $modifiedQuery[$i];
+                $keywords[] = mb_strtolower($modifiedQuery[$i]);
             }
         }
         $this->keywords = ($keywords);
