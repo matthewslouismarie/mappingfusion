@@ -18,7 +18,7 @@ class SearchEngine
         ): float {
         $rank = .0;
         foreach ($searchables as $s) {
-            if (null !== $result[$s->getName()]) {
+            if (key_exists($s->getName(), $result) && is_string($result[$s->getName()])) {
                 $k = 0;
                 foreach ($query->getKeywords() as $kw) {
                     if (false !== stripos($result[$s->getName()], $kw)) {

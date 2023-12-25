@@ -234,12 +234,13 @@ class ArticleRepository implements IRepository
             new Searchable('review_cons', .7),
             new Searchable('review_pros', .7),
         ];
-        $articleModel = new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel()));
+        $articleReviewModel = new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel()));
+        $articleModel = new ArticleModel(categoryModel: new CategoryModel());
         $results = [];
         foreach ($stmt->fetchAll() as $row) {
             $ranking = $this->searchEngine->rankResult($searchQuery, $row, $searchables);
             if ($ranking >= $minRanking) {
-                $a = $this->em->toAppData($row, $articleModel, 'article');
+                $a = $this->em->toAppData($row, null !== $row['review_id'] ? $articleReviewModel : $articleModel, 'article');
                 $results[] = $a->set('ranking', $ranking);
             }
         }
