@@ -102,8 +102,22 @@ class ArticleRepository implements IRepository
         return $entities;
     }
 
-    public function findAllNonReviews(): array {
-        $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE article_is_published = 1 AND review_id IS NULL AND article_is_published = 1 ORDER BY article_creation_date_time DESC;")->fetchAll();
+    public function findAllNonReviews(array $categories = []): array {
+        $sqlQuery = "SELECT * FROM v_article WHERE article_is_published = 1 AND review_id IS NULL";
+
+        if (0 !== count($categories)) {
+            $sqlQuery .= " AND (0";
+            foreach ($categories as $key => $categoryId) {
+                $sqlQuery .= " OR article_category_id = :{$key}";
+            }
+            $sqlQuery .= ")";
+        }
+        $sqlQuery .= " ORDER BY article_creation_date_time DESC;";
+        $stmt = $this->conn->getPdo()->prepare($sqlQuery);
+        $stmt->execute($categories);
+        $results = $stmt->fetchAll();
+
+
         $entities = [];
         foreach ($results as $r) {
             $entities[] = $this->em->toAppData($r, new ArticleModel(categoryModel: new CategoryModel()), 'article');

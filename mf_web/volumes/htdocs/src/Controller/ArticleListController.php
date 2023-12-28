@@ -28,9 +28,14 @@ class ArticleListController implements ControllerInterface
         if (key_exists(1, $routeParams)) {
             $requestedCategoryId = $routeParams[1];
             $category = $this->categoryRepository->findWithChildren($requestedCategoryId);
+            $i = 0;
+            $categoryIds = ["cat_{$i}" => $category->id];
+            foreach ($category->children as $c) {
+                $categoryIds['cat_' . ++$i] = $c->id;
+            }
             return new Response(
                 body: $this->twig->render('article_list.html.twig', [
-                    'articles' => $this->repo->findAllNonReviews(),
+                    'articles' => $this->repo->findAllNonReviews($categoryIds),
                     'categories' => $category->children,
                     'category' => $category,
                 ])

@@ -77,11 +77,15 @@
     </div>
 
     <div class="_horizontal-container">
+        {% if articles|length > 0 %}
         <ul class="std-mosaic-list">
             {% for a in articles %}
             <li class="item">{{ articleMosaic(a, app) }}</li>
             {% endfor %}
         </ul>
+        {% else %}
+        <p>Aucun article… :( </p>
+        {% endif %}
     </div>
 
     <div class="_horizontal-container">
