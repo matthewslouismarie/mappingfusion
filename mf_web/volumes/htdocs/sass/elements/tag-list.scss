@@ -1,7 +1,8 @@
 .tag-list {
     display: flex;
-    gap: $gap-xxs;
     flex-wrap: wrap;
+    gap: $gap-xxs;
+    justify-content: center;
 
     > .item {
         > .tag-link {
