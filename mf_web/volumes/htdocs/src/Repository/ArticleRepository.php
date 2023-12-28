@@ -102,8 +102,8 @@ class ArticleRepository implements IRepository
         return $entities;
     }
 
-    public function findAllNonReviews(array $categories = []): array {
-        $sqlQuery = "SELECT * FROM v_article WHERE article_is_published = 1 AND review_id IS NULL";
+    public function findAllPublished(array $categories = []): array {
+        $sqlQuery = "SELECT * FROM v_article WHERE article_is_published = 1";
 
         if (0 !== count($categories)) {
             $sqlQuery .= " AND (0";

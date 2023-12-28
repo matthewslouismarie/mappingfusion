@@ -35,7 +35,7 @@ class ArticleListController implements ControllerInterface
             }
             return new Response(
                 body: $this->twig->render('article_list.html.twig', [
-                    'articles' => $this->repo->findAllNonReviews($categoryIds),
+                    'articles' => $this->repo->findAllPublished($categoryIds),
                     'categories' => $category->children,
                     'category' => $category,
                 ])
@@ -43,7 +43,7 @@ class ArticleListController implements ControllerInterface
         } else {
             return new Response(
                 body: $this->twig->render('article_list.html.twig', [
-                    'articles' => $this->repo->findAllNonReviews(),
+                    'articles' => $this->repo->findAllPublished(),
                     'categories' => $this->categoryRepository->findAll(),
                     'category' => null,
                 ])
