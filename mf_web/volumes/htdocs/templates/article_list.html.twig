@@ -2,32 +2,96 @@
 
 {% from 'macros/article_mosaic.html.twig' import articleMosaic %}
 
-{% block title %}Liste des articles{% endblock %}
+{% block title %}{% if category %}{{ category.name }}{% else %}Liste des articles{% endif %}{% endblock %}
 
-{% block description %}Liste des articles de Mapping-Fusion : tests de maps et de mods, tutoriels et guides…{% endblock %}
+{% block description %}{% if category %}Liste dest articles publiés dans la catégorie {{ category.name }}.{% else %}Liste des articles de Mapping-Fusion : tests de maps et de mods, tutoriels et guides…{% endif %}{% endblock %}
 
 {% block body %}
-<div class="_wrapper _flex -col _gap -gap-row-xl _padding -padding-hori-mobile -padding-vert-l">
+<nav class="category-list _vertical-container -sm">
+    <ol class="list _horizontal-container" id="web-page-breadcrumb" itemprop="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li class="item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <meta itemprop="position" content="0">
+            <a class="link" href="{{ app.router.generateUrl('articles') }}" itemprop="item" itemscope itemid="{{ app.router.generateUrl('articles') }}" itemtype="https://schema.org/WebPage">
+                <span itemprop="name">Toutes les catégories</span>
+                <meta itemprop="url" content="{{ app.router.generateUrl('articles') }}">
+            </a>
+        </li>
+        {% if category %}
+        {% if category.parent %}
+        {% if category.parent.parent_id %}
+        <li class="item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <meta itemprop="position" content="1">
+            <span class="text" itemprop="item">…</span>
+        </li>
+        <meta itemprop="numberOfItems" content="4">
+        {% else %}
+        <meta itemprop="numberOfItems" content="3">
+        {% endif %}
+        <li class="item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <meta itemprop="position" content="2">
+            <a class="link" href="{{ app.router.generateUrl('articles', [category.parent.id]) }}" itemprop="item" itemscope itemid="{{ app.router.generateUrl('articles', [category.parent.id]) }}" itemtype="https://schema.org/WebPage">
+                <meta itemprop="url" content="{{ app.router.generateUrl('articles', [category.parent.id]) }}">
+                <span itemprop="name">{{ category.parent.name }}</span>
+            </a>
+        </li>
+        {% else %}
+        <meta itemprop="numberOfItems" content="2">
+        {% endif %}
+        <li class="item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <meta itemprop="position" content="3">
+            <span class="text" href="{{ app.router.generateUrl('articles', [category.id]) }}" itemprop="item" itemscope itemid="{{ app.router.generateUrl('articles', [category.id]) }}" itemtype="https://schema.org/WebPage">
+                <meta itemprop="url" content="{{ app.router.generateUrl('articles', [category.id]) }}">
+                <span itemprop="name">{{ category.name }}</span>
+            </span>
+        </li>
+        {% else %}
+        <meta itemprop="numberOfItems" content="1">
+        {% endif %}
+        <meta itemprop="itemListOrder" content="Ascending">
+    </ol>
+</nav>
+<div class="_vertical-container">
 
-    <h1 class="section-heading -inline -white">
-        <img class="image" {{ app.imgAttr('Actualités', 'news.svg', false, 107, 103)|raw }}>
-        <div class="text _txt -txtl">
-            <span>Liste des </span>
-            <span class="_txt -bold">actualités</span>
-        </div>
-    </h1>
-
-    <ul class="std-mosaic-list">
-        {% for a in articles %}
-        <li class="item">{{ articleMosaic(a, app) }}</li>
-        {% endfor %}
-    </ul>
-
-    <div class="_txt -textcentered">
-        <a class="std-button -darkblue -padded" href="{{ app.router.generateUrl('home') }}">
-            <div class="text _txt -bold -txtm">Retour à l’accueil</div>
-        </a>
+    <div class="_horizontal-container">
+        <h1 class="section-heading -inline -white">
+            <img class="image" {{ app.imgAttr('Actualités', 'news.svg', false, 107, 103)|raw }}>
+            <div class="text _txt -txtl">
+                {% if category %}
+                <span class="_txt -bold">{{ category.name }}</span>
+                {% else %}
+                <span>Liste des </span>
+                <span class="_txt -bold">actualités</span>
+                {% endif %}
+            </div>
+        </h1>
     </div>
+
+    <div class="_horizontal-container">
+        <ul class="tag-list">
+            {% for c in categories %}
+            <li class="item">
+                <a class="tag-link" href="{{ app.router.generateUrl('articles', [c.id]) }}">{{ c.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="_horizontal-container">
+        <ul class="std-mosaic-list">
+            {% for a in articles %}
+            <li class="item">{{ articleMosaic(a, app) }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="_horizontal-container">
+        <div class="_txt -textcentered">
+            <a class="std-button -darkblue -padded" href="{{ app.router.generateUrl('home') }}">
+                <div class="text _txt -bold -txtm">Retour à l’accueil</div>
+            </a>
+        </div>
+    </div>
+
 </div>
 
 {% include 'sections/social-networks-all.html.twig' %}
@@ -35,4 +99,9 @@
 {% include 'sections/beginners-all.html.twig' %}
 
 
+{% endblock %}
+
+{% block additionalMeta %}
+<div class="_hidden" itemscope itemid="{% if category %}{{ app.router.generateUrl('articles', [category.id]) }}{% else %}{{ app.router.generateUrl('articles') }}{% endif %}" itemtype="https://schema.org/WebPage" itemref="web-page-breadcrumb">
+</div>
 {% endblock %}

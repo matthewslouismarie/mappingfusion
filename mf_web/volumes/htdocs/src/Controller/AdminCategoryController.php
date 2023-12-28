@@ -18,7 +18,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminCategoryController implements ControllerInterface
 {
-    const ROUTE_ID = 'manage_category';
+    const ROUTE_ID = 'manage-category';
 
     public function __construct(
         private CategoryModel $model,
@@ -63,8 +63,10 @@ class AdminCategoryController implements ControllerInterface
         }
 
         return new Response(body: $this->twig->render('admin_category_form.html.twig', [
+            'categories' => $this->repo->findAll(),
             'formData' => $formData,
             'formErrors' => $formErrors,
+            'requestedId' => $requestedId,
         ]));
     }
 

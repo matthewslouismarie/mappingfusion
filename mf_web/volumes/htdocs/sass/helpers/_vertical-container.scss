@@ -1,0 +1,15 @@
+._vertical-container {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    
+    gap: $gap-m;
+    padding-bottom: $gap-m;
+    padding-top: $gap-m;
+
+    &.-sm {
+        gap: $gap-xs;
+        padding-bottom: $gap-xs;
+        padding-top: $gap-xs;
+    }
+}

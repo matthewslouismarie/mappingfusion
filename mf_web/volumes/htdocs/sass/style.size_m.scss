@@ -1,7 +1,9 @@
 @import 'vars.scss';
 
+@import 'helpers/_horizontal-container.size_m.scss';
 @import 'helpers/_padding.size_m.scss';
 @import 'helpers/_rtxt.size_m.scss';
+@import 'helpers/_vertical-container.size_m.scss';
 @import 'helpers/_wrapper.size_m.scss';
 @import 'helpers/_wrappers.size_m.scss';
 
@@ -16,6 +18,9 @@
 @import 'elements/std-inline-list.size_m.scss';
 @import 'elements/std-metadata.size_m.scss';
 @import 'elements/std-review.size_m.scss';
+
+@import 'elements/tag-link.size_m.scss';
+@import 'elements/tag-list.size_m.scss';
 
 @import 'elements/article-mosaic.size_m.scss';
 @import 'elements/article-nav.size_m.scss';

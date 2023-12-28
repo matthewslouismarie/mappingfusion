@@ -1,0 +1,35 @@
+.category-list {
+    background-color: $color-blue-4;
+
+    > .list {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        font-size: $txt-font-size-s;
+        gap: $gap-xxs;
+        list-style-type: none;
+
+        > .item {
+            > .link,
+            > .text {
+                display: block;
+            }
+
+            > .link:hover {
+                text-decoration: underline;
+            }
+
+            > .text {
+                opacity: 0.7;
+            }
+            
+            &:not(:first-child) {
+                > .link,
+                > .text {
+                    padding-left: $txt-font-size-s * 1.25;
+                    background: no-repeat url('simple-arrow-right.webp') center left / auto $txt-font-size-s;
+                }
+            }
+        }
+    }
+}

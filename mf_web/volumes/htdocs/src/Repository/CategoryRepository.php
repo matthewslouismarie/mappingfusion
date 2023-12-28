@@ -3,6 +3,7 @@
 namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
+use MF\Exception\Database\EntityNotFoundException;
 use MF\Framework\Database\DbEntityManager;
 use MF\Framework\DataStructures\AppObject;
 use MF\Model\CategoryModel;
@@ -18,7 +19,7 @@ class CategoryRepository implements IRepository
     }
 
     public function add(AppObject $category): void {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_category VALUES (:id, :name);');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_category VALUES (:id, :name, :parent_id);');
         $stmt->execute($this->em->toDbValue($category));
     }
 
@@ -41,10 +42,6 @@ class CategoryRepository implements IRepository
         }
     }
 
-    public function findOne(string $id): AppObject {
-        return $this->find($id);
-    }
-
     public function findAll(): array {
         $results = $this->conn->getPdo()->query('SELECT * FROM e_category;')->fetchAll();
         $entities = [];
@@ -54,8 +51,51 @@ class CategoryRepository implements IRepository
         return $entities;
     }
 
+    public function findAllRoot(): array {
+        $results = $this->conn->getPdo()->query('SELECT * FROM e_category WHERE category_parent_id IS NULL;')->fetchAll();
+        $entities = [];
+        foreach ($results as $r) {
+            $entities[] = $this->em->toAppData($r, $this->model, 'category');
+        }
+        return $entities;
+    }
+
+    public function findOne(string $id): AppObject {
+        return $this->find($id);
+    }
+
+    public function findWithChildren(string $id): AppObject {
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_category WHERE category_id = :id OR category_parent_id = :id;');
+        $stmt->execute(['id' => $id]);
+
+        $rows = $stmt->fetchAll();
+        if (0 === count($rows)) {
+            throw new EntityNotFoundException();
+        }
+
+        $children = [];
+        $parent = null;
+        foreach ($rows as $r) {
+            if ($id === $r['category_id']) {
+                $parentModel = null !== $r['category_parent_id'] ? new CategoryModel() : null;
+                $model = new CategoryModel(parentCategory: $parentModel);
+                $parent = $this->em->toAppData($r, $model, 'category');
+                if (null === $parentModel) {
+                    $parent = $parent->set('parent', null);
+                }
+            } else {
+                $children[] = $this->em->toAppData($r, $this->model, 'category');
+            }
+        }
+        if (null === $parent) {
+            throw new UnexpectedValueException();
+        }
+        $parent = $parent->set('children', $children);
+        return $parent;
+    }
+
     public function update(AppObject $category, ?string $previousId = null): void {
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_category SET category_id = :id, category_name = :name WHERE category_id = :previous_id;');
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_category SET category_id = :id, category_name = :name, category_parent_id = :parent_id WHERE category_id = :previous_id;');
         $stmt->execute($this->em->toDbValue($category) + ['previous_id' => $previousId ?? $category->id]);
     }
 }

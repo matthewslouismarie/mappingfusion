@@ -1,0 +1,11 @@
+.tag-list {
+    display: flex;
+    gap: $gap-xxs;
+    flex-wrap: wrap;
+
+    > .item {
+        > .tag-link {
+            display: block;
+        }
+    }
+}

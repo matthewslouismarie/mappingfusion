@@ -1,0 +1,11 @@
+._vertical-container {
+    gap: $gap-l;
+    padding-bottom: $gap-l;
+    padding-top: $gap-l;
+
+    &.-sm {
+        gap: $gap-s;
+        padding-bottom: $gap-s;
+        padding-top: $gap-s;
+    }
+}

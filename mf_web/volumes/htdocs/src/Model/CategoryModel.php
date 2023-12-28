@@ -8,10 +8,18 @@ use MF\Framework\Model\StringModel;
 
 class CategoryModel extends AbstractEntity
 {
-    public function __construct() {
-        parent::__construct([
+    public function __construct(
+        ?CategoryModel $parentCategory = null,
+        bool $isNullable = false,
+    ) {
+        $properties = [
             'id' => new SlugModel(),
             'name' => new StringModel(),
-        ]);
+            'parent_id' => new SlugModel(isNullable: true),
+        ];
+        if (null !== $parentCategory) {
+            $properties['parent'] = $parentCategory;
+        }
+        parent::__construct($properties, $isNullable);
     }
 }

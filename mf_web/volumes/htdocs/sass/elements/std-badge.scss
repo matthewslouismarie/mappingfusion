@@ -1,7 +1,10 @@
 .std-badge {
     @include asymetric-padding;
     display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
-    background-color: #3D9CCE;
-    color: #ffffff;
+    background-color: $color-blue-0;
+    color: $color-white;
 }

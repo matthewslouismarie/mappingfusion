@@ -36,6 +36,11 @@ class DbEntityManager
                     if (null !== $property->getArrayDefinition()) {
                         // echo "<br>";
                         // var_dump($key, get_class($property), gettype($dbData));
+
+                        // Could be used to consider an array of null values as a null value.
+                        // foreach ($property->getArrayDefinition() as $subkey => $subproperty) {
+                        //     var_dump($dbData[$key . self::SEP . $subkey]);
+                        // }
                         $appArray[$key] = $this->toAppData($dbData, $property, $key);
                     } elseif (null !== $property->getListNodeModel()) {
                         $subPrefix = 's' === substr($key, strlen($key) - 1) ? $subPrefix = substr($key, 0, strlen($key) - 1) : $key;
@@ -43,9 +48,9 @@ class DbEntityManager
                         $appArray[$key] = $this->toAppData($dbData[$key], $property, $subPrefix);
                     } else {
                         // echo "<br>";
-                        // var_dump($key, get_class($property), $prefix . '_' . $key, $dbData[$prefix . '_' . $key]);
+                        // var_dump($key, get_class($property), $prefix . self::SEP . $key, $dbData[$prefix . self::SEP . $key]);
                         $appArray[$key] = $this->toAppData(
-                            $dbData[$prefix . '_' . $key],
+                            $dbData[$prefix . self::SEP . $key],
                             $property,
                         );
                     }
