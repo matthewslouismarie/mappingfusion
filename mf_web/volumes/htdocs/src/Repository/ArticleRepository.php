@@ -229,7 +229,7 @@ class ArticleRepository implements IRepository
             new Searchable('article_title', 1),
             new Searchable('article_sub_title', .95),
             new Searchable('article_body', .7),
-            new Searchable('playable_name', 1),
+            new Searchable('playable_name', 0.8),
             new Searchable('review_body', 0.8),
             new Searchable('review_cons', .7),
             new Searchable('review_pros', .7),
