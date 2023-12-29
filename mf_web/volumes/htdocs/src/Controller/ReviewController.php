@@ -3,11 +3,12 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\Framework\DataStructures\AppObject;
-use MF\Enum\Clearance;
-use MF\Exception\Http\NotFoundException;
-use MF\Framework\Form\FormFactory;
-use MF\Framework\Type\ModelValidator;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
+use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\Form\FormFactory;
+use LM\WebFramework\Type\ModelValidator;
 use MF\Model\ReviewModel;
 use MF\Repository\ArticleRepository;
 use MF\Repository\PlayableRepository;
@@ -19,8 +20,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ReviewController implements ControllerInterface
 {
-    const ROUTE_ID = 'gestion-de-tests';
-
     public function __construct(
         private ArticleRepository $articleRepo,
         private FormFactory $formFactory,
@@ -57,7 +56,7 @@ class ReviewController implements ControllerInterface
         } elseif (null !== $requestedId) {
             $formData = $this->repo->find($requestedId)?->toArray();
             if (null === $formData) {
-                throw new NotFoundException();
+                throw new RequestedResourceNotFound();
             }
         }
 

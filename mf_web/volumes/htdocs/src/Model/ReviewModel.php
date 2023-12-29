@@ -2,12 +2,12 @@
 
 namespace MF\Model;
 
-use MF\Framework\Constraints\RangeConstraint;
-use MF\Framework\Model\AbstractEntity;
-use MF\Framework\Model\IntegerModel;
-use MF\Framework\Model\SlugModel;
-use MF\Framework\Model\StringModel;
-use MF\Framework\Model\UintModel;
+use LM\WebFramework\Constraints\RangeConstraint;
+use LM\WebFramework\Model\AbstractEntity;
+use LM\WebFramework\Model\IntegerModel;
+use LM\WebFramework\Model\SlugModel;
+use LM\WebFramework\Model\StringModel;
+use LM\WebFramework\Model\UintModel;
 
 class ReviewModel extends AbstractEntity
 {

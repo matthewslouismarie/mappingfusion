@@ -3,15 +3,13 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
+use LM\WebFramework\AccessControl\Clearance;
 use MF\Controller\ControllerInterface;
-use MF\Enum\Clearance;
 use MF\TwigService;
 use Psr\Http\Message\ServerRequestInterface;
 
 class AdminTestController implements ControllerInterface
 {
-    const ROUTE_ID = 'admin-test';
-
     public function __construct(private TwigService $twig) {
     }
 

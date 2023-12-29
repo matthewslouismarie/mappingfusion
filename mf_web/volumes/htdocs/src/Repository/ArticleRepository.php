@@ -3,16 +3,16 @@
 namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
-use MF\Framework\Database\DbEntityManager;
-use MF\Framework\DataStructures\AppObject;
-use MF\Framework\DataStructures\Searchable;
-use MF\Framework\DataStructures\SearchQuery;
-use MF\Framework\SearchEngine\SearchEngine;
+use LM\WebFramework\Database\DbEntityManager;
+use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\DataStructures\Searchable;
+use LM\WebFramework\DataStructures\SearchQuery;
+use LM\WebFramework\SearchEngine\SearchEngine;
 use MF\Model\AuthorModel;
 use MF\Model\CategoryModel;
 use MF\Model\ContributionModel;
 use MF\Model\PlayableLinkModel;
-use MF\Session\SessionManager;
+use LM\WebFramework\Session\SessionManager;
 use MF\Model\ArticleModel;
 use MF\Model\PlayableModel;
 use MF\Model\ReviewModel;

@@ -5,11 +5,11 @@
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
-<a class="link" href="{{ app.router.generateUrl('manage_playable') }}">Créer un nouveau mod</a>
+<a class="link" href="{{ app.router.generateUrl('admin-manage-playable') }}">Créer un nouveau mod</a>
 <ul>
     {% for p in playables %}
     <li class="item">
-        <a class="link" href="{{ app.router.generateUrl('manage_playable', {id: p.id}) }}">{{ p.name }}</a>
+        <a class="link" href="{{ app.router.generateUrl('admin-manage-playable', {id: p.id}) }}">{{ p.name }}</a>
     </li>
     {% endfor %}
 </ul>

@@ -2,12 +2,12 @@
 
 namespace MF\Model;
 
-use MF\Framework\Constraints\IUploadedImageConstraint;
-use MF\Framework\Model\AbstractEntity;
-use MF\Framework\Model\BoolModel;
-use MF\Framework\Model\DateTimeModel;
-use MF\Framework\Model\SlugModel;
-use MF\Framework\Model\StringModel;
+use LM\WebFramework\Constraints\IUploadedImageConstraint;
+use LM\WebFramework\Model\AbstractEntity;
+use LM\WebFramework\Model\BoolModel;
+use LM\WebFramework\Model\DateTimeModel;
+use LM\WebFramework\Model\SlugModel;
+use LM\WebFramework\Model\StringModel;
 
 class ArticleModel extends AbstractEntity
 {

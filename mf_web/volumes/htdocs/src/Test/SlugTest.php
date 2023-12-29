@@ -2,7 +2,7 @@
 
 namespace MF\Test;
 
-use MF\Framework\Test\IUnitTest;
+use LM\WebFramework\Test\IUnitTest;
 use MF\Model\Slug;
 
 class SlugTest implements IUnitTest

@@ -2,14 +2,15 @@
 
 namespace MF\Controller;
 
-use MF\Framework\DataStructures\AppObject;
-use MF\Enum\Clearance;
-use MF\Exception\Http\NotFoundException;
-use MF\Framework\Form\FormFactory;
-use MF\Framework\Type\ModelValidator;
+use GuzzleHttp\Psr7\Response;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
+use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\Form\FormFactory;
+use LM\WebFramework\Type\ModelValidator;
 use MF\Model\CategoryModel;
 use MF\Model\Slug;
-use GuzzleHttp\Psr7\Response;
 use MF\Repository\CategoryRepository;
 use MF\Router;
 use MF\TwigService;
@@ -18,8 +19,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminCategoryController implements ControllerInterface
 {
-    const ROUTE_ID = 'manage-category';
-
     public function __construct(
         private CategoryModel $model,
         private CategoryRepository $repo,
@@ -58,7 +57,7 @@ class AdminCategoryController implements ControllerInterface
         } elseif (null !== $requestedId) {
             $formData = $this->repo->find($requestedId)?->toArray();
             if (null === $formData) {
-                throw new NotFoundException();
+                throw new RequestedResourceNotFound();
             }
         }
 

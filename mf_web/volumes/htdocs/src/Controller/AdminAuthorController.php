@@ -3,11 +3,12 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\Enum\Clearance;
-use MF\Exception\Http\NotFoundException;
-use MF\Framework\DataStructures\AppObject;
-use MF\Framework\Form\FormFactory;
-use MF\Framework\Type\ModelValidator;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
+use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\Form\FormFactory;
+use LM\WebFramework\Type\ModelValidator;
 use MF\Model\AuthorModel;
 use MF\Model\Slug;
 use MF\Repository\AuthorRepository;
@@ -19,8 +20,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminAuthorController implements ControllerInterface
 {
-    const ROUTE_ID = 'manage_author';
-
     public function __construct(
         private AuthorModel $model,
         private AuthorRepository $repo,
@@ -67,7 +66,7 @@ class AdminAuthorController implements ControllerInterface
         } elseif (null !== $requestedId) {
             $formData = $this->repo->find($requestedId)?->toArray();
             if (null === $formData) {
-                throw new NotFoundException();
+                throw new RequestedResourceNotFound();
             }
         }
 

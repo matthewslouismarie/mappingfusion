@@ -3,8 +3,9 @@
 namespace MF\Controller;
 
 use Exception;
-use MF\Enum\Clearance;
-use MF\Session\SessionManager;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Session\SessionManager;
 use MF\Repository\MemberRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
@@ -12,8 +13,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class RegistrationController implements ControllerInterface
 {
-    const ROUTE_ID = 'register';
-
     private TwigService $twig;
 
     private MemberRepository $repo;

@@ -2,9 +2,8 @@
 
 namespace MF\Twig;
 
-use InvalidArgumentException;
-use MF\Configuration;
-use MF\Framework\DataStructures\Filename;
+use LM\WebFramework\Configuration;
+use LM\WebFramework\DataStructures\Filename;
 
 class ResourceManager
 {

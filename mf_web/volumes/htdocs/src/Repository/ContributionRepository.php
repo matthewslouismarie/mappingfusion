@@ -3,8 +3,8 @@
 namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
-use MF\Framework\Database\DbEntityManager;
-use MF\Framework\DataStructures\AppObject;
+use LM\WebFramework\Database\DbEntityManager;
+use LM\WebFramework\DataStructures\AppObject;
 use MF\Model\ContributionModel;
 
 class ContributionRepository implements IRepository

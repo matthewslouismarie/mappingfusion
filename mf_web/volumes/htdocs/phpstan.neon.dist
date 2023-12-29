@@ -5,4 +5,4 @@ parameters:
         - src
     phpVersion: 80100
     universalObjectCratesClasses:
-        - MF\Framework\DataStructures\AppObject
+        - LM\WebFramework\DataStructures\AppObject

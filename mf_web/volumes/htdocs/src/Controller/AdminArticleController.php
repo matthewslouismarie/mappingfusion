@@ -2,19 +2,18 @@
 
 namespace MF\Controller;
 
-use DateTimeZone;
-use MF\Framework\Database\DbEntityManager;
-use MF\Framework\DataStructures\AppObject;
-use MF\Enum\Clearance;
-use MF\Exception\Http\NotFoundException;
-use MF\Framework\Form\FormFactory;
-use MF\Framework\Model\AbstractEntity;
-use MF\Framework\Type\ModelValidator;
+use GuzzleHttp\Psr7\Response;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Database\DbEntityManager;
+use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\Form\FormFactory;
+use LM\WebFramework\Model\AbstractEntity;
+use LM\WebFramework\Session\SessionManager;
+use LM\WebFramework\Type\ModelValidator;
 use MF\Model\ArticleModel;
 use MF\Model\Slug;
 use MF\Repository\ArticleRepository;
-use MF\Session\SessionManager;
-use GuzzleHttp\Psr7\Response;
 use MF\Repository\CategoryRepository;
 use MF\Router;
 use MF\Twig\TemplateHelper;
@@ -24,8 +23,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminArticleController implements ControllerInterface
 {
-    const ROUTE_ID = 'manage-article';
-
     private AbstractEntity $model;
 
     public function __construct(

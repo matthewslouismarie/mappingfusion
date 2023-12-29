@@ -3,8 +3,8 @@
 namespace MF\Test;
 
 use InvalidArgumentException;
-use MF\Framework\Type\ModelValidator;
-use MF\Framework\Test\IUnitTest;
+use LM\WebFramework\Type\ModelValidator;
+use LM\WebFramework\Test\IUnitTest;
 use MF\Model\AuthorModel;
 
 class AppEntityTest implements IUnitTest

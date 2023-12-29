@@ -4,8 +4,8 @@ namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
 use MF\Exception\Database\EntityNotFoundException;
-use MF\Framework\Database\DbEntityManager;
-use MF\Framework\DataStructures\AppObject;
+use LM\WebFramework\Database\DbEntityManager;
+use LM\WebFramework\DataStructures\AppObject;
 use MF\Model\CategoryModel;
 use UnexpectedValueException;
 

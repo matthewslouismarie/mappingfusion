@@ -3,6 +3,7 @@
 namespace MF;
 
 use GuzzleHttp\Psr7\Response;
+use LM\WebFramework\Configuration;
 use MF\Controller\HomeController;
 use Psr\Http\Message\ResponseInterface;
 
@@ -13,8 +14,8 @@ class Router
     ) {
     }
 
-    public function generateUrl(string $routeId, array $parameters = [], string $paramStart = '?', string $hash = ''): string {
-        $url = $routeId === HomeController::ROUTE_ID ? '/' : "/$routeId";
+    public function generateUrl(string $routeId = '', array $parameters = [], string $paramStart = '?', string $hash = ''): string {
+        $url = "/$routeId";
         if (0 !== count($parameters)) {
             foreach ($parameters as $param) {
                 $url .= "/$param";

@@ -2,9 +2,9 @@
 
 namespace MF\Model;
 
-use MF\Framework\Constraints\StringConstraint;
-use MF\Framework\Model\AbstractEntity;
-use MF\Framework\Model\StringModel;
+use LM\WebFramework\Constraints\StringConstraint;
+use LM\WebFramework\Model\AbstractEntity;
+use LM\WebFramework\Model\StringModel;
 
 /**
  * @todo Add knowsAbout, memberOf, image

@@ -2,9 +2,9 @@
 
 namespace MF\Model;
 
-use MF\Framework\Model\AbstractEntity;
-use MF\Framework\Model\SlugModel;
-use MF\Framework\Model\StringModel;
+use LM\WebFramework\Model\AbstractEntity;
+use LM\WebFramework\Model\SlugModel;
+use LM\WebFramework\Model\StringModel;
 
 class CategoryModel extends AbstractEntity
 {

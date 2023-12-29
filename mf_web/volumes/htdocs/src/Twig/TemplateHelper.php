@@ -4,11 +4,11 @@ namespace MF\Twig;
 
 use DateTimeInterface;
 use IteratorAggregate;
-use MF\Configuration;
+use LM\WebFramework\Configuration;
 use MF\Enum\LinkType;
-use MF\Framework\DataStructures\AppObject;
-use MF\Framework\File\FileService;
-use MF\Session\SessionManager;
+use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\File\FileService;
+use LM\WebFramework\Session\SessionManager;
 use MF\MarkdownService;
 use MF\Router;
 use UnexpectedValueException;

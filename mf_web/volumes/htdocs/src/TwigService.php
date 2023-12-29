@@ -3,6 +3,7 @@
 namespace MF;
 
 use InvalidArgumentException;
+use LM\WebFramework\Configuration;
 use MF\Twig\TemplateHelper;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;

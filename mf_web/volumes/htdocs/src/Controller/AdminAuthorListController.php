@@ -3,7 +3,8 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\Enum\Clearance;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
 use MF\Repository\AuthorRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
@@ -11,8 +12,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminAuthorListController implements ControllerInterface
 {
-    const ROUTE_ID = 'admin-author-list';
-
     public function __construct(
         private AuthorRepository $repo,
         private TwigService $twig,

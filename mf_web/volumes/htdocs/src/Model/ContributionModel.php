@@ -2,12 +2,12 @@
 
 namespace MF\Model;
 
-use MF\Framework\Constraints\RangeConstraint;
-use MF\Framework\Constraints\StringConstraint;
-use MF\Framework\Model\AbstractEntity;
-use MF\Framework\Model\BoolModel;
-use MF\Framework\Model\IntegerModel;
-use MF\Framework\Model\StringModel;
+use LM\WebFramework\Constraints\RangeConstraint;
+use LM\WebFramework\Constraints\StringConstraint;
+use LM\WebFramework\Model\AbstractEntity;
+use LM\WebFramework\Model\BoolModel;
+use LM\WebFramework\Model\IntegerModel;
+use LM\WebFramework\Model\StringModel;
 
 class ContributionModel extends AbstractEntity
 {

@@ -3,19 +3,18 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\Enum\Clearance;
-use MF\Exception\Http\NotFoundException;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
+use LM\WebFramework\Session\SessionManager;
 use MF\Repository\ArticleRepository;
 use MF\Repository\AuthorRepository;
-use MF\Session\SessionManager;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class ArticleController implements ControllerInterface
 {
-    const ROUTE_ID = 'article';
-
     public function __construct(
         private ArticleRepository $repo,
         private AuthorRepository $authorRepo,
@@ -26,12 +25,12 @@ class ArticleController implements ControllerInterface
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         if (!key_exists(1, $routeParams)) {
-            throw new NotFoundException();
+            throw new RequestedResourceNotFound();
         }
         $article = $this->repo->find($routeParams[1], true, !$this->sessionManager->isUserLoggedIn());
 
         if (null === $article) {
-            throw new NotFoundException();
+            throw new RequestedResourceNotFound();
         }
 
         return new Response(

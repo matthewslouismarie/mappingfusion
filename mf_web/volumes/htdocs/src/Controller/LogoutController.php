@@ -2,18 +2,17 @@
 
 namespace MF\Controller;
 
-use MF\Enum\Clearance;
-use MF\Session\SessionManager;
-use MF\Repository\MemberRepository;
 use GuzzleHttp\Psr7\Response;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Session\SessionManager;
+use MF\Repository\MemberRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class LogoutController implements ControllerInterface
 {
-    const ROUTE_ID = 'logout';
-
     private TwigService $twig;
     private MemberRepository $repo;
 

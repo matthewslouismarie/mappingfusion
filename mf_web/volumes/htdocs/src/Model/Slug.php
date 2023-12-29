@@ -2,7 +2,7 @@
 
 namespace MF\Model;
 
-use MF\Framework\Constraints\StringConstraint;
+use LM\WebFramework\Constraints\StringConstraint;
 use Stringable;
 use UnexpectedValueException;
 use voku\helper\ASCII;

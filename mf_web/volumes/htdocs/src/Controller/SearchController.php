@@ -1,17 +1,16 @@
 <?php
 
 namespace MF\Controller;
+
 use GuzzleHttp\Psr7\Response;
-use MF\Enum\Clearance;
-use MF\Framework\DataStructures\SearchQuery;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\DataStructures\SearchQuery;
 use MF\Repository\ArticleRepository;
 use MF\TwigService;
 use Psr\Http\Message\ServerRequestInterface;
 
 class SearchController implements ControllerInterface
 {
-    const ROUTE_ID = 'recherche';
-
     const SEARCH_FORM_NAME = 'search-query';
 
     public function __construct(

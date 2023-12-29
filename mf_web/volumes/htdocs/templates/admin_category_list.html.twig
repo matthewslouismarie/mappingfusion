@@ -5,11 +5,11 @@
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
-<a class="link" href="{{ app.router.generateUrl('manage-category') }}">Créer une nouvelle catégorie</a>
+<a class="link" href="{{ app.router.generateUrl('admin-manage-category') }}">Créer une nouvelle catégorie</a>
 <ul>
     {% for c in categories %}
     <li class="item">
-        <a class="link" href="{{ app.router.generateUrl('manage-category', {id: c.id}) }}">{{ c.name }}</a>
+        <a class="link" href="{{ app.router.generateUrl('admin-manage-category', {id: c.id}) }}">{{ c.name }}</a>
     </li>
     {% endfor %}
 </ul>

@@ -3,7 +3,8 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\Enum\Clearance;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
 use MF\Repository\ArticleRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
@@ -11,8 +12,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class HomeController implements ControllerInterface
 {
-    const ROUTE_ID = 'home';
-
     public function __construct(
         private ArticleRepository $articleRepo,
         private TwigService $twig,

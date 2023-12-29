@@ -2,10 +2,10 @@
 
 namespace MF\Database;
 
-use MF\Configuration;
+use LM\WebFramework\Configuration;
 use MF\Enum\LinkType;
-use MF\Framework\Constraints\IUploadedImageConstraint;
-use MF\Framework\Constraints\StringConstraint;
+use LM\WebFramework\Constraints\IUploadedImageConstraint;
+use LM\WebFramework\Constraints\StringConstraint;
 use MF\Model\Url;
 use PDO;
 

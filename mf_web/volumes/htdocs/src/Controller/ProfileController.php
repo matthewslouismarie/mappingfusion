@@ -3,9 +3,9 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\Enum\Clearance;
-use MF\Exception\Http\BadRequestException;
-use MF\Exception\Http\NotFoundException;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use MF\Repository\ArticleRepository;
 use MF\Repository\MemberRepository;
 use MF\Repository\PlayableRepository;
@@ -15,8 +15,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ProfileController implements ControllerInterface
 {
-    const ROUTE_ID = 'membre';
-
     public function __construct(
         private ArticleRepository $articleRepository,
         private MemberRepository $repo,
@@ -27,12 +25,12 @@ class ProfileController implements ControllerInterface
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         if (!key_exists(1, $routeParams)) {
-            throw new BadRequestException();
+            throw new RequestedResourceNotFound();
         }
         $member = $this->repo->find($routeParams[1]);
 
         if (null === $member) {
-            throw new NotFoundException();
+            throw new RequestedResourceNotFound();
         }
 
         $articles = $this->articleRepository->findArticlesFrom($member->id);

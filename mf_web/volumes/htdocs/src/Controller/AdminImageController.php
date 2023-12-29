@@ -3,19 +3,17 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\Enum\Clearance;
-use MF\Framework\DataStructures\Filename;
-use MF\Framework\File\FileService;
-use MF\Framework\Form\Transformer\CheckboxTransformer;
-use MF\Framework\Form\Transformer\FileTransformer;
-use MF\Session\SessionManager;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\DataStructures\Filename;
+use LM\WebFramework\File\FileService;
+use LM\WebFramework\Form\Transformer\FileTransformer;
+use LM\WebFramework\Session\SessionManager;
 use MF\TwigService;
 use Psr\Http\Message\ServerRequestInterface;
 
 class AdminImageController implements ControllerInterface
 {
-    const ROUTE_ID = 'manage-images';
-
     private string $uploaded;
 
     public function __construct(

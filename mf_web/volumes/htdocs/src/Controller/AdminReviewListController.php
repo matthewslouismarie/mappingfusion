@@ -3,7 +3,8 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\Enum\Clearance;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
 use MF\Repository\ReviewRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
@@ -11,8 +12,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminReviewListController implements ControllerInterface
 {
-    const ROUTE_ID = 'admin-review-list';
-
     public function __construct(
         private ReviewRepository $repo,
         private TwigService $twig,

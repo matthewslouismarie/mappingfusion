@@ -3,8 +3,7 @@
 namespace MF\Database;
 
 use DateTimeImmutable;
-use MF\Configuration;
-use MF\Framework\DataStructures\AppObject;
+use LM\WebFramework\DataStructures\AppObject;
 use MF\Enum\LinkType;
 use MF\Repository\ArticleRepository;
 use MF\Repository\AuthorRepository;
@@ -18,7 +17,7 @@ use MF\Repository\ReviewRepository;
 class Fixture
 {
     public function __construct(
-        private Configuration $config,
+        private Configuratio $config,
         private DatabaseManager $conn,
         private ArticleRepository $repoArticle,
         private AuthorRepository $repoAuthor,

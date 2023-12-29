@@ -3,12 +3,12 @@
 namespace MF\Model;
 
 use MF\Enum\LinkType;
-use MF\Framework\Constraints\EnumConstraint;
-use MF\Framework\Constraints\RangeConstraint;
-use MF\Framework\Constraints\StringConstraint;
-use MF\Framework\Model\AbstractEntity;
-use MF\Framework\Model\IntegerModel;
-use MF\Framework\Model\StringModel;
+use LM\WebFramework\Constraints\EnumConstraint;
+use LM\WebFramework\Constraints\RangeConstraint;
+use LM\WebFramework\Constraints\StringConstraint;
+use LM\WebFramework\Model\AbstractEntity;
+use LM\WebFramework\Model\IntegerModel;
+use LM\WebFramework\Model\StringModel;
 
 /**
  * @todo Custom constraint for type and url.

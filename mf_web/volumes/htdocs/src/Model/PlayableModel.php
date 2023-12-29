@@ -2,11 +2,11 @@
 
 namespace MF\Model;
 
-use MF\Framework\Constraints\StringConstraint;
-use MF\Framework\Model\AbstractEntity;
-use MF\Framework\Model\DateTimeModel;
-use MF\Framework\Model\ListModel;
-use MF\Framework\Model\StringModel;
+use LM\WebFramework\Constraints\StringConstraint;
+use LM\WebFramework\Model\AbstractEntity;
+use LM\WebFramework\Model\DateTimeModel;
+use LM\WebFramework\Model\ListModel;
+use LM\WebFramework\Model\StringModel;
 
 class PlayableModel extends AbstractEntity
 {

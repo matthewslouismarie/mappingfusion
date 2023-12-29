@@ -1,6 +1,6 @@
 <?php
 
-use MF\Configuration;
+use LM\WebFramework\Configuration;
 use MF\Database\DatabaseManager;
 
 $container = require_once dirname(__FILE__) . '/../index.php';

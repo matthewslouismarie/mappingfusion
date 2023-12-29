@@ -44,7 +44,7 @@
                     <a class="link" href="{{ app.router.generateUrl('admin-review-list') }}">Gérer les tests</a>
                 </li>
                 <li class="item">
-                    <a class="link" href="{{ app.router.generateUrl('manage-images') }}">Gérer les images</a>
+                    <a class="link" href="{{ app.router.generateUrl('admin-manage-images') }}">Gérer les images</a>
                 </li>
                 <li class="item">
                     <a class="link" href="{{ app.router.generateUrl('logout') }}">Déconnexion</a>
@@ -57,7 +57,7 @@
             <meta itemprop="name" content="Mapping-Fusion">
 
             <div class="_wrapper _gap -gap-col-l _padding -padding-hori-mobile" id="menu-container">
-                <a class="logo" itemprop="url" href="{{ app.router.generateUrl('home') }}">
+                <a class="logo" itemprop="url" href="{{ app.router.generateUrl() }}">
                     <img class="img" itemprop="image thumbnailUrl" {{ app.imgAttr('Mapping-Fusion', 'mapping-fusion-logo.svg', false, 107, 103)|raw }}>
                 </a>
                 <div class="text _gap -gap-row-s2" id="menu">
@@ -105,7 +105,7 @@
                 <nav>
                     <ul class="std-inline-list _txt -txts">
                         <li class="item">
-                            <a class="link" href="{{ app.router.generateUrl('home') }}">Nouveautés</a>
+                            <a class="link" href="{{ app.router.generateUrl() }}">Nouveautés</a>
                         </li>
                         <li class="item">
                             <a class="link" href="{{ app.router.generateUrl('tests') }}">Tests maps et mods</a>

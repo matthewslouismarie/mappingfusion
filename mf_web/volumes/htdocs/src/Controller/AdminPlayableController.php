@@ -3,13 +3,14 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\Framework\DataStructures\AppObject;
-use MF\Enum\Clearance;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
+use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\Form\FormFactory;
+use LM\WebFramework\Type\ModelValidator;
 use MF\Enum\LinkType;
 use MF\Exception\Database\EntityNotFoundException;
-use MF\Exception\Http\NotFoundException;
-use MF\Framework\Form\FormFactory;
-use MF\Framework\Type\ModelValidator;
 use MF\Model\ContributionModel;
 use MF\Model\PlayableLinkModel;
 use MF\Model\PlayableModel;
@@ -24,8 +25,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminPlayableController implements ControllerInterface
 {
-    const ROUTE_ID = 'manage_playable';
-
     public function __construct(
         private AuthorRepository $authorRepo,
         private FormFactory $formFactory,
@@ -89,7 +88,7 @@ class AdminPlayableController implements ControllerInterface
             try {
                 $formData = $this->repo->findOne($routeParams[1])->toArray();
             } catch (EntityNotFoundException $e) {
-                throw new NotFoundException();
+                throw new RequestedResourceNotFound();
             }
         }
 

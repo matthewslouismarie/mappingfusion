@@ -3,7 +3,7 @@
 namespace MF\Model;
 
 use InvalidArgumentException;
-use MF\Framework\Constraints\IUploadedImageConstraint;
+use LM\WebFramework\Constraints\IUploadedImageConstraint;
 use Stringable;
 
 class SlugFilename implements Stringable

@@ -3,9 +3,9 @@
 namespace MF\Test;
 
 use DateTimeImmutable;
-use MF\Framework\Database\DbEntityManager;
-use MF\Framework\DataStructures\AppObject;
-use MF\Framework\Test\IUnitTest;
+use LM\WebFramework\Database\DbEntityManager;
+use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\Test\IUnitTest;
 use MF\Model\ArticleModel;
 use MF\Model\CategoryModel;
 use MF\Model\PlayableModel;

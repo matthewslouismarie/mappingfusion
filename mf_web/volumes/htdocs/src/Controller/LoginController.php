@@ -2,21 +2,20 @@
 
 namespace MF\Controller;
 
-use MF\Enum\Clearance;
-use MF\Framework\Form\FormFactory;
-use MF\Framework\Type\ModelValidator;
-use MF\Model\MemberModel;
-use MF\Session\SessionManager;
-use MF\Repository\MemberRepository;
 use GuzzleHttp\Psr7\Response;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Form\FormFactory;
+use LM\WebFramework\Session\SessionManager;
+use LM\WebFramework\Type\ModelValidator;
+use MF\Model\MemberModel;
+use MF\Repository\MemberRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class LoginController implements ControllerInterface
 {
-    const ROUTE_ID = 'accès-g-man';
-
     public function __construct(
         private FormFactory $formFactory,
         private MemberRepository $repo,

@@ -3,9 +3,9 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use MF\Enum\Clearance;
+use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use MF\Exception\Database\EntityNotFoundException;
-use MF\Exception\Http\NotFoundException;
 use MF\Repository\ArticleRepository;
 use MF\Repository\CategoryRepository;
 use MF\TwigService;
@@ -14,8 +14,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ArticleListController implements ControllerInterface
 {
-    const ROUTE_ID = 'articles';
-
     public function __construct(
         private ArticleRepository $repo,
         private CategoryRepository $categoryRepository,
@@ -53,7 +51,7 @@ class ArticleListController implements ControllerInterface
                 );
             }
         } catch (EntityNotFoundException $e) {
-            throw new NotFoundException();
+            throw new RequestedResourceNotFound();
         }
     }
 
