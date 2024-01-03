@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "daff0876bc807bbd145c3ce9d4b2a331",
+    "content-hash": "c70ff7a94cd2a32abf067d046cff4672",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -396,25 +396,49 @@
         },
         {
             "name": "matthewslouismarie/lm-web-framework",
-            "version": "dev-master",
+            "version": "2.1.4",
             "source": {
                 "type": "git",
-                "url": "C:\\Users\\louis\\Documents\\lm-web-framework",
-                "reference": "59acd75ef7108bb0c9d3d52734098afa3b95c4a4"
+                "url": "https://github.com/matthewslouismarie/lm-web-framework.git",
+                "reference": "65c77a8dfa4ed39a3e5f7086a41794f90c59b716"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/65c77a8dfa4ed39a3e5f7086a41794f90c59b716",
+                "reference": "65c77a8dfa4ed39a3e5f7086a41794f90c59b716",
+                "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "^7.8",
                 "php-di/php-di": "^7.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "LM\\WebFramework\\": "src/"
                 }
             },
-            "description": "Simple web framework.",
-            "time": "2023-12-29T21:01:46+00:00"
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Louis-Marie Matthews",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Lightweight web framework that doesn’t require tons of dependencies and keeps you in control.",
+            "keywords": [
+                "framework",
+                "lightweight",
+                "web"
+            ],
+            "support": {
+                "issues": "https://github.com/matthewslouismarie/lm-web-framework/issues",
+                "source": "https://github.com/matthewslouismarie/lm-web-framework/tree/2.1.4"
+            },
+            "time": "2024-01-03T11:13:27+00:00"
         },
         {
             "name": "michelf/php-markdown",
@@ -947,12 +971,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "7c3aff79d10325257a001fcf92d991f24fc967cf"
+                "reference": "2c438b99bb2753c1628c1e6f523991edea5b03a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/7c3aff79d10325257a001fcf92d991f24fc967cf",
-                "reference": "7c3aff79d10325257a001fcf92d991f24fc967cf",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/2c438b99bb2753c1628c1e6f523991edea5b03a4",
+                "reference": "2c438b99bb2753c1628c1e6f523991edea5b03a4",
                 "shasum": ""
             },
             "require": {
@@ -962,7 +986,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "3.4-dev"
+                    "dev-main": "3.5-dev"
                 },
                 "thanks": {
                     "name": "symfony/contracts",
@@ -991,7 +1015,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.4.0"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/main"
             },
             "funding": [
                 {
@@ -1007,7 +1031,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-23T14:45:45+00:00"
+            "time": "2024-01-02T14:07:37+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -1266,12 +1290,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "6e2f2655a88a84ccd03cd030641666c0c9caa19b"
+                "reference": "b4c3c1c448583e9ffa24933675c01f4be3435b41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/6e2f2655a88a84ccd03cd030641666c0c9caa19b",
-                "reference": "6e2f2655a88a84ccd03cd030641666c0c9caa19b",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/b4c3c1c448583e9ffa24933675c01f4be3435b41",
+                "reference": "b4c3c1c448583e9ffa24933675c01f4be3435b41",
                 "shasum": ""
             },
             "require": {
@@ -1338,7 +1362,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-24T08:54:44+00:00"
+            "time": "2024-01-01T14:44:03+00:00"
         },
         {
             "name": "voku/portable-ascii",
@@ -1418,9 +1442,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "matthewslouismarie/lm-web-framework": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
