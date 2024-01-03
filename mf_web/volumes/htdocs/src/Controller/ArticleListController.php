@@ -4,6 +4,7 @@ namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use MF\Exception\Database\EntityNotFoundException;
 use MF\Repository\ArticleRepository;
