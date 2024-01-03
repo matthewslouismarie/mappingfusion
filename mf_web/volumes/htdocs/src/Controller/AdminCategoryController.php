@@ -42,7 +42,7 @@ class AdminCategoryController implements ControllerInterface
 
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
-            $formData['id'] = $formData['id'] ??  null !== $formData['name'] ? (new Slug($formData['name'], true))->__toString() : null;
+            $formData['id'] = $formData['id'] ?? (null !== $formData['name'] ? (new Slug($formData['name'], true))->__toString() : null);
             $formErrors = $this->modelValidator->validate($formData, $this->model);
 
             if (0 === count($formErrors)) {
