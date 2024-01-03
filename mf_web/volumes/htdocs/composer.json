@@ -13,11 +13,5 @@
         "voku/portable-ascii": "^2.0",
         "matthewslouismarie/lm-web-framework": "dev-master"
     },
-    "minimum-stability": "dev",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "C:\\Users\\louis\\Documents\\lm-web-framework"
-        }
-    ]
+    "minimum-stability": "dev"
 }
