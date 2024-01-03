@@ -54,7 +54,7 @@ class AdminAuthorController implements ControllerInterface
                     } else {
                         $this->repo->update($author, $requestedId);
                     }
-                    return $this->router->generateRedirect(self::ROUTE_ID, [$formData['id']]);
+                    return $this->router->generateRedirect('admin-manage-author', [$formData['id']]);
                 } catch (PDOException $e) {
                     if ('23000' === $e->getCode()) {
                         $formErrors['id'][] = 'Il existe déjà un auteur avec le même ID.';

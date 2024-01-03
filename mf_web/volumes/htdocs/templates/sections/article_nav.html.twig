@@ -43,7 +43,7 @@
             {% endfor %}
             <li class="item">
                 <div class="list _gap -gap-row-s">
-                    <a class="std-button -s -transparent _padding -padding-xs _txt -txts" href="{{ app.router.generateUrl('tests') }}">
+                    <a class="std-button -s -transparent _padding -padding-xs _txt -txts" href="{{ app.router.generateUrl('articles', [app.conf.getSetting('reviewCategoryId')]) }}">
                         <span class="text">Voir plus de tests</span>
                     </a>
                     <a class="std-button -s -transparent _padding -padding-xs _txt -txts" href="{{ app.router.generateUrl('articles') }}">

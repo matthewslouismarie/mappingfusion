@@ -82,7 +82,7 @@ class AdminPlayableController implements ControllerInterface
                 } else {
                     $this->repo->addOrUpdate($playable, $playableId);
                 }
-                return $this->router->generateRedirect(self::ROUTE_ID, [$playable->id]);
+                return $this->router->generateRedirect('admin-manage-playable', [$playable->id]);
             }
         } elseif (isset($routeParams[1])) {
             try {

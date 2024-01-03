@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% from 'macros/article_mosaic.html.twig' import articleMosaic %}
+{% from 'macros/review_mosaic.html.twig' import reviewMosaic %}
 
 {% block title %}{% if category %}{{ category.name }}{% else %}Liste des articles{% endif %}{% endblock %}
 
@@ -11,42 +12,21 @@
     <ol class="list _horizontal-container" id="web-page-breadcrumb" itemprop="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
         <li class="item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
             <meta itemprop="position" content="0">
-            <a class="link" href="{{ app.router.generateUrl('articles') }}" itemprop="item" itemscope itemid="{{ app.router.generateUrl('articles') }}" itemtype="https://schema.org/WebPage">
+            <{% if not parentCats %}span class="text"{% else %}a class="link" href="{{ app.router.generateUrl('articles') }}"{% endif %} itemprop="item" itemscope itemid="{{ app.router.generateUrl('articles') }}" itemtype="https://schema.org/WebPage">
                 <span itemprop="name">Toutes les catégories</span>
                 <meta itemprop="url" content="{{ app.router.generateUrl('articles') }}">
-            </a>
+            </{% if not parentCats %}span{% else %}a{% endif %}>
         </li>
-        {% if category %}
-        {% if category.parent %}
-        {% if category.parent.parent_id %}
+        {% for cat in parentCats %}
         <li class="item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <meta itemprop="position" content="1">
-            <span class="text" itemprop="item">…</span>
+            <meta itemprop="position" content="{{ loop.index0 + 1 }}">
+            
+            <{% if loop.last %}span class="text"{% else %}a class="link" href="{{ app.router.generateUrl('articles', [cat.id]) }}"{% endif %} itemprop="item" itemscope itemid="{{ app.router.generateUrl('articles', [cat.id]) }}" itemtype="https://schema.org/WebPage">
+                <meta itemprop="url" content="{{ app.router.generateUrl('articles', [cat.id]) }}">
+                <span itemprop="name">{{ cat.name }}</span>
+            </{% if loop.last %}span{% else %}a{% endif %}>
         </li>
-        <meta itemprop="numberOfItems" content="4">
-        {% else %}
-        <meta itemprop="numberOfItems" content="3">
-        {% endif %}
-        <li class="item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <meta itemprop="position" content="2">
-            <a class="link" href="{{ app.router.generateUrl('articles', [category.parent.id]) }}" itemprop="item" itemscope itemid="{{ app.router.generateUrl('articles', [category.parent.id]) }}" itemtype="https://schema.org/WebPage">
-                <meta itemprop="url" content="{{ app.router.generateUrl('articles', [category.parent.id]) }}">
-                <span itemprop="name">{{ category.parent.name }}</span>
-            </a>
-        </li>
-        {% else %}
-        <meta itemprop="numberOfItems" content="2">
-        {% endif %}
-        <li class="item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <meta itemprop="position" content="3">
-            <span class="text" href="{{ app.router.generateUrl('articles', [category.id]) }}" itemprop="item" itemscope itemid="{{ app.router.generateUrl('articles', [category.id]) }}" itemtype="https://schema.org/WebPage">
-                <meta itemprop="url" content="{{ app.router.generateUrl('articles', [category.id]) }}">
-                <span itemprop="name">{{ category.name }}</span>
-            </span>
-        </li>
-        {% else %}
-        <meta itemprop="numberOfItems" content="1">
-        {% endif %}
+        {% endfor %}
         <meta itemprop="itemListOrder" content="Ascending">
     </ol>
 </nav>
@@ -80,7 +60,13 @@
         {% if articles|length > 0 %}
         <ul class="std-mosaic-list">
             {% for a in articles %}
-            <li class="item">{{ articleMosaic(a, app) }}</li>
+            <li class="item">
+            {% if onlyReviews %}
+            {{ reviewMosaic(a, app) }}
+            {% else %}
+            {{ articleMosaic(a, app) }}
+            {% endif %}
+            </li>
             {% endfor %}
         </ul>
         {% else %}

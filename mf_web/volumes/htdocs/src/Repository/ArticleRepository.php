@@ -44,9 +44,9 @@ class ArticleRepository implements IRepository
     }
 
     public function find(string $id, bool $fetchPlayableContributors = false, bool $onlyPublished = true): ?AppObject {
-        $wherePublished = $onlyPublished ? 'AND article_is_published = 1' : '';
+        $selectFrom = $onlyPublished ? 'v_article_published' : 'v_article';
 
-        $stmt = $this->conn->getPdo()->prepare("SELECT v_article.*, v_playable.*, v_person.author_id AS redactor_id, v_person.author_name AS redactor_name FROM v_article LEFT OUTER JOIN v_playable ON v_article.playable_id = v_playable.playable_id LEFT JOIN v_person ON v_article.article_author_id = v_person.member_id WHERE article_id = ? $wherePublished;");
+        $stmt = $this->conn->getPdo()->prepare("SELECT a.*, v_playable.*, v_person.author_id AS redactor_id, v_person.author_name AS redactor_name FROM {$selectFrom} AS a LEFT OUTER JOIN v_playable ON a.playable_id = v_playable.playable_id LEFT JOIN v_person ON a.article_author_id = v_person.member_id WHERE article_id = ?;");
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
@@ -92,37 +92,66 @@ class ArticleRepository implements IRepository
     }
 
     public function findAll(bool $onlyPublished = true): array {
-        $wherePublished = $onlyPublished ? 'WHERE article_is_published = 1' : '';
+        $selectFrom = $onlyPublished ? 'v_article_published' : 'v_article';
 
-        $results = $this->conn->getPdo()->query("SELECT * FROM v_article {$wherePublished};")->fetchAll();
-        $entities = [];
+        $results = $this->conn->getPdo()->query("SELECT * FROM {$selectFrom} ORDER BY article_creation_date_time;")->fetchAll();
+
+        $articleModel = new ArticleModel(
+            categoryModel: new CategoryModel(),
+        );
+        $reviewModel = new ArticleModel(
+            categoryModel: new CategoryModel(),
+            reviewModel: new ReviewModel(new PlayableModel(new PlayableModel()), articleModel: null, isNullable: true)
+        );
+        $articles = [];
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppData($r, new ArticleModel(categoryModel: new CategoryModel()), 'article');
+            if (null === $r['review_id']) {
+                $articles[] = $this->em->toAppData($r, $articleModel, 'article')->set('review', null);
+            } else {
+                $articles[] = $this->em->toAppData($r, $reviewModel, 'article');
+            }
         }
-        return $entities;
+        return $articles;
     }
 
-    public function findAllPublished(array $categories = []): array {
-        $sqlQuery = "SELECT * FROM v_article WHERE article_is_published = 1";
+    public function findByCategory(string $categoryId): array {
+        $stmt = $this->conn->getPdo()->prepare("
+            WITH RECURSIVE CategoryHierarchy AS (
+                SELECT category_id, category_name, category_parent_id
+                FROM e_category AS rootcat
+                WHERE rootcat.category_id = ?
 
-        if (0 !== count($categories)) {
-            $sqlQuery .= " AND (0";
-            foreach ($categories as $key => $categoryId) {
-                $sqlQuery .= " OR article_category_id = :{$key}";
-            }
-            $sqlQuery .= ")";
-        }
-        $sqlQuery .= " ORDER BY article_creation_date_time DESC;";
-        $stmt = $this->conn->getPdo()->prepare($sqlQuery);
-        $stmt->execute($categories);
+                UNION ALL
+
+                SELECT descendantcat.category_id, descendantcat.category_name, descendantcat.category_parent_id
+                FROM e_category AS descendantcat
+                JOIN CategoryHierarchy ch ON descendantcat.category_parent_id = ch.category_id
+            )
+            SELECT *
+            FROM v_article_published AS a
+            JOIN CategoryHierarchy ch ON a.article_category_id = ch.category_id
+            ORDER BY article_creation_date_time DESC;
+        ");
+        $stmt->execute([$categoryId]);
         $results = $stmt->fetchAll();
 
 
-        $entities = [];
+        $articles = [];
+        $articleModel = new ArticleModel(
+            categoryModel: new CategoryModel(),
+        );
+        $reviewModel = new ArticleModel(
+            categoryModel: new CategoryModel(),
+            reviewModel: new ReviewModel(new PlayableModel(new PlayableModel()), articleModel: null, isNullable: true)
+        );
         foreach ($results as $r) {
-            $entities[] = $this->em->toAppData($r, new ArticleModel(categoryModel: new CategoryModel()), 'article');
+            if (null === $r['review_id']) {
+                $articles[] = $this->em->toAppData($r, $articleModel, 'article')->set('review', null);
+            } else {
+                $articles[] = $this->em->toAppData($r, $reviewModel, 'article');
+            }
         }
-        return $entities;
+        return $articles;
     }
 
     /**
@@ -130,7 +159,7 @@ class ArticleRepository implements IRepository
      */
     public function findAllReviews(bool $onlyPublished = true): array {
         $wherePublished = $onlyPublished ? 'AND article_is_published = 1' : '';
-        $results = $this->conn->getPdo()->query("SELECT *, playable_game_id AS game_id, playable_game_name AS game_name, playable_game_release_date_time AS game_release_date_time, NULL AS game_game_id FROM v_article WHERE review_id IS NOT NULL $wherePublished;");
+        $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE review_id IS NOT NULL $wherePublished;");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = $this->em->toAppData($article, new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel(new PlayableModel()))), 'article');
@@ -186,7 +215,7 @@ class ArticleRepository implements IRepository
      * @return AppObject[]
      */
     public function findLastReviews(): array {
-        $results = $this->conn->getPdo()->query("SELECT *, playable_game_id AS game_id, playable_game_name AS game_name, playable_game_release_date_time AS game_release_date_time, NULL AS game_game_id FROM v_article WHERE article_is_published = 1 AND review_id IS NOT NULL ORDER BY article_creation_date_time DESC LIMIT 4;");
+        $results = $this->conn->getPdo()->query("SELECT * FROM v_article_published WHERE review_id IS NOT NULL ORDER BY article_creation_date_time DESC LIMIT 4;");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
             $articles[] = $this->em->toAppData($article, new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel(new PlayableModel()))), 'article');

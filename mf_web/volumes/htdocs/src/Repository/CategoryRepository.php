@@ -42,13 +42,27 @@ class CategoryRepository implements IRepository
         }
     }
 
+    /**
+     * @return array<string, AppObject> An array of categories, indexed by ID.
+     */
     public function findAll(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM e_category;')->fetchAll();
-        $entities = [];
-        foreach ($results as $r) {
-            $entities[] = $this->em->toAppData($r, $this->model, 'category');
+        $rows = $this->conn->getPdo()->query('SELECT * FROM e_category')->fetchAll();
+        $categories = [];
+        foreach ($rows as $row) {
+            $categories[$row['category_id']] = $this->em->toAppData($row, $this->model, 'category')->set('children', []);
         }
-        return $entities;
+
+        return $categories;
+    }
+
+    private function findChildren(array $categories, AppObject $parent): AppObject {
+        $foundChildren = [];
+        foreach ($categories as $cat) {
+            if ($cat->parentId == $parent->id) {
+                $foundChildren[] = $cat->set('children', $this->findChildren($categories, $cat));
+            }
+        }
+        return $parent->set('children', $foundChildren);
     }
 
     public function findAllRoot(): array {

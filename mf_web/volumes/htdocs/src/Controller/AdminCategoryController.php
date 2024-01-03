@@ -52,7 +52,7 @@ class AdminCategoryController implements ControllerInterface
                 } else {
                     $this->repo->update($category, $requestedId);
                 }
-                return $this->router->generateRedirect(self::ROUTE_ID, [$category->id]);
+                return $this->router->generateRedirect('admin-manage-category', [$category->id]);
             }
         } elseif (null !== $requestedId) {
             $formData = $this->repo->find($requestedId)?->toArray();

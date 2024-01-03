@@ -108,7 +108,7 @@
                             <a class="link" href="{{ app.router.generateUrl() }}">Nouveautés</a>
                         </li>
                         <li class="item">
-                            <a class="link" href="{{ app.router.generateUrl('tests') }}">Tests maps et mods</a>
+                            <a class="link" href="{{ app.router.generateUrl('articles', [app.conf.getSetting('reviewCategoryId')]) }}">Tests maps et mods</a>
                         </li>
                         <li class="item">
                             <a class="link" href="{{ app.router.generateUrl('articles') }}">Les derniers articles</a>

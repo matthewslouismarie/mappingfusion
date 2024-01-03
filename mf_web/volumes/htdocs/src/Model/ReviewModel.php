@@ -14,6 +14,7 @@ class ReviewModel extends AbstractEntity
     public function __construct(
         private ?PlayableModel $playableModel = null,
         private ?ArticleModel $articleModel = null,
+        private bool $isNullable = false,
     ) {
     }
 
@@ -34,5 +35,9 @@ class ReviewModel extends AbstractEntity
             $properties['article'] = $this->articleModel;
         }
         return $properties;
+    }
+
+    public function isNullable(): bool {
+        return $this->isNullable;
     }
 }

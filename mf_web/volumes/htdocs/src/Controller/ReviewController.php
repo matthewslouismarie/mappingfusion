@@ -51,7 +51,7 @@ class ReviewController implements ControllerInterface
                     $this->repo->update($review);
                 }
 
-                return $this->router->generateRedirect(self::ROUTE_ID, [$requestedId]);
+                return $this->router->generateRedirect('gestion-de-tests', [$requestedId]);
             }
         } elseif (null !== $requestedId) {
             $formData = $this->repo->find($requestedId)?->toArray();

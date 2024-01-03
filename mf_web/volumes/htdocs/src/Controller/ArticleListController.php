@@ -29,25 +29,38 @@ class ArticleListController implements ControllerInterface
         try {
             if (key_exists(1, $routeParams)) {
                 $requestedCategoryId = $routeParams[1];
-                $category = $this->categoryRepository->findWithChildren($requestedCategoryId);
-                $i = 0;
-                $categoryIds = ["cat_{$i}" => $category->id];
-                foreach ($category->children as $c) {
-                    $categoryIds['cat_' . ++$i] = $c->id;
+                $categories = $this->categoryRepository->findAll();
+                if (!key_exists($requestedCategoryId, $categories)) {
+                    throw new RequestedResourceNotFound();
+                }
+                $category = $categories[$requestedCategoryId];
+                $articles = $this->repo->findByCategory($requestedCategoryId);
+                $onlyReviews = null;
+                foreach ($articles as $a) {
+                    if (null === $a->review) {
+                        $onlyReviews = false;
+                    }
+                }
+                if (null === $onlyReviews) {
+                    $onlyReviews = true;
                 }
                 return new Response(
                     body: $this->twig->render('article_list.html.twig', [
-                        'articles' => $this->repo->findAllPublished($categoryIds),
-                        'categories' => $category->children,
+                        'articles' => $articles,
+                        'categories' => $this->getDescendants($categories, $requestedCategoryId),
+                        'parentCats' => $this->getAncestors($categories, $requestedCategoryId),
                         'category' => $category,
+                        'onlyReviews' => $onlyReviews,
                     ])
                 );
             } else {
                 return new Response(
                     body: $this->twig->render('article_list.html.twig', [
-                        'articles' => $this->repo->findAllPublished(),
+                        'articles' => $this->repo->findAll(true),
                         'categories' => $this->categoryRepository->findAll(),
+                        'parentCats' => [],
                         'category' => null,
+                        'onlyReviews' => false,
                     ])
                 );
             }
@@ -58,5 +71,29 @@ class ArticleListController implements ControllerInterface
 
     public function getAccessControl(): Clearance {
         return Clearance::ALL;
+    }
+
+    private function getAncestors(array $categories, string $id): array {
+        $cat = $categories[$id];
+        $ancestors = [];
+        while (null !== $cat) {
+            $ancestors[] = $cat;
+            if (null !== $cat->parentId) {
+                $cat = $categories[$cat->parentId];
+            } else {
+                $cat = null;
+            }
+        }
+        return array_reverse($ancestors);
+    }
+
+    private function getDescendants(array $categories, string $id): array {
+        $descendants = [];
+        foreach ($categories as $cat) {
+            if ($cat->parentId == $id) {
+                $descendants = array_merge($descendants, [$cat], $this->getDescendants($categories, $cat->id));
+            }
+        }
+        return $descendants;
     }
 }

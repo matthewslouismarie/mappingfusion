@@ -38,7 +38,7 @@
             {{ _self.links(app, 'download', review.playable.links) }}
             {{ _self.links(app, 'homepage', review.playable.links) }}
             {{ _self.links(app, 'other', review.playable.links) }}
-            <a class="std-button -blue -p -moretests" href="{{ app.router.generateUrl('tests') }}">
+            <a class="std-button -blue -p -moretests" href="{{ app.router.generateUrl('articles', [app.conf.getSetting('reviewCategoryId')]) }}">
                 <div class="text _txt -bold">Voir plus de tests</div>
             </a>
         </div>

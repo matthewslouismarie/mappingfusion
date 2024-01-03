@@ -81,7 +81,7 @@ class AdminArticleController implements ControllerInterface
                         $this->repo->updateArticle($article, $requestedId);
                     }
                 }
-                return $this->router->generateRedirect(self::ROUTE_ID, [$article->id]);
+                return $this->router->generateRedirect('manage-article', [$article->id]);
             }
         } elseif (null !== $requestedId) {
             $formData = $this->repo->find($requestedId, onlyPublished: false)?->toArray();
