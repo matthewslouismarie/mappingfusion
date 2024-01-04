@@ -101,7 +101,7 @@ const autosaveDateTimeKey = 'mf-article-{{ requestedId }}-last-update';
 const smdeCacheId = 'mf-article-body-cache-{{ requestedId }}';
 
 const lastUpdateDateTime = new Date({{ lastUpdateDateTimeUtc }});
-const autosaveDateTime = null;
+let autosaveDateTime = null;
 
 if (null !== localStorage.getItem(autosaveDateTimeKey)) {
     autosaveDateTime = new Date(parseInt(localStorage.getItem(autosaveDateTimeKey)));
