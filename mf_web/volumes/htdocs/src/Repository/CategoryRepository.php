@@ -49,7 +49,8 @@ class CategoryRepository implements IRepository
         $rows = $this->conn->getPdo()->query('SELECT * FROM e_category')->fetchAll();
         $categories = [];
         foreach ($rows as $row) {
-            $categories[$row['category_id']] = $this->em->toAppData($row, $this->model, 'category')->set('children', []);
+            $c = $this->em->toAppData($row, $this->model, 'category')->set('children', []);
+            $categories[$row['category_id']] = $c;
         }
 
         return $categories;

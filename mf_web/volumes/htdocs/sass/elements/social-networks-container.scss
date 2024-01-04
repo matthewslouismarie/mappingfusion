@@ -3,10 +3,11 @@
     flex-direction: column;
     align-items: center;
 
-    > ._wrapper {
+    > ._horizontal-container {
         > .text {
             font-weight: $txt-weight-bold;
             text-align: center;
+            font-size: $txt-font-size-l;
         }
     }
 }

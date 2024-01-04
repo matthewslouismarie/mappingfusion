@@ -1,0 +1,13 @@
+.subcategory-list {
+    &.subcategory-list,
+    > .list {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: $gap-xxs;
+    }
+
+    > .text {
+        font-size: $txt-font-size-s
+    }
+}

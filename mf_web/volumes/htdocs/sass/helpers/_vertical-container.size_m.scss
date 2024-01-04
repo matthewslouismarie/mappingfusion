@@ -8,4 +8,8 @@
         padding-bottom: $gap-s;
         padding-top: $gap-s;
     }
+
+    &.-l {
+        gap: $gap-l2;
+    }
 }

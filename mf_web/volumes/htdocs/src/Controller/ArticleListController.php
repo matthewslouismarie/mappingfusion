@@ -47,8 +47,9 @@ class ArticleListController implements ControllerInterface
                 return new Response(
                     body: $this->twig->render('article_list.html.twig', [
                         'articles' => $articles,
-                        'categories' => $this->getDescendants($categories, $requestedCategoryId),
-                        'parentCats' => $this->getAncestors($categories, $requestedCategoryId),
+                        'childCats' => $this->getCategoryDescendants($categories, $requestedCategoryId),
+                        'categories' => $categories,
+                        'parentCats' => $this->getCategoryAncestors($categories, $requestedCategoryId),
                         'category' => $category,
                         'onlyReviews' => $onlyReviews,
                     ])
@@ -59,6 +60,7 @@ class ArticleListController implements ControllerInterface
                         'articles' => $this->repo->findAll(true),
                         'categories' => $this->categoryRepository->findAll(),
                         'parentCats' => [],
+                        'childCats' => null,
                         'category' => null,
                         'onlyReviews' => false,
                     ])
@@ -73,7 +75,7 @@ class ArticleListController implements ControllerInterface
         return Clearance::ALL;
     }
 
-    private function getAncestors(array $categories, string $id): array {
+    private function getCategoryAncestors(array $categories, string $id): array {
         $cat = $categories[$id];
         $ancestors = [];
         while (null !== $cat) {
@@ -87,13 +89,26 @@ class ArticleListController implements ControllerInterface
         return array_reverse($ancestors);
     }
 
-    private function getDescendants(array $categories, string $id): array {
+    private function getCategoryDescendants(array $categories, string $id): array {
         $descendants = [];
         foreach ($categories as $cat) {
             if ($cat->parentId == $id) {
-                $descendants = array_merge($descendants, [$cat], $this->getDescendants($categories, $cat->id));
+                $descendants = array_merge($descendants, [$cat], $this->getCategoryDescendants($categories, $cat->id));
             }
         }
         return $descendants;
+    }
+
+    /**
+     * @return array<string, AppObject>
+     */
+    private function getRootCategories(array $categories): array {
+        $rootCats = [];
+        foreach ($categories as $cat) {
+            if (null === $cat->parentId) {
+                $rootCats[$cat->id] = $cat;
+            }
+        }
+        return $rootCats;
     }
 }

@@ -1,11 +1,13 @@
 .site-social-networks {
-    > .button {
-        > .text {
-            display: block;
-            text-align: center;
-
-            > .line {
+    > .content {
+        > .button {
+            > .text {
                 display: block;
+                text-align: center;
+    
+                > .line {
+                    display: block;
+                }
             }
         }
     }

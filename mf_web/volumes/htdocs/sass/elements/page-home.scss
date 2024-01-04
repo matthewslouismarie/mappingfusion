@@ -1,6 +1,6 @@
 .page-home {
     > .site-maps-and-mods-tests > ._wrapper,
-    > .site-social-networks {
+    > .site-social-networks > .content {
         padding-top: 124px;
     }
 
@@ -8,7 +8,7 @@
         padding-top: 0;
     }
 
-    > .site-social-networks {
+    > .site-social-networks > .content {
         background-color: #19577a;
         box-shadow: 0 (-$area-size-s / 2) $area-size-s ($area-size-s / 2) #19577a;
         position: relative;

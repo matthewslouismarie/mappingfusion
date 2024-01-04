@@ -1,4 +1,9 @@
 .tag-link {
     padding: $gap-s;
     font-size: $txt-font-size-m;
+
+    &.-sm {
+        padding: $gap-xxs;
+        font-size: $txt-font-size-s;
+    }
 }

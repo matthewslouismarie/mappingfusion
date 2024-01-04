@@ -12,4 +12,8 @@
         padding-bottom: $gap-xs;
         padding-top: $gap-xs;
     }
+
+    &.-l {
+        gap: $gap-l;
+    }
 }

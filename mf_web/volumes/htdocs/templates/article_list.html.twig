@@ -50,11 +50,35 @@
         <ul class="tag-list">
             {% for c in categories %}
             <li class="item">
-                <a class="tag-link" href="{{ app.router.generateUrl('articles', [c.id]) }}">{{ c.name }}</a>
+                <{% if category and c.id == category.id %}span class="tag-link -current"{% else %}a class="tag-link"{% endif %} href="{{ app.router.generateUrl('articles', [c.id]) }}">{{ c.name }}</a>
             </li>
             {% endfor %}
         </ul>
     </div>
+
+    {% if category and category.parent_id %}
+    <div class="_horizontal-container">
+        <div class="subcategory-list">
+            <p class="text">Catégorie parente :</p>
+            <a class="tag-link -sm" href="{{ app.router.generateUrl('articles', [category.parent_id]) }}">{{ categories[category.parent_id].name }}</a>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if childCats %}
+    <div class="_horizontal-container">
+        <div class="subcategory-list">
+            <p class="text">Sous-catégories :</p>
+            <ul class="list">
+                {% for c in childCats %}
+                <li class="item">
+                    <a class="tag-link -sm" href="{{ app.router.generateUrl('articles', [c.id]) }}">{{ c.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
 
     <div class="_horizontal-container">
         {% if articles|length > 0 %}
@@ -76,9 +100,15 @@
 
     <div class="_horizontal-container">
         <div class="_txt -textcentered">
+            {% if category %}
+            <a class="std-button -darkblue -padded" href="{{ app.router.generateUrl('articles') }}">
+                <div class="text _txt -bold -txtm">Tous les articles</div>
+            </a>
+            {% else %}
             <a class="std-button -darkblue -padded" href="{{ app.router.generateUrl('') }}">
                 <div class="text _txt -bold -txtm">Retour à l’accueil</div>
             </a>
+            {% endif %}
         </div>
     </div>
 
