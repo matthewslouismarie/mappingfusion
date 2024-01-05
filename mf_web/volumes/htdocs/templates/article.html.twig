@@ -35,18 +35,13 @@
 <div class="page-article" id="article">
     <div class="std-article">
 
-        <div class="article-cover" id="article-cover" style="background-image: url('{{ app.resource(article.cover_filename) }}');" itemprop="image" content="{{ app.resource(article.cover_filename) }}">
-            <div class="content">
-                <div class="heading _wrapper">
-                    <a class="link" href="{{ app.router.generateUrl('article', [article.id]) }}" itemprop="url">
-                        <h1 class="title _txt -txtxl" itemprop="headline name">
-                            {{ article.title }}
-                        </h1>
-                        {% if article.sub_title %}
-                        <h2 class="subtitle" itemprop="alternativeHeadline">{{ article.sub_title }}</h2>
-                        {% endif %}
-                    </a>
-                </div>
+        <div class="article-cover" id="article-cover" style="background: url('{{ app.asset('blue-shadow.png') }}') repeat-x bottom -1px left / auto 50%, url('{{ app.resource(article.cover_filename) }}') center / cover;" itemprop="image" content="{{ app.resource(article.cover_filename) }}">
+            <div class="text _horizontal-container">
+                <meta itemprop="url" content="{{ app.router.generateUrl('article', [article.id]) }}">
+                <h1 class="title" itemprop="headline name">{{ article.title }}</h1>
+                {% if article.sub_title %}
+                <h2 class="subtitle" itemprop="alternativeHeadline">{{ article.sub_title }}</h2>
+                {% endif %}
             </div>
         </div>
 

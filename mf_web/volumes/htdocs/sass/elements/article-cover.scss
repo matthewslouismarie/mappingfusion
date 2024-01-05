@@ -1,25 +1,28 @@
 .article-cover {
     background-position: center;
     background-size: cover;
+    height: 512px;
 
-    > .content {
-        background: url('blue-shadow.png') repeat-x bottom -1px left / auto 50%;
+    > .text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: 35px;
+        min-height: 486px;
 
-        > .heading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 486px;
+        text-align: center;
 
-            text-align: center;
+        > .subtitle,
+        > .title {
+            color: $color-white;
+        }
+
+        > .title {
             font-weight: $txt-weight-semi-bold;
+        }
 
-            > .link {
-                > .subtitle,
-                > .title {
-                    color: $color-white;
-                }
-            }
+        > .subtitle {
+            font-weight: $txt-weight-regular;
         }
     }
 }
