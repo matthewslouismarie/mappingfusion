@@ -4,6 +4,7 @@ namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Configuration;
 use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\DataStructures\Filename;
 use LM\WebFramework\File\FileService;
@@ -17,6 +18,7 @@ class AdminImageController implements ControllerInterface
     private string $uploaded;
 
     public function __construct(
+        private Configuration $configuration,
         private FileService $fileService,
         private SessionManager $sessionManager,
         private TwigService $twig,
@@ -48,7 +50,7 @@ class AdminImageController implements ControllerInterface
                     $this->sessionManager->addMessage('Le fichier a été supprimé.');
                 }
             } else {
-                $transformer = new FileTransformer('images');
+                $transformer = new FileTransformer($this->configuration->getUploadedFileFolder(), 'images');
                 
                 $transformer->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
                 $this->sessionManager->addMessage('Le fichier a bien été ajouté.');
