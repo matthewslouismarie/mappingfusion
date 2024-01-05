@@ -3,7 +3,7 @@
 {% from 'macros/csrf_input.html.twig' import csrf %}
 {% from 'macros/error_list.html.twig' import errorList %}
 
-{% block title %}{{ formData ? 'Édition d’article' ?? 'Nouvel article' }}{% endblock %}
+{% block title %}{{ formData ? 'Édition d’article' : 'Nouvel article' }}{% endblock %}
 
 {% block resources %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
@@ -15,9 +15,9 @@
 
 {% block bodyContent %}
 
-<h1>{{ formData ? 'Édition d’article' ?? 'Nouvel article' }}</h1>
+<h1>{{ formData ? 'Édition d’article' : 'Nouvel article' }}</h1>
 
-<form autocomplete="on" class="std-form" id="article-form" enctype="multipart/form-data" method="post">
+<form autocomplete="on" class="std-form" id="article-form" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="form-row">
         <label class="label" for="id">ID (généré automatiquement)</label>
         <input class="input" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
@@ -97,23 +97,21 @@
 {% block scriptInit %}
 <script>
 {% if requestedId %}
-const autosaveDateTimeKey = 'mf-article-{{ requestedId }}-last-update';
-const smdeCacheId = 'mf-article-body-cache-{{ requestedId }}';
-
-const lastUpdateDateTime = new Date({{ lastUpdateDateTimeUtc }});
-let autosaveDateTime = null;
-
-if (null !== localStorage.getItem(autosaveDateTimeKey)) {
-    autosaveDateTime = new Date(parseInt(localStorage.getItem(autosaveDateTimeKey)));
-}
-if (null !== autosaveDateTime && lastUpdateDateTime > autosaveDateTime) {
-    const autosaveKey = `smde_{{ requestedId }}`;
-    localStorage.removeItem(autosaveKey);
-}
+const autosaveDateTimeKey = 'article-form-last-update-{{ requestedId }}';
+const smdeCacheId = 'article-body-{{ requestedId }}';
 {% else %}
-const autosaveDateTimeKey = 'mf-new-article-last-update';
-const smdeCacheId = 'mf-new-article-body-cache';
+const autosaveDateTimeKey = 'article-form-last-update';
+const smdeCacheId = 'article-body';
 {% endif %}
+
+if ('' !== '{{ lastUpdateDateTimeUtc }}' && null !== localStorage.getItem(autosaveDateTimeKey)) {
+    const lastUpdateDateTime = new Date({{ lastUpdateDateTimeUtc }});
+    const autosaveDateTime = new Date(parseInt(localStorage.getItem(autosaveDateTimeKey)));
+    if (lastUpdateDateTime > autosaveDateTime) {
+        localStorage.removeItem(`smde_${smdeCacheId}`);
+        localStorage.removeItem(autosaveDateTimeKey);
+    }
+}
 
 var simplemde = new SimpleMDE({
     autosave: {
@@ -134,8 +132,5 @@ simplemde.codemirror.on('change', function() {
 simplemde.codemirror.on("change", function () {
     localStorage.setItem(autosaveDateTimeKey, Date.now());
 });
-document.getElementById('content').addEventListener('input', function() {
-    changes.init();
-}, false);
 </script>
 {% endblock %}
