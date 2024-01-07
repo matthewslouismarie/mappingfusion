@@ -71,7 +71,7 @@
                                     {% if c.is_author %}
                                     {% if not loop.first %}<span class="comma">, </span>{% endif %}
                                     {# @todo Make sure it is not an organisation #}
-                                    {{ authorLink(app, c.author, 32, 'creator') }}
+                                    {{ authorLink(app, c.author, 20, 'creator') }}
                                     {% endif %}
                                     {% endfor %}
                                 </dd>
