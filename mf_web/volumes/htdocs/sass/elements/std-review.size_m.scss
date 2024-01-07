@@ -18,7 +18,8 @@
                 font-size: $r-font-size-m;
             }
 
-            &:hover {
+            &:hover,
+            &:focus-within {
                 border-radius: 0 0 $border-radius-m $border-radius-m;
 
                 > .std-button {

@@ -106,7 +106,7 @@
             }
 
             &:hover,
-            &:focus,
+            &:focus-within,
             &:active {
                 background-color: $color-white;
                 border-radius: 0 0 $border-radius-xs $border-radius-xs;
