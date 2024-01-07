@@ -1,24 +1,16 @@
 .std-inline-list {
     display: flex;
-    gap: 22px;
-    justify-content: center;
-    text-align: center;
     flex-direction: column;
+    gap: 22px;
+    text-align: center;
 
     > .item {
-        padding-left: 16px;
-
         > .link {
             color: $color-white;
 
             > .img {
                 height: 1em;
             }
-        }
-
-        &:first-child,
-        &.-img {
-            list-style-type: none;
         }
 
         &.-img {

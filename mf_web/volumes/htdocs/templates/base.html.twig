@@ -99,37 +99,37 @@
             {% endblock %}
         </main>
 
-        <footer class="site-footer">
-            <div class="_wrapper">
+        <footer class="site-footer _vertical-container">
+            <div class="logo _horizontal-container">
                 <img class="img" {{ app.imgAttr('Mapping-Fusion', 'mapping-fusion-logo-transparent.svg', false, 189, 94)|raw }}>
-                <nav>
-                    <ul class="std-inline-list _txt -txts">
-                        <li class="item">
-                            <a class="link" href="{{ app.router.generateUrl() }}">Nouveautés</a>
-                        </li>
-                        <li class="item">
-                            <a class="link" href="{{ app.router.generateUrl('articles', [app.conf.getSetting('reviewCategoryId')]) }}">Tests maps et mods</a>
-                        </li>
-                        <li class="item">
-                            <a class="link" href="{{ app.router.generateUrl('articles') }}">Les derniers articles</a>
-                        </li>
-                        <li class="item">
-                            <a class="link" href="{{ app.router.generateUrl('article', ['guide-sven-co-op']) }}">Fonctionnement Sven Co-op</a>
-                        </li>
-                        <li class="item">
-                            <a class="link" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">Installation de mods</a>
-                        </li>
-                        <li class="item -img">
-                            <a class="link" href="https://www.facebook.com/halflifeetmods/">
-                                <img class="img" {{ app.imgAttr('Facebook', 'facebook-logo-transparent.svg', false, 12, 24)|raw }}>
-                            </a>
-                            <a class="link" href="https://discord.com/invite/nXmXKHBD">
-                                <img class="img" {{ app.imgAttr('Discord', 'discord-logo-transparent.svg', false, 25, 19)|raw }}>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
             </div>
+            <nav class="_horizontal-container">
+                <ul class="std-inline-list _txt -txts">
+                    <li class="item">
+                        <a class="link" href="{{ app.router.generateUrl() }}">Nouveautés</a>
+                    </li>
+                    <li class="item">
+                        <a class="link" href="{{ app.router.generateUrl('articles', [app.conf.getSetting('reviewCategoryId')]) }}">Tests maps et mods</a>
+                    </li>
+                    <li class="item">
+                        <a class="link" href="{{ app.router.generateUrl('articles') }}">Les derniers articles</a>
+                    </li>
+                    <li class="item">
+                        <a class="link" href="{{ app.router.generateUrl('article', ['guide-sven-co-op']) }}">Fonctionnement Sven Co-op</a>
+                    </li>
+                    <li class="item">
+                        <a class="link" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">Installation de mods</a>
+                    </li>
+                    <li class="item -img">
+                        <a class="link" href="https://www.facebook.com/halflifeetmods/">
+                            <img class="img" {{ app.imgAttr('Facebook', 'facebook-logo-transparent.svg', false, 12, 24)|raw }}>
+                        </a>
+                        <a class="link" href="https://discord.com/invite/nXmXKHBD">
+                            <img class="img" {{ app.imgAttr('Discord', 'discord-logo-transparent.svg', false, 25, 19)|raw }}>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </footer>
 
         {% block scriptInit %}

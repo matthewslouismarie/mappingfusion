@@ -1,17 +1,13 @@
 .site-footer {
     background-color: #0b4b6e;
     color: $color-white;
-    padding: 28px 0;
 
-    > ._wrapper {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        gap: 28px;
-
+    > .logo {
         > .img {
+            display: block;
+            height: auto;
+            margin: auto;
             width: 189px;
-            height: auto;   
         }
     }
 }
