@@ -1,0 +1,11 @@
+.profile-header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: $gap-m;
+
+    > .title {
+        text-align: center;
+        font-size: $txt-font-size-xl;
+    }
+}

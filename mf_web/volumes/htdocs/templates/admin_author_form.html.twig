@@ -12,12 +12,23 @@
     <div class="form-row">
         <label class="label" for="id">ID (peut être laissé vide)</label>
         <input class="input" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
-        {% if formErrors %}{{ errorList(formErrors.id) }}{% endif %}
+        {% if formErrors.id is defined %}{{ errorList(formErrors.id) }}{% endif %}
     </div>
     <div class="form-row">
         <label class="label" for="name">Nom</label>
         <input class="input" id="name" name="name" required{% if formData %} value="{{ formData.name }}"{% endif %}>
         {% if formErrors.name is defined %}{{ errorList(formErrors.name) }}{% endif %}
+    </div>
+    
+    <div class="form-row -singleimage">
+        <label class="label" for="avatar-filename">Avatar</label>
+        <input accept="image/*" class="input" id="avatar-filename" name="avatar_filename" type="file">
+        {% if formData and formData.avatar_filename %}
+        <input name="avatar_filename_previous" type="hidden" value="{{ formData.avatar_filename }}">
+        <p>Avatar actuel : {{ formData.avatar_filename }}.</p>
+        <img class="image" {{ app.imgAttr('Avatar actuel', formData.avatar_filename, true, 300)|raw }}>
+        {% endif %}
+        {% if formErrors.avatar_filename is defined %}{{ errorList( formErrors.avatar_filename ?? null) }}{% endif %}
     </div>
     {{ csrf(app) }}
     <button type="submit">Poster</button>

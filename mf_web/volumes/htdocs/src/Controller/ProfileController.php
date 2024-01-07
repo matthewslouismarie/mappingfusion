@@ -7,7 +7,7 @@ use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use MF\Repository\ArticleRepository;
-use MF\Repository\MemberRepository;
+use MF\Repository\AuthorRepository;
 use MF\Repository\PlayableRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
@@ -17,7 +17,7 @@ class ProfileController implements ControllerInterface
 {
     public function __construct(
         private ArticleRepository $articleRepository,
-        private MemberRepository $repo,
+        private AuthorRepository $authorRepository,
         private PlayableRepository $playableRepository,
         private TwigService $twig,
     ) {
@@ -27,20 +27,19 @@ class ProfileController implements ControllerInterface
         if (!key_exists(1, $routeParams)) {
             throw new RequestedResourceNotFound();
         }
-        $member = $this->repo->find($routeParams[1]);
+        $author = $this->authorRepository->find($routeParams[1]);
 
-        if (null === $member) {
+        if (null === $author) {
             throw new RequestedResourceNotFound();
         }
 
-        $articles = $this->articleRepository->findArticlesFrom($member->id);
+        $articles = null !== $author->member ? $this->articleRepository->findArticlesFrom($author->member->id) : null;
 
         return new Response(
-            body: $this->twig->render('member.html.twig', [
+            body: $this->twig->render('author.html.twig', [
                 'articles' => $articles,
-                'member' => $member,
-                'name' => null !== $member->author_id ? $member->author->name : $member->id,
-                'playables' => $member->author_id ? $this->playableRepository->findFrom($member->author_id) : null,
+                'author' => $author,
+                'playables' => $this->playableRepository->findFrom($author->id),
             ])
         );
     }

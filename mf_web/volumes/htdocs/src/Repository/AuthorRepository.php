@@ -6,6 +6,7 @@ use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\Model\AuthorModel;
+use MF\Model\MemberModel;
 use UnexpectedValueException;
 
 class AuthorRepository implements IRepository
@@ -18,7 +19,7 @@ class AuthorRepository implements IRepository
     }
 
     public function add(AppObject $author): string {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_author VALUES (:id, :name);');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_author VALUES (:id, :name, :avatar);');
         $stmt->execute($this->em->toDbValue($author));
         return $this->conn->getPdo()->lastInsertId();
     }
@@ -29,14 +30,21 @@ class AuthorRepository implements IRepository
     }
 
     public function find(string $id): ?AppObject {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_author WHERE author_id = ? LIMIT 1;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_author LEFT JOIN e_member ON author_id = member_author_id WHERE author_id = ? LIMIT 1;');
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            return $this->em->toAppData($data[0], $this->model, 'author');
+            $row = $data[0];
+            $memberModel = null !== $row['member_id'] ? new MemberModel() : null;
+            $author = $this->em->toAppData($row, new AuthorModel($memberModel), 'author');
+            if (null === $memberModel) {
+                return $author->set('member', null);
+            } else {
+                return $author;
+            }
         } else {
             throw new UnexpectedValueException();
         }
@@ -69,7 +77,7 @@ class AuthorRepository implements IRepository
     }
 
     public function update(AppObject $author, ?string $previousId = null): void {
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_author SET author_id = :id, author_name = :name WHERE author_id = :previous_id;');
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_author SET author_id = :id, author_name = :name, author_avatar_filename = :avatar_filename WHERE author_id = :previous_id;');
         $stmt->execute(['previous_id' => $previousId ?? $author->id] + $this->em->toDbValue($author));
     }
 }

@@ -4,8 +4,16 @@
     flex-direction: column;
 
     font-weight: $txt-weight-semi-bold;
+    font-size: 20px;
+
+    &.-s {
+        font-size: 16px;
+    }
 
     > .item {
+        display: flex;
+        gap: $gap-xs;
+
         > .def,
         > .term {
             display: inline-block;

@@ -46,7 +46,7 @@ class ArticleRepository implements IRepository
     public function find(string $id, bool $fetchPlayableContributors = false, bool $onlyPublished = true): ?AppObject {
         $selectFrom = $onlyPublished ? 'v_article_published' : 'v_article';
 
-        $stmt = $this->conn->getPdo()->prepare("SELECT a.*, v_playable.*, v_person.author_id AS redactor_id, v_person.author_name AS redactor_name FROM {$selectFrom} AS a LEFT OUTER JOIN v_playable ON a.playable_id = v_playable.playable_id LEFT JOIN v_person ON a.article_author_id = v_person.member_id WHERE article_id = ?;");
+        $stmt = $this->conn->getPdo()->prepare("SELECT a.*, v_playable.*, v_person.author_id AS redactor_id, v_person.author_name AS redactor_name, v_person.author_avatar_filename AS redactor_avatar_filename FROM {$selectFrom} AS a LEFT OUTER JOIN v_playable ON a.playable_id = v_playable.playable_id LEFT JOIN v_person ON a.article_author_id = v_person.member_id WHERE article_id = ?;");
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();

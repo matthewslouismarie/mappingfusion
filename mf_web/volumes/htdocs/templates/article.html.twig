@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% from 'sections/review.html.twig' import review %}
+{% from 'macros/author_link.html.twig' import authorLink %}
 {% from 'sections/article_nav.html.twig' import articleNav %}
+{% from 'sections/review.html.twig' import review %}
 
 {% block resources %}
 <link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
@@ -55,37 +56,34 @@
                 <div class="intro _flex -col _gap -gap-row-m _padding -padding-hori-mobile -padding-vert-l2">
                     <div class="sectioncontent _padding -padding-hori-s _flex -col _gap -gap-row-l">
 
-                        <dl class="std-metadata _txt -txtm" id="playable-object">
+                        <dl class="std-metadata" id="playable-object">
                             <meta itemprop="identifier" content="{{ article.review.playable.id }}">
-                            <div class="item _flex _gap -gap-col-xs">
+                            <div class="item">
                                 <dt class="term">Jeu :</dt>
                                 <dd class="def">
                                     <span itemprop="name">{{ article.review.playable.name }}</span>
                                 </dd>
                             </div>
-                            <div class="item _flex _gap -gap-col-xs">
+                            <div class="item">
                                 <dt class="term">Auteurs :</dt>
                                 <dd class="def">
                                     {% for c in article.review.playable.contributions %}
                                     {% if c.is_author %}
                                     {% if not loop.first %}<span class="comma">, </span>{% endif %}
                                     {# @todo Make sure it is not an organisation #}
-                                    <span itemprop="creator" itemscope itemtype="https://schema.org/Person">
-                                        <span itemprop="name">{{ c.author.name }}</span>
-                                        <meta itemprop="identifier" content="{{ c.author.id }}">
-                                    </span>
+                                    {{ authorLink(app, c.author, 32, 'creator') }}
                                     {% endif %}
                                     {% endfor %}
                                 </dd>
                             </div>
-                            <div class="item _flex _gap -gap-col-xs">
+                            <div class="item">
                                 <dt class="term">Date de sortie :</dt>
                                 <dd class="def">
                                     <time itemprop="datePublished" datetime="{{ article.review.playable.release_date_time|date('Y-m-d\\TH:i') }}Z">{{ article.review.playable.release_date_time|date('Y') }}</time>
                                 </dd>
                             </div>
                             {% if article.review.playable.game %}
-                            <div class="item _flex _gap -gap-col-xs">
+                            <div class="item">
                                 <dt class="term">Moteur :</dt>
                                 <dd class="def" itemprop="isBasedOn" itemscope itemtype="https://schema.org/VideoGame">
                                     <span itemprop="name">{{ article.review.playable.game.name }}</span>
@@ -155,26 +153,23 @@
 
 
                 <div class="sectioncontent _padding -padding-hori-s -padding-vert-l" id="article-metadata">
-                    <dl class="std-metadata _txt -txts">
-                        <div class="item _flex _gap -gap-col-xs">
+                    <dl class="std-metadata -s">
+                        <div class="item">
                             <dt class="term">Édité le :</dt>
                             <dd class="def">
                                 <time itemprop="dateModified" datetime="{{ article.last_update_date_time|date('Y-m-d\\TH:i') }}Z">Le {{ article.last_update_date_time|date('d/m/Y à H:i:s') }}</time>
                             </dd>
                         </div>
-                        <div class="item _flex _gap -gap-col-xs">
+                        <div class="item">
                             <dt class="term">Publié le :</dt>
                             <dd class="def">
                                 <time itemprop="dateCreated" datetime="{{ article.creation_date_time|date('Y-m-d\\TH:i') }}Z">Le {{ article.creation_date_time|date('d/m/Y à H:i:s') }}</time>
                             </dd>
                         </div>
-                        <div class="item _flex _gap -gap-col-xs">
+                        <div class="item -author">
                             <dt class="term">Rédigé par :</dt>
-                            <dd class="def" itemprop="author" itemscope itemtype="https://schema.org/Person">
-                                <meta itemprop="identifier" content="{{ article.redactor.id }}">
-                                <a href="{{ app.router.generateUrl('membre', [article.redactor.id]) }}" itemprop="url">
-                                    <span itemprop="name">{{ article.redactor.name }}</span>
-                                </a>
+                            <dd class="def" itemprop="author">
+                                {{ authorLink(app, article.redactor, 16) }}
                             </dd>
                         </div>
                     </dl>

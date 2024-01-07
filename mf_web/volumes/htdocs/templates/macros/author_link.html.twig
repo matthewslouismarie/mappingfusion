@@ -1,0 +1,11 @@
+{% macro authorLink(app, author, imgHeight, itemprop) %}
+<div class="author-link"{% if itemprop %} itemprop="{{ itemprop }}"{% endif %} itemscope itemtype="https://schema.org/Person">
+    <a class="link" href="{{ app.router.generateUrl('profil', [author.id]) }}" itemprop="url">
+        <meta itemprop="identifier" content="{{ author.id }}">
+        {% if author.avatar_filename %}
+        <img {{ app.imgAttr("Avatar de #{author.name}", author.avatar_filename, true, null, imgHeight, true)|raw }}>
+        {% endif %}
+        <span itemprop="name">{{ author.name }}</span>
+    </a>
+</div>
+{% endmacro %}
