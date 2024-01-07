@@ -1,4 +1,5 @@
 RewriteEngine On
+RewriteRule ^favicon.ico$ public/favicon.ico [L]
 RewriteRule ^public\/(.*)$ public/$1 [QSA,L]
 RewriteRule ^(.*)$ index.php?route_params=$1 [QSA,L]
 
