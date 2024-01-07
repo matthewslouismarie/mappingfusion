@@ -1,5 +1,12 @@
 {% macro articleNav(app, article, relatedArticles) %}
 <nav class="article-nav _gap -gap-row-s2 _padding -padding-vert-l -padding-hori-s">
+    {% if app.session.userLoggedIn %}
+    <a class="std-button -upper -white _padding -padding-vert-s" href="{{ app.router.generateUrl('manage-article', [article.id]) }}">
+        <div class="text">
+            <span class="bold _txt -bold -txtm">✎ Modifier</span>
+        </div>
+    </a>
+    {% endif %}
     {% if article.review is defined %}
     <div class="frame -articlenav _padding -padding-hori-s2 -padding-vert-s">
         <ul class="list _txt -txtm">
