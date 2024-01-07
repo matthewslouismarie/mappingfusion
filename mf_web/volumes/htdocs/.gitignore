@@ -1,4 +1,5 @@
 /.env.local.json
 /cache
 /public/*.css
+/var
 /vendor
