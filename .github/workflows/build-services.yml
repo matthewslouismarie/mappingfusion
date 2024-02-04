@@ -22,4 +22,3 @@ jobs:
         run: |
           docker-compose exec -T mf_web php -f scripts/fixtures.php
           docker-compose exec -T mf_web php -f scripts/tests.php
-      - name: Running code static analysis
