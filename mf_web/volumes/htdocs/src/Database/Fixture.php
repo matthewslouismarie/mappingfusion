@@ -3,6 +3,7 @@
 namespace MF\Database;
 
 use DateTimeImmutable;
+use LM\WebFramework\Configuration;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\Enum\LinkType;
 use MF\Repository\ArticleRepository;
@@ -17,7 +18,7 @@ use MF\Repository\ReviewRepository;
 class Fixture
 {
     public function __construct(
-        private Configuratio $config,
+        private Configuration $config,
         private DatabaseManager $conn,
         private ArticleRepository $repoArticle,
         private AuthorRepository $repoAuthor,
@@ -33,10 +34,10 @@ class Fixture
     public function load(): void {
         $this->conn->getPdo()->beginTransaction();
 
-        $loulimi = new AppObject(['id' => 'root', 'name' => 'Root']);
-        $valve = new AppObject(['id' => 'valve', 'name' => 'Valve']);
-        $scTeam = new AppObject(['id' => 'sven-co-op-team', 'name' => 'The Sven Co-op Team']);
-        $neophus = new AppObject(['id' => 'neophus', 'name' => 'Neophus']);
+        $loulimi = new AppObject(['id' => 'root', 'name' => 'Root', 'avatar_filename' => null]);
+        $valve = new AppObject(['id' => 'valve', 'name' => 'Valve', 'avatar_filename' => null]);
+        $scTeam = new AppObject(['id' => 'sven-co-op-team', 'name' => 'The Sven Co-op Team', 'avatar_filename' => null]);
+        $neophus = new AppObject(['id' => 'neophus', 'name' => 'Neophus', 'avatar_filename' => null]);
         $this->repoAuthor->add($loulimi);
         $this->repoAuthor->add($valve);
         $this->repoAuthor->add($scTeam);
@@ -115,10 +116,12 @@ class Fixture
         $cat0 = new AppObject([
             'id' => 'cat',
             'name' => 'Une catégorie',
+            'parent_id' => null,
         ]);
         $cat1 = new AppObject([
             'id' => 'another-cat',
             'name' => 'Une autre catégorie',
+            'parent_id' => null,
         ]);
         $this->repoCat->add($cat0);
         $this->repoCat->add($cat1);

@@ -19,7 +19,7 @@ class AuthorRepository implements IRepository
     }
 
     public function add(AppObject $author): string {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_author VALUES (:id, :name, :avatar);');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_author VALUES (:id, :name, :avatar_filename);');
         $stmt->execute($this->em->toDbValue($author));
         return $this->conn->getPdo()->lastInsertId();
     }
