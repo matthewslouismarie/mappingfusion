@@ -50,7 +50,7 @@ class AdminImageController implements ControllerInterface
                     $this->sessionManager->addMessage('Le fichier a été supprimé.');
                 }
             } else {
-                $transformer = new FileTransformer($this->configuration->getUploadedFileFolder(), 'images');
+                $transformer = new FileTransformer($this->configuration->getPathOfUploadedFiles(), 'images');
                 
                 $transformer->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
                 $this->sessionManager->addMessage('Le fichier a bien été ajouté.');

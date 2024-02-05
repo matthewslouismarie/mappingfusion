@@ -29,6 +29,7 @@ $context = stream_context_create(['http' => ['ignore_errors' => true]]);
 foreach ($urls as $url) {
     echo "Fetching $url...\n";
     $home = file_get_contents('http://localhost' . $url);
+    var_dump($http_response_header);
     
     $httpResponseCode = $http_response_header[0];
     if (!str_contains($httpResponseCode, '200')) {

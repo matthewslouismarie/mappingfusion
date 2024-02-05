@@ -4,14 +4,20 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - name: Create the Docker configuration file
+      - name: Create the Docker configuration fil
         run: cp .env.dist .env
       - name: Run the Docker Compose script
         run: DOCKER_BUILDKIT=1 docker-compose up -d
       - name: Install Composer dependencies
         run: docker-compose exec -T mf_web composer install
       - name: Generate style.css
-        run: docker-compose exec -T mf_web vendor/bin/pscss sass/style.scss public/style.css
+        run: |
+          docker-compose exec -T mf_web vendor/bin/pscss sass/style.scss public/style.css
+          docker-compose exec -T mf_web vendor/bin/pscss sass/style.size_s.scss public/style.size_s.css
+          docker-compose exec -T mf_web vendor/bin/pscss sass/style.size_m.scss public/style.size_m.css
+          docker-compose exec -T mf_web vendor/bin/pscss sass/style.size_l.scss public/style.size_l.css
+          docker-compose exec -T mf_web vendor/bin/pscss sass/style.size_l2.scss public/style.size_l2.css
+          docker-compose exec -T mf_web vendor/bin/pscss sass/style.size_xl.scss public/style.size_xl.css
       - name: Create configuration
         run: docker-compose exec -T mf_web cp .env.json.dist .env.local.json
       - name: Running basic tests
