@@ -5,6 +5,19 @@
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
+<div class="_vertical-container">
+    <ul class="std-inline-list -bare">
+        <li class="item">
+            <a class="std-button" href="{{ app.router.generateUrl('admin-manage-images') }}">Par nom</a>
+        </li>
+        <li class="item">
+            <a class="std-button" href="{{ app.router.generateUrl('admin-manage-images', ['par-date']) }}">Par date</a>
+        </li>
+        <li class="item">
+            <a class="std-button" href="{{ app.router.generateUrl('admin-manage-images', ['par-date-inversee']) }}">Par date (anciens en premier)</a>
+        </li>
+    </ul>
+</div>
 <form class="std-form" method="post" enctype="multipart/form-data">
     <div class="form-row">
         <input class="file" name="images[]" type="file" accept="image/*" multiple>

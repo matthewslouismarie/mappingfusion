@@ -59,6 +59,26 @@ class AdminImageController implements ControllerInterface
 
         $images = $this->fileService->getUploadedImages(false);
 
+        if (isset($routeParams[1])) {
+            switch ($routeParams[1]) {
+                case 'par-date':
+                    usort($images, function ($a, $b) {
+                        $aDate = filemtime($this->configuration->getPathOfUploadedFiles() . '/' . $a);
+                        $bDate = filemtime($this->configuration->getPathOfUploadedFiles() . '/' . $b);
+                        return $bDate - $aDate;
+                    });
+                    break;
+                
+                case 'par-date-inversee':
+                    usort($images, function ($a, $b) {
+                        $aDate = filemtime($this->configuration->getPathOfUploadedFiles() . '/' . $a);
+                        $bDate = filemtime($this->configuration->getPathOfUploadedFiles() . '/' . $b);
+                        return $aDate - $bDate;
+                    });
+                    break;
+            }
+        }
+
         return new Response(body: $this->twig->render('image_management.html.twig', [
             'images' => $images,
         ]));
