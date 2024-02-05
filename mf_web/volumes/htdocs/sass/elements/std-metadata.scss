@@ -14,7 +14,10 @@
         display: flex;
         gap: $gap-xs;
 
-        > .def,
+        > .def {
+            display: flex;
+        }
+
         > .term {
             display: inline-block;
         }

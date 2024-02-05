@@ -69,7 +69,7 @@
                                 <dd class="def">
                                     {% for c in article.review.playable.contributions %}
                                     {% if c.is_author %}
-                                    {% if not loop.first %}<span class="comma">, </span>{% endif %}
+                                    {% if not loop.first %}<span class="comma">, </span>{% endif %}
                                     {# @todo Make sure it is not an organisation #}
                                     {{ authorLink(app, c.author, 20, 'creator') }}
                                     {% endif %}
