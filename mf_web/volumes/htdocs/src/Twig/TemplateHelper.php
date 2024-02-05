@@ -11,6 +11,7 @@ use LM\WebFramework\File\FileService;
 use LM\WebFramework\Session\SessionManager;
 use MF\MarkdownService;
 use MF\Router;
+use RuntimeException;
 use UnexpectedValueException;
 
 class TemplateHelper
@@ -78,7 +79,12 @@ class TemplateHelper
         $attr = "alt=\"{$alt}\" src=\"{$srcValue}\"";
 
         if (false !== file_exists($imgPath)) {
-            $dimensions = getimagesize($imgPath);
+            try {
+                $dimensions = getimagesize($imgPath);
+            }
+            catch (RuntimeException $e) {
+                $dimensions = false;
+            }
             if ((null === $width || null === $height) && false !== $dimensions) {
                 if (null !== $width) {
                     $height = round($dimensions[1] * $width / $dimensions[0]);
