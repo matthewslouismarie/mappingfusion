@@ -9,6 +9,7 @@ use MF\Enum\LinkType;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\File\FileService;
 use LM\WebFramework\Session\SessionManager;
+use MF\Languages\Translator;
 use MF\MarkdownService;
 use MF\Router;
 use RuntimeException;
@@ -23,6 +24,7 @@ class TemplateHelper
         private ResourceManager $resourceManager,
         private Router $router,
         private SessionManager $session,
+        private Translator $translator,
     ) {
     }
 
@@ -154,5 +156,13 @@ class TemplateHelper
 
     public function shorten(string $string, int $nCharacters, string $suffix): string {
         return mb_substr($string, 0, $nCharacters) . $suffix;
+    }
+
+    public function t(string $text): string {
+        return $this->translate($text);
+    }
+
+    public function translate(string $text): string {
+        return $this->translator->translate($text);
     }
 }

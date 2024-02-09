@@ -6,7 +6,7 @@
 
 {% block suffix %}{% endblock %}
 
-{% block description %}Bienvenue sur la page d’acceuil de Mapping-Fusion, une communauté francophone rassemblé autour de Sven Co-op, Half-Life et de ses mods !{% endblock %}
+{% block description %}{{ app.t('Bienvenue sur la page d’acceuil de Mapping-Fusion, une communauté francophone rassemblé autour de Sven Co-op, Half-Life et de ses mods !') }}{% endblock %}
 
 {% block resources %}
 <link rel="canonical" href="{{ app.conf.homeUrl }}">
@@ -18,7 +18,7 @@
 <meta property="og:image:width" content="400">
 <meta property="og:image:height" content="400">
 <meta property="og:image:type" content="image/webp">
-<meta property="og:image:alt" content="Logo de Mapping-Fusion">
+<meta property="og:image:alt" content="{{ app.t('Logo de Mapping-Fusion') }}">
 {% endblock %}
 
 {% block body %}
@@ -48,10 +48,10 @@
     <section class="site-maps-and-mods-tests">
         <div class="_wrapper _gap -gap-row-l2 _padding -padding-vert-l2">
             <div class="section-heading -white">
-                <img class="image" {{ app.imgAttr('Tests maps et mods', 'tests_icon.svg', false, 116, 107)|raw }}>
+                <img class="image" {{ app.imgAttr(app.t('Tests maps et mods'), 'tests_icon.svg', false, 116, 107)|raw }}>
                 <h2 class="text _txt -txtl">
-                    <span class="line _txt -bold">Tests maps et mods<br></span>
-                    <span class="line">proposés par l’équipe</span>
+                    <span class="line _txt -bold">{{ app.t('Tests maps et mods') }}<br></span>
+                    <span class="line">{{ app.t('proposés par l’équipe') }}</span>
                 </h2>
             </div>
             <ul class="list">
@@ -67,7 +67,7 @@
                 {% endfor %}
             </ul>
             <a class="std-button -white" href="{{ app.router.generateUrl('articles', [app.conf.getSetting('reviewCategoryId')]) }}">
-                <div class="text _txt -bold -txtm">Voir plus de tests</div>
+                <div class="text _txt -bold -txtm">{{ app.t('Voir plus de tests') }}</div>
             </a>
         </div>
     </section>
@@ -76,8 +76,8 @@
             <div class="section-heading -inline -white">
                 <img class="image" {{ app.imgAttr('Actualités', 'news.svg', false, 107, 103)|raw }}>
                 <h2 class="text _txt -txtl">
-                    <span class="regular">Les dernières </span>
-                    <span class="_txt -bold">actualités</span>
+                    <span class="regular">{{ app.t('Les dernières ') }}</span>
+                    <span class="_txt -bold">{{ app.t('actualités') }}</span>
                 </h2>
             </div>
             <ul class="list _gap -gap-row-l">
@@ -87,7 +87,7 @@
             </ul>
             
             <a class="std-button -white" href="{{ app.router.generateUrl('articles') }}">
-                <div class="text _txt -bold -txtm">Voir plus d’articles</div>
+                <div class="text _txt -bold -txtm">{{ app.t('Voir plus d’articles') }}</div>
             </a>
         </div>
     </section>
@@ -95,28 +95,28 @@
     <section class="site-section-beginners">
         <div class="_wrapper _gap -gap-row-l _padding -padding-hori-mobile">
             <div class="left _rtxt -txtl _gap -gap-row-l _padding -padding-vert-xl">
-                <h2 class="title">Nouveau et un peu perdu ?<br>Pas de panique !</h2>
-                <p class="text">Consulte dès à présent <em>tous nos dossiers explicatifs</em> pour bien <em>comprendre comment fonctionnent Half-Life et ses mods</em>.</p>
+                <h2 class="title">{{ app.t('Nouveau et un peu perdu ?<br>Pas de panique !')|raw }}</h2>
+                <p class="text">{{ app.t('Consulte dès à présent <em>tous nos dossiers explicatifs</em> pour bien <em>comprendre comment fonctionnent Half-Life et ses mods</em>.')|raw }}</p>
             </div>
             <dl class="right _gap -gap-row-l _padding -padding-vert-xl">
                 <div class="item -sc _gap -gap-row-s2">
-                    <dt class="subject _txt -txtm">Fonctionnement Sven Co-op</dt>
-                    <dd class="text _txt -txtm">Guide d’installation, lancement de partie, création de serveurs, etc…</dd>
+                    <dt class="subject _txt -txtm">{{ app.t('Fonctionnement Sven Co-op') }}</dt>
+                    <dd class="text _txt -txtm">{{ app.t('Guide d’installation, lancement de partie, création de serveurs, etc…') }}</dd>
                     <dd>
                         <a class="std-button -white" href="{{ app.router.generateUrl('article', ['guide-sven-co-op']) }}">
                             <div class="text _txt -txts">
-                                <span class="_txt -bold">En savoir plus</span>
+                                <span class="_txt -bold">{{ app.t('En savoir plus') }}</span>
                             </div>
                         </a>
                     </dd>
                 </div>
                 <div class="item -mods _gap -gap-row-s2">
-                    <dt class="subject _txt -txtm">Installation de mods</dt>
-                    <dd class="text _txt -txtm">Installation des mods pour Half-Life et Half-Life 2</dd>
+                    <dt class="subject _txt -txtm">{{ app.t('Installation de mods') }}</dt>
+                    <dd class="text _txt -txtm">{{ app.t('Installation des mods pour Half-Life et Half-Life 2') }}</dd>
                     <dd>
                         <a class="std-button -white" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">
                             <div class="text _txt -txts">
-                                <span class="_txt -bold">En savoir plus</span>
+                                <span class="_txt -bold">{{ app.t('En savoir plus') }}</span>
                             </div>
                         </a>
                     </dd>

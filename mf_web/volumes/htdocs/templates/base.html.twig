@@ -61,21 +61,21 @@
                     <img class="img" itemprop="image thumbnailUrl" {{ app.imgAttr('Mapping-Fusion', 'mapping-fusion-logo.svg', false, 107, 103)|raw }}>
                 </a>
                 <div class="text _gap -gap-row-s2" id="menu">
-                    <p class="intro _txt -txtm" itemprop="description">Communauté francophone sur l’univers d’<strong itemprop="about">Half-Life et le modding pour Goldsource et Source</strong>.</p>
+                    <p class="intro _txt -txtm" itemprop="description">{{ app.t('Communauté francophone sur l’univers d’<strong itemprop="about">Half-Life et le modding pour Goldsource et Source</strong>.')|raw }}</p>
                     <ul class="header-menu _gap -gap-col-l">
                         <li class="item -search">
                             <form class="form" id="search-form" action="{{ app.router.generateUrl('recherche') }}" method="get" rel="search">
                                 <div class="std-interactive -search">
-                                    <img class="icon" {{ app.imgAttr('Rechercher', 'magnifying-glass.svg', false, 20, 24)|raw }}>
-                                    <input class="input _txt -txts" name="search-query" type="search" placeholder="Votre recherche" value="{{ searchQuery ?? "" }}" data-type="search-field">
+                                    <img class="icon" {{ app.imgAttr(app.t('Rechercher'), 'magnifying-glass.svg', false, 20, 24)|raw }}>
+                                    <input class="input _txt -txts" name="search-query" type="search" placeholder="{{ app.translate('Votre recherche') }}" value="{{ searchQuery ?? "" }}" data-type="search-field">
                                 </div>
                             </form>
                         </li>
                         <li class="item">
-                            <a class="std-interactive _txt -txts" href="{{ app.router.generateUrl('article', ['guide-sven-co-op']) }}">Nouveau sur Sven Co-op ?</a>
+                            <a class="std-interactive _txt -txts" href="{{ app.router.generateUrl('article', ['guide-sven-co-op']) }}">{{ app.t('Nouveau sur Sven Co-op ?') }}</a>
                         </li>
                         <li class="item">
-                            <a class="std-interactive _txt -txts" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">Comment installer un mod Half-Life</a>
+                            <a class="std-interactive _txt -txts" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">{{ app.t('Comment installer un mod Half-Life') }}</a>
                         </li>
                     </ul>
                 </div>                
@@ -106,19 +106,19 @@
             <nav class="_horizontal-container">
                 <ul class="std-inline-list _txt -txts">
                     <li class="item">
-                        <a class="link" href="{{ app.router.generateUrl() }}">Nouveautés</a>
+                        <a class="link" href="{{ app.router.generateUrl() }}">{{ app.t('Nouveautés') }}</a>
                     </li>
                     <li class="item">
-                        <a class="link" href="{{ app.router.generateUrl('articles', [app.conf.getSetting('reviewCategoryId')]) }}">Tests maps et mods</a>
+                        <a class="link" href="{{ app.router.generateUrl('articles', [app.conf.getSetting('reviewCategoryId')]) }}">{{ app.t('Tests maps et mods') }}</a>
                     </li>
                     <li class="item">
-                        <a class="link" href="{{ app.router.generateUrl('articles') }}">Les derniers articles</a>
+                        <a class="link" href="{{ app.router.generateUrl('articles') }}">{{ app.t('Les derniers articles') }}</a>
                     </li>
                     <li class="item">
-                        <a class="link" href="{{ app.router.generateUrl('article', ['guide-sven-co-op']) }}">Fonctionnement Sven Co-op</a>
+                        <a class="link" href="{{ app.router.generateUrl('article', ['guide-sven-co-op']) }}">{{ app.t('Fonctionnement Sven Co-op') }}</a>
                     </li>
                     <li class="item">
-                        <a class="link" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">Installation de mods</a>
+                        <a class="link" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">{{ app.t('Installation de mods') }}</a>
                     </li>
                     <li class="item -img">
                         <a class="link" href="https://www.facebook.com/halflifeetmods/">
