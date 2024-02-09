@@ -55,12 +55,13 @@
 
     > .link {
         max-width: 98dvw;
-        max-height: 90dvh;
+        max-height: 80dvh;
 
         > .img {
             display: block;
             max-height: 100%;
             box-shadow: 0 0 $shadow-m $color-black;
+            margin: auto;
         }
     }
 
