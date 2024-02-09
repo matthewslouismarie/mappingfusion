@@ -171,7 +171,7 @@ class ArticleRepository implements IRepository
      * @return AppObject[]
      */
     public function findArticlesFrom(string $memberId): array {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_article WHERE article_is_published = 1 AND article_author_id = ?;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_article WHERE article_is_published = 1 AND article_author_id = ? ORDER BY article_last_update_date_time DESC;');
         $stmt->execute([$memberId]);
         $articles = [];
         foreach ($stmt->fetchAll() as $article) {
