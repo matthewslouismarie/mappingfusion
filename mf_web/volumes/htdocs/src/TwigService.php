@@ -17,11 +17,11 @@ class TwigService
 
     public function __construct(
         TemplateHelper $templateHelper,
-        Configuration $twigConfig,
+        Configuration $configuration,
     ) {
         $this->templateHelper = $templateHelper;
-        $twigLoader = new FilesystemLoader('templates');
-        $dev = $twigConfig->getSetting('dev');
+        $twigLoader = new FilesystemLoader($configuration->getPathOfProjectDirectory() . '/templates');
+        $dev = $configuration->getSetting('dev');
         $this->twig = new Environment($twigLoader, [
             'debug' => $dev ? true : false,
             'cache' => $dev ? false : 'cache',
