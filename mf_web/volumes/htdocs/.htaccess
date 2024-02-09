@@ -9,3 +9,5 @@ RewriteRule ^(.*)$ index.php?route_params=$1 [L, QSA]
     ExpiresDefault "access plus 1 year"
     Header set Cache-Control "max-age=31536000, immutable, public"
 </Directory>
+
+Header set Content-Security-Policy "script-src 'unsafe-inline' https://mappingfusion.fr https://unpkg.com https://cdn.jsdelivr.net; object-src 'none'"
