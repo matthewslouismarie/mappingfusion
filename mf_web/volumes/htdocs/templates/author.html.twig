@@ -32,9 +32,15 @@
 {% if null != playables %}
 <h2>Maps et mods</h2>
 <p>{{ author.name }} a contribué ou a créé les mods ou maps suivants :</p>
-<ul>
+<ul class="std-list">
     {% for p in playables %}
-    <li>{{ p.name }}</li>
+        <li class="item">
+        {% if p.article_id %}
+        <a class="std-link" href="{{ app.router.generateUrl('article', [p.article_id]) }}">{{ p.name }}</a>
+        {% else %}
+        {{ p.name }}
+        {% endif %}
+        </li>
     {% endfor %}
 </ul>
 {% else %}

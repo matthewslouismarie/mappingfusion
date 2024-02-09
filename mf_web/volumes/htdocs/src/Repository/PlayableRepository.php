@@ -117,11 +117,11 @@ class PlayableRepository implements IRepository
      * @return AppObject[]
      */
     public function findFrom(string $authorId): array {
-        $stmt = $this->conn->getPdo()->prepare('SELECT DISTINCT * FROM v_playable WHERE author_id = ? GROUP BY playable_id;');
+        $stmt = $this->conn->getPdo()->prepare('SELECT DISTINCT v_playable.*, v_article_published.article_id FROM v_playable LEFT JOIN v_article_published ON v_playable.playable_id = v_article_published.playable_id WHERE author_id = ? GROUP BY v_playable.playable_id;');
         $stmt->execute([$authorId]);
         $playables = [];
         foreach ($stmt->fetchAll() as $row) {
-            $playables[] = $this->em->toAppData($row, $this->model, 'playable');
+            $playables[] = $this->em->toAppData($row, $this->model, 'playable')->set('article_id', $row['article_id']);
         }
         return $playables;
     }
