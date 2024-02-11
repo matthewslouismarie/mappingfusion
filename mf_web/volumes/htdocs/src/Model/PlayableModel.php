@@ -14,6 +14,7 @@ class PlayableModel extends AbstractEntity
         private ?self $gameModel = null,
         private ?PlayableLinkModel $playableLinkModel = null,
         private ?ContributionModel $contributionModel = null,
+        private bool $isNullable = false,
     ) {
         $properties = [
             'id' => new StringModel([new StringConstraint(regex: StringConstraint::REGEX_DASHES)]),
@@ -30,6 +31,6 @@ class PlayableModel extends AbstractEntity
         if (null !== $contributionModel) {
             $properties['contributions'] = new ListModel($contributionModel);
         }
-        parent::__construct($properties);
+        parent::__construct($properties, $isNullable);
     }
 }
