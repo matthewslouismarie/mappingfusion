@@ -195,6 +195,19 @@ class Fixture
             'thumbnail_filename' => '2021112713481.jpg',
         ]));
 
+        $this->repoArticle->add(new AppObject([
+            'id' => 'goldsource-review',
+            'author_id' => $root['id'],
+            'category_id' => $cat1['id'],
+            'body' => 'Un moteur tout à fait génial !!!!',
+            'is_featured' => true,
+            'is_published' => true,
+            'title' => 'GoldSource : pour ou contre ?',
+            'sub_title' => 'Grande question',
+            'cover_filename' => '202111271344571.jpg',
+            'thumbnail_filename' => '202111271348081.jpg',
+        ]));
+
         $this->repoReview->add(new AppObject([
             'id' => null,
             'article_id' => $article0['id'],
@@ -230,6 +243,15 @@ class Fixture
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
             'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
             'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
+        ]));
+        $this->repoReview->add(new AppObject([
+            'id' => null,
+            'article_id' => 'goldsource-review',
+            'playable_id' => 'goldsource',
+            'rating' => 5,
+            'body' =>  'Un moteur parfait',
+            'cons' => '- Aucun',
+            'pros' => '- Tout',
         ]));
         $this->conn->getPdo()->commit();
     }

@@ -57,20 +57,6 @@ class ArticleRepository implements IRepository
 
         $contribs = [];
         $links = [];
-        $reviewModel = null;
-
-        if (null !== $data[0]['review_id']) {
-            if (null !== $data[0]['game_id']) {
-                $gameModel = new PlayableModel();
-            } else {
-                $gameModel = null;
-            }
-            $reviewModel = new ReviewModel(new PlayableModel(
-                gameModel: $gameModel,
-                contributionModel: $fetchPlayableContributors ? new ContributionModel(new AuthorModel()) : null,
-                playableLinkModel: new PlayableLinkModel(),
-            ));
-        }
 
         $contribIds = [];
         $linkIds = [];
@@ -88,11 +74,21 @@ class ArticleRepository implements IRepository
         $data[0]['links'] = $links;
         $data[0]['contributions'] = $contribs;
 
+        $reviewModel = new ReviewModel(
+            new PlayableModel(
+                gameModel: new PlayableModel(isNullable: true),
+                contributionModel: $fetchPlayableContributors ? new ContributionModel(new AuthorModel()) : null,
+                playableLinkModel: new PlayableLinkModel(),
+            ),
+            isNullable: true,
+        );
+
         $articleModel = new ArticleModel(
             authorModel: new AuthorModel(),
             categoryModel: new CategoryModel(),
             reviewModel: $reviewModel,
         );
+
         return $this->em->toAppData($data[0], $articleModel, 'article');
     }
 
@@ -101,21 +97,14 @@ class ArticleRepository implements IRepository
 
         $results = $this->conn->getPdo()->query("SELECT * FROM {$selectFrom} ORDER BY article_creation_date_time;")->fetchAll();
 
-        $articleModel = new ArticleModel(
-            categoryModel: new CategoryModel(),
-        );
         $articles = [];
         foreach ($results as $r) {
-            if (null === $r['review_id']) {
-                $articles[] = $this->em->toAppData($r, $articleModel, 'article')->set('review', null);
-            } else {
-                
-                $reviewModel = new ArticleModel(
-                    categoryModel: new CategoryModel(),
-                    reviewModel: new ReviewModel(new PlayableModel(null !== $r['game_id'] ? new PlayableModel() : null), articleModel: null, isNullable: true)
-                );
-                $articles[] = $this->em->toAppData($r, $reviewModel, 'article');
-            }
+
+            $model = new ArticleModel(
+                categoryModel: new CategoryModel(),
+                reviewModel: new ReviewModel(new PlayableModel(new PlayableModel(isNullable: true), isNullable: true), articleModel: null, isNullable: true)
+            );
+            $articles[] = $this->em->toAppData($r, $model, 'article');
         }
         return $articles;
     }
@@ -143,19 +132,13 @@ class ArticleRepository implements IRepository
 
 
         $articles = [];
-        $articleModel = new ArticleModel(
-            categoryModel: new CategoryModel(),
-        );
-        $reviewModel = new ArticleModel(
+
+        $model = new ArticleModel(
             categoryModel: new CategoryModel(),
             reviewModel: new ReviewModel(new PlayableModel(new PlayableModel()), articleModel: null, isNullable: true)
         );
         foreach ($results as $r) {
-            if (null === $r['review_id']) {
-                $articles[] = $this->em->toAppData($r, $articleModel, 'article')->set('review', null);
-            } else {
-                $articles[] = $this->em->toAppData($r, $reviewModel, 'article');
-            }
+            $articles[] = $this->em->toAppData($r, $model, 'article');
         }
         return $articles;
     }
@@ -167,8 +150,9 @@ class ArticleRepository implements IRepository
         $wherePublished = $onlyPublished ? 'AND article_is_published = 1' : '';
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE review_id IS NOT NULL $wherePublished;");
         $articles = [];
+        $model = new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel(new PlayableModel(isNullable: true))));
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel(new PlayableModel()))), 'article');
+            $articles[] = $this->em->toAppData($article, $model, 'article');
         }
         return $articles;
     }

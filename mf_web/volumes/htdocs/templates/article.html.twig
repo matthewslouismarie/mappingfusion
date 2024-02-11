@@ -52,7 +52,7 @@
             </div>
 
             <div class="content">
-                {% if article.review is defined %}
+                {% if article.review %}
                 <div class="intro _flex -col _gap -gap-row-m _padding -padding-hori-mobile -padding-vert-l2">
                     <div class="sectioncontent _padding -padding-hori-s _flex -col _gap -gap-row-l">
 
@@ -82,7 +82,7 @@
                                     <time itemprop="datePublished" datetime="{{ article.review.playable.release_date_time|date('Y-m-d\\TH:i') }}Z">{{ article.review.playable.release_date_time|date('Y') }}</time>
                                 </dd>
                             </div>
-                            {% if article.review.playable.game is defined %}
+                            {% if article.review.playable.game %}
                             <div class="item">
                                 <dt class="term">Moteur :</dt>
                                 <dd class="def" itemprop="isBasedOn" itemscope itemtype="https://schema.org/VideoGame">
@@ -105,10 +105,10 @@
                     id="article-body"
                     itemscope
                     itemid="{{ app.articleItemId(article.id) }}"
-                    itemtype={% if article.review is defined %}"https://schema.org/ReviewNewsArticle"{% else %}"https://schema.org/NewsArticle"{% endif %}
-                    itemref="{% if article.review is defined %}review-box {% endif %}article-cover article-metadata"
+                    itemtype={% if article.review %}"https://schema.org/ReviewNewsArticle"{% else %}"https://schema.org/NewsArticle"{% endif %}
+                    itemref="{% if article.review %}review-box {% endif %}article-cover article-metadata"
                 >
-                    {% if article.review is defined %}<meta itemprop="itemReviewed" itemscope itemtype="https://schema.org/VideoGame" itemref="playable-object playable-links">{% endif %}
+                    {% if article.review %}<meta itemprop="itemReviewed" itemscope itemtype="https://schema.org/VideoGame" itemref="playable-object playable-links">{% endif %}
                     <div class="std-markdown-container" itemprop="articleBody">
                         {{ app.mk.formatArticleBody(article.body).main|raw }}
                     </div>
@@ -137,7 +137,7 @@
                 </section>
                 {% endif %}
 
-                {% if article.review is defined %}
+                {% if article.review %}
                 <div class="sectioncontent _padding -padding-hori-s -padding-vert-l" id="review-summary">
                     {{ review(app, article.review.playable, article.review, '-summary', false) }}
                 </div>
@@ -215,7 +215,7 @@
 <div class="_hidden" itemscope itemid="{{ app.router.generateUrl('article', [article.id]) }}" itemtype="https://schema.org/WebPage" itemref="article-metadata web-page-description web-page-related-links web-page-title">
     {# @todo breadcrumb with links #}
     <meta itemprop="breadcrumb" content="Mapping-Fusion > Articles">
-    <meta itemprop="mainEntity" itemscope itemtype={% if article.review is defined %}"https://schema.org/ReviewNewsArticle"{% else %}"https://schema.org/NewsArticle"{% endif %} itemid="{{ app.articleItemId(article.id) }}">
+    <meta itemprop="mainEntity" itemscope itemtype={% if article.review %}"https://schema.org/ReviewNewsArticle"{% else %}"https://schema.org/NewsArticle"{% endif %} itemid="{{ app.articleItemId(article.id) }}">
     <time itemprop="lastReviewed" datetime="{{ article.last_update_date_time|date('Y-m-d\\TH:i') }}Z">{{ article.last_update_date_time|date('Y-m-d H:i:s') }}</time>
     <link itemprop="image" href="{{ app.resource(article.cover_filename) }}">
     <meta itemprop="identifier" content="{{ app.articleItemId(article.id) }}">
