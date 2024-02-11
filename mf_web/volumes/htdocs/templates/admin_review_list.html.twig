@@ -5,12 +5,16 @@
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
-<a class="link" href="{{ app.router.generateUrl('gestion-de-tests') }}">Créer un nouveau test</a>
+<h1 class="_h1">Liste des tests</h1>
 
-<ul>
+<div class="box">
+    <a class="std-button" href="{{ app.router.generateUrl('gestion-de-tests') }}">Créer un nouveau test</a>
+</div>
+
+<ul class="std-list">
     {% for r in reviews %}
     <li class="item">
-        <a class="link" href="{{ app.router.generateUrl('gestion-de-tests', {id: r.id}) }}">Pour {{ r.playable_id }} (note {{ r.rating}})</a>
+        <a class="std-link" href="{{ app.router.generateUrl('gestion-de-tests', {id: r.id}) }}">Pour {{ r.playable_id }} (note {{ r.rating}})</a>
     </li>
     {% endfor %}
 </ul>

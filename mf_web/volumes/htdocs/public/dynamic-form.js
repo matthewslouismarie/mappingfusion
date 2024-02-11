@@ -6,7 +6,7 @@ class DynamicForm
                 const tplClone = document.getElementById(addBtn.dataset.templateId).content.cloneNode(true);
                 this.formatAttributes(tplClone, '{{ i }}', addBtn.dataset.index);
                 tplClone.querySelector('[data-type=remove-dynamic-form-button]').onclick = this.onDelClick;
-                addBtn.parentNode.insertBefore(tplClone, addBtn);
+                document.getElementById(addBtn.dataset.target).append(tplClone);
                 addBtn.dataset.index = parseInt(addBtn.dataset.index) + 1;
             };
         });
@@ -37,3 +37,6 @@ class DynamicForm
         currentElement.remove();
     }
 }
+
+const contribForm = new DynamicForm();
+contribForm.init();

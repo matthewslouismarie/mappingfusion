@@ -3,26 +3,28 @@
 {% from 'macros/csrf_input.html.twig' import csrf %}
 {% from 'macros/error_list.html.twig' import errorList %}
 
-{% block title %}Édition d’auteur{% endblock %}
+{% block title %}{% if formData.id is defined %}Édition d’auteur{% else %}Nouvel auteur{% endif %}{% endblock %}
 
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
-<form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
+<h1 class="_h1">{% if formData.id is defined %}Édition d’auteur{% else %}Nouvel auteur{% endif %}</h1>
+
+<form autocomplete="on" class="form-row-container" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="form-row">
         <label class="label" for="id">ID (peut être laissé vide)</label>
-        <input class="input" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
+        <input class="input -text" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
         {% if formErrors.id is defined %}{{ errorList(formErrors.id) }}{% endif %}
     </div>
     <div class="form-row">
         <label class="label" for="name">Nom</label>
-        <input class="input" id="name" name="name" required{% if formData %} value="{{ formData.name }}"{% endif %}>
+        <input class="input -text" id="name" name="name" required{% if formData %} value="{{ formData.name }}"{% endif %}>
         {% if formErrors.name is defined %}{{ errorList(formErrors.name) }}{% endif %}
     </div>
     
     <div class="form-row -singleimage">
         <label class="label" for="avatar-filename">Avatar</label>
-        <input accept="image/*" class="input" id="avatar-filename" name="avatar_filename" type="file">
+        <input accept="image/*" class="input -text" id="avatar-filename" name="avatar_filename" type="file">
         {% if formData and formData.avatar_filename %}
         <input name="avatar_filename_previous" type="hidden" value="{{ formData.avatar_filename }}">
         <p>Avatar actuel : {{ formData.avatar_filename }}.</p>
@@ -31,6 +33,9 @@
         {% if formErrors.avatar_filename is defined %}{{ errorList( formErrors.avatar_filename ?? null) }}{% endif %}
     </div>
     {{ csrf(app) }}
-    <button type="submit">Poster</button>
+
+    <div class="form-row -buttons">
+        <button class="std-button" type="submit">Poster</button>
+    </div>
 </form>
 {% endblock %}

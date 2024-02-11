@@ -79,7 +79,7 @@ class AdminImageController implements ControllerInterface
             }
         }
 
-        return new Response(body: $this->twig->render('image_management.html.twig', [
+        return new Response(body: $this->twig->render('admin_image_management.html.twig', [
             'images' => $images,
         ]));
     }

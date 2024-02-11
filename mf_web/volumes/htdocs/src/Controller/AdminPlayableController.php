@@ -42,7 +42,7 @@ class AdminPlayableController implements ControllerInterface
             contributionModel: new ContributionModel(),
         );
 
-        $playableId = $routeParams[1] ?? null;
+        $requestedId = $routeParams[1] ?? null;
 
         $form = $this->formFactory->createForm($model, config: [
             'id' => [
@@ -77,10 +77,10 @@ class AdminPlayableController implements ControllerInterface
 
             if (0 === count($formErrors)) {
                 $playable = new AppObject($formData);
-                if (null === $playableId) {
+                if (null === $requestedId) {
                     $this->repo->addOrUpdate($playable, add: true);
                 } else {
-                    $this->repo->addOrUpdate($playable, $playableId);
+                    $this->repo->addOrUpdate($playable, $requestedId);
                 }
                 return $this->router->generateRedirect('admin-manage-playable', [$playable->id]);
             }
@@ -99,6 +99,7 @@ class AdminPlayableController implements ControllerInterface
                 'formErrors' => $formErrors,
                 'linkTypes' => LinkType::cases(),
                 'playables' => $this->repo->findAll(),
+                'requestedId' => $requestedId,
             ]),
         );
     }

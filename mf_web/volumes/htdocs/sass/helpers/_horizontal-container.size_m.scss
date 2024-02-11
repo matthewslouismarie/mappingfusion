@@ -3,4 +3,8 @@
     padding-right: 0;
     width: 80%;
     margin: auto;
+
+    &.-sm {
+        width: 60%;
+    }
 }

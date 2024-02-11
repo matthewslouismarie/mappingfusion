@@ -5,11 +5,16 @@
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
-<a class="link" href="{{ app.router.generateUrl('admin-manage-author') }}">Créer un nouvel auteur</a>
-<ul>
+<h1 class="_h1">Gestion des auteurs</h1>
+
+<div class="box">
+    <a class="std-button" href="{{ app.router.generateUrl('admin-manage-author') }}">Créer un nouvel auteur</a>
+</div>
+
+<ul class="std-list">
     {% for a in authors %}
     <li class="item">
-        <a class="link" href="{{ app.router.generateUrl('admin-manage-author', {id: a.id}) }}">{{ a.name }}</a>
+        <a class="std-link" href="{{ app.router.generateUrl('admin-manage-author', {id: a.id}) }}">{{ a.name }}</a>
     </li>
     {% endfor %}
 </ul>

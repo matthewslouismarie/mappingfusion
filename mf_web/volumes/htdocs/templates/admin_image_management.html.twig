@@ -18,14 +18,18 @@
         </li>
     </ul>
 </div>
-<form class="std-form" method="post" enctype="multipart/form-data">
-    <div class="form-row">
-        <input class="file" name="images[]" type="file" accept="image/*" multiple>
-    </div>
-    <div class="form-row">
-        <button class="std-button">Mettre en ligne</button>
-    </div>
-</form>
+
+<div class="box">
+    <form class="form-row-container" method="post" enctype="multipart/form-data">
+        <div class="form-row">
+            <input class="file" name="images[]" type="file" accept="image/*" multiple>
+        </div>
+        <div class="form-row">
+            <button class="std-button">Mettre en ligne</button>
+        </div>
+    </form>
+</div>
+
 <ul class="std-mosaic-list -twoperrow">
     {% for i in images %}
     <li class="item">

@@ -1,15 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gérer les mods{% endblock %}
+{% block title %}Gestion des mods{% endblock %}
 
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
-<a class="link" href="{{ app.router.generateUrl('admin-manage-playable') }}">Créer un nouveau mod</a>
-<ul>
+<h1 class="_h1">Gestion des mods</h1>
+
+<div class="box">
+    <a class="std-button" href="{{ app.router.generateUrl('admin-manage-playable') }}">Créer un nouveau mod</a>
+</div>
+
+<ul class="std-list">
     {% for p in playables %}
     <li class="item">
-        <a class="link" href="{{ app.router.generateUrl('admin-manage-playable', {id: p.id}) }}">{{ p.name }}</a>
+        <a class="std-link" href="{{ app.router.generateUrl('admin-manage-playable', {id: p.id}) }}">{{ p.name }}</a>
     </li>
     {% endfor %}
 </ul>

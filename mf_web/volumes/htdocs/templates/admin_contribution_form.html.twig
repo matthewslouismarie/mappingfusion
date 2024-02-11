@@ -3,10 +3,10 @@
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
-<form autocomplete="on" class="std-form" enctype="multipart/form-data" method="post">
+<form autocomplete="on" class="form-row-container" enctype="multipart/form-data" method="post">
     <div class="form-row">
         <label class="label" for="author-id">ID de l’auteur</label>
-        <select class="input" id="author-id" name="contribution_author_id" required>
+        <select class="input -text" id="author-id" name="contribution_author_id" required>
             {% for a in authors %}
             <option label="{{ a.name }}" value="{{ a.id }}" {% if contribution and contribution.contributionAuthorId == a.id %}selected="selected"{% endif %}>
             {% endfor %}
@@ -17,7 +17,7 @@
     </div>
     <div class="form-row">
         <label class="label" for="summary">Contenu de l’article</label>
-        <textarea class="input" id="summary" name="contribution_summary">{% if article %}{{ article['contribution_summary'] }}{% endif %}</textarea>
+        <textarea class="input -text" id="summary" name="contribution_summary">{% if article %}{{ article['contribution_summary'] }}{% endif %}</textarea>
     </div>
     <button type="submit">Poster</button>
 </form>

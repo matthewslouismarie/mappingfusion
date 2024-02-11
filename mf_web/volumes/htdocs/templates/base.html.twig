@@ -91,9 +91,11 @@
 
         <main class="site-main">
             {% block body %}
-            <div class="_padded -a">
-                <div class="_wrappers _flex -col -gap">
-                    {% block bodyContent %}{% endblock %}
+            <div class="_vertical-container">
+                <div class="_horizontal-container -sm">
+                    <div class="section-content">
+                        {% block bodyContent %}{% endblock %}
+                    </div>
                 </div>
             </div>
             {% endblock %}

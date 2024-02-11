@@ -1,7 +1,34 @@
 .form-row {
+    &.-buttons {
+        display: flex;
+        justify-content: center;
+        gap: $gap-xs;
+
+        &.-left {
+            justify-content: start;
+        }
+    }
+
     > .input,
     > .label {
         display: block;
+    }
+
+    > .input.-text,
+    > .input.-textarea,
+    > .select > .option {
+        padding: $gap-xxxs-2;
+    }
+
+    > .input {
+        &.-text,
+        &.-textarea {
+            padding: $gap-xxxs-2;
+        }
+
+        &.-text {
+            min-width: 50%;
+        }
 
         &.-textarea {
             width: 100%;
@@ -33,6 +60,11 @@
             height: auto;
             max-width: $icon-size-s;
             width: 100%;
+        }
+
+        > .current {
+            font-size: $r-font-size-s;
+            font-style: italic;
         }
     }
 }

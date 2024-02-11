@@ -14,22 +14,27 @@
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
+<h1 class="_h1">{{ formData ? 'Édition d’article' : 'Nouvel article' }}</h1>
 
-<h1>{{ formData ? 'Édition d’article' : 'Nouvel article' }}</h1>
+{% if requestedId %}
+    <div class="box">
+        <a class="std-link" href="{{ app.router.generateUrl('article', [requestedId]) }}">Visualiser l’article</a>
+    </div>
+{% endif %}
 
-<form autocomplete="on" class="std-form" id="article-form" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
+<form autocomplete="on" class="form-row-container" id="article-form" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="form-row">
         <label class="label" for="id">ID (généré automatiquement)</label>
-        <input class="input" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
+        <input class="input -text" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
         {% if formErrors %}{{ errorList( formErrors.id ?? null ) }}{% endif %}
     </div>    <div class="form-row">
         <label class="label" for="title">Titre</label>
-        <input class="input" id="title" name="title" required{% if formData %} value="{{ formData.title }}"{% endif %}>
+        <input class="input -text" id="title" name="title" required{% if formData %} value="{{ formData.title }}"{% endif %}>
         {% if formErrors %}{{ errorList( formErrors.title ?? null ) }}{% endif %}
     </div>
     <div class="form-row">
         <label class="label" for="sub-title">Sous-titre</label>
-        <input class="input" id="sub-title" name="sub_title"{% if formData %} value="{{ formData.sub_title }}"{% endif %}>
+        <input class="input -text" id="sub-title" name="sub_title"{% if formData %} value="{{ formData.sub_title }}"{% endif %}>
         {% if formErrors %}{{ errorList( formErrors.sub_title ?? null) }}{% endif %}
     </div>
     <div class="form-row">
@@ -43,17 +48,17 @@
     </div>
     <div class="form-row -singleimage">
         <label class="label" for="cover-filename">Couverture</label>
-        <input accept="image/*" class="input" id="cover-filename" name="cover_filename" type="file">
+        <input accept="image/*" class="input -text" id="cover-filename" name="cover_filename" type="file">
         {% if formData and formData.cover_filename %}
         <input name="cover_filename_previous" type="hidden" value="{{ formData.cover_filename }}">
-        <p>Couverture actuelle : {{ formData.cover_filename }}.</p>
+        <p class="current">Couverture actuelle : {{ formData.cover_filename }}.</p>
         <img class="image" {{ app.imgAttr('Couverture actuelle', formData.cover_filename, true, 300)|raw }}>
         {% endif %}
         {% if formErrors %}{{ errorList( formErrors.cover_filename ?? null) }}{% endif %}
     </div>
     <div class="form-row -singleimage">
         <label class="label" for="thumbnail-filename">Miniature</label>
-        <input accept="image/*" class="input" id="thumbnail-filename" name="thumbnail_filename" type="file">
+        <input accept="image/*" class="input -text" id="thumbnail-filename" name="thumbnail_filename" type="file">
         {% if formData and formData.thumbnail_filename %}
         <input name="thumbnail_filename_previous" type="hidden" value="{{ formData.thumbnail_filename }}">
         <p>Miniature actuelle : {{ formData.thumbnail_filename }}.</p>
@@ -85,12 +90,11 @@
     </div>
     {% endif %}
 
-    <button class="std-button" id="submit-button" type="submit">Poster</button>
-    {{ csrf(app) }}
+    <div class="form-row -buttons">
+        <button class="std-button" id="submit-button" type="submit">Sauvegarder</button>
+    </div>
 
-    {% if requestedId %}
-    <a class="std-button" href="{{ app.router.generateUrl('article', [requestedId]) }}">Visualiser l’article</a>
-    {% endif %}
+    {{ csrf(app) }}
 </form>
 {% endblock %}
 

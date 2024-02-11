@@ -3,28 +3,28 @@
 {% from 'macros/csrf_input.html.twig' import csrf %}
 {% from 'macros/error_list.html.twig' import errorList %}
 
-{% block title %}Édition de mod{% endblock %}
+{% block title %}{% if requestedId %}Édition de {{ formData.name }}{% else %}Nouveau jeu{% endif %}{% endblock %}
 
 {% block bodyContent %}
-<h1>{% if formData %}Édition de {{ formData.name }}{% else %}Nouveau jeu{% endif %}</h1>
+<h1 class="_h1">{% if requestedId %}Édition de {{ formData.name }}{% else %}Nouveau jeu{% endif %}</h1>
 
-<form class="std-form" autocomplete="on" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
+<form class="form-row-container" autocomplete="on" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="_flex -col -gaps">
         <div class="form-row">
             <label class="label" for="id">ID (générée automatiquement)</label>
-            <input class="input" id="id" name="id" value="{{ formData.id ?? null }}">
+            <input class="input -text" id="id" name="id" value="{{ formData.id ?? null }}">
             {{ errorList(formErrors.id ?? null )}}
         </div>
 
         <div class="form-row">
             <label class="label" for="name">Nom</label>
-            <input class="input" id="name" name="name" required value="{{ formData.name ?? null }}">
+            <input class="input -text" id="name" name="name" required value="{{ formData.name ?? null }}">
             {{ errorList(formErrors.name ?? null )}}
         </div>
 
         <div class="form-row">
             <label class="label" for="game-id">Si mod ou map, ID du jeu (laisser vide si c’est un jeu stand-alone)</label>
-            <select class="input" id="game-id" name="game_id">
+            <select class="input -text" id="game-id" name="game_id">
                 <option value=""></option>
                 {% for p in playables %}
                 {% if formData == null or p.id != formData.id %}
@@ -37,27 +37,33 @@
 
         <div class="form-row">
             <label class="label" for="release-date-time">Date de publication</label>
-            <input class="input" id="release-date-time" name="release_date_time" required type="date" value="{{ formData.release_date_time.format('Y-m-d') ?? null }}">
+            <input class="input -text" id="release-date-time" name="release_date_time" required type="date" value="{{ formData.release_date_time.format('Y-m-d') ?? null }}">
             {{ errorList(formErrors.release_date_time ?? null )}}
         </div>
     </div>
     
+    <div class="form-row-container" id="links-container">
     {% if formData %}
     {% for key, link in formData.links %}
     {{ _self.linkForm(app.linkTypes, loop.index0, link, formErrors.links[key] ?? []) }}
     {% endfor %}
     {% endif %}
+    </div>
 
-    <button class="std-button" data-type="add-dynamic-form" data-template-id="link-form-template" data-index="{{ null != formData ? formData.links|length : 0 }}" type="button">Ajouter un lien</button>
-
+    <div class="form-row-container" id="contributions-container">
     {% if formData %}
-    {% for c in formData.contributions %}
-    {{ _self.contributionForm(authors, loop.index0, c) }}
-    {% endfor %}
+        {% for c in formData.contributions %}
+        {{ _self.contributionForm(authors, loop.index0, c) }}
+        {% endfor %}
     {% endif %}
-    <button class="std-button" data-type="add-dynamic-form" data-template-id="contrib-form-tpl" data-index="{{ null != formData ? formData.contributions|length : 0 }}" type="button">Ajouter un contributeur</button>
+    </div>
 
-    <div class="_txt -textcentered">
+    <div class="form-row -buttons">
+        <button class="std-button -transparent" data-target="links-container" data-type="add-dynamic-form" data-template-id="link-form-template" data-index="{{ null != formData ? formData.links|length : 0 }}" type="button">Ajouter un lien</button>
+        <button class="std-button -transparent" data-target="contributions-container" data-type="add-dynamic-form" data-template-id="contrib-form-tpl" data-index="{{ null != formData ? formData.contributions|length : 0 }}" type="button">Ajouter un contributeur</button>
+    </div>
+
+    <div class="form-row -buttons">
         <button class="std-button" type="submit">Poster</button>
     </div>
 
@@ -79,44 +85,44 @@
 
 {% block scriptInit %}
 <script src="{{ app.asset('dynamic-form.js') }}"></script>
-<script>
-const contribForm = new DynamicForm();
-contribForm.init();
-</script>
 {% endblock %}
 
 {% macro index(i) %}{{ i ?? '${index}' }}{% endmacro %}
 
 {% macro linkForm(linkTypes, i = '{{ i }}', link = null, linkErrors = null) %}
-<div class="_flex -col -gaps" data-type="dynamic-form">
+<div class="form-row-container" data-type="dynamic-form">
     <div class="form-row">
         <label class="label" for="link-{{ i }}-name">Nom du lien</label>
-        <input class="input" id="link-{{ i }}-name" name="links[{{ i }}][name]"{% if link %} value="{{ link.name }}"{% endif %}>
+        <input class="input -text" id="link-{{ i }}-name" name="links[{{ i }}][name]"{% if link %} value="{{ link.name }}"{% endif %}>
         {% if linkErrors.name is defined %}{{ errorList(linkErrors.name) }}{% endif %}
     </div>
+
     <div class="form-row">
         <label class="label" for="link-{{ i }}-url">URL du lien</label>
-        <input class="input" id="link-{{ i }}-url" name="links[{{ i }}][url]"{% if link %} value="{{ link.url }}"{% endif %}>
+        <input class="input -text" id="link-{{ i }}-url" name="links[{{ i }}][url]"{% if link %} value="{{ link.url }}"{% endif %}>
         {% if linkErrors.url is defined %}{{ errorList(linkErrors.url) }}{% endif %}
     </div>
+
     <div class="form-row">
         <label class="label" for="link-{{ i }}-type">Type de lien</label>
-        <select class="input" id="link-{{ i }}-type" name="links[{{ i }}][type]">
+        <select class="input -text" id="link-{{ i }}-type" name="links[{{ i }}][type]">
             {% for t in linkTypes %}
             <option value="{{ t.value }}"{% if link and link.type == t.value %} selected{% endif %}>{{ t.value }}</option>
             {% endfor %}
         </select>
         {% if linkErrors.type is defined %}{{ errorList(linkErrors.type) }}{% endif %}
     </div>
-    <div class="form-row">
-        <button class="stb-button" type="button" data-type="remove-dynamic-form-button">Supprimer le lien</button>
+
+    <div class="form-row -buttons -left">
+        <button class="std-button" data-type="remove-dynamic-form-button" type="button">Supprimer le lien</button>
     </div>
-    <input class="input" name="links[{{ i }}][id]" type="hidden" value="{{ link.id ?? null }}">
+
+    <input class="input -text" name="links[{{ i }}][id]" type="hidden" value="{{ link.id ?? null }}">
 </div>
 {% endmacro %}
 
 {% macro contributionForm(authors, i = '{{ i }}', contribution = null, errors = null) %}
-<div data-type="dynamic-form">
+<div class="form-row-container" data-type="dynamic-form">
     <div class="form-row">
         <select id="contributions[{{ i }}][author_id]" name="contributions[{{ i }}][author_id]">
             {% for a in authors %}
@@ -134,15 +140,14 @@ contribForm.init();
 
     <div class="form-row">
         <label class="label" for="contributions[{{ i }}][summary]">Résumé</label>
-        <input class="input" id="contributions[{{ i }}][summary]" name="contributions[{{ i }}][summary]"{% if contribution %} value="{{ contribution.summary }}"{% endif %}>
+        <input class="input -text" id="contributions[{{ i }}][summary]" name="contributions[{{ i }}][summary]"{% if contribution %} value="{{ contribution.summary }}"{% endif %}>
         {% if errors %}{{ errorList(errors.summary) }}{% endif %}
     </div>
 
-    <div class="form-row">
-        <button class="std-button" data-type="remove-dynamic-form-button" type="button">
-            <div class="text">Supprimer</div>
-        </button>
+    <div class="form-row -buttons -left">
+        <button class="std-button" data-type="remove-dynamic-form-button" type="button">Supprimer la contribution</button>
     </div>
+
     <input type="hidden" name="contributions[{{ i }}][id]" value="{{ contribution.id ?? null }}">
 </div>
 {% endmacro %}

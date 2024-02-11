@@ -9,16 +9,18 @@
 
 {% block bodyContent %}
 {# @todo autocomplete attributes #}
-<h1>Mon Compte</h1>
-<form class="std-form" autocomplete="on" method="post"{% if app.conf.dev %} novalidate{% endif %}>
+
+<h1 class="_h1">Mon Compte</h1>
+
+<form class="form-row-container" autocomplete="on" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="form-row">
         <label class="label" for="id">Nom d’utilisateur :</label>
-        <input class="input" id="id" name="id" autocomplete="username" required value="{{ formData['id'] }}">
+        <input class="input -text" id="id" name="id" autocomplete="username" required value="{{ formData['id'] }}">
         {% if formErrors.id is defined %}{{ errorList(formErrors.id )}}{% endif %}
     </div>
     <div class="form-row">
         <label class="label" for="password">Mot de passe :</label>
-        <input class="input" id="password" name="password" autocomplete="current-password" type="password">
+        <input class="input -text" id="password" name="password" autocomplete="current-password" type="password">
         {% if formErrors.password is defined %}{{ errorList(formErrors.password )}}{% endif %}
     </div>
     <div class="form-row">
