@@ -36,6 +36,12 @@
         }
     }
 
+    &.-fullwidth {
+        > .input {
+            width: 100%;
+        }
+    }
+
     &.-titled {
         > .label {
             @include h2;
