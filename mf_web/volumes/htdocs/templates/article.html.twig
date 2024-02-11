@@ -82,7 +82,7 @@
                                     <time itemprop="datePublished" datetime="{{ article.review.playable.release_date_time|date('Y-m-d\\TH:i') }}Z">{{ article.review.playable.release_date_time|date('Y') }}</time>
                                 </dd>
                             </div>
-                            {% if article.review.playable.game %}
+                            {% if article.review.playable.game is defined %}
                             <div class="item">
                                 <dt class="term">Moteur :</dt>
                                 <dd class="def" itemprop="isBasedOn" itemscope itemtype="https://schema.org/VideoGame">

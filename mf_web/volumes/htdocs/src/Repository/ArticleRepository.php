@@ -104,15 +104,16 @@ class ArticleRepository implements IRepository
         $articleModel = new ArticleModel(
             categoryModel: new CategoryModel(),
         );
-        $reviewModel = new ArticleModel(
-            categoryModel: new CategoryModel(),
-            reviewModel: new ReviewModel(new PlayableModel(new PlayableModel()), articleModel: null, isNullable: true)
-        );
         $articles = [];
         foreach ($results as $r) {
             if (null === $r['review_id']) {
                 $articles[] = $this->em->toAppData($r, $articleModel, 'article')->set('review', null);
             } else {
+                
+                $reviewModel = new ArticleModel(
+                    categoryModel: new CategoryModel(),
+                    reviewModel: new ReviewModel(new PlayableModel(null !== $r['game_id'] ? new PlayableModel() : null), articleModel: null, isNullable: true)
+                );
                 $articles[] = $this->em->toAppData($r, $reviewModel, 'article');
             }
         }
