@@ -60,8 +60,13 @@ class ArticleRepository implements IRepository
         $reviewModel = null;
 
         if (null !== $data[0]['review_id']) {
+            if (null !== $data[0]['game_id']) {
+                $gameModel = new PlayableModel();
+            } else {
+                $gameModel = null;
+            }
             $reviewModel = new ReviewModel(new PlayableModel(
-                gameModel: new PlayableModel(isNullable: true),
+                gameModel: $gameModel,
                 contributionModel: $fetchPlayableContributors ? new ContributionModel(new AuthorModel()) : null,
                 playableLinkModel: new PlayableLinkModel(),
             ));
