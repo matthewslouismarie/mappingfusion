@@ -1,6 +1,6 @@
 .article-advice {
-    padding: 16px 16px 16px 125px + 16*2px;
-    background: no-repeat url("mapping-fusion-advice.svg") center left 16px / 125px 106px, $color-blue-1;
+    padding: $gap-s;
+    background-color: $color-blue-1;
 
     > h2 {
         color: $color-white;

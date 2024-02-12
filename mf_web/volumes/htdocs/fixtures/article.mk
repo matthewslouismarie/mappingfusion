@@ -32,3 +32,7 @@ At first glance, that sounds like a good workaround until you actually try it ou
 Yay, now the colours are alright, but it still looks bad and quite different than the original.
 
 So, how do we do this *properly*?
+
+<!--- Conseil -->
+## Le petit conseil pour les mappeurs Mapping-Fusion
+Un excellent moyen de s’améliorer en mapping et en modding, c’est de jouer à des mods ! Ça permet de voir ce qui marche (et ne marche pas) en terme de visuels, choix des textures, lumières, gameplay…
