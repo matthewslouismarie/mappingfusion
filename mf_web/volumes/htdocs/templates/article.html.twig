@@ -192,22 +192,12 @@
 {% endblock %}
 
 {% block scriptInit %}
-<script>
     {% if app.getImages(article.body) %}
-    const glide = new Glide('.glide', {gap: 0});
-    glide.on('mount.after', function () {
-        glide.update();
-    });
-    glide.mount();
+    <script src="{{ app.asset('glide-init.js') }}"></script>
     {% endif %}
-
-    window.addEventListener('load', function () {
-        const reviewMenu = new ReviewMenu();
-        reviewMenu.init();
-    });
-
-    const previewer = new ImgPreviewer('img-preview-container');
-    previewer.init(document.querySelectorAll('.std-markdown-container img, .glide__slide > .link'));
+    
+    <script src="{{ app.asset('review-menu.js') }}"></script>
+    <script src="{{ app.asset('img-previewer.js') }}"></script>
 </script>
 {% endblock %}
 

@@ -3,14 +3,11 @@ class Menu
     #button;
     #containerHtmlId;
     #menu;
-    #searchForm;
 
-    constructor(buttonId, containerHtmlId, menuId, searchFormId) {
+    constructor(buttonId, containerHtmlId, menuId) {
         this.#containerHtmlId = containerHtmlId;
         this.#button = document.getElementById(buttonId);
         this.#menu = document.getElementById(menuId);
-        this.#searchForm = document.getElementById(searchFormId);
-
     }
 
     init() {
@@ -25,3 +22,7 @@ class Menu
         };
     }
 }
+
+document.getElementById('montserrat-font').disabled = false;
+const menu = new Menu('menu-button', 'menu-container', 'menu', 'search-form');
+menu.init();

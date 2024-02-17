@@ -27,3 +27,8 @@ class ReviewMenu
         });
     }
 }
+
+window.addEventListener('load', function () {
+    const reviewMenu = new ReviewMenu();
+    reviewMenu.init();
+});

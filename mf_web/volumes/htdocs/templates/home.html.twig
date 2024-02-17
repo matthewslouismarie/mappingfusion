@@ -129,7 +129,9 @@
 
 {% block scriptInit %}
 <script src="https://unpkg.com/@glidejs/glide@3.6.0/dist/glide.js"></script>
-<script>
-  new Glide('.glide', {gap: 0}).mount()
-</script>
+<script
+    id="glide-init-script"
+    src="{{ app.asset('glide-init.js') }}"
+    data-gap = 0
+></script>
 {% endblock %}
