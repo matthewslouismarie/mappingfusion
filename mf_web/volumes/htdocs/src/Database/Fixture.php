@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use LM\WebFramework\Configuration;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\Enum\LinkType;
+use MF\Enum\PlayableType;
 use MF\Repository\ArticleRepository;
 use MF\Repository\AuthorRepository;
 use MF\Repository\CategoryRepository;
@@ -50,11 +51,36 @@ class Fixture
         ]);
         $this->repoMember->add($root);
 
-        $gs = new AppObject(['id' => 'goldsource', 'name' => 'GoldSource', 'release_date_time' => new DateTimeImmutable(), 'game_id' => null]);
-        $hl = new AppObject(['id' => 'half-life', 'name' => 'Half-Life', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'goldsource']);
-        $hl2 = new AppObject(['id' => 'half-life-2', 'name' => 'Half-Life 2', 'release_date_time' => new DateTimeImmutable(), 'game_id' => null]);
-        $sc = new AppObject(['id' => 'sven-co-op', 'name' => 'Sven Co-op', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'goldsource']);
-        $cp = new AppObject(['id' => 'crossed-paths', 'name' => 'Crossed Paths', 'release_date_time' => new DateTimeImmutable(), 'game_id' => 'sven-co-op']);
+        $gs = new AppObject(['id' => 'goldsource',
+			'name' => 'GoldSource',
+			'release_date_time' => new DateTimeImmutable(),
+			'game_id' => null,
+            'type' => PlayableType::Standalone->value,
+        ]);
+        $hl = new AppObject(['id' => 'half-life',
+			'name' => 'Half-Life',
+			'release_date_time' => new DateTimeImmutable(),
+			'game_id' => 'goldsource',
+            'type' => PlayableType::Standalone->value,
+        ]);
+        $hl2 = new AppObject(['id' => 'half-life-2',
+			'name' => 'Half-Life 2',
+			'release_date_time' => new DateTimeImmutable(),
+			'game_id' => null,
+            'type' => PlayableType::Standalone->value,
+        ]);
+        $sc = new AppObject(['id' => 'sven-co-op',
+			'name' => 'Sven Co-op',
+			'release_date_time' => new DateTimeImmutable(),
+			'game_id' => 'goldsource',
+            'type' => PlayableType::Standalone->value,
+        ]);
+        $cp = new AppObject(['id' => 'crossed-paths',
+			'name' => 'Crossed Paths',
+			'release_date_time' => new DateTimeImmutable(),
+			'game_id' => 'sven-co-op',
+            'type' => PlayableType::Map->value,
+        ]);
 
         $this->repoPlayable->add($gs);
         $this->repoPlayable->add($hl);

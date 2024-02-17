@@ -2,11 +2,13 @@
 
 namespace MF\Model;
 
+use LM\WebFramework\Constraints\EnumConstraint;
 use LM\WebFramework\Constraints\StringConstraint;
 use LM\WebFramework\Model\AbstractEntity;
 use LM\WebFramework\Model\DateTimeModel;
 use LM\WebFramework\Model\ListModel;
 use LM\WebFramework\Model\StringModel;
+use MF\Enum\PlayableType;
 
 class PlayableModel extends AbstractEntity
 {
@@ -21,6 +23,7 @@ class PlayableModel extends AbstractEntity
             'name' => new StringModel([new StringConstraint()]),
             'release_date_time' => new DateTimeModel(),
             'game_id' => new StringModel([new StringConstraint(regex: StringConstraint::REGEX_DASHES)], true),
+            'type' => new StringModel([new EnumConstraint(PlayableType::cases())]),
         ];
         if (null !== $gameModel) {
             $properties['game'] = $gameModel;

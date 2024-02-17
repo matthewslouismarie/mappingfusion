@@ -40,6 +40,16 @@
             <input class="input -text" id="release-date-time" name="release_date_time" required type="date" value="{{ formData.release_date_time.format('Y-m-d') ?? null }}">
             {{ errorList(formErrors.release_date_time ?? null )}}
         </div>
+
+        <div class="form-row">
+            <label class="label" for="type">Type</label>
+            <select class="input -text" id="type" name="type">
+                {% for t in playableTypes %}
+                <option value="{{ t.value }}"{% if formData and formData.type == t.value %} selected{% endif %}>{{ t.value }}</option>
+                {% endfor %}
+            </select>
+            {{ errorList(formErrors.type ?? null )}}
+        </div>
     </div>
     
     <div class="form-row-container" id="links-container">

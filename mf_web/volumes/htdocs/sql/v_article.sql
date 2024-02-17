@@ -6,6 +6,7 @@ CREATE OR REPLACE VIEW v_article AS SELECT
     game.playable_id AS game_id,
     game.playable_name AS game_name,
     game.playable_release_date_time AS game_release_date_time,
+    game.playable_type AS game_type,
     game.playable_game_id AS game_game_id
 FROM e_article
     LEFT JOIN e_category ON article_category_id = category_id

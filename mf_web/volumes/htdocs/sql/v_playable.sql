@@ -3,6 +3,7 @@ CREATE OR REPLACE VIEW v_playable AS SELECT
     game.playable_id AS game_id,
     game.playable_name AS game_name,
     game.playable_release_date_time AS game_release_date_time,
+    game.playable_type AS game_type,
     game.playable_game_id AS game_game_id,
     e_playable_link.*,
     e_contribution.*,

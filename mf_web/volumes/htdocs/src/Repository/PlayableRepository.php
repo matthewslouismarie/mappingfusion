@@ -23,7 +23,7 @@ class PlayableRepository implements IRepository
 
     public function add(AppObject $playable): void {
         $dbArray = $this->em->toDbValue($playable);
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:id, :name, :release_date_time, :game_id);');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:id, :name, :release_date_time, :type, :game_id);');
         $stmt->execute($dbArray);
         $playable->set('id', $this->conn->getPdo()->lastInsertId());
     }
@@ -35,7 +35,8 @@ class PlayableRepository implements IRepository
         if ($add) {
             $this->add($playable);
         } else {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_id = :id, playable_name = :name, playable_game_id = :game_id, playable_release_date_time = :release_date_time WHERE playable_id = :previous_id;');
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_id = :id, playable_name = :name, playable_type = :type, playable_game_id = :game_id, playable_release_date_time = :release_date_time WHERE playable_id = :previous_id;');
+            var_dump($dbArray);
             $stmt->execute($dbArray + ['previous_id' => $previousId ?? $dbArray['id']]);
         }
 

@@ -79,6 +79,10 @@
                                     <time itemprop="datePublished" datetime="{{ article.review.playable.release_date_time|date('Y-m-d\\TH:i') }}Z">{{ article.review.playable.release_date_time|date('Y') }}</time>
                                 </dd>
                             </div>
+                            <div class="item">
+                                <dt class="term">Type :</dt>
+                                <dd class="def">{{ article.review.playable.type }}</dd>
+                            </div>
                             {% if article.review.playable.game %}
                             <div class="item">
                                 <dt class="term">Moteur :</dt>

@@ -10,6 +10,7 @@ use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Type\ModelValidator;
 use MF\Enum\LinkType;
+use MF\Enum\PlayableType;
 use MF\Exception\Database\EntityNotFoundException;
 use MF\Model\ContributionModel;
 use MF\Model\PlayableLinkModel;
@@ -99,6 +100,7 @@ class AdminPlayableController implements ControllerInterface
                 'formErrors' => $formErrors,
                 'linkTypes' => LinkType::cases(),
                 'playables' => $this->repo->findAll(),
+                'playableTypes' => PlayableType::cases(),
                 'requestedId' => $requestedId,
             ]),
         );
