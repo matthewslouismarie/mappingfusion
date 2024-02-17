@@ -15,12 +15,11 @@
 }
 
 @mixin h2 {
-    font-size: $txt-font-size-l2;
-    color: $color-blue-0;
+    font-size: 25px;
+    color: $color-blue-05;
     font-weight: $txt-weight-semi-bold;
 }
 
 @mixin h3 {
-    font-size: $txt-font-size-l;
-    color: $color-blue-0;
+    font-size: 22px;
 }

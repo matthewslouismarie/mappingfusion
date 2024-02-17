@@ -1,19 +1,7 @@
 .section-content {
-    > ._h1 {
-        margin-bottom: $gap-l;
-    }
-
-    > ._h2 {
-        margin-bottom: $gap-l2;
-    }
-
     > .box {
         &.-centered {
             text-align: center;
-        }
-
-        &:not(:last-child) {
-            margin-bottom: $gap-l;
         }
     }
 }

@@ -1,0 +1,30 @@
+._h1 {
+    @include h1;
+    margin-bottom: $gap-l;
+}
+
+._h1:not(:first-child) {
+    margin-top: $gap-l;
+}
+
+._h2 {
+    @include h2;
+    margin-bottom: $gap-s2;
+}
+
+._h2:not(:first-child) {
+    margin-top: $gap-s2;
+}
+
+._h3 {
+    @include h3;
+    margin-bottom: $gap-xs;
+}
+
+._h3:not(:first-child) {
+    margin-top: $gap-xs;
+}
+
+._std:not(:last-child) {
+    margin-bottom: $gap-xs;
+}

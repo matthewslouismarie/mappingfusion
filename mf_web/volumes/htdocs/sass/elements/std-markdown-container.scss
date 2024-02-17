@@ -1,6 +1,6 @@
 .std-markdown-container {
     overflow-wrap: break-word;
-    line-height: 1.4em;
+    line-height: 24px;
     font-size: 18px;
 
     img {
@@ -13,8 +13,8 @@
         width: fit-content;
         max-width: 90%;
         padding: $gap-xs;
-        transform: translateX($gap-s2) translateY(-$gap-s2 * 2);
-        margin-bottom: -$gap-s2 * 2;
+        transform: translateX($gap-s2) translateY(-$gap-xs *2 - 22px / 2);
+        margin-bottom: -$gap-xs *2 - 22px / 2;
 
         font-weight: $txt-weight-regular;
         font-style: italic;
@@ -32,16 +32,23 @@
 
     h1 {
         @include h1;
+        margin-bottom: $gap-l;
     }
 
     h2 {
         @include h2;
+        margin-bottom: $gap-s2;
+    }
+
+    h2:not(:first-child) {
+        margin-top: $gap-s2;
     }
 
     h3,
     h4,
     h5 {
         @include h3;
+        margin-bottom: $gap-xs;
     }
 
     iframe {
@@ -59,10 +66,11 @@
         list-style-type: circle;
     }
 
-    p,
-    li,
-    ol,
-    img {
-        margin-bottom: $gap-s2;
+    p:not(:last-child),
+    li:not(:last-child),
+    ul:not(:last-child),
+    ol:not(:last-child),
+    img:not(:last-child) {
+        margin-bottom: $gap-xs;
     }
 }
