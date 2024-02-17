@@ -17,7 +17,9 @@
 <h1 class="_h1">{{ formData ? 'Édition d’article' : 'Nouvel article' }}</h1>
 
 {% if requestedId %}
-<a class="std-link _std" href="{{ app.router.generateUrl('article', [requestedId]) }}">Visualiser l’article</a>
+<div class="_std">
+    <a class="std-link" href="{{ app.router.generateUrl('article', [requestedId]) }}">Visualiser l’article</a>
+</div>
 {% endif %}
 
 <form autocomplete="on" class="form-row-container" id="article-form" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
