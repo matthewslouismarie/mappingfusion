@@ -41,11 +41,11 @@
 
     h2 {
         @include h2;
-        margin-bottom: $gap-s2;
+        margin-bottom: $gap-m;
     }
 
     h2:not(:first-child):not(h1 + h2) {
-        margin-top: $gap-s2;
+        margin-top: $gap-m;
     }
 
     h3,
