@@ -93,7 +93,7 @@
                             {% endif %}
                         </dl>
 
-                        <p class="_txt -txts">{{ article.review.body }}</p>
+                        <div class="std-markdown-container">{{ app.mk.format(article.review.body)|raw }}</div>
 
                         {{ review(app, article.review.playable, article.review) }}
                     </div>

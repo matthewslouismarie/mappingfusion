@@ -23,3 +23,9 @@
 @mixin h3 {
     font-size: 22px;
 }
+
+@mixin text-content {
+    line-height: 24px;
+    font-size: 18px;
+    overflow-wrap: break-word;
+}

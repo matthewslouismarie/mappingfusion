@@ -1,7 +1,5 @@
 .std-markdown-container {
-    overflow-wrap: break-word;
-    line-height: 24px;
-    font-size: 18px;
+    @include text-content;
 
     img {
         display: block;
