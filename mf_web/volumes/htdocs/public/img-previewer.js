@@ -79,6 +79,6 @@ class ImgPreviewer
     }
 }
 
-const scriptRef = document.getElementById('img-previewer-init-script');
-const previewer = new ImgPreviewer(scriptRef.dataset.containerId);
-previewer.init(document.querySelectorAll(scriptRef.dataset.selectors));
+const imgPreviewerOptions = document.getElementById('img-previewer-init-script').dataset;
+const previewer = new ImgPreviewer(imgPreviewerOptions.containerId);
+previewer.init(document.querySelectorAll(imgPreviewerOptions.selectors));

@@ -1,7 +1,7 @@
-const scriptRef = document.getElementById('smde-init');
-const autosaveDateTimeKey = scriptRef.dataset.autosaveDateTimeKey;
-const smdeCacheId = scriptRef.dataset.smdeCacheId;
-const lastUpdateDateTimeUtc = scriptRef.dataset.lastUpdateDateTimeUtc;
+const smdeOptions = document.getElementById('smde-init').dataset;
+const autosaveDateTimeKey = smdeOptions.autosaveDateTimeKey;
+const smdeCacheId = smdeOptions.smdeCacheId;
+const lastUpdateDateTimeUtc = smdeOptions.lastUpdateDateTimeUtc;
 
 if ('' !== lastUpdateDateTimeUtc && null !== localStorage.getItem(autosaveDateTimeKey)) {
     const lastUpdateDateTime = new Date(parseInt(lastUpdateDateTimeUtc));

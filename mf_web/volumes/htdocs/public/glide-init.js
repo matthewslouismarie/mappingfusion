@@ -1,6 +1,6 @@
-const scriptRef = document.getElementById('glide-init-script');
+const glideOptions = document.getElementById('glide-init-script').dataset;
 
-new Glide('.glide', {gap: parseInt(scriptRef.dataset.gap)}).mount()
+const glide = new Glide('.glide', {gap: parseInt(glideOptions.gap)}).mount()
 
 glide.on('mount.after', function () {
     glide.update();
