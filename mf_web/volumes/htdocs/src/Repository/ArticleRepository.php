@@ -95,7 +95,7 @@ class ArticleRepository implements IRepository
     public function findAll(bool $onlyPublished = true): array {
         $selectFrom = $onlyPublished ? 'v_article_published' : 'v_article';
 
-        $results = $this->conn->getPdo()->query("SELECT * FROM {$selectFrom} ORDER BY article_creation_date_time;")->fetchAll();
+        $results = $this->conn->getPdo()->query("SELECT * FROM {$selectFrom} ORDER BY article_creation_date_time DESC;")->fetchAll();
 
         $articles = [];
         foreach ($results as $r) {
