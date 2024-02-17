@@ -5,32 +5,28 @@
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
-<div class="_vertical-container">
-    <ul class="std-inline-list -bare">
-        <li class="item">
-            <a class="std-button" href="{{ app.router.generateUrl('admin-manage-images') }}">Par nom</a>
-        </li>
-        <li class="item">
-            <a class="std-button" href="{{ app.router.generateUrl('admin-manage-images', ['par-date']) }}">Par date</a>
-        </li>
-        <li class="item">
-            <a class="std-button" href="{{ app.router.generateUrl('admin-manage-images', ['par-date-inversee']) }}">Par date (anciens en premier)</a>
-        </li>
-    </ul>
-</div>
+<ul class="std-inline-list -bare _std">
+    <li class="item">
+        <a class="std-button" href="{{ app.router.generateUrl('admin-manage-images') }}">Par nom</a>
+    </li>
+    <li class="item">
+        <a class="std-button" href="{{ app.router.generateUrl('admin-manage-images', ['par-date']) }}">Par date</a>
+    </li>
+    <li class="item">
+        <a class="std-button" href="{{ app.router.generateUrl('admin-manage-images', ['par-date-inversee']) }}">Par date (anciens en premier)</a>
+    </li>
+</ul>
 
-<div class="box">
-    <form class="form-row-container" method="post" enctype="multipart/form-data">
-        <div class="form-row">
-            <input class="file" name="images[]" type="file" accept="image/*" multiple>
-        </div>
-        <div class="form-row">
-            <button class="std-button">Mettre en ligne</button>
-        </div>
-    </form>
-</div>
+<form class="form-row-container _std" method="post" enctype="multipart/form-data">
+    <div class="form-row">
+        <input class="file" name="images[]" type="file" accept="image/*" multiple>
+    </div>
+    <div class="form-row">
+        <button class="std-button">Mettre en ligne</button>
+    </div>
+</form>
 
-<ul class="std-mosaic-list -twoperrow">
+<ul class="std-mosaic-list -twoperrow _std">
     {% for i in images %}
     <li class="item">
         <img class="img" {{ app.imgAttr(i, i, true, null, 200)|raw }}>

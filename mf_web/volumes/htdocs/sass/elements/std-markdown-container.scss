@@ -40,7 +40,7 @@
         margin-bottom: $gap-s2;
     }
 
-    h2:not(:first-child) {
+    h2:not(:first-child):not(h1 + h2) {
         margin-top: $gap-s2;
     }
 
@@ -49,6 +49,10 @@
     h5 {
         @include h3;
         margin-bottom: $gap-xs;
+    }
+
+    h3:not(:first-child):not(h2 + h3) {
+        margin-top: $gap-xs;
     }
 
     iframe {

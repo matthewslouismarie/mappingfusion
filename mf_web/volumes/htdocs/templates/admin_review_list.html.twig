@@ -7,11 +7,9 @@
 {% block bodyContent %}
 <h1 class="_h1">Liste des tests</h1>
 
-<div class="box">
-    <a class="std-button" href="{{ app.router.generateUrl('gestion-de-tests') }}">Créer un nouveau test</a>
-</div>
+<a class="std-button _std" href="{{ app.router.generateUrl('gestion-de-tests') }}">Créer un nouveau test</a>
 
-<ul class="std-list">
+<ul class="std-list _std">
     {% for r in reviews %}
     <li class="item">
         <a class="std-link" href="{{ app.router.generateUrl('gestion-de-tests', {id: r.id}) }}">Pour {{ r.playable_id }} (note {{ r.rating}})</a>

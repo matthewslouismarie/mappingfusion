@@ -1,4 +1,8 @@
 .std-list {
     padding-left: $gap-l;
     list-style-type: disc;
+
+    > .item:not(:last-child) {
+        margin-bottom: $gap-xxs;
+    }
 }

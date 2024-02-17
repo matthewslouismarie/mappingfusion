@@ -7,17 +7,13 @@
 {% block bodyContent %}
 <h1 class="_h1">Gestion des articles</h1>
 
-<div class="box">
-    <a class="std-button" href="{{ app.router.generateUrl('manage-article') }}">Créer un nouvel article</a>
-</div>
+<a class="std-button _std" href="{{ app.router.generateUrl('manage-article') }}">Créer un nouvel article</a>
 
-<div class="box">
-    <ul class="std-list">
-        {% for a in articles %}
-        <li class="item">
-            <a class="std-link" href="{{ app.router.generateUrl('manage-article', {id: a.id}) }}">{{ a.title }}</a>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
+<ul class="std-list _std">
+    {% for a in articles %}
+    <li class="item">
+        <a class="std-link" href="{{ app.router.generateUrl('manage-article', {id: a.id}) }}">{{ a.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}

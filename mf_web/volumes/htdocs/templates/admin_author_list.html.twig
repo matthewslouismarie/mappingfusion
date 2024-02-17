@@ -7,11 +7,9 @@
 {% block bodyContent %}
 <h1 class="_h1">Gestion des auteurs</h1>
 
-<div class="box">
-    <a class="std-button" href="{{ app.router.generateUrl('admin-manage-author') }}">Créer un nouvel auteur</a>
-</div>
+<a class="std-button _std" href="{{ app.router.generateUrl('admin-manage-author') }}">Créer un nouvel auteur</a>
 
-<ul class="std-list">
+<ul class="std-list _std">
     {% for a in authors %}
     <li class="item">
         <a class="std-link" href="{{ app.router.generateUrl('admin-manage-author', {id: a.id}) }}">{{ a.name }}</a>

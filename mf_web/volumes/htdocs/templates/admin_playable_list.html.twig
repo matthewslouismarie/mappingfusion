@@ -7,11 +7,9 @@
 {% block bodyContent %}
 <h1 class="_h1">Gestion des mods</h1>
 
-<div class="box">
-    <a class="std-button" href="{{ app.router.generateUrl('admin-manage-playable') }}">Créer un nouveau mod</a>
-</div>
+<a class="std-button _std" href="{{ app.router.generateUrl('admin-manage-playable') }}">Créer un nouveau mod</a>
 
-<ul class="std-list">
+<ul class="std-list _std">
     {% for p in playables %}
     <li class="item">
         <a class="std-link" href="{{ app.router.generateUrl('admin-manage-playable', {id: p.id}) }}">{{ p.name }}</a>
