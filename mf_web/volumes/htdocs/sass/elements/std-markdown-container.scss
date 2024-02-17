@@ -35,6 +35,10 @@
         margin-bottom: $gap-l;
     }
 
+    h1:not(:first-child) {
+        margin-top: $gap-l;
+    }
+
     h2 {
         @include h2;
         margin-bottom: $gap-s2;
