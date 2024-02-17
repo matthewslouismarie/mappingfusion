@@ -6,9 +6,6 @@
 
 {% block resources %}
 <link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
-<script src="https://unpkg.com/@glidejs/glide@3.6.0/dist/glide.js"></script>
-<script src="{{ app.asset('img-previewer.js') }}"></script>
-<script src="{{ app.asset('review-menu.js') }}"></script>
 <meta property="og:description" content="{{ app.shorten(app.mk.getText(article.body), 128, '…') }}">
 <meta property="og:type" content="article">
 <meta property="og:published_time" content="{{ article.creation_date_time|date('Y-m-d\\TH:i') }}Z">
@@ -193,11 +190,12 @@
 
 {% block scriptInit %}
     {% if app.getImages(article.body) %}
+    <script src="https://unpkg.com/@glidejs/glide@3.6.0/dist/glide.js"></script>
     <script id="glide-init-script" src="{{ app.asset('glide-init.js') }}" data-gap="0"></script>
     {% endif %}
     
     <script src="{{ app.asset('review-menu.js') }}"></script>
-    <script src="{{ app.asset('img-previewer.js') }}"></script>
+    <script id="img-previewer-init-script" src="{{ app.asset('img-previewer.js') }}" data-container-id="img-preview-container" data-selectors=".std-markdown-container img, .glide__slide > .link"></script>
 </script>
 {% endblock %}
 

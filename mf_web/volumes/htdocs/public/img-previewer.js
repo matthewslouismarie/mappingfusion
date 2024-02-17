@@ -79,5 +79,6 @@ class ImgPreviewer
     }
 }
 
-const previewer = new ImgPreviewer('img-preview-container');
-previewer.init(document.querySelectorAll('.std-markdown-container img, .glide__slide > .link'));
+const scriptRef = document.getElementById('img-previewer-init-script');
+const previewer = new ImgPreviewer(scriptRef.dataset.containerId);
+previewer.init(document.querySelectorAll(scriptRef.dataset.selectors));
