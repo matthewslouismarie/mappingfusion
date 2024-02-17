@@ -4,7 +4,7 @@ const smdeCacheId = scriptRef.dataset.smdeCacheId;
 const lastUpdateDateTimeUtc = scriptRef.dataset.lastUpdateDateTimeUtc;
 
 if ('' !== lastUpdateDateTimeUtc && null !== localStorage.getItem(autosaveDateTimeKey)) {
-    const lastUpdateDateTime = new Date(lastUpdateDateTimeUtc );
+    const lastUpdateDateTime = new Date(parseInt(lastUpdateDateTimeUtc));
     const autosaveDateTime = new Date(parseInt(localStorage.getItem(autosaveDateTimeKey)));
     if (lastUpdateDateTime > autosaveDateTime) {
         localStorage.removeItem(`smde_${smdeCacheId}`);
