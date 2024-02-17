@@ -103,12 +103,12 @@
     id="smde-init"
     src="{{ app.asset('smde-init.js') }}"
     {% if requestedId %}
-    autosave-date-time-key = "article-form-last-update-{{ requestedId|escape('html_attr') }}"
-    smde-cache-id = "article-body-{{ requestedId|escape('html_attr') }}"
+    data-autosave-date-time-key = "article-form-last-update-{{ requestedId|escape('html_attr') }}"
+    data-smde-cache-id = "article-body-{{ requestedId|escape('html_attr') }}"
     {% else %}
-    autosave-date-time-key = "article-form-last-update"
-    smde-cache-id = "article-body"
+    data-autosave-date-time-key = "article-form-last-update"
+    data-smde-cache-id = "article-body"
     {% endif %}
-    last-update-date-time-utc = "{{ lastUpdateDateTimeUtc|escape('html_attr') }}"
+    data-last-update-date-time-utc = "{{ lastUpdateDateTimeUtc|escape('html_attr') }}"
 ></script>
 {% endblock %}
