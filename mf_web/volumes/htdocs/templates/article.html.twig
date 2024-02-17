@@ -193,7 +193,7 @@
 
 {% block scriptInit %}
     {% if app.getImages(article.body) %}
-    <script src="{{ app.asset('glide-init.js') }}"></script>
+    <script id="glide-init-script" src="{{ app.asset('glide-init.js') }}" data-gap="0"></script>
     {% endif %}
     
     <script src="{{ app.asset('review-menu.js') }}"></script>
