@@ -1,4 +1,18 @@
 .glide {
+    &.-arrows {
+        > .controls {    
+            .button {
+                &.-left {
+                    transform: translateX(-25%);
+                }
+
+                &.-right {
+                    transform: translateX(-75%);
+                }
+            }
+        }
+    }
+
     > .glide__bullets {
         > .glide__bullet {
             width: 236px * 1.5;

@@ -16,12 +16,18 @@
         }
 
         > .content {
+            display: flex;
+            flex-direction: column;
             flex: 0 0 100%;
 
-            > .intro > .sectioncontent,
-            > .section,
-            > .sectioncontent {
-                width: 70dvw;
+            > ._vertical-container {
+                padding-right: 30%;
+
+                > ._horizontal-container {
+                    width: 100%;
+                    padding-left: $gap-xxs;
+                    padding-right: $gap-xxs;
+                }
             }
         }
     }

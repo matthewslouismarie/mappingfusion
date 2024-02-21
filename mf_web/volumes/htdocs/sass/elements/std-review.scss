@@ -83,6 +83,8 @@
             flex-direction: column;
             z-index: 1;
             border-radius: $border-radius-xs;
+            max-width: 30%;
+            word-wrap: break-word;
 
 
             > .std-button,
@@ -103,6 +105,10 @@
 
                 &:hover {
                     text-decoration: underline;
+                }
+
+                &.-guide {
+                    font-style: italic;
                 }
             }
 

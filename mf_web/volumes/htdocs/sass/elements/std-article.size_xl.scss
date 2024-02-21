@@ -5,10 +5,9 @@
         }
 
         > .content {
-            > .intro > .sectioncontent,
-            > .section,
-            > .sectioncontent {
-                width: 40dvw;
+            > ._vertical-container {
+                padding-right: 30%;
+                padding-left: 30%;
             }
         }
     }

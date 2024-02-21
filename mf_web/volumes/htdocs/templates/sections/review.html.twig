@@ -35,9 +35,9 @@
         </div>
     
         <div class="relatedlinks _txt"{% if metadata %} id="playable-links"{% endif %}>
-            {{ _self.links(app, 'download', review.playable.links) }}
-            {{ _self.links(app, 'homepage', review.playable.links) }}
-            {{ _self.links(app, 'other', review.playable.links) }}
+            {{ _self.links(app, 'download', review.playable.links, playable) }}
+            {{ _self.links(app, 'homepage', review.playable.links, playable) }}
+            {{ _self.links(app, 'other', review.playable.links, playable) }}
             <a class="std-button -blue -p -moretests" href="{{ app.router.generateUrl('articles', [app.conf.getSetting('reviewCategoryId')]) }}">
                 <div class="text _txt -bold">Voir plus de tests</div>
             </a>
@@ -45,7 +45,7 @@
     </div>
 {% endmacro %}
 
-{% macro links(app, linkType, links) %}
+{% macro links(app, linkType, links, playable) %}
 {% if app.hasLinks(linkType, links) %}
 <ul class="list -dormant">
     <button class="std-button -p">
@@ -58,6 +58,13 @@
     </a>
     {% endif %}
     {% endfor %}
+    {% if linkType == 'download' %}
+    {% if playable.type == 'Mod' %}
+    <a class="link -guide" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">Comment installer un mod ?</a>
+    {% elseif playable.type == 'Map' %}
+    <a class="link -guide" href="{{ app.router.generateUrl('article', ['installer-un-mod']) }}">Comment installer une map ?</a>
+    {% endif %}
+    {% endif %}
 </ul>
 {% endif %}
 {% endmacro %}

@@ -28,3 +28,9 @@
 ._std:not(:last-child) {
     margin-bottom: $gap-xs;
 }
+
+._spaced {
+    ._std:not(:last-child) {
+        margin-bottom: $gap-xs;
+    }
+}

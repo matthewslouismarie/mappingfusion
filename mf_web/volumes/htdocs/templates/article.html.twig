@@ -50,10 +50,9 @@
 
             <div class="content">
                 {% if article.review %}
-                <div class="intro _flex -col _gap -gap-row-m _padding -padding-hori-mobile -padding-vert-l2">
-                    <div class="sectioncontent _padding -padding-hori-s _flex -col _gap -gap-row-l">
-
-                        <dl class="std-metadata" id="playable-object">
+                <div class="sectioncontent -intro _vertical-container">
+                    <div class="sectioncontent _spaced _horizontal-container">
+                        <dl class="std-metadata _std" id="playable-object">
                             <meta itemprop="identifier" content="{{ article.review.playable.id }}">
                             <div class="item">
                                 <dt class="term">Jeu :</dt>
@@ -94,7 +93,7 @@
                             {% endif %}
                         </dl>
 
-                        <div class="std-markdown-container">{{ app.mk.format(article.review.body)|raw }}</div>
+                        <div class="std-markdown-container _std">{{ app.mk.format(article.review.body)|raw }}</div>
 
                         {{ review(app, article.review.playable, article.review) }}
                     </div>
@@ -102,7 +101,7 @@
                 {% endif %}
 
                 <div
-                    class="sectioncontent _padding -padding-hori-s -padding-vert-l"
+                    class="sectioncontent _vertical-container"
                     id="article-body"
                     itemscope
                     itemid="{{ app.articleItemId(article.id) }}"
@@ -110,13 +109,13 @@
                     itemref="{% if article.review %}review-box {% endif %}article-cover article-metadata"
                 >
                     {% if article.review %}<meta itemprop="itemReviewed" itemscope itemtype="https://schema.org/VideoGame" itemref="playable-object playable-links">{% endif %}
-                    <div class="std-markdown-container" itemprop="articleBody">
+                    <div class="std-markdown-container _horizontal-container" itemprop="articleBody">
                         {{ app.mk.formatArticleBody(article.body).main|raw }}
                     </div>
                 </div>
 
                 {% if app.getImages(article.body) %}
-                <section class="section _padding -padding-vert-l -padding-s" id="article-images">
+                <section class="sectioncontent -galery _vertical-container" id="article-images">
                     <h2 class="_h1">Galerie d’images</h2>
                     <div class="glide -arrows">
                         <div class="controls" data-glide-el="controls">
@@ -139,13 +138,13 @@
                 {% endif %}
 
                 {% if article.review %}
-                <div class="sectioncontent _padding -padding-hori-s -padding-vert-l" id="review-summary">
+                <div class="sectioncontent _vertical-container" id="review-summary">
                     {{ review(app, article.review.playable, article.review, '-summary', false) }}
                 </div>
                 {% endif %}
 
                 {% if app.mk.formatArticleBody(article.body).advice %}
-                <div class="sectioncontent _padding -padding-hori-s -padding-vert-l">
+                <div class="sectioncontent _vertical-container">
                     <aside class="article-advice">
                         {{ app.mk.formatArticleBody(article.body).advice|raw }}
                     </aside>
@@ -153,27 +152,29 @@
                 {% endif %}
 
 
-                <div class="sectioncontent _padding -padding-hori-s -padding-vert-l" id="article-metadata">
-                    <dl class="std-metadata -s">
-                        <div class="item">
-                            <dt class="term">Édité le :</dt>
-                            <dd class="def">
-                                <time itemprop="dateModified" datetime="{{ article.last_update_date_time|date('Y-m-d\\TH:i') }}Z">Le {{ article.last_update_date_time|date('d/m/Y à H:i:s') }}</time>
-                            </dd>
-                        </div>
-                        <div class="item">
-                            <dt class="term">Publié le :</dt>
-                            <dd class="def">
-                                <time itemprop="dateCreated" datetime="{{ article.creation_date_time|date('Y-m-d\\TH:i') }}Z">Le {{ article.creation_date_time|date('d/m/Y à H:i:s') }}</time>
-                            </dd>
-                        </div>
-                        <div class="item -author">
-                            <dt class="term">Rédigé par :</dt>
-                            <dd class="def">
-                                {{ authorLink(app, article.redactor, 16, 'author') }}
-                            </dd>
-                        </div>
-                    </dl>
+                <div class="sectioncontent _vertical-container" id="article-metadata">
+                    <div class="_horizontal-container">
+                        <dl class="std-metadata -s">
+                            <div class="item">
+                                <dt class="term">Édité le :</dt>
+                                <dd class="def">
+                                    <time itemprop="dateModified" datetime="{{ article.last_update_date_time|date('Y-m-d\\TH:i') }}Z">Le {{ article.last_update_date_time|date('d/m/Y à H:i:s') }}</time>
+                                </dd>
+                            </div>
+                            <div class="item">
+                                <dt class="term">Publié le :</dt>
+                                <dd class="def">
+                                    <time itemprop="dateCreated" datetime="{{ article.creation_date_time|date('Y-m-d\\TH:i') }}Z">Le {{ article.creation_date_time|date('d/m/Y à H:i:s') }}</time>
+                                </dd>
+                            </div>
+                            <div class="item -author">
+                                <dt class="term">Rédigé par :</dt>
+                                <dd class="def">
+                                    {{ authorLink(app, article.redactor, 16, 'author') }}
+                                </dd>
+                            </div>
+                        </dl>
+                    </div>
                 </div>
             </div>
         </div>
