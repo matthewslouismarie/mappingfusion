@@ -30,31 +30,31 @@
 
     h1 {
         @include h1;
-        margin-bottom: $gap-l;
+        margin-bottom: $gap-l2;
     }
 
     h1:not(:first-child) {
-        margin-top: $gap-l;
+        margin-top: $gap-l2;
     }
 
     h2 {
         @include h2;
-        margin-bottom: $gap-m;
+        margin-bottom: $gap-l;
     }
 
     h2:not(:first-child):not(h1 + h2) {
-        margin-top: $gap-m;
+        margin-top: $gap-l;
     }
 
     h3,
     h4,
     h5 {
         @include h3;
-        margin-bottom: $gap-xs;
+        margin-bottom: $gap-s2;
     }
 
     h3:not(:first-child):not(h2 + h3) {
-        margin-top: $gap-xs;
+        margin-top: $gap-s2;
     }
 
     iframe {

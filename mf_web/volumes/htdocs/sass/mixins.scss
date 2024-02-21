@@ -10,7 +10,7 @@
 
 @mixin h1 {
     font-size: $txt-font-size-xl;
-    color: $color-blue-0;
+    color: $color-blue-05;
     font-weight: $txt-weight-bold;
 }
 
@@ -22,6 +22,8 @@
 
 @mixin h3 {
     font-size: 22px;
+    color: $color-blue-05;
+    font-weight: $txt-weight-regular;
 }
 
 @mixin text-content {
