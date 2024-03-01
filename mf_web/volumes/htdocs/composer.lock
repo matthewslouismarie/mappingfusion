@@ -393,16 +393,16 @@
         },
         {
             "name": "matthewslouismarie/lm-web-framework",
-            "version": "2.4.2",
+            "version": "2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthewslouismarie/lm-web-framework.git",
-                "reference": "54e00c0a0bf59a552831dc61c1ad0a7c24c7e3f7"
+                "reference": "4f54b550b5e7bf18d62f0e354418ad5f10374aea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/54e00c0a0bf59a552831dc61c1ad0a7c24c7e3f7",
-                "reference": "54e00c0a0bf59a552831dc61c1ad0a7c24c7e3f7",
+                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/4f54b550b5e7bf18d62f0e354418ad5f10374aea",
+                "reference": "4f54b550b5e7bf18d62f0e354418ad5f10374aea",
                 "shasum": ""
             },
             "require": {
@@ -433,9 +433,9 @@
             ],
             "support": {
                 "issues": "https://github.com/matthewslouismarie/lm-web-framework/issues",
-                "source": "https://github.com/matthewslouismarie/lm-web-framework/tree/2.4.2"
+                "source": "https://github.com/matthewslouismarie/lm-web-framework/tree/2.4.3"
             },
-            "time": "2024-02-11T17:21:01+00:00"
+            "time": "2024-03-01T10:34:14+00:00"
         },
         {
             "name": "michelf/php-markdown",
