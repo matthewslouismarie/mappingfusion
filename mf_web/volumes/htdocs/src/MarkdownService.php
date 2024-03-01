@@ -2,21 +2,24 @@
 
 namespace MF;
 
-use Michelf\Markdown;
+use ElGigi\CommonMarkEmoji\EmojiExtension;
+use League\CommonMark\CommonMarkConverter;
 
 class MarkdownService
 {
     const ADVICE_MARKER = '<!--- Conseil -->';
 
-    private Markdown $parser;
+    private CommonMarkConverter $parser;
 
     public function __construct() {
-        $this->parser = new Markdown();
-        $this->parser->empty_element_suffix = '>';
+        $this->parser = new CommonMarkConverter([
+            'allow_unsafe_links' => false,
+        ]);
+        $this->parser->getEnvironment()->addExtension(new EmojiExtension());
     }
 
     public function format(string $text): string {
-        return $this->parser->transform($text);
+        return $this->parser->convert($text);
     }
 
     /**
