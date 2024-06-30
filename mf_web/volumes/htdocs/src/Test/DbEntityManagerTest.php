@@ -36,6 +36,7 @@ class DbEntityManagerTest implements IUnitTest
                 'article_last_update_date_time' => '2023-08-12 23:10:16',
                 'category_id' => 'cat',
                 'category_name' => 'Une catégorie',
+                'category_parent_id' => null,
                 'playable_id' => NULL,
                 'playable_name' => NULL,
                 'playable_release_date_time' => NULL,
@@ -70,6 +71,7 @@ class DbEntityManagerTest implements IUnitTest
             'category' => new AppObject([
                 'id' => 'cat',
                 'name' => 'Une catégorie',
+                'parent_id' => null,
             ]),
         ]);
 
