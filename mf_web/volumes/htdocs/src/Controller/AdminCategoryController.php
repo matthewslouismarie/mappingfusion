@@ -8,6 +8,7 @@ use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\Form\FormFactory;
+use LM\WebFramework\Session\SessionManager;
 use LM\WebFramework\Type\ModelValidator;
 use MF\Model\CategoryModel;
 use MF\Model\Slug;
@@ -25,6 +26,7 @@ class AdminCategoryController implements ControllerInterface
         private FormFactory $formFactory,
         private ModelValidator $modelValidator,
         private Router $router,
+        private SessionManager $sessionManager,
         private TwigService $twig,
     ) {
     }
@@ -49,8 +51,10 @@ class AdminCategoryController implements ControllerInterface
                 $category = new AppObject($formData);
                 if (null === $requestedId) {
                     $this->repo->add($category);
+                    $this->sessionManager->addMessage('La catégorie a bien été créée.');
                 } else {
                     $this->repo->update($category, $requestedId);
+                    $this->sessionManager->addMessage('La catégorie a bien été mise à jour.');
                 }
                 return $this->router->generateRedirect('admin-manage-category', [$category->id]);
             }
