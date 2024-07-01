@@ -10,7 +10,7 @@ use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Type\ModelValidator;
 use MF\Model\AuthorModel;
-use MF\Model\Slug;
+use LM\WebFramework\DataStructures\Slug;
 use MF\Repository\AuthorRepository;
 use MF\Router;
 use MF\TwigService;

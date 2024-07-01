@@ -12,7 +12,7 @@ use LM\WebFramework\Model\AbstractEntity;
 use LM\WebFramework\Session\SessionManager;
 use LM\WebFramework\Type\ModelValidator;
 use MF\Model\ArticleModel;
-use MF\Model\Slug;
+use LM\WebFramework\DataStructures\Slug;
 use MF\Repository\ArticleRepository;
 use MF\Repository\CategoryRepository;
 use MF\Router;

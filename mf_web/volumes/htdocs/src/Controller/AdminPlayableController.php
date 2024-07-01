@@ -15,7 +15,7 @@ use MF\Exception\Database\EntityNotFoundException;
 use MF\Model\ContributionModel;
 use MF\Model\PlayableLinkModel;
 use MF\Model\PlayableModel;
-use MF\Model\Slug;
+use LM\WebFramework\DataStructures\Slug;
 use MF\Repository\AuthorRepository;
 use MF\Repository\PlayableLinkRepository;
 use MF\Repository\PlayableRepository;

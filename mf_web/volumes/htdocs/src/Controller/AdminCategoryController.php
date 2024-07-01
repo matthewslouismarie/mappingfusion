@@ -11,7 +11,7 @@ use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Session\SessionManager;
 use LM\WebFramework\Type\ModelValidator;
 use MF\Model\CategoryModel;
-use MF\Model\Slug;
+use LM\WebFramework\DataStructures\Slug;
 use MF\Repository\CategoryRepository;
 use MF\Router;
 use MF\TwigService;

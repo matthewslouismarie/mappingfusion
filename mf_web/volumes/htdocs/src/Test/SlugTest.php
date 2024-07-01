@@ -3,7 +3,7 @@
 namespace MF\Test;
 
 use LM\WebFramework\Test\IUnitTest;
-use MF\Model\Slug;
+use LM\WebFramework\DataStructures\Slug;
 
 class SlugTest implements IUnitTest
 {
