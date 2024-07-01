@@ -208,7 +208,7 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query("SELECT * FROM v_article_published WHERE review_id IS NOT NULL ORDER BY article_creation_date_time DESC LIMIT 4;");
         $articles = [];
         foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel(new PlayableModel()))), 'article');
+            $articles[] = $this->em->toAppData($article, new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel(new PlayableModel(isNullable: true)))), 'article');
         }
         return $articles;
     }
