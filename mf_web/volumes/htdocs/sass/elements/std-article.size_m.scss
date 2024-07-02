@@ -1,6 +1,7 @@
 .std-article {
     > .columns {
         flex-direction: row;
+        overflow: hidden;
 
         > .nav {
             order: 1;

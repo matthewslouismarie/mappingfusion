@@ -4,9 +4,6 @@
         flex-direction: column;
 
         > .content {
-            width: 100vw;
-            max-width: 100%;
-            overflow: hidden;
             > ._vertical-container.-intro {
                 background-color: $color-blue-4;
             }
