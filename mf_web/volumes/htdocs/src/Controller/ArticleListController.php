@@ -57,7 +57,7 @@ class ArticleListController implements ControllerInterface
             } else {
                 return new Response(
                     body: $this->twig->render('article_list.html.twig', [
-                        'articles' => $this->repo->findAll(true),
+                        'articles' => $this->repo->findAll(),
                         'categories' => $this->categoryRepository->findAll(),
                         'parentCats' => [],
                         'childCats' => null,

@@ -135,7 +135,7 @@ class ArticleRepository implements IRepository
 
         $model = new ArticleModel(
             categoryModel: new CategoryModel(),
-            reviewModel: new ReviewModel(new PlayableModel(new PlayableModel()), articleModel: null, isNullable: true)
+            reviewModel: new ReviewModel(new PlayableModel(new PlayableModel(isNullable: true)), articleModel: null, isNullable: true)
         );
         foreach ($results as $r) {
             $articles[] = $this->em->toAppData($r, $model, 'article');
