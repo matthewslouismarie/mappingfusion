@@ -9,9 +9,9 @@
         > .list {
             display: flex;
             flex-wrap: wrap;
-            width: 100%;
             
             > .item {
+                overflow: hidden;
                 flex: 0 0 50%;
                 height: 176px;
             }

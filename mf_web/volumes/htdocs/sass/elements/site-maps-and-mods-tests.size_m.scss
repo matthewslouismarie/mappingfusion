@@ -1,11 +1,5 @@
 .site-maps-and-mods-tests {
     > ._wrapper {
         background: url('headcrab-transparent.svg') no-repeat top 180px left 160px  / 140px 126px, url('marine-transparent.svg') no-repeat top 64px right 46px / 186px 266px;
-
-        > .list {
-            flex-direction: row;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
     }
 }
