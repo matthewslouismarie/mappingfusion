@@ -49,7 +49,7 @@
             color: $color-white;
             font-size: $r-font-size-s;
             font-style: italic;
-            text-shadow: 0 0 $shadow-xs $color-black;
+            text-shadow: 0 0 $txt-shadow $color-black;
         }
     }
 
@@ -60,7 +60,7 @@
         > .img {
             display: block;
             max-height: 100%;
-            box-shadow: 0 0 $shadow-m $color-black;
+            box-shadow: 0 0 $box-shadow $color-black;
             margin: auto;
         }
     }

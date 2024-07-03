@@ -1,7 +1,7 @@
 .std-button {
     display: inline-flex;
     align-items: center;
-    border: $border-xs solid $color-white;
+    border: $border-xxs solid $color-white;
     justify-content: center;
 
     @include asymetric-padding;

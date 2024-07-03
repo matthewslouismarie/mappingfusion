@@ -1,14 +1,14 @@
 .article-cover {
+    display: flex;
+    align-items: center;
+    height: $cover-height;
+    justify-content: center;
+
     background-position: center;
     background-size: cover;
-    height: 512px;
 
     > .text {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        font-size: 35px;
-        min-height: 486px;
+        font-size: $txt-font-size-xxl;
 
         text-align: center;
 

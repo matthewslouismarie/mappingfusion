@@ -10,7 +10,7 @@
 
     > .site-social-networks > .content {
         background-color: #19577a;
-        box-shadow: 0 (-$area-size-s / 2) $area-size-s ($area-size-s / 2) #19577a;
+        box-shadow: 0 (-$cover-height/8) $cover-height/4 ($cover-height/8) $color-blue-2;
         position: relative;
         height: 0;
     }
