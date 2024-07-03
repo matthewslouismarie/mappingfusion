@@ -2,7 +2,11 @@
 <a class="review-mosaic" href="{{ app.router.generateUrl('article', {id: article.id}) }}" itemscope itemid="{{ app.articleItemId(article.id) }}" itemtype="https://schema.org/Article">
     <link itemprop="url" href="{{ app.router.generateUrl('article', {id: article.id}) }}">
     <div class="img"{% if article.cover_filename %} style="background-image: url('{{ app.thumbnailUrl(article) }}');"{% endif %}>
+        {% if article.category_id == 'hors-serie' %}
+        <em class="std-badge -orange" itemprop="about">Hors-série</em>
+        {% elseif article.review.playable.game %}
         <em class="std-badge" itemprop="about">{{ article.review.playable.game.name }}</em>
+        {% endif %}
     </div>
     <div class="text">
         <div class="left">
