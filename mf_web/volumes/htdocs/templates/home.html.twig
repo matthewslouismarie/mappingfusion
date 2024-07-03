@@ -60,7 +60,11 @@
                     <a class="review-mosaic-bare"{% if r.cover_filename %} style="background-image: url('{{ app.thumbnailUrl(r) }}');"{% endif %} href="{{ app.router.generateUrl('article', [r.id]) }}">
                         <div class="content">
                             <span class="playable _txt -txtl">{{ r.review.playable.name }}</span>
-                            {% if r.review.playable.game %}<span class="std-badge _txt -txts">{{ r.review.playable.game.name }}</span>{% endif %}
+                            {% if r.category_id == 'hors-serie' %}
+                            <span class="std-badge -orange _txt -txts">Hors-série</span>
+                            {% elseif r.review.playable.game %}
+                            <span class="std-badge _txt -txts">{{ r.review.playable.game.name }}</span>
+                            {% endif %}
                         </div>
                     </a>
                 </li>
