@@ -1,19 +1,27 @@
 .site-maps-and-mods-tests {
-    background-color: #0c4b6e;
+    @include vertical-section;
 
-    > ._wrapper {
+    background-color: $color-blue-3;
+
+    > .content {
         display: flex;
         align-items: center;
         flex-direction: column;
+        max-width: $block-width-interface-xl;
+        margin: auto;
+        gap: $gap-l;
+        text-align: center;
+        
 
         > .list {
             display: flex;
             flex-wrap: wrap;
+            width: 100%;
             
             > .item {
                 overflow: hidden;
                 flex: 0 0 50%;
-                height: 176px;
+                height: $img-size-s;
             }
         }
     }
