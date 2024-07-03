@@ -27,16 +27,14 @@
 
                 > .item {
                     > .link {
-                        display: flex;
-                        flex-direction: column;
-                        width: 176px;
-
                         color: $color-white;
                         font-weight: $txt-weight-regular;
 
                         > .image {
                             width: 100%;
+                            height: auto;
                             display: block;
+                            margin-bottom: $gap-xxs;
                         }
                     }
 
