@@ -1,6 +1,7 @@
 .std-review {
     display: flex;
     flex-direction: column;
+    margin-bottom: $r-font-size-s;
 
     border: 4px solid $color-white;
     @include text-content;
