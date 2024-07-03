@@ -1,14 +1,17 @@
 .std-article {
     > .columns {
-        > .nav {
-            left: -30%;
-        }
-
-        > .content {
-            > ._vertical-container {
-                padding-right: 30%;
-                padding-left: 30%;
-            }
-        }
+        grid-template-columns: 1fr $block-width-paragraph-xl $gap-xxl $block-width-navbar 1fr;
     }
+    // > .columns {
+    //     > .nav {
+    //         left: -30%;
+    //     }
+
+    //     > .content {
+    //         > ._vertical-container {
+    //             padding-right: 30%;
+    //             padding-left: 30%;
+    //         }
+    //     }
+    // }
 }

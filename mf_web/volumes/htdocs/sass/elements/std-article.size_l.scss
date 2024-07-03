@@ -1,20 +1,21 @@
 .std-article {
     > .columns {
-        > .nav {
-            left: -25%;
-            width: 256px;
-        }
+        grid-template-columns: 1fr $block-width-paragraph-l $gap-m $block-width-navbar 1fr;
+        // > .nav {
+        //     left: -25%;
+        //     width: 256px;
+        // }
 
-        > .content {
-            > ._vertical-container {
-                padding-right: 25%;
-                padding-left: 25%;
+        // > .content {
+        //     > ._vertical-container {
+        //         padding-right: 25%;
+        //         padding-left: 25%;
 
-                > ._horizontal-container {
-                    padding-left: unset;
-                    padding-right: unset;
-                }
-            }
-        }
+        //         > ._horizontal-container {
+        //             padding-left: unset;
+        //             padding-right: unset;
+        //         }
+        //     }
+        // }
     }
 }

@@ -34,7 +34,7 @@
     <div class="std-article">
 
         <div class="article-cover" id="article-cover" style="background: url('{{ app.asset('blue-shadow.png') }}') repeat-x bottom -1px left / auto 50%, url('{{ app.resource(article.cover_filename) }}') center / cover;" itemprop="image" content="{{ app.resource(article.cover_filename) }}">
-            <div class="text _horizontal-container">
+            <div class="text">
                 <meta itemprop="url" content="{{ app.router.generateUrl('article', [article.id]) }}">
                 <h1 class="title" itemprop="headline name">{{ article.title }}</h1>
                 {% if article.sub_title %}
@@ -50,9 +50,9 @@
 
             <div class="content">
                 {% if article.review %}
-                <div class="sectioncontent -intro _vertical-container">
-                    <div class="sectioncontent _spaced _horizontal-container">
-                        <dl class="std-metadata _std" id="playable-object">
+                <div class="section -intro">
+                    <div class="sectioncontent">
+                        <dl class="std-metadata" id="playable-object">
                             <meta itemprop="identifier" content="{{ article.review.playable.id }}">
                             <div class="item">
                                 <dt class="term">Jeu :</dt>
@@ -93,7 +93,7 @@
                             {% endif %}
                         </dl>
 
-                        <div class="std-markdown-container _std">{{ app.mk.format(article.review.body)|raw }}</div>
+                        <div class="std-markdown-container">{{ app.mk.format(article.review.body)|raw }}</div>
 
                         {{ review(app, article.review.playable, article.review) }}
                     </div>
@@ -101,7 +101,7 @@
                 {% endif %}
 
                 <div
-                    class="sectioncontent _vertical-container"
+                    class="section"
                     id="article-body"
                     itemscope
                     itemid="{{ app.articleItemId(article.id) }}"
@@ -109,51 +109,59 @@
                     itemref="{% if article.review %}review-box {% endif %}article-cover article-metadata"
                 >
                     {% if article.review %}<meta itemprop="itemReviewed" itemscope itemtype="https://schema.org/VideoGame" itemref="playable-object playable-links">{% endif %}
-                    <div class="std-markdown-container _horizontal-container" itemprop="articleBody">
-                        {{ app.mk.formatArticleBody(article.body).main|raw }}
+                    <div class="sectioncontent">
+                        <div class="std-markdown-container" itemprop="articleBody">
+                            {{ app.mk.formatArticleBody(article.body).main|raw }}
+                        </div>
                     </div>
                 </div>
 
                 {% if app.getImages(article.body) %}
-                <section class="sectioncontent -galery _vertical-container" id="article-images">
-                    <h2 class="_h1">Galerie d’images</h2>
-                    <div class="glide -arrows">
-                        <div class="controls" data-glide-el="controls">
-                            <button class="button -left" data-glide-dir="<"></button>
-                        </div>
-                        <div class="glide__track" data-glide-el="track">
-                            <ul class="glide__slides">
-                                {% for url in app.getImages(article.body) %}
-                                <li class="glide__slide">
-                                    <a class="link" href="{{ url }}" style="background-image: url({{ url }});"></a>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="controls" data-glide-el="controls">
-                            <button class="button -right" data-glide-dir=">"></button>
+                <section class="section -galery" id="article-images">
+                    <div class="sectioncontent">
+                        <h2 class="_h1">Galerie d’images</h2>
+                        <div class="glide -arrows">
+                            <div class="controls" data-glide-el="controls">
+                                <button class="button -left" data-glide-dir="<"></button>
+                            </div>
+                            <div class="glide__track" data-glide-el="track">
+                                <ul class="glide__slides">
+                                    {% for url in app.getImages(article.body) %}
+                                    <li class="glide__slide">
+                                        <a class="link" href="{{ url }}" style="background-image: url({{ url }});"></a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="controls" data-glide-el="controls">
+                                <button class="button -right" data-glide-dir=">"></button>
+                            </div>
                         </div>
                     </div>
                 </section>
                 {% endif %}
 
                 {% if article.review %}
-                <div class="sectioncontent _vertical-container" id="review-summary">
-                    {{ review(app, article.review.playable, article.review, '-summary', false) }}
+                <div class="section" id="review-summary">
+                    <div class="sectioncontent">
+                        {{ review(app, article.review.playable, article.review, '-summary', false) }}
+                    </div>
                 </div>
                 {% endif %}
 
                 {% if app.mk.formatArticleBody(article.body).advice %}
-                <div class="sectioncontent _vertical-container">
-                    <aside class="article-advice">
-                        {{ app.mk.formatArticleBody(article.body).advice|raw }}
-                    </aside>
+                <div class="section">
+                    <div class="sectioncontent">
+                        <aside class="article-advice">
+                            {{ app.mk.formatArticleBody(article.body).advice|raw }}
+                        </aside>
+                    </div>
                 </div>
                 {% endif %}
 
 
-                <div class="sectioncontent _vertical-container" id="article-metadata">
-                    <div class="_horizontal-container">
+                <div class="section" id="article-metadata">
+                    <div class="sectioncontent">
                         <dl class="std-metadata -s">
                             <div class="item">
                                 <dt class="term">Édité le :</dt>

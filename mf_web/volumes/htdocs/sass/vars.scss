@@ -3,8 +3,7 @@ To do so, we can use pixels for horizontal dimensions and rem for vertical ones.
 When the vertical dimensions need to match the horizontal dimensions, we can use px for vertical dimensions too.
 */
 
-// Dimensions
-$cover-height: 502px;
+
 
 // Colors
 $color-black: #000000;
@@ -19,6 +18,13 @@ $color-blue-4: #0a3f5c;
 $color-blue-5: #05202e;
 $color-grey: #f2f2f2;
 $color-white: #ffffff;
+
+// Dimensions
+$cover-height: 502px;
+
+$block-width-paragraph-l: 768px;
+$block-width-paragraph-xl: 944px;
+$block-width-navbar: 215px;
 
 $border-m: 5px;
 $border-s: 3px;

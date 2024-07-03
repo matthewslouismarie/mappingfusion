@@ -4,10 +4,10 @@
     flex-direction: column;
 
     font-weight: $txt-weight-semi-bold;
-    font-size: 20px;
+    font-size: $txt-font-size-l;
 
     &.-s {
-        font-size: 16px;
+        font-size: $txt-font-size-m;
     }
 
     > .item {

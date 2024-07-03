@@ -1,14 +1,11 @@
 .std-article {
     > .columns {
-        flex-direction: row;
-        overflow: hidden;
+        display: grid;
+        grid-template-columns: $gap-m 1fr $gap-s $block-width-navbar $gap-m;
 
         > .nav {
-            order: 1;
-            position: relative;
-            left: -30%;
-            width: 30%;
-            flex: 0 0 auto;
+            grid-row: 1;
+            grid-column: 4;
 
             > .article-nav {
                 position: sticky;
@@ -17,18 +14,23 @@
         }
 
         > .content {
-            max-width: 100%;
-            display: flex;
-            flex-direction: column;
-            flex: 0 0 100%;
+            grid-column-start: 1;
+            grid-column-end: 6;
+            grid-row: 1;
 
-            > ._vertical-container {
-                padding-right: 30%;
+            display: grid;
+            grid-template-columns: subgrid;
+            
+            > .section {
+                display: grid;
+                grid-template-columns: subgrid;
+                grid-column-start: 1;
+                grid-column-end: 6;
 
-                > ._horizontal-container {
-                    width: 100%;
-                    padding-left: $gap-xxs;
-                    padding-right: $gap-xxs;
+                > .sectioncontent {
+                    grid-column: 2;
+                    padding-left: $gap-xs;
+                    padding-right: $gap-xs;
                 }
             }
         }

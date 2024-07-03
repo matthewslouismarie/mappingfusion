@@ -9,8 +9,9 @@
 
     > .text {
         font-size: $txt-font-size-xxl;
-
+        
         text-align: center;
+        text-shadow: 0 0 $txt-shadow $color-black;
 
         > .subtitle,
         > .title {

@@ -31,3 +31,14 @@
     font-size: 18px;
     overflow-wrap: break-word;
 }
+
+@mixin vertical-section {
+    padding-top: $gap-m;
+    padding-bottom: $gap-m;
+}
+
+@mixin vertical-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: $gap-m;
+}
