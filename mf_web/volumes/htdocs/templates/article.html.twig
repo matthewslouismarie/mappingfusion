@@ -48,7 +48,7 @@
                 {{ articleNav(app, article, relatedArticles) }}
             </div>
 
-            <div class="content">
+            <div class="content{% if article.review %} -withintro{% endif %}">
                 {% if article.review %}
                 <div class="section -intro">
                     <div class="sectioncontent">
