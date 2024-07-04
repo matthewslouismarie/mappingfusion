@@ -7,7 +7,14 @@
 {% block bodyContent %}
 <h1 class="_h1">Gestion des articles</h1>
 
-<a class="std-button _std" href="{{ app.router.generateUrl('manage-article') }}">Créer un nouvel article</a>
+<ul class="std-inline-list _marginm -mgbottom">
+    <li class="item">
+        <a class="std-button _std" href="{{ app.router.generateUrl('manage-article') }}">Créer un nouvel article</a>
+    </li>
+    <li class="item">
+        <a class="std-button _std" href="{{ app.router.generateUrl('admin-liste-des-tutoriels') }}">Gestion des tutoriels</a>
+    </li>
+</ul>
 
 <ul class="std-list _std">
     {% for a in articles %}

@@ -20,6 +20,7 @@ class ArticleModel extends AbstractEntity
             'id' => new SlugModel(),
             'author_id' => new SlugModel(),
             'category_id' => new SlugModel(),
+            'chapter_id' => new SlugModel(isNullable: true),
             'body' => new StringModel([]),
             'is_featured' => new BoolModel(),
             'is_published' => new BoolModel(),

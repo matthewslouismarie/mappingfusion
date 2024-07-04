@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% from 'macros/csrf_input.html.twig' import csrf %}
+{% from 'macros/error_list.html.twig' import errorList %}
+
+{% block title %}{{ pageTitle }}{% endblock %}
+
+{% block index %}<meta name="robots" content="noindex">{% endblock %}
+
+{% block bodyContent %}
+<h1 class="_h1">{{ pageTitle }}</h1>
+
+<form autocomplete="on" class="form-row-container" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
+    <div class="form-row">
+        <label class="label" for="id">ID (peut être laissé vide)</label>
+        <input class="input -text" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
+        {% if formErrors.id is defined %}{{ errorList(formErrors.id) }}{% endif %}
+    </div>
+    <div class="form-row">
+        <label class="label" for="title">Titre</label>
+        <input class="input -text" id="title" name="title" required{% if formData %} value="{{ formData.title }}"{% endif %}>
+        {% if formErrors.title is defined %}{{ errorList(formErrors.title) }}{% endif %}
+    </div>
+    
+    {{ csrf(app) }}
+
+    <div class="form-row -buttons">
+        <button class="std-button" type="submit">Poster</button>
+    </div>
+</form>
+{% endblock %}

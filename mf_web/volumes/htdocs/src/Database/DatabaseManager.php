@@ -52,6 +52,8 @@ class DatabaseManager
     private function createDatabase(): void {
         $this->pdo->exec("CREATE DATABASE $this->dbName");
         
+        $this->pdo->exec('USE ' . $this->dbName);
+
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_author.sql'), StringConstraint::MAX_LENGTH));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_member.sql'), StringConstraint::MAX_LENGTH));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_playable.sql'), StringConstraint::MAX_LENGTH, implode(',', array_map(function ($case) {return "'$case->value'";}, PlayableType::cases()))));

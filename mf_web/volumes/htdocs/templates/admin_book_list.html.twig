@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des tutoriels{% endblock %}
+
+{% block index %}<meta name="robots" content="noindex">{% endblock %}
+
+{% block bodyContent %}
+<h1 class="_h1">Liste des tutoriels</h1>
+
+<a class="std-button _std" href="{{ app.router.generateUrl('admin-tutoriel') }}">Créer un nouveau tutoriel</a>
+
+<ul class="std-list _std">
+    {% for b in books %}
+    <li class="item">
+        <a class="std-link" href="{{ app.router.generateUrl('admin-tutoriel', {id: b.id}) }}">{{ b.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

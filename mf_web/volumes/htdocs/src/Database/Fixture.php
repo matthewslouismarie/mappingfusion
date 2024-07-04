@@ -9,7 +9,9 @@ use MF\Enum\LinkType;
 use MF\Enum\PlayableType;
 use MF\Repository\ArticleRepository;
 use MF\Repository\AuthorRepository;
+use MF\Repository\BookRepository;
 use MF\Repository\CategoryRepository;
+use MF\Repository\ChapterRepository;
 use MF\Repository\ContributionRepository;
 use MF\Repository\MemberRepository;
 use MF\Repository\PlayableLinkRepository;
@@ -19,12 +21,14 @@ use MF\Repository\ReviewRepository;
 class Fixture
 {
     public function __construct(
-        private Configuration $config,
-        private DatabaseManager $conn,
         private ArticleRepository $repoArticle,
         private AuthorRepository $repoAuthor,
+        private BookRepository $repoBook,
         private CategoryRepository $repoCat,
+        private ChapterRepository $repoChapter,
+        private Configuration $config,
         private ContributionRepository $repoContrib,
+        private DatabaseManager $conn,
         private MemberRepository $repoMember,
         private PlayableLinkRepository $linkRepo,
         private PlayableRepository $repoPlayable,
@@ -152,10 +156,42 @@ class Fixture
         $this->repoCat->add($cat0);
         $this->repoCat->add($cat1);
 
+        $book1 = new AppObject([
+            'id' => 'a-book',
+            'title' => 'Mon premier livre !',
+        ]);
+        $this->repoBook->add($book1);
+
+        $book2 = new AppObject([
+            'id' => 'another-book',
+            'title' => 'Mon deuxième livre…',
+        ]);
+        $this->repoBook->add($book2);
+
+        $chapter1 = new AppObject([
+            'id' => 'chapter-1',
+            'book_id' => 'a-book',
+            'title' => 'Au commencement…',
+        ]);
+        $chapter2 = new AppObject([
+            'id' => 'chapter-2',
+            'book_id' => 'a-book',
+            'title' => 'Puis ensuite',
+        ]);
+        $chapter3 = new AppObject([
+            'id' => 'chapter-3',
+            'book_id' => 'a-book',
+            'title' => 'Conclusion…',
+        ]);
+        $this->repoChapter->add($chapter1);
+        $this->repoChapter->add($chapter2);
+        $this->repoChapter->add($chapter3);
+
         $article0 = new AppObject([
             'id' => 'nouvel-article',
             'author_id' => $root['id'],
             'category_id' => $cat0['id'],
+            'chapter_id' => null,
             'body' => file_get_contents(dirname(__FILE__) . '/../../fixtures/article.mk'),
             'is_featured' => true,
             'is_published' => true,
@@ -170,6 +206,7 @@ class Fixture
             'id' => 'nouvel-version-tcm',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
+            'chapter_id' => null,
             'body' => 'The Crystal Mission a reçu une nouvelle mise à jour, et franchement elle vaut le coup de rejouer à la map.',
             'is_featured' => true,
             'is_published' => true,
@@ -184,6 +221,7 @@ class Fixture
             'id' => 'prout-lol-xptdr',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
+            'chapter_id' => null,
             'body' => 'The Crystal Mission a reçu une nouvelle mise à jour, et franchement elle vaut le coup de rejouer à la map.',
             'is_featured' => true,
             'is_published' => true,
@@ -198,6 +236,7 @@ class Fixture
             'id' => 'bonjour-a-tous',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
+            'chapter_id' => null,
             'body' => 'The Crystal Mission a reçu une nouvelle mise à jour, et franchement elle vaut le coup de rejouer à la map.',
             'is_featured' => false,
             'is_published' => true,
@@ -207,11 +246,42 @@ class Fixture
             'thumbnail_filename' => null,
         ]);
         $this->repoArticle->add($article3);
+        
+        $article4 = new AppObject([
+            'id' => 'commencement',
+            'author_id' => $root['id'],
+            'category_id' => $cat1['id'],
+            'chapter_id' => null,
+            'body' => 'Ceci est le tout début… Bienvenue à tout le monde ! Commencons sans plus attendre. Blah blah blah…',
+            'is_featured' => false,
+            'is_published' => true,
+            'title' => 'Se préparer…',
+            'sub_title' => 'mais genre pas du tout',
+            'cover_filename' => '202111271348081.jpg',
+            'thumbnail_filename' => null,
+        ]);
+        $this->repoArticle->add($article4);
+        
+        $article5 = new AppObject([
+            'id' => 'la-compet',
+            'author_id' => $root['id'],
+            'category_id' => $cat1['id'],
+            'chapter_id' => null,
+            'body' => 'Rien de plus important que de réussir sa compétition. Une fois le jour J arrivé, tout l’entraînement n’aura servi à rien si l’on ne donne pas son maximum.',
+            'is_featured' => false,
+            'is_published' => true,
+            'title' => 'Au moment de la compétition',
+            'sub_title' => null,
+            'cover_filename' => '202111271348081.jpg',
+            'thumbnail_filename' => null,
+        ]);
+        $this->repoArticle->add($article5);
 
         $this->repoArticle->add(new AppObject([
             'id' => 'article-with-thumbnail',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
+            'chapter_id' => null,
             'body' => '',
             'is_featured' => false,
             'is_published' => true,
@@ -225,6 +295,7 @@ class Fixture
             'id' => 'goldsource-review',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
+            'chapter_id' => null,
             'body' => 'Un moteur tout à fait génial !!!!',
             'is_featured' => true,
             'is_published' => true,
