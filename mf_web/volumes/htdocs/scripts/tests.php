@@ -1,8 +1,6 @@
 <?php
 
-use MF\Controller\ArticleController;
-use MF\Controller\HomeController;
-use MF\Model\KeyName;
+use LM\WebFramework\DataStructures\KeyName;
 use MF\Router;
 use MF\Twig\TemplateHelper;
 
@@ -29,7 +27,6 @@ $context = stream_context_create(['http' => ['ignore_errors' => true]]);
 foreach ($urls as $url) {
     echo "Fetching $url...\n";
     $home = file_get_contents('http://localhost' . $url);
-    var_dump($http_response_header);
     
     $httpResponseCode = $http_response_header[0];
     if (!str_contains($httpResponseCode, '200')) {
@@ -49,3 +46,5 @@ if ('my_article' !== $keyName1->__toString()) {
     echo "$keyName1 should be equal to 'my_article'.";
     exit(1);
 }
+
+echo "Successful integration tests!";

@@ -1,6 +1,8 @@
 <?php
 
 namespace MF\Test;
+
+use AssertionError;
 use Closure;
 use Exception;
 
@@ -12,12 +14,12 @@ class Tester
         $this->errors = [];
     }
 
-    public function assertEquals(mixed $expected, mixed $actual): bool {
+    public function assertEquals(mixed $expected, mixed $actual, ?string $message = null): bool {
         $expectedType = gettype($expected);
         $actualType = gettype($actual);
         if ($expected !== $actual) {
             $this->errors[] = new AssertionFailure(
-                "Equality assertion between $expectedType and $actualType failed.",
+                $message ?? "Equality assertion between $expectedType and $actualType failed.",
                 "Expected : " . var_export($expected, true) . "\n" .
                 "Got : " . var_export($actual, true)
             );
@@ -26,17 +28,29 @@ class Tester
         return true;
     }
 
-    public function assertArrayEquals(array $expected, array $actual): bool {
+    public function assertArrayEquals(array $expected, array $actual, ?string $message = null): bool {
         $diffExpectedActual = $this->getSetDifference($expected, $actual);
         $diffActualExpected = $this->getSetDifference($actual, $expected);
         if ([] !== $diffActualExpected || [] !== $diffExpectedActual) {
             $this->errors[] = new AssertionFailure(
-                "The actual array differs from the expected array.",
+                $message ?? "The actual array differs from the expected array.",
                 "Additional keys in expected: " . var_export($diffExpectedActual, true) . "\n" .
                 "Additional keys in actual: " . var_export($diffActualExpected, true)
             );
             return false;
         }
+        return true;
+    }
+
+    public function assertNull(mixed $actual, ?string $message = null): bool {
+        if (null !== $actual) {
+            $this->errors[] = new AssertionError(
+                $message ?? 'Actual data is not null.',
+                'Expected null data, got variable of type ' . gettype($actual) . '.',
+            );
+            return false;
+        }
+
         return true;
     }
 
@@ -60,45 +74,50 @@ class Tester
         return $diffs;
     }
 
-    public function assertException(string $exceptionClass, Closure $statement): bool {
+    public function assertException(string $expectedExceptionClass, Closure $statement, ?string $message = null): bool {
         try {
             $statement->call($this);
         } catch (Exception $e) {
-            $actualExceptionClass = get_class($e);
-            if ($actualExceptionClass !== $exceptionClass) {
+            if ($e instanceof $expectedExceptionClass) {
+                return true;
+            }
+            else {
+                $actualExceptionClass = get_class($e);
+                
                 $this->errors[] = new AssertionFailure(
-                    "Raised exception not of the expected type.",
-                    "Expected :$exceptionClass. Got : $actualExceptionClass.",
+                    $message ?? "Raised exception not of the expected type.",
+                    "Expected :$expectedExceptionClass. Got : $actualExceptionClass.",
                 );
                 return false;
             }
-            return true;
         }
         $this->errors[] = new AssertionFailure(
-            "No exceptions were raised.",
-            "Expected :$exceptionClass. Got nothing.",
+            $message ?? "No exceptions were raised.",
+            "Expected : $expectedExceptionClass, but no exceptions were thrown.",
         );
         return false;
     }
 
-    public function assertNoException(Closure $statement): bool {
+    public function assertNoException(Closure $statement, ?string $message = null): bool {
         try {
             $statement->call($this);
         } catch (Exception $e) {
             $actualExceptionClass = get_class($e);
             $this->errors[] = new AssertionFailure(
-                "Raised exception not of the expected type.",
-                "Expected : No exception. Got : $actualExceptionClass.\n".
-                "Message : " . $e->getMessage(),
+                $message ?? "Raised exception not of the expected type.",
+                "Expected : No exception. Got : $actualExceptionClass.\nMessage : " . $e->getMessage(),
             );
             return false;
         }
         return true;
     }
 
-    public function assertTrue(mixed $variable): bool {
+    public function assertTrue(mixed $variable, ?string $message = null): bool {
         if ($variable !== true) {
-            $this->errors[] = 'Expected true, got ' . gettype($variable) . "\n" . var_export($variable, true);
+            $this->errors[] = new AssertionFailure(
+                $message ?? 'Expected true, got ' . gettype($variable),
+                'Actual is ' . var_export($variable, true)
+            );
             return false;
         }
         return true;

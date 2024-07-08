@@ -21,8 +21,8 @@
         <input class="input -text" id="title" name="title" required{% if formData %} value="{{ formData.title }}"{% endif %}>
         {% if formErrors.title is defined %}{{ errorList(formErrors.title) }}{% endif %}
     </div>
-    {% for chapter in entity.chapters %}
-    <h2><a href="{{ app.router.generateUrl('admin-chapitre', [chapter.id]) }}">{{ chapter.title }}</a></h2>
+    {% for article in entity.articles %}
+    <h2><a href="{{ app.router.generateUrl('manage-article', [article.id]) }}">{{ article.title }}</a></h2>
     {% endfor %}
     {{ csrf(app) }}
 

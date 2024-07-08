@@ -14,6 +14,7 @@ use LM\WebFramework\Type\ModelValidator;
 use MF\Model\ArticleModel;
 use LM\WebFramework\DataStructures\Slug;
 use MF\Repository\ArticleRepository;
+use MF\Repository\BookRepository;
 use MF\Repository\CategoryRepository;
 use MF\Router;
 use MF\Twig\TemplateHelper;
@@ -27,6 +28,7 @@ class AdminArticleController implements ControllerInterface
 
     public function __construct(
         private ArticleRepository $repo,
+        private BookRepository $bookRepository,
         private CategoryRepository $catRepo,
         private DbEntityManager $em,
         private FormFactory $formFactory,
@@ -47,6 +49,7 @@ class AdminArticleController implements ControllerInterface
         $formErrors = null;
         $lastUpdateDateTimeUtc = null;
         $requestedId = $routeParams[1] ?? null;
+        $books = $this->bookRepository->findAll();
 
         $form = $this->formFactory->createForm(
             $this->model,
@@ -75,10 +78,10 @@ class AdminArticleController implements ControllerInterface
                 } else {
                     if (isset($request->getParsedBody()['update_author']) && 'on' === $request->getParsedBody()['update_author']) {
                         $this->session->addMessage('Article mis à jour et auteur modifié.');
-                        $this->repo->updateArticle($article, $requestedId, true);
+                        $this->repo->update($article, $requestedId, true);
                     } else {
                         $this->session->addMessage('Article mis à jour.');
-                        $this->repo->updateArticle($article, $requestedId);
+                        $this->repo->update($article, $requestedId);
                     }
                 }
                 return $this->router->generateRedirect('manage-article', [$article->id]);
@@ -91,10 +94,11 @@ class AdminArticleController implements ControllerInterface
 
         return new Response(body: $this->twig->render('admin_article_form.html.twig', [
             'categories' => $this->catRepo->findAll(),
+            'books' => $books,
             'formData' => $formData,
             'formErrors' => $formErrors,
-            'requestedId' => $requestedId,
             'lastUpdateDateTimeUtc' => $lastUpdateDateTimeUtc,
+            'requestedId' => $requestedId,
         ]));
     }
 

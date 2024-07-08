@@ -4,8 +4,14 @@ namespace MF\Repository;
 
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\Model\AbstractEntity;
+use LM\WebFramework\Model\IModel;
+use LM\WebFramework\Model\ListModel;
+use LM\WebFramework\Model\SlugModel;
+use LM\WebFramework\Model\StringModel;
 use MF\Database\DatabaseManager;
 use MF\Model\BookModel;
+use MF\Model\ChapterModel;
 use OutOfBoundsException;
 
 // It was you, Oswald!
@@ -16,6 +22,14 @@ class BookRepository implements IRepository
         private DatabaseManager $conn,
         private DbEntityManager $em,
     ) {
+        $this->model = new BookModel(
+            new ChapterModel(
+                new AbstractEntity([
+                    'id' => new SlugModel(),
+                    'title' => new StringModel(),
+                ])
+            )
+        );
     }
 
     public function add(AppObject $appObject): void {
@@ -30,27 +44,23 @@ class BookRepository implements IRepository
     }
 
     public function find(string $id): ?AppObject {
-        $stmt = $this->conn->getPdo()->prepare("SELECT * FROM e_book WHERE book_id = ?;");
+        $stmt = $this->conn->getPdo()->prepare("SELECT * FROM v_book WHERE book_id = ?;");
         $stmt->execute([$id]);
 
-        $data = $stmt->fetchAll();
+        $rows = $stmt->fetchAll();
 
-        if (0 === count($data)) {
+        if (0 === count($rows)) {
             return null;
         }
 
-        return $this->em->toAppData($data[0], $this->model, 'book');
+        return $this->em->toAppData($rows, $this->model, 'book');
     }
 
-    public function findAll(): array {
+    public function findAll(): AppObject {
 
-        $results = $this->conn->getPdo()->query("SELECT * FROM e_book ORDER BY book_title;")->fetchAll();
+        $dbRows = $this->conn->getPdo()->query("SELECT * FROM v_book ORDER BY book_title;")->fetchAll();
 
-        $books = [];
-        foreach ($results as $r) {
-
-            $books[] = $this->em->toAppData($r, $this->model, 'book');
-        }
+        $books = $this->em->toAppData($dbRows, new ListModel($this->model), 'book');
         return $books;
     }
 

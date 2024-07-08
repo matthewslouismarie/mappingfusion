@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "dflydev/dot-access-data",
-            "version": "v3.0.2",
+            "version": "v3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dflydev/dflydev-dot-access-data.git",
-                "reference": "f41715465d65213d644d3141a6a93081be5d3549"
+                "reference": "a23a2bf4f31d3518f3ecb38660c95715dfead60f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dflydev/dflydev-dot-access-data/zipball/f41715465d65213d644d3141a6a93081be5d3549",
-                "reference": "f41715465d65213d644d3141a6a93081be5d3549",
+                "url": "https://api.github.com/repos/dflydev/dflydev-dot-access-data/zipball/a23a2bf4f31d3518f3ecb38660c95715dfead60f",
+                "reference": "a23a2bf4f31d3518f3ecb38660c95715dfead60f",
                 "shasum": ""
             },
             "require": {
@@ -77,9 +77,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dflydev/dflydev-dot-access-data/issues",
-                "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.2"
+                "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.3"
             },
-            "time": "2022-10-27T11:44:00+00:00"
+            "time": "2024-07-08T12:26:09+00:00"
         },
         {
             "name": "elgigi/commonmark-emoji",
@@ -694,16 +694,16 @@
         },
         {
             "name": "matthewslouismarie/lm-web-framework",
-            "version": "2.4.4",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthewslouismarie/lm-web-framework.git",
-                "reference": "108b815ea88e0d4e42585bda24c9d793a20d0f75"
+                "reference": "c9874d631b7e275e1661e9ce67ebe07b79540936"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/108b815ea88e0d4e42585bda24c9d793a20d0f75",
-                "reference": "108b815ea88e0d4e42585bda24c9d793a20d0f75",
+                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/c9874d631b7e275e1661e9ce67ebe07b79540936",
+                "reference": "c9874d631b7e275e1661e9ce67ebe07b79540936",
                 "shasum": ""
             },
             "require": {
@@ -735,9 +735,9 @@
             ],
             "support": {
                 "issues": "https://github.com/matthewslouismarie/lm-web-framework/issues",
-                "source": "https://github.com/matthewslouismarie/lm-web-framework/tree/2.4.4"
+                "source": "https://github.com/matthewslouismarie/lm-web-framework/tree/2.5.0"
             },
-            "time": "2024-06-30T23:51:51+00:00"
+            "time": "2024-07-08T18:49:50+00:00"
         },
         {
             "name": "nette/schema",

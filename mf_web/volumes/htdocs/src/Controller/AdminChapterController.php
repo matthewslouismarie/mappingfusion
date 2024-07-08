@@ -6,16 +6,19 @@ use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\Slug;
+use LM\WebFramework\Model\AbstractEntity;
+use LM\WebFramework\Model\SlugModel;
+use LM\WebFramework\Model\StringModel;
 use MF\Model\BookModel;
 use MF\Model\ChapterModel;
-use MF\Repository\BookRepository;
+use MF\Repository\ChapterRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AdminBookController implements ControllerInterface
+class AdminChapterController implements ControllerInterface
 {
     public function __construct(
-        private BookRepository $bookRepository,
+        private ChapterRepository $chapterRepository,
         private FormController $formController,
     ) {
     }
@@ -33,7 +36,12 @@ class AdminBookController implements ControllerInterface
             $request,
             $routeParams,
             $routeParams[1] ?? null,
-            new BookModel(new ChapterModel()),
+            new ChapterModel(
+                new AbstractEntity([
+                    'id' => new SlugModel(),
+                    'title' => new StringModel(),
+                ]),
+            ),
             [
                 'id' => [
                     'required' => false,
@@ -42,14 +50,14 @@ class AdminBookController implements ControllerInterface
                     }
                 ]
             ],
-            'Il existe déjà un tutoriel avec le même ID.',
-            $this->bookRepository,
-            'admin_book.html.twig',
+            'Il existe déjà un chapitre avec le même ID.',
+            $this->chapterRepository,
+            'admin_chapter.html.twig',
             function ($formData) {
-                return null === $formData ? 'Nouveau tutoriel' : $formData['title'];
+                return null === $formData ? 'Nouveau chapitre' : $formData['title'];
             },
-            'Le tutoriel a été créé avec succès.',
-            'Le tutoriel a été mis à jour avec succès.',
+            'Le chapitre a été créé avec succès.',
+            'Le chapitre a été mis à jour avec succès.',
             true,
         );
     }

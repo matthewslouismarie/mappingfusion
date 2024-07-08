@@ -65,6 +65,7 @@ class DatabaseManager
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_article.sql'), StringConstraint::MAX_LENGTH, StringConstraint::REGEX_DASHES, IUploadedImageConstraint::FILENAME_REGEX));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_playable_link.sql'), StringConstraint::MAX_LENGTH, Url::MAX_LENGTH, LinkType::Download->value, LinkType::HomePage->value, LinkType::Other->value));
 
+        $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_book.sql'));
         $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_article.sql'));
         $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_article_published.sql'));
         $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_category.sql'));

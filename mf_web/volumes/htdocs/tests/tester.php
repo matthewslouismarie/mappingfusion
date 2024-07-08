@@ -20,7 +20,21 @@ foreach (array_slice($argv, 1) as $unitTestClass) {
         exit -2;
     }
     $unitTestFailures = $unitTest->run();
+
     if (count($unitTestFailures) > 0) {
-        $allFailures[] = $unitTestFailures;
+        $allFailures[$unitTestClass] = $unitTestFailures;
     }
+}
+
+if (count($allFailures) > 0) {
+    $logger->log('Some tests failed');
+    foreach ($allFailures as $unitTestClass => $failures) {
+        $logger->log("{$unitTestClass} failed!");
+        foreach ($failures as $failure) {
+            $logger->log($failure->getTitle());
+            $logger->log("\t" . str_replace("\n", "\t\n", $failure->getMessage()));
+        }
+    }
+} else {
+    $logger->log('Tests completed successfully.');
 }

@@ -4,8 +4,10 @@ namespace MF\Repository;
 
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\Model\AbstractEntity;
+use LM\WebFramework\Model\SlugModel;
+use LM\WebFramework\Model\StringModel;
 use MF\Database\DatabaseManager;
-use MF\Model\CategoryModel;
 use MF\Model\ChapterModel;
 use OutOfBoundsException;
 
@@ -16,6 +18,7 @@ class ChapterRepository implements IRepository
         private DatabaseManager $conn,
         private DbEntityManager $em,
     ) {
+
     }
 
     public function add(AppObject $appObject): void {
@@ -30,7 +33,7 @@ class ChapterRepository implements IRepository
     }
 
     public function find(string $id): ?AppObject {
-        $stmt = $this->conn->getPdo()->prepare("SELECT * FROM e_chapter WHERE chapter_id = ?;");
+        $stmt = $this->conn->getPdo()->prepare("SELECT * FROM v_book WHERE chapter_id = ?;");
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
@@ -39,7 +42,13 @@ class ChapterRepository implements IRepository
             return null;
         }
 
-        return $this->em->toAppData($data[0], $this->model, 'chapter');
+        $model = new ChapterModel(
+            new AbstractEntity([
+                'id' => new SlugModel(),
+                'title' => new StringModel(),
+            ])
+        );
+        return $this->em->toAppData($data, $model, 'chapter');
     }
 
     public function findAll(): array {
@@ -60,5 +69,10 @@ class ChapterRepository implements IRepository
             throw new OutOfBoundsException();
         }
         return $chapter;
+    }
+
+    public function update(AppObject $entity, string $previousId): void {
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_chapter SET chapter_id = :id, chapter_title = :title WHERE chapter_id = :previous_id;');
+        $stmt->execute($this->em->toDbValue($entity) + ['previous_id' => $previousId]);
     }
 }
