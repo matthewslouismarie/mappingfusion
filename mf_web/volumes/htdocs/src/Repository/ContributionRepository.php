@@ -45,7 +45,7 @@ class ContributionRepository implements IRepository
         }
     }
 
-    public function update(AppObject $contrib, ?string $previousId = null) {
+    public function update(AppObject $contrib, ?string $previousId = null): void {
         $dbArray = $this->em->toDbValue($contrib);
         $stmt = $this->conn->getPdo()->prepare('UPDATE e_contribution SET contribution_id = :id, contribution_author_id = :author_id, contribution_playable_id = :playable_id, contribution_is_author = :is_author, contribution_summary = :summary WHERE contribution_id = :previous_id;');
         $stmt->execute($dbArray + ['previous_id' => $previousId ?? $dbArray['id']]);

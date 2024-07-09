@@ -38,7 +38,7 @@ class AdminArticleController implements ControllerInterface
         private TemplateHelper $templateHelper,
         private TwigService $twig,
     ) {
-        $this->model = (new ArticleModel())
+        $this->model = (new ArticleModel(chapterId: true))
             ->removeProperty('creation_date_time')
             ->removeProperty('last_update_date_time')
         ;

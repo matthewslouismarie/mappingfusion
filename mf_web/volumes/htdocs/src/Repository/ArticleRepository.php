@@ -32,10 +32,11 @@ class ArticleRepository implements IRepository
         );
     }
 
-    public function add(AppObject $appObject): void {
+    public function add(AppObject $appObject): string {
         $dbArray = $this->em->toDbValue($appObject);
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article SET article_id = :id, article_author_id = :author_id, article_category_id = :category_id, article_chapter_id = :chapter_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_sub_title = :sub_title, article_title = :title, article_cover_filename = :cover_filename, article_thumbnail_filename = :thumbnail_filename;');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_article SET article_id = :id, article_author_id = :author_id, article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_sub_title = :sub_title, article_title = :title, article_cover_filename = :cover_filename, article_thumbnail_filename = :thumbnail_filename;');
         $stmt->execute($dbArray);
+        return $this->conn->getPdo()->lastInsertId();
     }
 
     public function deleteArticle(string $id): void {
@@ -86,6 +87,7 @@ class ArticleRepository implements IRepository
         $articleModel = new ArticleModel(
             authorModel: new AuthorModel(),
             categoryModel: new CategoryModel(),
+            chapterId: true,
             reviewModel: $reviewModel,
         );
 
@@ -283,13 +285,64 @@ class ArticleRepository implements IRepository
 
     public function update(AppObject $appObject, ?string $previousId = null, bool $updateAuthor = false): void {
         $dbArray = $this->em->toDbValue($appObject);
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_id = :id, ' . ($updateAuthor ? 'article_author_id = :author_id, ' : '') . 'article_category_id = :category_id, article_chapter_id = :chapter_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_title = :title, article_sub_title = :sub_title, article_cover_filename = :cover_filename, article_last_update_date_time = NOW(), article_thumbnail_filename = :thumbnail_filename WHERE article_id = :old_id;');
+
+        $this->conn->getPdo()->beginTransaction();
+
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_article SET article_id = :id, ' . ($updateAuthor ? 'article_author_id = :author_id, ' : '') . 'article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_title = :title, article_sub_title = :sub_title, article_cover_filename = :cover_filename, article_last_update_date_time = NOW(), article_thumbnail_filename = :thumbnail_filename WHERE article_id = :old_id;');
         
         if (!$updateAuthor) {
             unset($dbArray['author_id']);
         }
+        $chapterId = $dbArray['chapter_id'];
+        unset($dbArray['chapter_id']);
         $dbArray['old_id'] = $previousId ?? $dbArray['id'];
 
         $stmt->execute($dbArray);
+
+        $previousChapterIndex = $this->conn->fetchNullableRow(
+            'SELECT * FROM e_chapter_index WHERE chapter_index_article_id = :previous_id;',
+            [
+                'previous_id' => $previousId,
+            ]
+        );
+        if (null === $chapterId && null !== $previousChapterIndex) {
+            $stmt = $this->conn->run(
+                'DELETE FROM e_chapter_index WHERE chapter_index_article_id = :article_id;',
+                [
+                    'article_id' => $previousId
+                ]
+            );
+        }
+        elseif (null !== $chapterId) {
+            $highestChapterOrder = $this->conn->fetchNullableRow(
+                'SELECT * FROM e_chapter_index WHERE chapter_index_chapter_id = :chapter_id;',
+                [
+                    'chapter_id' => $chapterId,
+                ]
+            );
+            if (null == $previousChapterIndex) {
+                $this->conn->run(
+                    'INSERT INTO e_chapter_index SET chapter_index_article_id = :id, chapter_index_chapter_id = :chapter_id, chapter_index_order = :order;',
+                    [
+                        'id' => $dbArray['id'],
+                        'chapter_id' => $chapterId,
+                        'order' => $highestChapterOrder ?? 0,
+                    ]
+                );
+            }
+            else {
+                $this->conn->run(
+                    'UPDATE e_chapter_index SET chapter_index_article_id = :id, chapter_index_chapter_id = :chapter_id, chapter_index_order = :order WHERE chapter_index_article_id = :previous_id;',
+                    [
+                        'id' => $dbArray['id'],
+                        'chapter_id' => $chapterId,
+                        'previous_id' => $previousId,
+                        'order' => $highestChapterOrder ?? 0,
+                    ]
+                );
+            }
+        }
+
+        $this->conn->getPdo()->commit();
     }
 }

@@ -18,9 +18,10 @@ class CategoryRepository implements IRepository
     ) {
     }
 
-    public function add(AppObject $category): void {
+    public function add(AppObject $category): string {
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_category VALUES (:id, :name, :parent_id);');
         $stmt->execute($this->em->toDbValue($category));
+        return $this->conn->getPdo()->lastInsertId();
     }
 
     public function delete(string $id): void {

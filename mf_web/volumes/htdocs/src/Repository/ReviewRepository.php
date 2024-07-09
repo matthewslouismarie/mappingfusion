@@ -57,8 +57,8 @@ class ReviewRepository implements IRepository
         return $reviews;
     }
 
-    public function update(AppObject $review): void {
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_review SET review_article_id = :article_id, review_playable_id = :playable_id, review_rating = :rating, review_body = :body, review_cons = :cons, review_pros = :pros WHERE review_id = :id;');
-        $stmt->execute($this->em->toDbValue($review));
+    public function update(AppObject $review, ?string $previousId = null): void {
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_review SET review_article_id = :article_id, review_playable_id = :playable_id, review_rating = :rating, review_body = :body, review_cons = :cons, review_pros = :pros WHERE review_id = :previous_id;');
+        $stmt->execute($this->em->toDbValue($review) + ['previous_id' => $previous_id ?? $review['id']]);
     }
 }

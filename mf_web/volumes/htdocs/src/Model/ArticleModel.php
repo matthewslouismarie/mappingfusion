@@ -15,12 +15,12 @@ class ArticleModel extends AbstractEntity
         ?AuthorModel $authorModel = null,
         ?CategoryModel $categoryModel = null,
         ?ReviewModel $reviewModel = null,
+        bool $chapterId = false,
     ) {
         $properties = [
             'id' => new SlugModel(),
             'author_id' => new SlugModel(),
             'category_id' => new SlugModel(),
-            'chapter_id' => new SlugModel(isNullable: true),
             'body' => new StringModel([]),
             'is_featured' => new BoolModel(),
             'is_published' => new BoolModel(),
@@ -31,6 +31,9 @@ class ArticleModel extends AbstractEntity
             'last_update_date_time' => new DateTimeModel(),
             'thumbnail_filename' => new StringModel([new class implements IUploadedImageConstraint {}], true),
         ];
+        if ($chapterId) {
+            $properties['chapter_id'] = new SlugModel(isNullable: true);
+        }
         if (null !== $reviewModel) {
             $properties['review'] = $reviewModel;
         }

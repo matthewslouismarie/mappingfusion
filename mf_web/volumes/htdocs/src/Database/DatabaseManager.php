@@ -10,6 +10,8 @@ use MF\Enum\PlayableType;
 use MF\Model\Url;
 use PDO;
 use PDOException;
+use PDOStatement;
+use UnexpectedValueException;
 
 class DatabaseManager
 {
@@ -52,7 +54,7 @@ class DatabaseManager
     private function createDatabase(): void {
         $this->pdo->exec("CREATE DATABASE $this->dbName");
         
-        $this->pdo->exec('USE ' . $this->dbName);
+        $this->pdo->exec('USE ' . $this->dbName . ';');
 
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_author.sql'), StringConstraint::MAX_LENGTH));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_member.sql'), StringConstraint::MAX_LENGTH));
@@ -63,6 +65,7 @@ class DatabaseManager
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_book.sql'), StringConstraint::MAX_LENGTH, StringConstraint::REGEX_DASHES));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_chapter.sql'), StringConstraint::MAX_LENGTH, StringConstraint::REGEX_DASHES));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_article.sql'), StringConstraint::MAX_LENGTH, StringConstraint::REGEX_DASHES, IUploadedImageConstraint::FILENAME_REGEX));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_chapter_index.sql'), StringConstraint::MAX_LENGTH, StringConstraint::REGEX_DASHES, IUploadedImageConstraint::FILENAME_REGEX));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_playable_link.sql'), StringConstraint::MAX_LENGTH, Url::MAX_LENGTH, LinkType::Download->value, LinkType::HomePage->value, LinkType::Other->value));
 
         $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_book.sql'));
@@ -71,5 +74,33 @@ class DatabaseManager
         $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_category.sql'));
         $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_playable.sql'));
         $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_person.sql'));
+    }
+
+    public function prepare(string $query): PDOStatement {
+        $stmt = $this->pdo->prepare($query);
+        if (false === $stmt) {
+            throw new UnexpectedValueException('PDO::prepare returned false!');
+        }
+        return $stmt;
+    }
+
+    public function fetchRows(string $query, array $arguments, int $maxNumberOfRows): array {
+        $stmt = $this->prepare($query);
+        $stmt->execute($arguments);
+        $dbRows = $stmt->fetchAll();
+        if (count($dbRows) > $maxNumberOfRows) {
+            throw new UnexpectedValueException('Fetched rows exceed maximum number.');
+        }
+        return $dbRows;
+    }
+
+    public function fetchNullableRow(string $query, array $arguments): ?array {
+        $rows = $this->fetchRows($query, $arguments, 1);
+        return $rows[0] ?? null;
+    }
+
+    public function run(string $query, array $arguments): void {
+        $stmt = $this->prepare($query);
+        $stmt->execute($arguments);
     }
 }

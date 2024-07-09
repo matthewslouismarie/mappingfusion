@@ -32,10 +32,11 @@ class BookRepository implements IRepository
         );
     }
 
-    public function add(AppObject $appObject): void {
+    public function add(AppObject $appObject): string {
         $dbArray = $this->em->toDbValue($appObject);
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_book SET book_id = :id, book_title = :title;');
         $stmt->execute($dbArray);
+        return $this->conn->getPdo()->lastInsertId();
     }
 
     public function delete(string $id): void {

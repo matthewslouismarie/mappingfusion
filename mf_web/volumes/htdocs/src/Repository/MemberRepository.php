@@ -18,9 +18,10 @@ class MemberRepository implements IRepository
     ) {
     }
 
-    public function add(AppObject $member): void {
+    public function add(AppObject $member): string {
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_member VALUES (:id, :password, :author_id )');
         $stmt->execute($this->em->toDbValue($member));
+        return $this->conn->getPdo()->lastInsertId();
     }
 
     public function find(string $username): ?AppObject {
@@ -38,14 +39,13 @@ class MemberRepository implements IRepository
         }
     }
 
-    public function update(array $member, string $oldId, bool $updatePassword = true): void {
+    public function update(AppObject $entity, string $oldId, bool $updatePassword = true): void {
         if ($updatePassword) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_member SET member_id = ?, member_password = ?, member_author_id = ? WHERE member_id = ?;');
-            $stmt->execute([$member['id'], $member['password'], $member['author_id'], $oldId]);
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_member SET member_id = :id, member_password = :password, member_author_id = :author_id WHERE member_id = :old_id;');
         } else {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_member SET member_id = ?, member_author_id = ? WHERE member_id = ?;');
-            $stmt->execute([$member['id'], $member['author_id'], $oldId]);
+            $stmt = $this->conn->getPdo()->prepare('UPDATE e_member SET member_id = :id, member_author_id = :author_id WHERE member_id = :old_id;');
         }
+        $stmt->execute($this->em->toDbValue($entity) + [$oldId]);
     }
 
     public function updateId(string $oldId, string $newId): void {

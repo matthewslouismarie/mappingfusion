@@ -21,11 +21,12 @@ class PlayableRepository implements IRepository
     ) {
     }
 
-    public function add(AppObject $playable): void {
+    public function add(AppObject $playable): string {
         $dbArray = $this->em->toDbValue($playable);
         $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:id, :name, :release_date_time, :type, :game_id);');
         $stmt->execute($dbArray);
         $playable->set('id', $this->conn->getPdo()->lastInsertId());
+        return $this->conn->getPdo()->lastInsertId();
     }
 
     public function addOrUpdate(AppObject $playable, ?string $previousId = null, bool $add = false): void {
@@ -130,5 +131,10 @@ class PlayableRepository implements IRepository
     public function findOne(string $id): AppObject {
 
         return $this->find($id) ?? throw new EntityNotFoundException();
+    }
+
+    public function update(AppObject $entity, string $previousId): void {
+        // $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET ')
+        $this->addOrUpdate($entity, $previousId);
     }
 }
