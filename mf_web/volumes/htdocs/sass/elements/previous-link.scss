@@ -1,0 +1,11 @@
+.previous-link {
+    > .link {
+        display: inline-flex;
+        gap: $gap-xxs2;
+        align-items: center;
+
+        &:hover {
+            border-bottom: $border-s solid $color-blue-0;
+        }
+    }
+}

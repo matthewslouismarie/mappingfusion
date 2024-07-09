@@ -1,6 +1,8 @@
 {% macro previous(app, page) %}
-<a class="" href="{{ page.parent.url }}">
-    <img class="image" {{ app.imgAttr('Précédent', 'arrow-left.svg', false, 16, 16)|raw }}>
-    <span class="text">{{ page.parent.name }}</span>
-</a>
+<div class="previous-link">
+    <a class="link" href="{{ page.parent.url }}">
+        <img class="image" {{ app.imgAttr('Précédent', 'arrow-left.svg', false, 16, 16)|raw }}>
+        <span class="text">{{ page.parent.name }}</span>
+    </a>
+</div>
 {% endmacro %}
