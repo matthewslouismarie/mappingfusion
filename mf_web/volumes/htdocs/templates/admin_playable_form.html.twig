@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% from 'macros/csrf_input.html.twig' import csrf %}
-{% from 'macros/error_list.html.twig' import errorList %}
+{% from 'macros/macros.html.twig' import csrf, errorList %}
 
 {% block title %}{% if requestedId %}Édition de {{ formData.name }}{% else %}Nouveau jeu{% endif %}{% endblock %}
 
