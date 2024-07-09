@@ -14,6 +14,15 @@ class Router
     ) {
     }
 
+    public function getRouteId(string $controllerfqcn): ?string {
+        foreach ($this->config->getRoutes() as $routeId => $fqcn) {
+            if ($controllerfqcn === $fqcn) {
+                return $routeId;
+            }
+        }
+        return null;
+    }
+
     public function generateUrl(string $routeId = '', array $parameters = [], string $paramStart = '?', string $hash = ''): string {
         $url = "/$routeId";
         if (0 !== count($parameters)) {

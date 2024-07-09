@@ -17,6 +17,7 @@ class AdminBookController implements ControllerInterface
     public function __construct(
         private BookRepository $bookRepository,
         private FormController $formController,
+        private PageFactory $pageFactory,
     ) {
     }
 
@@ -51,10 +52,26 @@ class AdminBookController implements ControllerInterface
             'Le tutoriel a été créé avec succès.',
             'Le tutoriel a été mis à jour avec succès.',
             true,
+            page: $this->getPage($routeParams),
         );
     }
 
     public function getAccessControl(): Clearance {
         return Clearance::ADMINS;
+    }
+
+    public function getPage(array $routeParams): Page {
+        $pageName = 'Nouveau tutoriel';
+        if (isset($routeParams[1])) {
+            $book = $this->bookRepository->find($routeParams[1]);
+            if (null !== $book) {
+                $pageName = "Gestion de {$book->title}";
+            }
+        }
+        return $this->pageFactory->createPage(
+            $pageName,
+            self::class,
+            parentFqcn: AdminBookListController::class,
+        );
     }
 }

@@ -2,12 +2,16 @@
 
 {% from 'macros/csrf_input.html.twig' import csrf %}
 {% from 'macros/error_list.html.twig' import errorList %}
+{% from 'macros/macros.html.twig' import previous %}
 
 {% block title %}{{ pageTitle }}{% endblock %}
 
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
+
+{{ previous(app, page) }}
+
 <h1 class="_h1">{{ pageTitle }}</h1>
 
 <form autocomplete="on" class="form-row-container" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>

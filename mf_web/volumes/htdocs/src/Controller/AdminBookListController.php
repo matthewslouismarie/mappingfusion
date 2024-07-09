@@ -12,10 +12,18 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminBookListController implements ControllerInterface
 {
+    private Page $page;
+
     public function __construct(
         private BookRepository $bookRepository,
+        private PageFactory $pageFactory,
         private TwigService $twig,
     ) {
+        $this->page = $pageFactory->createPage(
+            'Liste des tutoriels',
+            self::class,
+            parentFqcn: AdminArticleListController::class,
+        );
     }
 
     public function generateResponse(
@@ -26,11 +34,16 @@ class AdminBookListController implements ControllerInterface
         return new Response(
             body: $this->twig->render('admin_book_list.html.twig', [
                 'books' => $books,
+                'page' => $this->page,
             ]),
         );
     }
 
     public function getAccessControl(): Clearance {
         return Clearance::ADMINS;
+    }
+
+    public function getPage(): Page {
+        return $this->page;
     }
 }

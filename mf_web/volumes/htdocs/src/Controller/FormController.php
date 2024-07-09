@@ -54,6 +54,7 @@ class FormController
      * if the entity was successfully updated in the database.
      * @param bool $alwaysFetchRequestedEntity Whether to fetch the requested
      * entity, even if the request is a POST request.
+     * @todo Make $page required.
      */
     public function generateResponse(
         ServerRequestInterface $request,
@@ -68,6 +69,7 @@ class FormController
         string $successfulInsertMessage,
         string $successfulUpdateMessage,
         bool $alwaysFetchEntity = false,
+        ?Page $page = null,
     ): ResponseInterface {
         // @todo Use model to check.
         if (1 !== count($routeParams) && 2 !== count($routeParams)) {
@@ -130,6 +132,7 @@ class FormController
                 'formErrors' => $formErrors,
                 'pageTitle' => $htmlPageTitle($formData),
                 'entity' => $requestedEntity,
+                'page' => $page,
             ]),
         );
     }
