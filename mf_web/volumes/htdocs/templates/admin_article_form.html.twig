@@ -2,6 +2,7 @@
 
 {% from 'macros/csrf_input.html.twig' import csrf %}
 {% from 'macros/error_list.html.twig' import errorList %}
+{% from 'macros/macros.html.twig' import previous %}
 
 {% block title %}{{ formData ? 'Édition d’article' : 'Nouvel article' }}{% endblock %}
 
@@ -12,6 +13,9 @@
 {% block index %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block bodyContent %}
+
+{{ previous(app, page) }}
+
 <h1 class="_h1">{{ formData ? 'Édition d’article' : 'Nouvel article' }}</h1>
 
 {% if requestedId %}

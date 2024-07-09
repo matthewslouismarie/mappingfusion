@@ -25,6 +25,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class AdminArticleController implements ControllerInterface
 {
     private AbstractEntity $model;
+    private ?AppObject $requestedEntity;
 
     public function __construct(
         private ArticleRepository $repo,
@@ -33,6 +34,7 @@ class AdminArticleController implements ControllerInterface
         private DbEntityManager $em,
         private FormFactory $formFactory,
         private ModelValidator $modelValidator,
+        private PageFactory $pageFactory,
         private Router $router,
         private SessionManager $session,
         private TemplateHelper $templateHelper,
@@ -42,6 +44,7 @@ class AdminArticleController implements ControllerInterface
             ->removeProperty('creation_date_time')
             ->removeProperty('last_update_date_time')
         ;
+        $this->requestedEntity = null;
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
@@ -87,7 +90,8 @@ class AdminArticleController implements ControllerInterface
                 return $this->router->generateRedirect('manage-article', [$article->id]);
             }
         } elseif (null !== $requestedId) {
-            $formData = $this->repo->find($requestedId, onlyPublished: false)?->toArray();
+            $this->requestedEntity = $this->repo->find($requestedId, onlyPublished: false);
+            $formData = $this->requestedEntity?->toArray();
             $lastUpdateDateTime = $formData['last_update_date_time'];
             $lastUpdateDateTimeUtc = $lastUpdateDateTime->getTimestamp() * 1000;
         }
@@ -99,10 +103,25 @@ class AdminArticleController implements ControllerInterface
             'formErrors' => $formErrors,
             'lastUpdateDateTimeUtc' => $lastUpdateDateTimeUtc,
             'requestedId' => $requestedId,
+            'page' => $this->getPage(array_slice($routeParams, 1)),
         ]));
     }
 
     public function getAccessControl(): Clearance {
         return Clearance::ADMINS;
+    }
+
+    public function getPage(array $urlParams): Page {
+        if (null === $this->requestedEntity && isset($urlParams[0])) {
+            $this->requestedEntity = $this->repo->find($urlParams[0], onlyPublished: false);
+        }
+        $pageName = (null == $this->requestedEntity) ? 'Nouvel article' : "Édition de {$this->requestedEntity->title}";
+
+        return $this->pageFactory->createPage(
+            $pageName,
+            self::class,
+            $urlParams,
+            AdminArticleListController::class,
+        );
     }
 }

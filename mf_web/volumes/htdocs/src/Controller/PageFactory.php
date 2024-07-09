@@ -3,7 +3,6 @@
 namespace MF\Controller;
 
 use MF\Router;
-use PSpell\Config;
 use Psr\Container\ContainerInterface;
 
 class PageFactory
@@ -19,9 +18,10 @@ class PageFactory
         string $controllerFqcn,
         array $controllerParams = [],
         ?string $parentFqcn = null,
+        ?array $parentControllerParams = null,
     ) {
         return new Page(
-            null === $parentFqcn ? null : $this->container->get($parentFqcn)->getPage(),
+            null === $parentFqcn ? null : $this->container->get($parentFqcn)->getPage($parentControllerParams),
             $name,
             $this->router->generateUrl($this->router->getRouteId($controllerFqcn), $controllerParams),
         );
