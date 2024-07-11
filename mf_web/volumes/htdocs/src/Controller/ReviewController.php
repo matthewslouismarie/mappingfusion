@@ -6,7 +6,9 @@ use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
+use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Type\ModelValidator;
 use MF\Model\ReviewModel;
@@ -24,6 +26,7 @@ class ReviewController implements ControllerInterface
         private ArticleRepository $articleRepo,
         private FormFactory $formFactory,
         private ModelValidator $modelValidator,
+        private PageFactory $pageFactory,
         private PlayableRepository $playableRepo,
         private ReviewModel $model,
         private ReviewRepository $repo,
@@ -60,15 +63,38 @@ class ReviewController implements ControllerInterface
             }
         }
 
-        return new Response(body: $this->twig->render('admin_review_form.html.twig', [
-            'formData' => $formData,
-            'formErrors' => $formErrors,
-            'playables' => $this->playableRepo->findAll(),
-            'availableArticles' => $this->articleRepo->findAvailableArticles(),
-        ]));
+        return $this->twig->respond(
+            'admin_review_form.html.twig',
+            $this->getPage(is_null($requestedId) ? null : new AppObject($formData)),
+            [
+                'formData' => $formData,
+                'formErrors' => $formErrors,
+                'playables' => $this->playableRepo->findAll(),
+                'availableArticles' => $this->articleRepo->findAvailableArticles(),
+            ],
+        );
     }
 
     public function getAccessControl(): Clearance {
         return Clearance::ADMINS;
+    }
+
+    public function getPage(?AppObject $review): Page
+    {
+        if (null === $review) {
+            return $this->pageFactory->create(
+                name: 'Nouveau test',
+                controllerFqcn: self::class,
+                parentFqcn: HomeController::class,
+            );
+        }
+        else {
+            return $this->pageFactory->create(
+                name: "Test de {$review->playable_id}",
+                controllerFqcn: self::class,
+                controllerParams: [$review->id],
+                parentFqcn: HomeController::class,
+            );
+        }
     }
 }

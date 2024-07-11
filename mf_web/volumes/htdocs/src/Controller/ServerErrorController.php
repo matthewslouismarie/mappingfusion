@@ -6,14 +6,17 @@ use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Configuration;
 use LM\WebFramework\Controller\ControllerInterface;
-use MF\TwigService;
+use LM\WebFramework\DataStructures\Page;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class ServerErrorController implements ControllerInterface
 {
+    private ?Page $page;
+
     public function __construct(
         private Configuration $configuration,
+        private PageFactory $pageFactory,
     ) {
     }
 
@@ -29,5 +32,15 @@ class ServerErrorController implements ControllerInterface
     public function getAccessControl(): Clearance
     {
         return Clearance::ALL;
+    }
+
+    public function getPage(array $pageParams): Page {
+        if (null === $this->page) {
+            $this->page = $this->pageFactory->createPage(
+                'Erreur serveur',
+                self::class,
+            );
+        }
+        return $this->page;
     }
 }

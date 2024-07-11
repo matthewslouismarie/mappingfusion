@@ -32,7 +32,6 @@ class CategoryRepository implements IRepository
     public function find(string $id): ?AppObject {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_category WHERE category_id = ? LIMIT 1;');
         $stmt->execute([$id]);
-
         $data = $stmt->fetchAll();
         if (0 === count($data)) {
             return null;

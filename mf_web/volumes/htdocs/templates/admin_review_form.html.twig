@@ -2,10 +2,8 @@
 
 {% from 'macros/macros.html.twig' import csrf, errorList %}
 
-{% block title %}Nouveau test{% endblock %}
-
 {% block bodyContent %}
-<h1 class="_h1">Édition de test</h1>
+<h1 class="_h1">{{ page.name }}</h1>
 <form autocomplete="on" class="form-row-container _flex -gap" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="form-row -titled">
         <label class="label" for="playable-id">ID du jeu ou mod testé</label>

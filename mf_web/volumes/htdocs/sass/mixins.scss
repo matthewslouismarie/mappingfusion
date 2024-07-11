@@ -37,6 +37,11 @@
     padding-bottom: $gap-m;
 }
 
+@mixin vertical-section-thin {
+    padding-top: $gap-xxs;
+    padding-bottom: $gap-xxs;
+}
+
 @mixin vertical-container {
     display: flex;
     flex-direction: column;

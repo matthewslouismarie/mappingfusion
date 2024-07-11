@@ -2,9 +2,9 @@
 
 namespace MF\Controller;
 
-use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Session\SessionManager;
 use LM\WebFramework\Type\ModelValidator;
@@ -20,11 +20,16 @@ class LoginController implements ControllerInterface
         private FormFactory $formFactory,
         private MemberRepository $repo,
         private ModelValidator $validator,
+        private PageFactory $pageFactory,
         private SessionManager $session,
         private TwigService $twig,
     ) {
     }
 
+    /**
+     * @todo Are there HTTP response codes or attributes for login required / successful?
+     * @todo Redirect to success / error page instead?
+     */
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $model = (new MemberModel())->removeProperty('author_id');
         $form = $this->formFactory->createTransformer($model);
@@ -40,20 +45,36 @@ class LoginController implements ControllerInterface
                     $formErrors[] = 'Identifiants invalides.';
                 } else {
                     $this->session->setCurrentMemberUsername($member->id);
-                    return new Response(body: $this->twig->render('success.html.twig', [
-                        'message' => 'Connexion réussie.',
-                        'title' => 'Connecté',
-                    ]));
+                    return $this->twig->respond(
+                        'success.html.twig',
+                        $this->getPage(),
+                        [
+                            'message' => 'Connexion réussie.',
+                        ],
+                    );
                 }
             }
         }
-        return new Response(body: $this->twig->render('login.html.twig', [
-            'formErrors' => $formErrors,
-            'formData' => $formData,
-        ]));
+        return $this->twig->respond(
+            'login.html.twig',
+            $this->getPage(),
+            [
+                'formErrors' => $formErrors,
+                'formData' => $formData,
+            ],
+        );
     }
 
     public function getAccessControl(): Clearance {
         return Clearance::VISITORS;
+    }
+
+    public function getPage(): Page
+    {
+        return $this->pageFactory->createPage(
+            name: 'Connexion',
+            controllerFqcn: self::class,
+            parentFqcn: HomeController::class,
+        );
     }
 }

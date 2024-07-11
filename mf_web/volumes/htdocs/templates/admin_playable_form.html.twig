@@ -2,10 +2,8 @@
 
 {% from 'macros/macros.html.twig' import csrf, errorList %}
 
-{% block title %}{% if requestedId %}Édition de {{ formData.name }}{% else %}Nouveau jeu{% endif %}{% endblock %}
-
 {% block bodyContent %}
-<h1 class="_h1">{% if requestedId %}Édition de {{ formData.name }}{% else %}Nouveau jeu{% endif %}</h1>
+<h1 class="_h1">{{ page.name }}</h1>
 
 <form class="form-row-container" autocomplete="on" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="_flex -col -gaps">

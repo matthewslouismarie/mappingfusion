@@ -2,32 +2,38 @@
 
 namespace MF\Controller;
 
-use GuzzleHttp\Psr7\Response;
-use LM\WebFramework\AccessControl\Clearance;
-use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\ResponseGenerator;
+use LM\WebFramework\Controller\SinglePageOwner;
+use LM\WebFramework\DataStructures\Page;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ErrorAlreadyLoggedInController implements ControllerInterface
+class ErrorAlreadyLoggedInController implements ResponseGenerator, SinglePageOwner
 {
     public function __construct(
         private TwigService $twig,
+        private PageFactory $pageFactory,
     ) {
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        return new Response(
-            status: 404,
-            body: $this->twig->render('errors/error_page.html.twig', [
+        return $this->twig->respond(
+            'errors/error_page.html.twig',
+            $this->getPage(),
+            [
                 'message' => 'Tu es déjà connecté.',
-                'title' => 'Déjà connecté',
-            ]),
+            ],
         );
     }
 
-    public function getAccessControl(): Clearance
+    function getPage(): Page
     {
-        return Clearance::ALL;
+        return $this->pageFactory->create(
+            'Tu es déjà connecté',
+            self::class,
+            isIndexed: false,
+            partOfHierarchy: false,
+        );
     }
 }

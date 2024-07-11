@@ -7,7 +7,7 @@
             @include vertical-container;
             @include vertical-section;
 
-            &.-withintro {
+            &:first-child {
                 padding-top: 0;
             }
 
@@ -23,10 +23,6 @@
                 @include vertical-section;
                 background-color: $color-blue-4;
             }
-        }
-
-        > .nav {
-            order: 1;
         }
     }
 }

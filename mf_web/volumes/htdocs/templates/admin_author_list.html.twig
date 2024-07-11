@@ -1,11 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gérer les auteurs{% endblock %}
-
-{% block index %}<meta name="robots" content="noindex">{% endblock %}
-
 {% block bodyContent %}
-<h1 class="_h1">Gestion des auteurs</h1>
+<h1 class="_h1">{{ page.name }}</h1>
 
 <a class="std-button _std" href="{{ app.router.generateUrl('admin-manage-author') }}">Créer un nouvel auteur</a>
 

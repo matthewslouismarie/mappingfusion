@@ -7,6 +7,7 @@ use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Type\ModelValidator;
 use MF\Enum\LinkType;
@@ -16,6 +17,7 @@ use MF\Model\ContributionModel;
 use MF\Model\PlayableLinkModel;
 use MF\Model\PlayableModel;
 use LM\WebFramework\DataStructures\Slug;
+use LM\WebFramework\Session\SessionManager;
 use MF\Repository\AuthorRepository;
 use MF\Repository\PlayableLinkRepository;
 use MF\Repository\PlayableRepository;
@@ -30,9 +32,11 @@ class AdminPlayableController implements ControllerInterface
         private AuthorRepository $authorRepo,
         private FormFactory $formFactory,
         private ModelValidator $validator,
+        private PageFactory $pageFactory,
         private PlayableLinkRepository $linkRepo,
         private PlayableRepository $repo,
         private Router $router,
+        private SessionManager $sessionManager,
         private TwigService $twig,
     ) {
     }
@@ -44,6 +48,7 @@ class AdminPlayableController implements ControllerInterface
         );
 
         $requestedId = $routeParams[1] ?? null;
+        $requestedEntity = null;
 
         $form = $this->formFactory->createForm($model, config: [
             'id' => [
@@ -79,22 +84,27 @@ class AdminPlayableController implements ControllerInterface
             if (0 === count($formErrors)) {
                 $playable = new AppObject($formData);
                 if (null === $requestedId) {
+                    $this->sessionManager->addMessage('Le jeu a bien été ajouté.');
                     $this->repo->addOrUpdate($playable, add: true);
                 } else {
+                    $this->sessionManager->addMessage('Le jeu a bien été mis à jour.');
                     $this->repo->addOrUpdate($playable, $requestedId);
                 }
                 return $this->router->generateRedirect('admin-manage-playable', [$playable->id]);
             }
         } elseif (isset($routeParams[1])) {
             try {
-                $formData = $this->repo->findOne($routeParams[1])->toArray();
-            } catch (EntityNotFoundException $e) {
+                $requestedEntity = $this->repo->findOne($routeParams[1]);
+                $formData = $requestedEntity->toArray();
+            } catch (EntityNotFoundException) {
                 throw new RequestedResourceNotFound();
             }
         }
 
-        return new Response(
-            body: $this->twig->render('admin_playable_form.html.twig', [
+        return $this->twig->respond(
+            'admin_playable_form.html.twig',
+            $this->getPage($requestedEntity),
+            [
                 'authors' => $this->authorRepo->findAll(),
                 'formData' => $formData,
                 'formErrors' => $formErrors,
@@ -102,11 +112,21 @@ class AdminPlayableController implements ControllerInterface
                 'playables' => $this->repo->findAll(),
                 'playableTypes' => PlayableType::cases(),
                 'requestedId' => $requestedId,
-            ]),
+            ],
         );
     }
 
     public function getAccessControl(): Clearance {
         return Clearance::ADMINS;
+    }
+
+    public function getPage(?AppObject $playable): Page {
+        return $this->pageFactory->create(
+            is_null($playable) ? 'Nouveau jeu' : $playable->name,
+            self::class,
+            is_null($playable) ? [] : [$playable->id],
+            parentFqcn: AdminPlayableListController::class,
+            isIndexed: false,
+        );
     }
 }

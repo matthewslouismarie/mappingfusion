@@ -1,5 +1,10 @@
-.category-list {
+.page-breadcrumb {
     background-color: $color-blue-4;
+    @include vertical-section;
+
+    &.-thin {
+        @include vertical-section-thin;
+    }
 
     > .list {
         display: flex;

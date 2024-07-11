@@ -2,35 +2,33 @@
 
 namespace MF\Controller;
 
-use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\SinglePageOwner;
+use LM\WebFramework\DataStructures\Page;
 use MF\Repository\ArticleRepository;
-use MF\Router;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AdminArticleListController implements ControllerInterface
+class AdminArticleListController implements ControllerInterface, SinglePageOwner
 {
-    private Page $page;
-
     public function __construct(
         private ArticleRepository $repo,
         private PageFactory $pageFactory,
         private TwigService $twig,
 
     ) {
-        $this->page = $this->pageFactory->createPage(
-            'Liste des articles',
-            self::class,
-        );
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
-        return new Response(body: $this->twig->render('admin_article_list.html.twig', [
-            'articles' => $this->repo->findAll(false),
-        ]));
+        return $this->twig->respond(
+            'admin_article_list.html.twig',
+            $this->getPage(),
+            [
+                'articles' => $this->repo->findAll(false),
+            ],
+        );
     }
 
     public function getAccessControl(): Clearance {
@@ -38,6 +36,11 @@ class AdminArticleListController implements ControllerInterface
     }
 
     public function getPage(): Page {
-        return $this->page;
+        return $this->pageFactory->createPage(
+            name: 'Gestion des articles',
+            controllerFqcn: self::class,
+            parentFqcn: HomeController::class,
+            isIndexed: false,
+        );
     }
 }

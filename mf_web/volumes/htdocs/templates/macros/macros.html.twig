@@ -26,6 +26,24 @@
 </div>
 {% endmacro %}
 
+{% macro breadcrumb(app, page, thin = false, pageSection = true) %}
+<nav class="page-breadcrumb{% if thin %} -thin{% endif %}">
+    <ol class="list{% if pageSection %} _horizontal-container{% endif %}" id="web-page-breadcrumb" itemprop="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+        {% for p in app.pageAncestors(page) %}
+        <li class="item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <meta itemprop="position" content="{{ loop.index0 }}">
+            
+            <{% if loop.last %}span class="text"{% else %}a class="link" href="{{ p.url }}"{% endif %} itemprop="item" itemscope itemid="{{ p.url }}" itemtype="https://schema.org/WebPage">
+                <meta itemprop="url" content="{{ p.url }}">
+                <span itemprop="name">{{ p.name }}</span>
+            </{% if loop.last %}span{% else %}a{% endif %}>
+        </li>
+        {% endfor %}
+        <meta itemprop="itemListOrder" content="Ascending">
+    </ol>
+</nav>
+{% endmacro %}
+
 {% macro csrf(app) %}
 <input name="_csrf" type="hidden" value="{{ app.session.csrf }}">
 {% endmacro %}

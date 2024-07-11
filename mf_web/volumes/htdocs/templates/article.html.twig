@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% from 'macros/macros.html.twig' import authorLink %}
+{% from 'macros/macros.html.twig' import authorLink, breadcrumb %}
 {% from 'sections/article_nav.html.twig' import articleNav %}
 {% from 'sections/review.html.twig' import review %}
 
@@ -22,14 +22,15 @@
 {% endif %}
 {% endblock %}
 
-{% block title %}{{ article.title }}{% endblock %}
-
 {% block description %}{{ app.shorten(app.mk.getText(article.body), 128, '…') }}{% endblock %}
+
+{% block breadcrumb %}{% endblock breadcrumb %}
 
 {% block body %}
 {# @todo https://schema.org/HowTo #}
 {# https://schema.org/Review #}
 {# https://schema.org/VideoGame #}
+
 <div class="page-article" id="article">
     <div class="std-article">
 
@@ -44,14 +45,13 @@
         </div>
 
         <div class="columns">
-            <div class="nav">
-                {{ articleNav(app, article, relatedArticles) }}
-            </div>
 
             <div class="content{% if article.review %} -withintro{% endif %}">
-                {% if article.review %}
                 <div class="section -intro">
                     <div class="sectioncontent">
+                        {{ breadcrumb(app, page, true, false) }}
+
+                        {% if article.review %}
                         <dl class="std-metadata" id="playable-object">
                             <meta itemprop="identifier" content="{{ article.review.playable.id }}">
                             <div class="item">
@@ -96,9 +96,9 @@
                         <div class="std-markdown-container">{{ app.mk.format(article.review.body)|raw }}</div>
 
                         {{ review(app, article.review.playable, article.review) }}
+                        {% endif %}
                     </div>
                 </div>
-                {% endif %}
 
                 <div
                     class="section"
@@ -184,6 +184,10 @@
                         </dl>
                     </div>
                 </div>
+            </div>
+            
+            <div class="nav">
+                {{ articleNav(app, article, relatedArticles) }}
             </div>
         </div>
     </div>

@@ -1,11 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des catégories{% endblock %}
-
-{% block index %}<meta name="robots" content="noindex">{% endblock %}
-
 {% block bodyContent %}
-<h1 class="_h1">Liste des catégories</h1>
+<h1 class="_h1">{{ page.name }}</h1>
 
 <a class="std-button _std" href="{{ app.router.generateUrl('admin-manage-category') }}">Créer une nouvelle catégorie</a>
 

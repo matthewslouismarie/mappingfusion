@@ -6,7 +6,9 @@ use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
+use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Session\SessionManager;
 use LM\WebFramework\Type\ModelValidator;
@@ -25,6 +27,7 @@ class AdminCategoryController implements ControllerInterface
         private CategoryRepository $repo,
         private FormFactory $formFactory,
         private ModelValidator $modelValidator,
+        private PageFactory $pageFactory,
         private Router $router,
         private SessionManager $sessionManager,
         private TwigService $twig,
@@ -33,6 +36,7 @@ class AdminCategoryController implements ControllerInterface
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
         $requestedId = $routeParams[1] ?? null;
+
         $formData = null;
         $formErrors = null;
 
@@ -65,19 +69,30 @@ class AdminCategoryController implements ControllerInterface
             }
         }
 
-        return new Response(body: $this->twig->render('admin_category_form.html.twig', [
-            'categories' => $this->repo->findAll(),
-            'formData' => $formData,
-            'formErrors' => $formErrors,
-            'requestedId' => $requestedId,
-        ]));
-    }
-
-    private function getExistingCategory(array $routeParams): ?AppObject {
-        return isset($routeParams[1]) ? $this->repo->findOne($routeParams[1]) : null;
+        return $this->twig->respond(
+            'admin_category_form.html.twig',
+            $this->getPage(is_null($requestedId) ? null : new AppObject($formData)),
+            [
+                'categories' => $this->repo->findAll(),
+                'formData' => $formData,
+                'formErrors' => $formErrors,
+                'requestedId' => $requestedId,
+            ],
+        );
     }
 
     public function getAccessControl(): Clearance {
         return Clearance::ADMINS;
+    }
+
+    public function getPage(?AppObject $category): Page
+    {
+        return $this->pageFactory->create(
+            is_null($category) ? 'Nouvelle catégorie' : $category->name,
+            self::class,
+            is_null($category) ? [] : [$category->id],
+            AdminCategoryListController::class,
+            isIndexed: false,
+        );
     }
 }

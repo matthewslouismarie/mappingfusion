@@ -5,7 +5,10 @@ namespace MF\Controller;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
+use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\DataStructures\Slug;
+use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Model\AbstractEntity;
 use LM\WebFramework\Model\SlugModel;
 use LM\WebFramework\Model\StringModel;
@@ -17,10 +20,14 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminChapterController implements ControllerInterface
 {
+    private ?AppObject $requestedEntity;
+
     public function __construct(
         private ChapterRepository $chapterRepository,
         private FormController $formController,
+        private PageFactory $pageFactory,
     ) {
+        $this->requestedEntity = null;
     }
 
     public function generateResponse(
@@ -64,5 +71,17 @@ class AdminChapterController implements ControllerInterface
 
     public function getAccessControl(): Clearance {
         return Clearance::ADMINS;
+    }
+
+    public function getPage(array $pageParams): Page
+    {
+        return $this->pageFactory->createPage(
+            $pageParams['chapter_title'] ?? 'Nouveau chapitre',
+            self::class,
+            [$pageParams['chapter_id']] ?? [],
+            AdminBookController::class,
+            [$pageParams['book_id']],
+            isIndexed: false,
+        );
     }
 }

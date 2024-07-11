@@ -5,6 +5,8 @@ namespace MF\Controller;
 use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Model\StringModel;
 use LM\WebFramework\Session\SessionManager;
@@ -23,6 +25,7 @@ class AccountController implements ControllerInterface
         private FormFactory $formFactory,
         private MemberRepository $repo,
         private ModelValidator $modelValidator,
+        private PageFactory $pageFactory,
         private SessionManager $session,
         private TwigService $twig,
     ) {
@@ -44,27 +47,41 @@ class AccountController implements ControllerInterface
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
             $formErrors = $this->modelValidator->validate($formData, $model);
             if (0 === count($formErrors)) {
+                $appObject = new AppObject($formData);
                 if (null !== $formData['password']) {
                     $formData['password'] =  password_hash($formData['password'], PASSWORD_DEFAULT);
-                    $this->repo->update($formData, $this->session->getCurrentMemberUsername());
+                    $this->repo->update($appObject, $this->session->getCurrentMemberUsername());
                 } else {
-                    $this->repo->update($formData, $this->session->getCurrentMemberUsername(), false);
+                    $this->repo->update($appObject, $this->session->getCurrentMemberUsername(), false);
                 }
-                $this->session->setCurrentMemberUsername($formData['id']);
+                $this->session->setCurrentMemberUsername($appObject['id']);
                 $this->session->addMessage('Votre compte a été mis à jour.');
             }
         } else {
             $formData = $this->repo->find($this->session->getCurrentMemberUsername());
         }
 
-        return new Response(body: $this->twig->render('account.html.twig', [
-            'formData' => $formData,
-            'formErrors' => $formErrors,
-            'authors' => $this->authorRepository->findAll(),
-        ]));
+        return $this->twig->respond(
+            'account.html.twig',
+            $this->getPage(),
+            [
+                'formData' => $formData,
+                'formErrors' => $formErrors,
+                'authors' => $this->authorRepository->findAll(),
+            ],
+        );
     }
 
     public function getAccessControl(): Clearance {
         return Clearance::ADMINS;
+    }
+
+    public function getPage(): Page {
+        return $this->pageFactory->create(
+            name: 'Gestion du compte',
+            controllerFqcn: self::class,
+            parentFqcn: HomeController::class,
+            isIndexed: false,
+        );
     }
 }

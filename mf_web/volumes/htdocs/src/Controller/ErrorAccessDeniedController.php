@@ -3,31 +3,41 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use LM\WebFramework\AccessControl\Clearance;
-use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\ResponseGenerator;
+use LM\WebFramework\DataStructures\Page;
+use MF\Router;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ErrorAccessDeniedController implements ControllerInterface
+class ErrorAccessDeniedController implements ResponseGenerator
 {
     public function __construct(
+        private PageFactory $pageFactory,
+        private Router $router,
         private TwigService $twig,
     ) {
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        return new Response(
-            status: 404,
-            body: $this->twig->render('errors/error_page.html.twig', [
+        return $this->twig->respond(
+            'errors/error_page.html.twig',
+            $this->getPage($request),
+            [
                 'message' => 'Désolé monsieur Freeman, l’accès est interdit… ou alors il faut vous connecter.',
-                'title' => 'Accès interdit',
-            ]),
+            ],
+            403,
         );
     }
 
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ALL;
+    public function getPage(ServerRequestInterface $request): Page {
+        $path = $this->router->getRequestUrl($request);
+        return new Page(
+            parent: null,
+            name: 'Accès interdit',
+            url: $path,
+            isIndexed: false,
+            partofHierarchy: false,
+        );
     }
 }

@@ -2,10 +2,6 @@
 
 {% from 'macros/macros.html.twig' import csrf, errorList, previous %}
 
-{% block title %}{{ pageTitle }}{% endblock %}
-
-{% block index %}<meta name="robots" content="noindex">{% endblock %}
-
 {% block bodyContent %}
 
 {{ previous(app, page) }}
@@ -23,9 +19,11 @@
         <input class="input -text" id="title" name="title" required{% if formData %} value="{{ formData.title }}"{% endif %}>
         {% if formErrors.title is defined %}{{ errorList(formErrors.title) }}{% endif %}
     </div>
+    {% if entity %}
     {% for chapter in entity.chapters %}
     <h2><a href="{{ app.router.generateUrl('admin-chapitre', [chapter.id]) }}">{{ chapter.title }}</a></h2>
     {% endfor %}
+    {% endif %}
     {{ csrf(app) }}
 
     <div class="form-row -buttons">

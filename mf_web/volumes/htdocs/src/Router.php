@@ -6,12 +6,18 @@ use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\Configuration;
 use MF\Controller\HomeController;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class Router
 {
     public function __construct(
         private Configuration $config,
     ) {
+    }
+
+    public function getRequestUrl(ServerRequestInterface $request): string {
+        $uri = $request->getUri();
+        return "{$uri->getScheme()}://{$uri->getHost()}{$uri->getPath()}";
     }
 
     public function getRouteId(string $controllerfqcn): ?string {

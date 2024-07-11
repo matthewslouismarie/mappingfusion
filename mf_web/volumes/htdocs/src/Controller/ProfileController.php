@@ -2,10 +2,11 @@
 
 namespace MF\Controller;
 
-use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
+use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\DataStructures\Page;
 use MF\Repository\ArticleRepository;
 use MF\Repository\AuthorRepository;
 use MF\Repository\PlayableRepository;
@@ -18,6 +19,7 @@ class ProfileController implements ControllerInterface
     public function __construct(
         private ArticleRepository $articleRepository,
         private AuthorRepository $authorRepository,
+        private PageFactory $pageFactory,
         private PlayableRepository $playableRepository,
         private TwigService $twig,
     ) {
@@ -35,16 +37,30 @@ class ProfileController implements ControllerInterface
 
         $articles = null !== $author->member ? $this->articleRepository->findArticlesFrom($author->member->id) : null;
 
-        return new Response(
-            body: $this->twig->render('author.html.twig', [
+        return $this->twig->respond(
+            'author.html.twig',
+            $this->getPage($author),
+            [
                 'articles' => $articles,
                 'author' => $author,
                 'playables' => $this->playableRepository->findFrom($author->id),
-            ])
+            ],
         );
     }
 
     public function getAccessControl(): Clearance {
         return Clearance::ALL;
+    }
+
+    /**
+     * @todo Add list of authors page.
+     */
+    public function getPage(AppObject $author): Page {
+        return $this->pageFactory->create(
+            $author->name,
+            self::class,
+            [$author->id],
+            parentFqcn: HomeController::class,
+        );
     }
 }

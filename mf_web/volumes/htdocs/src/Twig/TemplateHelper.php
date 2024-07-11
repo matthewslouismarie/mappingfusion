@@ -7,6 +7,7 @@ use IteratorAggregate;
 use LM\WebFramework\Configuration;
 use MF\Enum\LinkType;
 use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\File\FileService;
 use LM\WebFramework\Session\SessionManager;
 use MF\Languages\Translator;
@@ -119,6 +120,15 @@ class TemplateHelper
 
     public function getMk(): MarkdownService {
         return $this->mk;
+    }
+
+    public function getPageAncestors(Page $page): array {
+        $ancestors = [];
+        while (null !== $page) {
+            $ancestors[] = $page;
+            $page = $page->getParent();
+        }
+        return array_reverse($ancestors);
     }
 
     public function getResource(string $filename): string {

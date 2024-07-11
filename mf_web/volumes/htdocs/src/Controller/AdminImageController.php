@@ -6,20 +6,23 @@ use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Configuration;
 use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\Filename;
+use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\File\FileService;
 use LM\WebFramework\Form\Transformer\FileTransformer;
 use LM\WebFramework\Session\SessionManager;
 use MF\TwigService;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AdminImageController implements ControllerInterface
+class AdminImageController implements ControllerInterface, SinglePageOwner
 {
     private string $uploaded;
 
     public function __construct(
         private Configuration $configuration,
         private FileService $fileService,
+        private PageFactory $pageFactory,
         private SessionManager $sessionManager,
         private TwigService $twig,
     ) {
@@ -79,12 +82,26 @@ class AdminImageController implements ControllerInterface
             }
         }
 
-        return new Response(body: $this->twig->render('admin_image_management.html.twig', [
-            'images' => $images,
-        ]));
+        return $this->twig->respond(
+            'admin_image_management.html.twig',
+            $this->getPage(),
+            [
+                'images' => $images,
+            ],
+        );
     }
 
     public function getAccessControl(): Clearance {
         return Clearance::ADMINS;
+    }
+
+    public function getPage(): Page
+    {
+        return $this->pageFactory->create(
+            name:  'Gestion des images',
+            controllerFqcn: self::class,
+            parentFqcn: HomeController::class,
+            isIndexed: false,
+        );
     }
 }

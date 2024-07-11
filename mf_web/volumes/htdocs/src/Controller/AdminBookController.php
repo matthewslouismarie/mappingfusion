@@ -5,6 +5,7 @@ namespace MF\Controller;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
+use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\DataStructures\Slug;
 use MF\Model\BookModel;
 use MF\Model\ChapterModel;
@@ -60,10 +61,10 @@ class AdminBookController implements ControllerInterface
         return Clearance::ADMINS;
     }
 
-    public function getPage(array $routeParams): Page {
+    public function getPage(array $pageParams): Page {
         $pageName = 'Nouveau tutoriel';
-        if (isset($routeParams[1])) {
-            $book = $this->bookRepository->find($routeParams[1]);
+        if (isset($pageParams[1])) {
+            $book = $this->bookRepository->find($pageParams[1]);
             if (null !== $book) {
                 $pageName = "Gestion de {$book->title}";
             }
@@ -72,6 +73,7 @@ class AdminBookController implements ControllerInterface
             $pageName,
             self::class,
             parentFqcn: AdminBookListController::class,
+            isIndexed: false,
         );
     }
 }

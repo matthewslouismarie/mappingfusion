@@ -6,6 +6,7 @@ use Closure;
 use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Model\IModel;
 use LM\WebFramework\Session\SessionManager;
@@ -78,7 +79,7 @@ class FormController
 
         // @todo Put formData and formErrors in the same object?
         $formData = null;
-        $requestedEntity = $alwaysFetchEntity ? $repository->find($requestedId)?->toArray() : null;
+        $requestedEntity = ($alwaysFetchEntity && null !== $requestedId) ? $repository->find($requestedId)?->toArray() : null;
         $formErrors = null;
         $form = $this->formFactory->createForm(
             $model,
@@ -106,7 +107,7 @@ class FormController
                         $this->sessionManager->addMessage($successfulInsertMessage);
                         return $this->getSuccessfulRedirect($routeParams, $requestedId, $appObject['id']);
                     } else {
-                        $repository->add($appObject);
+                        $repository->update($appObject, $requestedId);
                         $this->sessionManager->addMessage($successfulUpdateMessage);
                         return $this->getSuccessfulRedirect($routeParams, $requestedId, $appObject['id']);
                     }
@@ -126,14 +127,15 @@ class FormController
             }
         }
 
-        return new Response(
-            body: $this->twig->render($twigFilename, [
+        return $this->twig->respond(
+            $twigFilename,
+            $page,
+            [
                 'formData' => $formData,
                 'formErrors' => $formErrors,
                 'pageTitle' => $htmlPageTitle($formData),
                 'entity' => $requestedEntity,
-                'page' => $page,
-            ]),
+            ],
         );
     }
 

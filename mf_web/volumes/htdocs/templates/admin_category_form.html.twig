@@ -2,11 +2,9 @@
 
 {% from 'macros/macros.html.twig' import csrf, errorList %}
 
-{% block title %}Édition de catégorie{% endblock %}
-
-{% block index %}<meta name="robots" content="noindex">{% endblock %}
-
 {% block bodyContent %}
+<h1 class="_h1">{{ page.name }}</h1>
+
 <form autocomplete="on" class="form-row-container" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="form-row">
         <label class="label" for="p-id">ID de la catégorie (peut être laissé vide, généré automatiquement)</label>

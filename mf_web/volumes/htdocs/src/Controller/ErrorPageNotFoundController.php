@@ -3,15 +3,18 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use LM\WebFramework\AccessControl\Clearance;
-use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\ResponseGenerator;
+use LM\WebFramework\DataStructures\Page;
+use MF\Router;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ErrorPageNotFoundController implements ControllerInterface
+class ErrorPageNotFoundController implements ResponseGenerator
 {
     public function __construct(
+        private PageFactory $pageFactory,
+        private Router $router,
         private TwigService $twig,
     ) {
     }
@@ -19,15 +22,32 @@ class ErrorPageNotFoundController implements ControllerInterface
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         return new Response(
             status: 404,
-            body: $this->twig->render('errors/error_page.html.twig', [
-                'message' => 'Cette page n’existe pas… :(',
-                'title' => 'Page non trouvé',
-            ]),
+            body: $this->twig->render(
+                'errors/error_page.html.twig',
+                $this->getPage($request),
+                [
+                    'message' => 'Cette page n’existe pas… :(',
+                    'title' => 'Page non trouvée',
+                ],
+            ),
         );
     }
 
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ALL;
+    /**
+     * @todo Maybe, error pages shouldn’t exist?
+     */
+    public function getPage(ServerRequestInterface $request): Page {
+        $path = $this->router->getRequestUrl($request);
+        
+        return $this->pageFactory->createFromUri(
+            'Page non existante',
+            $path,
+            HomeController::class,
+            function (HomeController $homeController) {
+                return $homeController->getPage();
+            },
+            isIndexed: false,
+            partOfHierarchy: false,
+        );
     }
 }

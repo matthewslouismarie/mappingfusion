@@ -2,11 +2,11 @@
 
 namespace MF\Controller;
 
-use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Type\ModelValidator;
 use MF\Model\AuthorModel;
@@ -25,6 +25,7 @@ class AdminAuthorController implements ControllerInterface
         private AuthorRepository $repo,
         private FormFactory $formFactory,
         private ModelValidator $modelValidator,
+        private PageFactory $pageFactory,
         private Router $router,
         private TwigService $twig,
     ) {
@@ -32,6 +33,7 @@ class AdminAuthorController implements ControllerInterface
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
         $requestedId = $routeParams[1] ?? null;
+        $requestedEntity = null;
         $formData = null;
         $formErrors = null;
 
@@ -64,21 +66,34 @@ class AdminAuthorController implements ControllerInterface
                 }
             }
         } elseif (null !== $requestedId) {
-            $formData = $this->repo->find($requestedId)?->toArray();
+            $requestedEntity = $this->repo->find($requestedId);
+            $formData = $requestedEntity?->toArray();
             if (null === $formData) {
                 throw new RequestedResourceNotFound();
             }
         }
 
-        return new Response(
-            body: $this->twig->render('admin_author_form.html.twig', [
+        return $this->twig->respond(
+            'admin_author_form.html.twig',
+            $this->getPage($requestedEntity),
+            [
                 'formData' => $formData,
                 'formErrors' => $formErrors,
-            ])
+            ],
         );
     }
 
     public function getAccessControl(): Clearance {
         return Clearance::ADMINS;
+    }
+
+    public function getPage(?AppObject $author): Page {
+        return $this->pageFactory->create(
+            $author['name'] ?? 'Nouvel auteur',
+            self::class,
+            [$author['id']] ?? [],
+            AdminAuthorListController::class,
+            isIndexed: false,
+        );
     }
 }

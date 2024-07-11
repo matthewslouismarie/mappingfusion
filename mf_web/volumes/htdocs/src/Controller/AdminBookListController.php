@@ -5,25 +5,20 @@ namespace MF\Controller;
 use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\SinglePageOwner;
+use LM\WebFramework\DataStructures\Page;
 use MF\Repository\BookRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AdminBookListController implements ControllerInterface
+class AdminBookListController implements ControllerInterface, SinglePageOwner
 {
-    private Page $page;
-
     public function __construct(
         private BookRepository $bookRepository,
         private PageFactory $pageFactory,
         private TwigService $twig,
     ) {
-        $this->page = $pageFactory->createPage(
-            'Liste des tutoriels',
-            self::class,
-            parentFqcn: AdminArticleListController::class,
-        );
     }
 
     public function generateResponse(
@@ -31,11 +26,12 @@ class AdminBookListController implements ControllerInterface
         array $routeParams,
     ): ResponseInterface {
         $books = $this->bookRepository->findAll();
-        return new Response(
-            body: $this->twig->render('admin_book_list.html.twig', [
+        return $this->twig->respond(
+            'admin_book_list.html.twig',
+            $this->getPage(),
+            [
                 'books' => $books,
-                'page' => $this->page,
-            ]),
+            ],
         );
     }
 
@@ -44,6 +40,11 @@ class AdminBookListController implements ControllerInterface
     }
 
     public function getPage(): Page {
-        return $this->page;
+        return $this->pageFactory->createPage(
+            'Liste des tutoriels',
+            self::class,
+            parentFqcn: AdminArticleListController::class,
+            isIndexed: false,
+        );
     }
 }

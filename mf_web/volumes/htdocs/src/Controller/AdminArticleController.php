@@ -2,11 +2,11 @@
 
 namespace MF\Controller;
 
-use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Model\AbstractEntity;
 use LM\WebFramework\Session\SessionManager;
@@ -96,32 +96,39 @@ class AdminArticleController implements ControllerInterface
             $lastUpdateDateTimeUtc = $lastUpdateDateTime->getTimestamp() * 1000;
         }
 
-        return new Response(body: $this->twig->render('admin_article_form.html.twig', [
-            'categories' => $this->catRepo->findAll(),
-            'books' => $books,
-            'formData' => $formData,
-            'formErrors' => $formErrors,
-            'lastUpdateDateTimeUtc' => $lastUpdateDateTimeUtc,
-            'requestedId' => $requestedId,
-            'page' => $this->getPage(array_slice($routeParams, 1)),
-        ]));
+        return $this->twig->respond(
+            'admin_article_form.html.twig',
+            $this->getPage(array_slice($routeParams, 1)),
+            [
+                'categories' => $this->catRepo->findAll(),
+                'books' => $books,
+                'formData' => $formData,
+                'formErrors' => $formErrors,
+                'lastUpdateDateTimeUtc' => $lastUpdateDateTimeUtc,
+                'requestedId' => $requestedId,
+            ],
+        );
     }
 
     public function getAccessControl(): Clearance {
         return Clearance::ADMINS;
     }
 
-    public function getPage(array $urlParams): Page {
-        if (null === $this->requestedEntity && isset($urlParams[0])) {
-            $this->requestedEntity = $this->repo->find($urlParams[0], onlyPublished: false);
+    public function getPage(array $pageParams): Page {
+        if (null === $this->requestedEntity && isset($pageParams[0])) {
+            $this->requestedEntity = $this->repo->find($pageParams[0], onlyPublished: false);
         }
-        $pageName = (null == $this->requestedEntity) ? 'Nouvel article' : "Édition de {$this->requestedEntity->title}";
+        /**
+         * @todo Create function to remove any quotation mark (", ', «…)
+         */
+        $pageName = (null == $this->requestedEntity) ? 'Nouvel article' : "Édition de \"{$this->requestedEntity->title}\"";
 
         return $this->pageFactory->createPage(
             $pageName,
             self::class,
-            $urlParams,
+            $pageParams,
             AdminArticleListController::class,
+            isIndexed: false,
         );
     }
 }

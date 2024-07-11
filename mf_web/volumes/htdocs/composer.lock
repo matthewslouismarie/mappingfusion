@@ -694,16 +694,16 @@
         },
         {
             "name": "matthewslouismarie/lm-web-framework",
-            "version": "2.6.0",
+            "version": "2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthewslouismarie/lm-web-framework.git",
-                "reference": "613504f451b8d2f18dd548bb038d46d684b110bb"
+                "reference": "b811527a5eaf26a6e22653a480d2d4ef432c5301"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/613504f451b8d2f18dd548bb038d46d684b110bb",
-                "reference": "613504f451b8d2f18dd548bb038d46d684b110bb",
+                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/b811527a5eaf26a6e22653a480d2d4ef432c5301",
+                "reference": "b811527a5eaf26a6e22653a480d2d4ef432c5301",
                 "shasum": ""
             },
             "require": {
@@ -735,9 +735,9 @@
             ],
             "support": {
                 "issues": "https://github.com/matthewslouismarie/lm-web-framework/issues",
-                "source": "https://github.com/matthewslouismarie/lm-web-framework/tree/2.6.0"
+                "source": "https://github.com/matthewslouismarie/lm-web-framework/tree/2.8.0"
             },
-            "time": "2024-07-08T22:30:15+00:00"
+            "time": "2024-07-11T20:01:19+00:00"
         },
         {
             "name": "nette/schema",

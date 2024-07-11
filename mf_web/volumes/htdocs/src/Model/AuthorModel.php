@@ -19,7 +19,7 @@ class AuthorModel extends AbstractEntity
                 new StringConstraint(regex: StringConstraint::REGEX_DASHES),
             ]),
             'name' => new StringModel([
-                new StringConstraint(),
+                new StringConstraint(minLength: 1),
             ]),
             'avatar_filename' => new StringModel([
                 new class implements IUploadedImageConstraint {}

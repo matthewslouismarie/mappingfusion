@@ -1,20 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% from 'macros/macros.html.twig' import articleMosaic %}
-
-{% block title %}{{ searchQuery ?? 'Nouvelle recherche' }}{% endblock %}
-
-{% block index %}
-<meta name="robots" content="noindex">
-{% endblock %}
+{% from 'macros/macros.html.twig' import articleMosaic, breadcrumb %}
 
 {% block description %}Résultats pour : {{ searchQuery }}{% endblock %}
 
 {% block body %}
+
 <div class="page-section">
     <div class="_wrapper">
         {% if articles %}
-        <h1 class="_h1">Résultats pour : « {{ searchQuery }} »</h1>
+        <h1 class="_h1">{{ page.name }}</h1>
 
         <ul class="std-mosaic-list -oneperrow _marginm -mgbottom">
             {% for a in articles %}

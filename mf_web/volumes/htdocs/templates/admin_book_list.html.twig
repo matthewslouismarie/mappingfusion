@@ -2,15 +2,11 @@
 
 {% from 'macros/macros.html.twig' import previous %}
 
-{% block title %}Gestion des tutoriels{% endblock %}
-
-{% block index %}<meta name="robots" content="noindex">{% endblock %}
-
 {% block bodyContent %}
 
 {{ previous(app, page) }}
 
-<h1 class="_h1">Liste des tutoriels</h1>
+<h1 class="_h1">{{ page.name }}</h1>
 
 <a class="std-button _std" href="{{ app.router.generateUrl('admin-tutoriel') }}">Créer un nouveau tutoriel</a>
 
