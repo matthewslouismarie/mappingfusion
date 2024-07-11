@@ -162,17 +162,4 @@ class ArticleListController implements ControllerInterface
         }
         return $descendants;
     }
-
-    /**
-     * @return array<string, AppObject>
-     */
-    private function getRootCategories(array $categories): array {
-        $rootCats = [];
-        foreach ($categories as $cat) {
-            if (null === $cat->parentId) {
-                $rootCats[$cat->id] = $cat;
-            }
-        }
-        return $rootCats;
-    }
 }

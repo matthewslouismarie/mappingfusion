@@ -47,7 +47,7 @@ class ErrorPageNotFoundController implements ResponseGenerator
                 return $homeController->getPage();
             },
             isIndexed: false,
-            partOfHierarchy: false,
+            isPartOfHierarchy: false,
         );
     }
 }

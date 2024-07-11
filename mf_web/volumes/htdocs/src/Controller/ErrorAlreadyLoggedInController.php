@@ -33,7 +33,7 @@ class ErrorAlreadyLoggedInController implements ResponseGenerator, SinglePageOwn
             'Tu es déjà connecté',
             self::class,
             isIndexed: false,
-            partOfHierarchy: false,
+            isPartOfHierarchy: false,
         );
     }
 }

@@ -8,7 +8,6 @@ use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\DataStructures\Slug;
-use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Model\AbstractEntity;
 use LM\WebFramework\Model\SlugModel;
 use LM\WebFramework\Model\StringModel;

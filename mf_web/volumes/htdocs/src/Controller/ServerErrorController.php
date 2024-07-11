@@ -37,8 +37,10 @@ class ServerErrorController implements ControllerInterface
     public function getPage(array $pageParams): Page {
         if (null === $this->page) {
             $this->page = $this->pageFactory->createPage(
-                'Erreur serveur',
-                self::class,
+                name: 'Erreur serveur',
+                controllerFqcn: self::class,
+                isIndexed: false,
+                isPartOfHierarchy: false,
             );
         }
         return $this->page;

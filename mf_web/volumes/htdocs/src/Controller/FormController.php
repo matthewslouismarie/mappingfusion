@@ -3,7 +3,6 @@
 namespace MF\Controller;
 
 use Closure;
-use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;

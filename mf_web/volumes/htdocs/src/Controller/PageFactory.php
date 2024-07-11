@@ -23,14 +23,14 @@ class PageFactory
         ?string $parentFqcn = null,
         array $parentControllerParams = [],
         bool $isIndexed = true,
-        bool $partOfHierarchy = true,
+        bool $isPartOfHierarchy = true,
     ) {
         return new Page(
             null === $parentFqcn ? null : $this->container->get($parentFqcn)->getPage($parentControllerParams),
             $name,
             $this->router->generateUrl($this->router->getRouteId($controllerFqcn), $controllerParams),
             $isIndexed,
-            $partOfHierarchy,
+            $isPartOfHierarchy,
         );
     }
 
@@ -41,7 +41,7 @@ class PageFactory
         ?string $parentFqcn = null,
         ?Closure $getParent = null,
         bool $isIndexed = true,
-        bool $partOfHierarchy = true,
+        bool $isPartOfHierarchy = true,
     ) {
         
         return $this->createFromUri(
@@ -50,7 +50,7 @@ class PageFactory
             $parentFqcn,
             $getParent,
             $isIndexed,
-            $partOfHierarchy,
+            $isPartOfHierarchy,
         );
     }
 
@@ -60,7 +60,7 @@ class PageFactory
         ?string $parentFqcn = null,
         ?Closure $getParent = null,
         bool $isIndexed = true,
-        bool $partOfHierarchy = true,
+        bool $isPartOfHierarchy = true,
     ) {
         $parentPage = null;
         if (null !== $parentFqcn) {
@@ -77,7 +77,7 @@ class PageFactory
             $name,
             $uri,
             $isIndexed,
-            $partOfHierarchy,
+            $isPartOfHierarchy,
         );
     }
 }

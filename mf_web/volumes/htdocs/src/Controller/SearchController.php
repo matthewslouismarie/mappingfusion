@@ -60,7 +60,7 @@ class SearchController implements ControllerInterface
             $blankSearch ? [] : [$queryStr],
             HomeController::class,
             isIndexed: false,
-            partOfHierarchy: false,
+            isPartOfHierarchy: false,
         );
     }
 }

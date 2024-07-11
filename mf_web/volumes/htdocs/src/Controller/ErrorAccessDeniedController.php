@@ -37,7 +37,7 @@ class ErrorAccessDeniedController implements ResponseGenerator
             name: 'Accès interdit',
             url: $path,
             isIndexed: false,
-            partofHierarchy: false,
+            isPartOfHierarchy: false,
         );
     }
 }
