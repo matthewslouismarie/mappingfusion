@@ -39,7 +39,7 @@ class ArticleRepository implements IRepository
         return $this->conn->getPdo()->lastInsertId();
     }
 
-    public function deleteArticle(string $id): void {
+    public function delete(string $id): void {
         $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_article WHERE article_id = ?;');
         $stmt->execute([$id]);
     }

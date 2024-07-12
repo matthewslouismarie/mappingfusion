@@ -74,6 +74,9 @@ class AdminChapterController implements ControllerInterface
                 'book' => $book,
             ],
             true,
+            true,
+            AdminBookController::class,
+            [$book->id],
         );
     }
 

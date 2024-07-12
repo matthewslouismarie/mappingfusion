@@ -27,10 +27,26 @@
     {% endfor %}
     {% endif %}
     {{ csrf(app) }}
-    <input class="_hidden" name="book_id" value="{{ book.id }}">
+    <input name="book_id" type="hidden" value="{{ book.id }}">
 
     <div class="form-row -buttons">
         <button class="std-button" type="submit">Poster</button>
     </div>
 </form>
+
+{% if entity %}
+<form autocomplete="off" class="form-row-container" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
+    <div class="form-row">
+        <label class="label" for="delete_id">Taper « Supprimer  » suivi de l’ID du chapitre si vous voulez le supprimer.</label>
+        <input class="input -text" id="delete_id" name="delete_id">
+        {% if deleteFormErrors.delete_id is defined %}{{ errorList(deleteFormErrors.delete_id) }}{% endif %}
+    </div>
+    {{ csrf(app) }}
+    <input name="_DELETE_FORM" type="hidden" value="{{ entity.id }}">
+
+    <div class="form-row -buttons">
+        <button class="std-button" type="submit">Supprimer le chapitre</button>
+    </div>
+</form>
+{% endif %}
 {% endblock %}

@@ -5,8 +5,11 @@ namespace MF\Controller;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
+use LM\WebFramework\Form\Exceptions\IllegalUserInputException;
 use LM\WebFramework\Form\FormFactory;
+use LM\WebFramework\Model\AbstractEntity;
 use LM\WebFramework\Model\IModel;
+use LM\WebFramework\Model\StringModel;
 use LM\WebFramework\Session\SessionManager;
 use LM\WebFramework\Type\ModelValidator;
 use MF\Repository\IRepository;
@@ -69,6 +72,9 @@ class FormController
         string $twigFilename,
         array $additionalTwigParams = [],
         bool $alwaysFetchEntity = false,
+        bool $hasDeleteForm = false,
+        ?string $redirectAfterDeletion = null,
+        ?array $redirectAfterDeletionParams = null,
     ): ResponseInterface {
         // @todo Put formData and formErrors in the same object?
         $formData = null;
@@ -79,37 +85,68 @@ class FormController
             $formConfig,
         );
 
+        $deleteFormModel = new AbstractEntity([
+            'delete_id' => new StringModel()
+        ]);
+        $deleteForm = $hasDeleteForm ? $this->formFactory->createForm(
+            $deleteFormModel,
+        ) : null;
+        $deleteFormErrors = null;
+
         if ('POST' === $request->getMethod()) {
-            $extractedFromRequest = $form->extractValueFromRequest(
-                $request->getParsedBody(),
-                $request->getUploadedFiles(),
-            );
-
-            $formData = $extractedFromRequest;
-            $formErrors = $this->modelValidator->validate($formData, $model);
-
-            if (0 === count($formErrors)) {
-                $appObject = new AppObject($formData);
-                try {
-                    if (null === $requestedId) {
-                        $repository->add($appObject);
-                        $this->sessionManager->addMessage($successfulInsertMessage);
-                        return $this->getSuccessfulRedirect($routeParams, $requestedId, $appObject['id']);
-                    } else {
-                        $repository->update($appObject, $requestedId);
-                        $this->sessionManager->addMessage($successfulUpdateMessage);
-                        return $this->getSuccessfulRedirect($routeParams, $requestedId, $appObject['id']);
-                    }
-                } catch (PDOException $e) {
-                    if ('23000' === $e->getCode()) {
-                        $formErrors['form'][] = $idAlreadyTakenMessage;
-                    } else {
-                        throw $e;
+            if ($hasDeleteForm && isset($request->getParsedBody()['_DELETE_FORM'])) {
+                $deleteFormData = $deleteForm->extractValueFromRequest(
+                    $request->getParsedBody(),
+                    $request->getUploadedFiles(),
+                );
+                $deleteFormErrors = $this->modelValidator->validate($deleteFormData, $deleteFormModel);
+                if (null === $requestedEntity) {
+                    throw new IllegalUserInputException();
+                }
+                elseif ("Supprimer $requestedId" !== $deleteFormData['delete_id']) {
+                    $deleteFormErrors['delete_id'][] = "Veuillez rentrer « Supprimer {$requestedId} » si vous voulez le supprimer.";
+                }
+                if (0 === count($deleteFormErrors)) {
+                    $repository->delete($requestedId);
+                    $this->sessionManager->addMessage('La suppression a bien été effectuée.');
+                    return $this->router->generateRedirect(
+                        $this->router->getRouteId($redirectAfterDeletion),
+                        $redirectAfterDeletionParams ?? [],
+                    );
+                }
+            }
+            else {
+                $formData = $form->extractValueFromRequest(
+                    $request->getParsedBody(),
+                    $request->getUploadedFiles(),
+                );
+    
+                $formErrors = $this->modelValidator->validate($formData, $model);
+    
+                if (0 === count($formErrors)) {
+                    $appObject = new AppObject($formData);
+                    try {
+                        if (null === $requestedId) {
+                            $repository->add($appObject);
+                            $this->sessionManager->addMessage($successfulInsertMessage);
+                            return $this->getSuccessfulRedirect($routeParams, $requestedId, $appObject['id']);
+                        } else {
+                            $repository->update($appObject, $requestedId);
+                            $this->sessionManager->addMessage($successfulUpdateMessage);
+                            return $this->getSuccessfulRedirect($routeParams, $requestedId, $appObject['id']);
+                        }
+                    } catch (PDOException $e) {
+                        if ('23000' === $e->getCode()) {
+                            $formErrors['form'][] = $idAlreadyTakenMessage;
+                        } else {
+                            throw $e;
+                        }
                     }
                 }
             }
         }
-        elseif (null !== $requestedId) {
+        
+        if (null !== $requestedId && null === $formData) {
             $requestedEntity = $requestedEntity ?? $repository->find($requestedId);
             if (null === $requestedEntity) {
                 throw new RequestedResourceNotFound();
@@ -124,6 +161,7 @@ class FormController
                 'formData' => $formData,
                 'formErrors' => $formErrors,
                 'entity' => $requestedEntity,
+                'deleteFormErrors' => $deleteFormErrors,
             ] + $additionalTwigParams,
         );
     }

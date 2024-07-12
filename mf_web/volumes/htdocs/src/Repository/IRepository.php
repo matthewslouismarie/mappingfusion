@@ -11,6 +11,8 @@ interface IRepository
      */
     public function add(AppObject $entity): string;
 
+    public function delete(string $id): void;
+
     public function find(string $id): ?AppObject;
 
     public function update(AppObject $entity, string $previousId): void;
