@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use Closure;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
@@ -57,28 +56,23 @@ class FormController
      * @todo Make $page required.
      */
     public function generateResponse(
-        ServerRequestInterface $request,
-        array $routeParams,
         ?string $requestedId,
-        IModel $model,
         array $formConfig,
-        string $idAlreadyTakenMessage,
+        array $routeParams,
+        IModel $model,
         IRepository $repository,
-        string $twigFilename,
-        Closure $htmlPageTitle,
+        Page $page,
+        ServerRequestInterface $request,
+        string $idAlreadyTakenMessage,
         string $successfulInsertMessage,
         string $successfulUpdateMessage,
+        string $twigFilename,
+        array $additionalTwigParams = [],
         bool $alwaysFetchEntity = false,
-        ?Page $page = null,
     ): ResponseInterface {
-        // @todo Use model to check.
-        if (1 !== count($routeParams) && 2 !== count($routeParams)) {
-            throw new RequestedResourceNotFound();
-        }
-
         // @todo Put formData and formErrors in the same object?
         $formData = null;
-        $requestedEntity = ($alwaysFetchEntity && null !== $requestedId) ? $repository->find($requestedId)?->toArray() : null;
+        $requestedEntity = ($alwaysFetchEntity && null !== $requestedId) ? $repository->find($requestedId) : null;
         $formErrors = null;
         $form = $this->formFactory->createForm(
             $model,
@@ -90,12 +84,8 @@ class FormController
                 $request->getParsedBody(),
                 $request->getUploadedFiles(),
             );
-            if (null === $formData) {
-                $formData = $extractedFromRequest;
-            } else {
-                $formData = $extractedFromRequest + $formData;
-            }
 
+            $formData = $extractedFromRequest;
             $formErrors = $this->modelValidator->validate($formData, $model);
 
             if (0 === count($formErrors)) {
@@ -112,7 +102,7 @@ class FormController
                     }
                 } catch (PDOException $e) {
                     if ('23000' === $e->getCode()) {
-                        $formErrors['id'][] = $idAlreadyTakenMessage;
+                        $formErrors['form'][] = $idAlreadyTakenMessage;
                     } else {
                         throw $e;
                     }
@@ -120,10 +110,11 @@ class FormController
             }
         }
         elseif (null !== $requestedId) {
-            $formData = $alwaysFetchEntity ? $requestedEntity : $repository->find($requestedId)?->toArray();
-            if (null === $formData) {
+            $requestedEntity = $requestedEntity ?? $repository->find($requestedId);
+            if (null === $requestedEntity) {
                 throw new RequestedResourceNotFound();
             }
+            $formData = $requestedEntity->toArray();
         }
 
         return $this->twig->respond(
@@ -132,9 +123,8 @@ class FormController
             [
                 'formData' => $formData,
                 'formErrors' => $formErrors,
-                'pageTitle' => $htmlPageTitle($formData),
                 'entity' => $requestedEntity,
-            ],
+            ] + $additionalTwigParams,
         );
     }
 

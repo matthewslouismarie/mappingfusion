@@ -6,7 +6,7 @@
 
 {{ previous(app, page) }}
 
-<h1 class="_h1">{{ pageTitle }}</h1>
+<h1 class="_h1">{{ page.name }}</h1>
 
 <form autocomplete="on" class="form-row-container" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="form-row">
@@ -21,7 +21,7 @@
     </div>
     {% if entity %}
     {% for chapter in entity.chapters %}
-    <h2><a href="{{ app.router.generateUrl('admin-chapitre', [chapter.id]) }}">{{ chapter.title }}</a></h2>
+    <h2><a href="{{ app.router.generateUrl('admin-chapitre', [entity.id, chapter.id]) }}">{{ chapter.title }}</a></h2>
     {% endfor %}
     {% endif %}
     {{ csrf(app) }}

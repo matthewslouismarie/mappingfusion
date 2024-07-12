@@ -8,6 +8,7 @@ use LM\WebFramework\Model\AbstractEntity;
 use LM\WebFramework\Model\SlugModel;
 use LM\WebFramework\Model\StringModel;
 use MF\Database\DatabaseManager;
+use MF\Model\BookModel;
 use MF\Model\ChapterModel;
 use OutOfBoundsException;
 
@@ -23,7 +24,7 @@ class ChapterRepository implements IRepository
 
     public function add(AppObject $appObject): string {
         $dbArray = $this->em->toDbValue($appObject);
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_chapter SET chapter_id = :id, chapter_book_id = :book_id, chapter_title = :title;');
+        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_chapter SET chapter_id = :id, chapter_book_id = :book_id, chapter_title = :title, chapter_order = :order;');
         $stmt->execute($dbArray);
         return $this->conn->getPdo()->lastInsertId();
     }
@@ -47,7 +48,8 @@ class ChapterRepository implements IRepository
             new AbstractEntity([
                 'id' => new SlugModel(),
                 'title' => new StringModel(),
-            ])
+            ]),
+            new BookModel(),
         );
         return $this->em->toAppData($data, $model, 'chapter');
     }
@@ -73,7 +75,7 @@ class ChapterRepository implements IRepository
     }
 
     public function update(AppObject $entity, string $previousId): void {
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_chapter SET chapter_id = :id, chapter_title = :title WHERE chapter_id = :previous_id;');
+        $stmt = $this->conn->getPdo()->prepare('UPDATE e_chapter SET chapter_id = :id, chapter_book_id = :book_id, chapter_order = :order, chapter_title = :title WHERE chapter_id = :previous_id;');
         $stmt->execute($this->em->toDbValue($entity) + ['previous_id' => $previousId]);
     }
 }

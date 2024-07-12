@@ -39,14 +39,44 @@ class Fixture
     public function load(): void {
         $this->conn->getPdo()->beginTransaction();
 
-        $loulimi = new AppObject(['id' => 'root', 'name' => 'Root', 'avatar_filename' => null]);
-        $valve = new AppObject(['id' => 'valve', 'name' => 'Valve', 'avatar_filename' => null]);
-        $scTeam = new AppObject(['id' => 'sven-co-op-team', 'name' => 'The Sven Co-op Team', 'avatar_filename' => null]);
-        $neophus = new AppObject(['id' => 'neophus', 'name' => 'Neophus', 'avatar_filename' => null]);
+        /**
+         * Authors
+         */
+
+
+        $loulimi = new AppObject([
+            'id' => 'root',
+            'name' => 'Root',
+            'avatar_filename' => null,
+        ]);
         $this->repoAuthor->add($loulimi);
+
+        $valve = new AppObject([
+            'id' => 'valve',
+            'name' => 'Valve',
+            'avatar_filename' => null,
+        ]);
         $this->repoAuthor->add($valve);
+
+        $scTeam = new AppObject([
+            'id' => 'sven-co-op-team',
+            'name' => 'The Sven Co-op Team',
+            'avatar_filename' => null,
+        ]);
         $this->repoAuthor->add($scTeam);
+
+        $neophus = new AppObject([
+            'id' => 'neophus',
+            'name' => 'Neophus',
+            'avatar_filename' => null,
+        ]);
         $this->repoAuthor->add($neophus);
+
+
+        /**
+         * Accounts
+         */
+
 
         $root = new AppObject([
             'id' => 'root',
@@ -55,106 +85,157 @@ class Fixture
         ]);
         $this->repoMember->add($root);
 
-        $gs = new AppObject(['id' => 'goldsource',
+
+        /**
+         * Playables
+         */
+
+
+        $gs = new AppObject([
+            'id' => 'goldsource',
 			'name' => 'GoldSource',
 			'release_date_time' => new DateTimeImmutable(),
 			'game_id' => null,
             'type' => PlayableType::Standalone->value,
         ]);
-        $hl = new AppObject(['id' => 'half-life',
+        $this->repoPlayable->add($gs);
+
+        $hl = new AppObject([
+            'id' => 'half-life',
 			'name' => 'Half-Life',
 			'release_date_time' => new DateTimeImmutable(),
 			'game_id' => 'goldsource',
             'type' => PlayableType::Standalone->value,
         ]);
-        $hl2 = new AppObject(['id' => 'half-life-2',
+        $this->repoPlayable->add($hl);
+
+        $hl2 = new AppObject([
+            'id' => 'half-life-2',
 			'name' => 'Half-Life 2',
 			'release_date_time' => new DateTimeImmutable(),
 			'game_id' => null,
             'type' => PlayableType::Standalone->value,
         ]);
-        $sc = new AppObject(['id' => 'sven-co-op',
+        $this->repoPlayable->add($hl2);
+
+        $sc = new AppObject([
+            'id' => 'sven-co-op',
 			'name' => 'Sven Co-op',
 			'release_date_time' => new DateTimeImmutable(),
 			'game_id' => 'goldsource',
             'type' => PlayableType::Standalone->value,
         ]);
-        $cp = new AppObject(['id' => 'crossed-paths',
+        $this->repoPlayable->add($sc);
+
+        $cp = new AppObject([
+            'id' => 'crossed-paths',
 			'name' => 'Crossed Paths',
 			'release_date_time' => new DateTimeImmutable(),
 			'game_id' => 'sven-co-op',
             'type' => PlayableType::Map->value,
         ]);
-
-        $this->repoPlayable->add($gs);
-        $this->repoPlayable->add($hl);
-        $this->repoPlayable->add($hl2);
-        $this->repoPlayable->add($sc);
         $this->repoPlayable->add($cp);
 
-        $this->linkRepo->add(new AppObject([
-           'id' => null,
-           'playable_id' => $sc['id'],
-           'name' => 'Homepage',
-           'type' => LinkType::HomePage->name,
-           'url' => 'https://svencoop.com',
-        ]));
-        $this->linkRepo->add(new AppObject([
-           'id' => null,
-           'playable_id' => $sc['id'],
-           'name' => 'Download',
-           'type' => LinkType::Download->name,
-           'url' => 'https://store.steampowered.com/agecheck/app/225840/',
-        ]));
 
-        $this->repoContrib->add(new AppObject([
+        /**
+         * Playable links
+         */
+
+
+        $link1 = new AppObject([
+            'id' => null,
+            'playable_id' => $sc['id'],
+            'name' => 'Homepage',
+            'type' => LinkType::HomePage->name,
+            'url' => 'https://svencoop.com',
+        ]);
+        $this->linkRepo->add($link1);
+
+        $link2 = new AppObject([
+            'id' => null,
+            'playable_id' => $sc['id'],
+            'name' => 'Download',
+            'type' => LinkType::Download->name,
+            'url' => 'https://store.steampowered.com/agecheck/app/225840/',
+        ]);
+        $this->linkRepo->add($link2);
+
+
+        /**
+         * Contributions
+         */
+
+
+        $contrib1 = new AppObject([
             'id' => null,
             'author_id' => $loulimi['id'],
             'playable_id' => $cp['id'],
             'is_author' => true,
             'summary' => null,
-        ]));
-        $this->repoContrib->add(new AppObject([
+        ]);
+        $this->repoContrib->add($contrib1);
+
+        $contrib2 = new AppObject([
             'id' => null,
             'author_id' => $loulimi['id'],
             'playable_id' => $cp['id'],
             'is_author' => true,
             'summary' => null,
-        ]));
-        $this->repoContrib->add(new AppObject([
+        ]);
+        $this->repoContrib->add($contrib2);
+
+        $contrib3 = new AppObject([
             'id' => null,
             'author_id' => $valve['id'],
             'playable_id' => $hl['id'],
             'is_author' => true,
             'summary' => null,
-        ]));
-        $this->repoContrib->add(new AppObject([
+        ]);
+        $this->repoContrib->add($contrib3);
+
+        $contrib4 = new AppObject([
             'id' => null,
             'author_id' => $valve['id'],
             'playable_id' => $hl2['id'],
             'is_author' => true,
             'summary' => null,
-        ]));
-        $this->repoContrib->add(new AppObject([
+        ]);
+        $this->repoContrib->add($contrib4);
+
+        $contrib5 = new AppObject([
             'id' => null,
             'author_id' => $scTeam['id'],
             'playable_id' => $sc['id'],
             'is_author' => true,
             'summary' => null,
-        ]));
+        ]);
+        $this->repoContrib->add($contrib5);
+
+
+        /**
+         * Categories
+         */
+
 
         $cat0 = new AppObject([
             'id' => 'cat',
             'name' => 'Une catégorie',
             'parent_id' => null,
         ]);
+        $this->repoCat->add($cat0);
+
         $cat1 = new AppObject([
             'id' => 'another-cat',
             'name' => 'Une autre catégorie',
             'parent_id' => null,
         ]);
-        $this->repoCat->add($cat0);
         $this->repoCat->add($cat1);
+
+
+        /**
+         * Books
+         */
+
 
         $book1 = new AppObject([
             'id' => 'a-book',
@@ -168,26 +249,43 @@ class Fixture
         ]);
         $this->repoBook->add($book2);
 
+
+        /**
+         * Chapters
+         */
+
+
         $chapter1 = new AppObject([
             'id' => 'chapter-1',
             'book_id' => 'a-book',
             'title' => 'Au commencement…',
+            'order' => 1,
         ]);
+        $this->repoChapter->add($chapter1);
+
         $chapter2 = new AppObject([
             'id' => 'chapter-2',
             'book_id' => 'a-book',
             'title' => 'Puis ensuite',
+            'order' => 2,
         ]);
+        $this->repoChapter->add($chapter2);
+
         $chapter3 = new AppObject([
             'id' => 'chapter-3',
             'book_id' => 'a-book',
             'title' => 'Conclusion…',
+            'order' => 3,
         ]);
-        $this->repoChapter->add($chapter1);
-        $this->repoChapter->add($chapter2);
         $this->repoChapter->add($chapter3);
 
-        $article0 = new AppObject([
+
+        /**
+         * Articles
+         */
+
+
+        $article1 = new AppObject([
             'id' => 'nouvel-article',
             'author_id' => $root['id'],
             'category_id' => $cat0['id'],
@@ -199,9 +297,9 @@ class Fixture
             'cover_filename' => '202111271344571.jpg',
             'thumbnail_filename' => null,
         ]);
-        $this->repoArticle->add($article0);
+        $this->repoArticle->add($article1);
         
-        $article1 = new AppObject([
+        $article2 = new AppObject([
             'id' => 'nouvel-version-tcm',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
@@ -213,9 +311,9 @@ class Fixture
             'cover_filename' => '202111271344571.jpg',
             'thumbnail_filename' => null,
         ]);
-        $this->repoArticle->add($article1);
+        $this->repoArticle->add($article2);
         
-        $article2 = new AppObject([
+        $article3 = new AppObject([
             'id' => 'prout-lol-xptdr',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
@@ -227,9 +325,9 @@ class Fixture
             'cover_filename' => '202201051906201.jpg',
             'thumbnail_filename' => null,
         ]);
-        $this->repoArticle->add($article2);
+        $this->repoArticle->add($article3);
         
-        $article3 = new AppObject([
+        $article4 = new AppObject([
             'id' => 'bonjour-a-tous',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
@@ -241,9 +339,9 @@ class Fixture
             'cover_filename' => '202111271348081.jpg',
             'thumbnail_filename' => null,
         ]);
-        $this->repoArticle->add($article3);
+        $this->repoArticle->add($article4);
         
-        $article4 = new AppObject([
+        $article5 = new AppObject([
             'id' => 'commencement',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
@@ -255,9 +353,9 @@ class Fixture
             'cover_filename' => '202111271348081.jpg',
             'thumbnail_filename' => null,
         ]);
-        $this->repoArticle->add($article4);
+        $this->repoArticle->add($article5);
         
-        $article5 = new AppObject([
+        $article6 = new AppObject([
             'id' => 'la-compet',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
@@ -269,9 +367,9 @@ class Fixture
             'cover_filename' => '202111271348081.jpg',
             'thumbnail_filename' => null,
         ]);
-        $this->repoArticle->add($article5);
+        $this->repoArticle->add($article6);
 
-        $this->repoArticle->add(new AppObject([
+        $article7 = new AppObject([
             'id' => 'article-with-thumbnail',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
@@ -282,9 +380,10 @@ class Fixture
             'sub_title' => null,
             'cover_filename' => '202111271348081.jpg',
             'thumbnail_filename' => '2021112713481.jpg',
-        ]));
+        ]);
+        $this->repoArticle->add($article7);
 
-        $this->repoArticle->add(new AppObject([
+        $article8 = new AppObject([
             'id' => 'goldsource-review',
             'author_id' => $root['id'],
             'category_id' => $cat1['id'],
@@ -295,18 +394,15 @@ class Fixture
             'sub_title' => 'Grande question',
             'cover_filename' => '202111271344571.jpg',
             'thumbnail_filename' => '202111271348081.jpg',
-        ]));
+        ]);
+        $this->repoArticle->add($article8);
 
-        $this->repoReview->add(new AppObject([
-            'id' => null,
-            'article_id' => $article0['id'],
-            'playable_id' => $sc['id'],
-            'rating' => 4,
-            'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
-            'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
-            'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
-        ]));
-        $this->repoReview->add(new AppObject([
+
+        /**
+         * Reviews
+         */
+
+        $review1 = new AppObject([
             'id' => null,
             'article_id' => $article1['id'],
             'playable_id' => $sc['id'],
@@ -314,8 +410,10 @@ class Fixture
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
             'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
             'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
-        ]));
-        $this->repoReview->add(new AppObject([
+        ]);
+        $this->repoReview->add($review1);
+
+        $review2 = new AppObject([
             'id' => null,
             'article_id' => $article2['id'],
             'playable_id' => $sc['id'],
@@ -323,8 +421,10 @@ class Fixture
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
             'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
             'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
-        ]));
-        $this->repoReview->add(new AppObject([
+        ]);
+        $this->repoReview->add($review2);
+
+        $review3 = new AppObject([
             'id' => null,
             'article_id' => $article3['id'],
             'playable_id' => $sc['id'],
@@ -332,8 +432,21 @@ class Fixture
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
             'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
             'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
-        ]));
-        $this->repoReview->add(new AppObject([
+        ]);
+        $this->repoReview->add($review3);
+
+        $review4 = new AppObject([
+            'id' => null,
+            'article_id' => $article4['id'],
+            'playable_id' => $sc['id'],
+            'rating' => 4,
+            'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
+            'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
+            'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
+        ]);
+        $this->repoReview->add($review4);
+
+        $review5 = new AppObject([
             'id' => null,
             'article_id' => 'goldsource-review',
             'playable_id' => 'goldsource',
@@ -341,7 +454,9 @@ class Fixture
             'body' =>  'Un moteur parfait',
             'cons' => '- Aucun',
             'pros' => '- Tout',
-        ]));
+        ]);
+        $this->repoReview->add($review5);
+        
         $this->conn->getPdo()->commit();
     }
 }

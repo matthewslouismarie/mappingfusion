@@ -5,6 +5,7 @@ namespace MF\Controller;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
+use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\DataStructures\Slug;
 use MF\Model\BookModel;
@@ -26,16 +27,18 @@ class AdminBookController implements ControllerInterface
         ServerRequestInterface $request,
         array $routeParams,
     ): ResponseInterface {
-        // @todo Use model to check.
+        /**
+         * @todo Use model to check.
+         * @todo Should check this in every controller.
+         */ 
         if (1 !== count($routeParams) && 2 !== count($routeParams)) {
             throw new RequestedResourceNotFound();
         }
 
+        $book = isset($routeParams[1]) ? $this->bookRepository->find($routeParams[1]) : null;
+
         return $this->formController->generateResponse(
-            $request,
-            $routeParams,
-            $routeParams[1] ?? null,
-            new BookModel(new ChapterModel()),
+            $routeParams[1],
             [
                 'id' => [
                     'required' => false,
@@ -44,16 +47,17 @@ class AdminBookController implements ControllerInterface
                     }
                 ]
             ],
-            'Il existe déjà un tutoriel avec le même ID.',
+            $routeParams,
+            new BookModel(new ChapterModel()),
             $this->bookRepository,
-            'admin_book.html.twig',
-            function ($formData) {
-                return null === $formData ? 'Nouveau tutoriel' : $formData['title'];
-            },
+            $this->getPage($book),
+            $request,
+            'Il existe déjà un tutoriel avec le même ID.',
             'Le tutoriel a été créé avec succès.',
             'Le tutoriel a été mis à jour avec succès.',
+            'admin_book.html.twig',
+            [],
             true,
-            page: $this->getPage($routeParams),
         );
     }
 
@@ -61,17 +65,13 @@ class AdminBookController implements ControllerInterface
         return Clearance::ADMINS;
     }
 
-    public function getPage(array $pageParams): Page {
-        $pageName = 'Nouveau tutoriel';
-        if (isset($pageParams[1])) {
-            $book = $this->bookRepository->find($pageParams[1]);
-            if (null !== $book) {
-                $pageName = "Gestion de {$book->title}";
-            }
-        }
+    public function getPage(?AppObject $book): Page {
+        $pageName = null === $book ? 'Nouveau tutoriel' : "Gestion de {$book->title}";
+        $params = null === $book ? [] : [$book->id];
         return $this->pageFactory->createPage(
-            $pageName,
-            self::class,
+            name: $pageName,
+            controllerFqcn: self::class,
+            controllerParams: $params,
             parentFqcn: AdminBookListController::class,
             isIndexed: false,
         );

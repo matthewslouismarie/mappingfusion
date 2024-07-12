@@ -2,9 +2,10 @@
 
 {% from 'macros/macros.html.twig' import csrf, errorList %}
 {% block bodyContent %}
-<h1 class="_h1">{{ pageTitle }}</h1>
+<h1 class="_h1">{{ page.name }}</h1>
 
 <form autocomplete="on" class="form-row-container" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
+    {% if formErrors.form is defined %}{{ errorList(formErrors.form) }}{% endif %}
     <div class="form-row">
         <label class="label" for="id">ID (peut être laissé vide)</label>
         <input class="input -text" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
@@ -15,10 +16,16 @@
         <input class="input -text" id="title" name="title" required{% if formData %} value="{{ formData.title }}"{% endif %}>
         {% if formErrors.title is defined %}{{ errorList(formErrors.title) }}{% endif %}
     </div>
+    <div class="form-row">
+        <label class="label" for="order">Ordre</label>
+        <input class="input -text" id="order" name="order" required type="number" min="0" max="255" step="1"{% if formData %} value="{{ formData.order }}"{% endif %}>
+        {% if formErrors.title is defined %}{{ errorList(formErrors.title) }}{% endif %}
+    </div>
     {% for article in entity.articles %}
     <h2><a href="{{ app.router.generateUrl('manage-article', [article.id]) }}">{{ article.title }}</a></h2>
     {% endfor %}
     {{ csrf(app) }}
+    <input class="_hidden" name="book_id" value="{{ book.id }}">
 
     <div class="form-row -buttons">
         <button class="std-button" type="submit">Poster</button>
