@@ -19,11 +19,13 @@
     <div class="form-row">
         <label class="label" for="order">Ordre</label>
         <input class="input -text" id="order" name="order" required type="number" min="0" max="255" step="1"{% if formData %} value="{{ formData.order }}"{% endif %}>
-        {% if formErrors.title is defined %}{{ errorList(formErrors.title) }}{% endif %}
+        {% if formErrors.order is defined %}{{ errorList(formErrors.order) }}{% endif %}
     </div>
+    {% if entity %}
     {% for article in entity.articles %}
     <h2><a href="{{ app.router.generateUrl('manage-article', [article.id]) }}">{{ article.title }}</a></h2>
     {% endfor %}
+    {% endif %}
     {{ csrf(app) }}
     <input class="_hidden" name="book_id" value="{{ book.id }}">
 

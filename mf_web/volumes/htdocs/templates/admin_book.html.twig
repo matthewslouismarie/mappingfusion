@@ -19,15 +19,20 @@
         <input class="input -text" id="title" name="title" required{% if formData %} value="{{ formData.title }}"{% endif %}>
         {% if formErrors.title is defined %}{{ errorList(formErrors.title) }}{% endif %}
     </div>
-    {% if entity %}
-    {% for chapter in entity.chapters %}
-    <h2><a href="{{ app.router.generateUrl('admin-chapitre', [entity.id, chapter.id]) }}">{{ chapter.title }}</a></h2>
-    {% endfor %}
-    {% endif %}
+
     {{ csrf(app) }}
 
     <div class="form-row -buttons">
         <button class="std-button" type="submit">Poster</button>
     </div>
 </form>
+
+{% if entity %}
+{% for chapter in entity.chapters %}
+<h2>
+    <a href="{{ app.router.generateUrl('admin-chapitre', [entity.id, chapter.id]) }}">{{ chapter.title }}</a>
+</h2>
+{% endfor %}
+<a class="std-link" href="{{ app.router.generateUrl('admin-chapitre', [entity.id]) }}">Nouveau chapitre</a>
+{% endif %}
 {% endblock %}
