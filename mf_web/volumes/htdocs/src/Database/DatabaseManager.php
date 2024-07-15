@@ -5,6 +5,8 @@ namespace MF\Database;
 use LM\WebFramework\Configuration;
 use LM\WebFramework\Constraints\IUploadedImageConstraint;
 use LM\WebFramework\Constraints\StringConstraint;
+use LM\WebFramework\Model\SlugModel;
+use LM\WebFramework\Type\ModelValidator;
 use MF\Enum\LinkType;
 use MF\Enum\PlayableType;
 use MF\Model\Url;
@@ -15,16 +17,23 @@ use UnexpectedValueException;
 
 class DatabaseManager
 {
+    /**
+     * @todo Theses const should go in lm-web-framework.
+     */
     const UNEXISTING_DB_CODE = '42000';
+    const SMALLINT_UNSIGNED_MAX = 65535;
+    const TINYINT_UNSIGNED_MAX = 255;
 
     private PDO $pdo;
     private string $dbName;
     private string $dbPwd;
     private string $dbUsername;
     private string $dbHost;
+    private ModelValidator $modelValidator;
 
     public function __construct(
         Configuration $config,
+        ModelValidator $modelValidator,
     ) {
         $this->dbName = $config->getSetting('DB_NAME');
         $this->dbPwd = $config->getSetting('DB_PASSWORD');
@@ -34,6 +43,7 @@ class DatabaseManager
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]);
+        $this->modelValidator = $modelValidator;
 
         try {
             $this->pdo->exec('USE ' . $this->dbName);
@@ -45,6 +55,11 @@ class DatabaseManager
                 $this->createDatabase();
             }
         }
+    }
+
+    public function getLastInsertId(): string
+    {
+        return $this->pdo->lastInsertId();
     }
 
     public function getPdo(): PDO {
@@ -99,8 +114,17 @@ class DatabaseManager
         return $rows[0] ?? null;
     }
 
-    public function run(string $query, array $arguments): void {
+    public function run(string $query, array $arguments): void
+    {
         $stmt = $this->prepare($query);
         $stmt->execute($arguments);
+    }
+
+    public function runFilename(string $fileShortName, array $arguments): void
+    {
+        $this->modelValidator->validate($fileShortName, new SlugModel());
+        $filePath = realpath(dirname(__FILE__) . "/../../sql/{$fileShortName}.sql");
+        $query = file_get_contents($filePath);
+        $this->run($query, $arguments);
     }
 }

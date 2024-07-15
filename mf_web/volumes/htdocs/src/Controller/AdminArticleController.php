@@ -25,7 +25,6 @@ use Psr\Http\Message\ServerRequestInterface;
 class AdminArticleController implements ControllerInterface
 {
     private AbstractEntity $model;
-    private ?AppObject $requestedEntity;
 
     public function __construct(
         private ArticleRepository $repo,
@@ -44,7 +43,6 @@ class AdminArticleController implements ControllerInterface
             ->removeProperty('creation_date_time')
             ->removeProperty('last_update_date_time')
         ;
-        $this->requestedEntity = null;
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
@@ -52,6 +50,7 @@ class AdminArticleController implements ControllerInterface
         $formErrors = null;
         $lastUpdateDateTimeUtc = null;
         $requestedId = $routeParams[1] ?? null;
+        $requestedEntity = null;
         $books = $this->bookRepository->findAll();
 
         $form = $this->formFactory->createForm(
@@ -89,16 +88,21 @@ class AdminArticleController implements ControllerInterface
                 }
                 return $this->router->generateRedirect('manage-article', [$article->id]);
             }
-        } elseif (null !== $requestedId) {
-            $this->requestedEntity = $this->repo->find($requestedId, onlyPublished: false);
-            $formData = $this->requestedEntity?->toArray();
-            $lastUpdateDateTime = $formData['last_update_date_time'];
-            $lastUpdateDateTimeUtc = $lastUpdateDateTime->getTimestamp() * 1000;
+        }
+        
+        if (null !== $requestedId) {
+            $requestedEntity = $this->repo->find($requestedId, onlyPublished: false);
+
+            if (null === $formData) {
+                $formData = $requestedEntity?->toArray();
+                $lastUpdateDateTime = $formData['last_update_date_time'];
+                $lastUpdateDateTimeUtc = $lastUpdateDateTime->getTimestamp() * 1000;
+            }
         }
 
         return $this->twig->respond(
             'admin_article_form.html.twig',
-            $this->getPage(array_slice($routeParams, 1)),
+            $this->getPage($requestedEntity),
             [
                 'categories' => $this->catRepo->findAll(),
                 'books' => $books,
@@ -114,19 +118,16 @@ class AdminArticleController implements ControllerInterface
         return Clearance::ADMINS;
     }
 
-    public function getPage(array $pageParams): Page {
-        if (null === $this->requestedEntity && isset($pageParams[0])) {
-            $this->requestedEntity = $this->repo->find($pageParams[0], onlyPublished: false);
-        }
+    public function getPage(?AppObject $article): Page {
         /**
          * @todo Create function to remove any quotation mark (", ', «…)
          */
-        $pageName = (null == $this->requestedEntity) ? 'Nouvel article' : "Édition de \"{$this->requestedEntity->title}\"";
+        $pageName = (null === $article) ? 'Nouvel article' : "Édition de \"{$article->title}\"";
 
         return $this->pageFactory->createPage(
             $pageName,
             self::class,
-            $pageParams,
+            null === $pageName ? [] : [$article['id']],
             AdminArticleListController::class,
             isIndexed: false,
         );

@@ -24,6 +24,15 @@ class MemberRepository implements IRepository
         return $this->conn->getPdo()->lastInsertId();
     }
 
+    public function delete(string $id): void {
+        $this->conn->run(
+            'DELETE FROM e_member WHERE member_id = :id;',
+            [
+                'id' => $id,
+            ],
+        );
+    }
+
     public function find(string $username): ?AppObject {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_member LEFT JOIN e_author ON member_author_id = author_id WHERE (member_id=?) LIMIT 1');
         $stmt->execute([$username]);

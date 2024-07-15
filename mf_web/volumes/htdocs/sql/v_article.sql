@@ -1,7 +1,7 @@
 CREATE OR REPLACE VIEW v_article AS SELECT
     e_article.*,
     e_category.*,
-    e_chapter_index.chapter_index_chapter_id AS article_chapter_id,
+    e_chapter_index.*,
     e_playable.*,
     e_review.*,
     game.playable_id AS game_id,

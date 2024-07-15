@@ -11,10 +11,10 @@ use LM\WebFramework\DataStructures\Slug;
 use LM\WebFramework\Model\AbstractEntity;
 use LM\WebFramework\Model\SlugModel;
 use LM\WebFramework\Model\StringModel;
-use MF\Model\BookModel;
 use MF\Model\ChapterModel;
 use MF\Repository\BookRepository;
 use MF\Repository\ChapterRepository;
+use MF\Router;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -25,6 +25,7 @@ class AdminChapterController implements ControllerInterface
         private ChapterRepository $chapterRepository,
         private FormController $formController,
         private PageFactory $pageFactory,
+        private Router $router,
     ) {
     }
 
@@ -47,16 +48,6 @@ class AdminChapterController implements ControllerInterface
         }
 
         return $this->formController->generateResponse(
-            $routeParams[2] ?? null,
-            [
-                'id' => [
-                    'required' => false,
-                    'default' => function ($values) {
-                        return null !== $values['title'] ? (new Slug($values['title'], true))->__toString() : null;
-                    }
-                ],
-            ],
-            $routeParams,
             new ChapterModel(
                 new AbstractEntity([
                     'id' => new SlugModel(),
@@ -66,17 +57,27 @@ class AdminChapterController implements ControllerInterface
             $this->chapterRepository,
             $this->getPage($book, $chapter),
             $request,
-            'Il existe déjà un chapitre avec le même ID, ou avec cet ordre.',
-            'Le chapitre a été créé avec succès.',
-            'Le chapitre a été mis à jour avec succès.',
+            function ($appObject) {
+                return $this->router->getUrl('AdminChapterController', [$appObject['id']]);
+            },
             'admin_chapter.html.twig',
-            [
+            $chapter,
+            $routeParams[2] ?? null,
+            $this->router->getUrl('AdminBookController', [$book['id']]),
+            formConfig: [
+                'id' => [
+                    'required' => false,
+                    'default' => function ($values) {
+                        return null !== $values['title'] ? (new Slug($values['title'], true))->__toString() : null;
+                    }
+                ],
+            ],
+            twigAdditionalParams: [
                 'book' => $book,
             ],
-            true,
-            true,
-            AdminBookController::class,
-            [$book->id],
+            idAlreadyTakenMessage: 'Il existe déjà un chapitre avec le même ID, ou avec cet ordre.',
+            successfulInsertMessage: 'Le chapitre a été créé avec succès.',
+            successfulUpdateMessage: 'Le chapitre a été mis à jour avec succès.',
         );
     }
 

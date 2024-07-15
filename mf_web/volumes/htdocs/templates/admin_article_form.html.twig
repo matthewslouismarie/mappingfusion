@@ -13,9 +13,14 @@
 <h1 class="_h1">{{ page.name }}</h1>
 
 {% if requestedId %}
-<div class="_std">
-    <a class="std-link" href="{{ app.router.generateUrl('article', [requestedId]) }}">Visualiser l’article</a>
-</div>
+<ul class="std-inline-list _marginm -mgbottom">
+    <li class="item">
+        <a class="std-button" href="{{ app.router.generateUrl('article', [requestedId]) }}">Visualiser l’article</a>
+    </li>
+    <li class="item">
+        <a class="std-button" href="{{ app.router.url('AdminChapterIndexController', [requestedId]) }}">Ajouter l’article à un chapitre</a>
+    </li>
+</ul>
 {% endif %}
 
 <form autocomplete="on" class="form-row-container" id="article-form" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
@@ -41,20 +46,6 @@
             {% endfor %}
         </select>
         {% if formErrors %}{{ errorList( formErrors.category_id ?? null) }}{% endif %}
-    </div>
-
-    <div class="form-row">
-        <label class="label" for="chapter-id">Tutoriel et chapitre</label>
-        <select id="chapter-id" name="chapter_id">
-            <option></option>
-            {% for book in books %}
-            <optgroup label="{{ book.title }}">
-            {% for c in book.chapters %}
-            <option value="{{ c.id }}"{% if formData and c.id == formData.chapter_id %} selected{% endif %}>{{ c.title }}</option>
-            {% endfor %}
-            {% endfor %}
-        </select>
-        {% if formErrors %}{{ errorList( formErrors.chapter_id ?? null) }}{% endif %}
     </div>
 
     <div class="form-row -singleimage">

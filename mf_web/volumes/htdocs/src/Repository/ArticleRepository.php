@@ -14,6 +14,7 @@ use MF\Model\ContributionModel;
 use MF\Model\PlayableLinkModel;
 use LM\WebFramework\Session\SessionManager;
 use MF\Model\ArticleModel;
+use MF\Model\ChapterIndexModel;
 use MF\Model\PlayableModel;
 use MF\Model\ReviewModel;
 use OutOfBoundsException;
@@ -87,8 +88,8 @@ class ArticleRepository implements IRepository
         $articleModel = new ArticleModel(
             authorModel: new AuthorModel(),
             categoryModel: new CategoryModel(),
-            chapterId: true,
             reviewModel: $reviewModel,
+            chapterIndexModel: new ChapterIndexModel(isNullable: true),
         );
 
         return $this->em->toAppData($data[0], $articleModel, 'article');

@@ -11,6 +11,7 @@ use LM\WebFramework\DataStructures\Slug;
 use MF\Model\BookModel;
 use MF\Model\ChapterModel;
 use MF\Repository\BookRepository;
+use MF\Router;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -20,6 +21,7 @@ class AdminBookController implements ControllerInterface
         private BookRepository $bookRepository,
         private FormController $formController,
         private PageFactory $pageFactory,
+        private Router $router,
     ) {
     }
 
@@ -38,8 +40,18 @@ class AdminBookController implements ControllerInterface
         $book = isset($routeParams[1]) ? $this->bookRepository->find($routeParams[1]) : null;
 
         return $this->formController->generateResponse(
-            $routeParams[1],
-            [
+            model: new BookModel(new ChapterModel()),
+            repository: $this->bookRepository,
+            page: $this->getPage($book),
+            request: $request,
+            getSuccessfulRedirect: function ($appObject) {
+                return $this->router->redirect(self::class, [$appObject['id']]);
+            },
+            twigFilename: 'admin_book.html.twig',
+            entity: $book,
+            id: $routeParams[1] ?? null,
+            redirectAfterDeletion: $this->router->getUrl('AdminBookListController'),
+            formConfig: [
                 'id' => [
                     'required' => false,
                     'default' => function ($values) {
@@ -47,17 +59,9 @@ class AdminBookController implements ControllerInterface
                     }
                 ]
             ],
-            $routeParams,
-            new BookModel(new ChapterModel()),
-            $this->bookRepository,
-            $this->getPage($book),
-            $request,
-            'Il existe déjà un tutoriel avec le même ID.',
-            'Le tutoriel a été créé avec succès.',
-            'Le tutoriel a été mis à jour avec succès.',
-            'admin_book.html.twig',
-            [],
-            true,
+            idAlreadyTakenMessage: 'Il existe déjà un tutoriel avec le même ID.',
+            successfulInsertMessage: 'Le tutoriel a été créé avec succès.',
+            successfulUpdateMessage: 'Le tutoriel a été mis à jour avec succès.',
         );
     }
 

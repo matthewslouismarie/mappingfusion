@@ -60,6 +60,42 @@
 {% endif %}
 {% endmacro %}
 
+{% macro form_start(app, formErrors) %}
+<form autocomplete="on" class="form-row-container" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
+    {% if formErrors.form is defined %}{{ _self.errorList(formErrors.form) }}{% endif %}
+{% endmacro %}
+
+{% macro form_end(app, submitButtonLabel = 'Poster', whiteButton = true) %}
+    {{ _self.csrf(app) }}
+
+    <div class="form-row -buttons">
+        <button class="std-button{% if whiteButton %} -white{% endif %}" type="submit">{{ submitButtonLabel }}</button>
+    </div>
+</form>
+{% endmacro %}
+
+{% macro form_row_start(name, label) %}
+<div class="form-row">
+    <label class="label" for="{{ name }}">{{ label }}</label>
+{% endmacro %}
+
+{% macro form_row_end(name, formErrors) %}
+    {% if formErrors[name] is defined %}{{ _self.errorList(formErrors[name]) }}{% endif %}
+</div>
+{% endmacro %}
+
+{% macro formRow(name, label, formData, formErrors, required = true) %}
+{{ _self.form_row_start(name, label) }}
+    <input class="input -text" id="{{ name }}" name="{{ name }}"{% if required %} required{% endif %}{% if formData %} value="{{ formData[name] }}"{% endif %}>
+{{ _self.form_row_end(name, formErrors) }}
+{% endmacro %}
+
+{% macro numberRow(name, label, formData, formErrors, max, min=0, step = 1) %}
+{{ _self.form_row_start(name, label) }}
+    <input class="input -text" id="{{ name }}" name="{{ name }}" required type="number" min="{{ min }}" max="{{ max }}" step="{{ step }}"{% if formData %} value="{{ formData[name] }}"{% endif %}>
+{{ _self.form_row_end(name, formErrors) }}
+{% endmacro %}
+
 {% macro previous(app, page) %}
 <div class="previous-link">
     <a class="link" href="{{ page.parent.url }}">

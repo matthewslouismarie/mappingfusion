@@ -1,52 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% from 'macros/macros.html.twig' import csrf, errorList %}
+{% from 'macros/macros.html.twig' import csrf, errorList, form_start, formRow, numberRow, form_end %}
 {% block bodyContent %}
 <h1 class="_h1">{{ page.name }}</h1>
 
-<form autocomplete="on" class="form-row-container" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
-    {% if formErrors.form is defined %}{{ errorList(formErrors.form) }}{% endif %}
-    <div class="form-row">
-        <label class="label" for="id">ID (peut être laissé vide)</label>
-        <input class="input -text" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
-        {% if formErrors.id is defined %}{{ errorList(formErrors.id) }}{% endif %}
-    </div>
-    <div class="form-row">
-        <label class="label" for="title">Titre</label>
-        <input class="input -text" id="title" name="title" required{% if formData %} value="{{ formData.title }}"{% endif %}>
-        {% if formErrors.title is defined %}{{ errorList(formErrors.title) }}{% endif %}
-    </div>
-    <div class="form-row">
-        <label class="label" for="order">Ordre</label>
-        <input class="input -text" id="order" name="order" required type="number" min="0" max="255" step="1"{% if formData %} value="{{ formData.order }}"{% endif %}>
-        {% if formErrors.order is defined %}{{ errorList(formErrors.order) }}{% endif %}
-    </div>
+{{ form_start(app, formErrors) }}
+    {{ formRow('id', 'ID (peut être laissé vide)', formData, formErrors, false) }}
+
+    {{ formRow('title', 'Titre', formData, formErrors) }}
+
+    {{ numberRow('order', 'Position dans le chapitre', formData, formErrors, 255) }}
+
     {% if entity %}
     {% for article in entity.articles %}
     <h2><a href="{{ app.router.generateUrl('manage-article', [article.id]) }}">{{ article.title }}</a></h2>
     {% endfor %}
     {% endif %}
-    {{ csrf(app) }}
+
     <input name="book_id" type="hidden" value="{{ book.id }}">
 
-    <div class="form-row -buttons">
-        <button class="std-button" type="submit">Poster</button>
-    </div>
-</form>
+{{ form_end(app) }}
 
 {% if entity %}
-<form autocomplete="off" class="form-row-container" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
-    <div class="form-row">
-        <label class="label" for="delete_id">Taper « Supprimer  » suivi de l’ID du chapitre si vous voulez le supprimer.</label>
-        <input class="input -text" id="delete_id" name="delete_id">
-        {% if deleteFormErrors.delete_id is defined %}{{ errorList(deleteFormErrors.delete_id) }}{% endif %}
-    </div>
-    {{ csrf(app) }}
-    <input name="_DELETE_FORM" type="hidden" value="{{ entity.id }}">
+{{ form_start(app) }}
 
-    <div class="form-row -buttons">
-        <button class="std-button" type="submit">Supprimer le chapitre</button>
-    </div>
-</form>
+{{ formRow('_DELETE_FORM', 'Supprimre définitivement le chapitre', null, deleteFormErrors) }}
+
+{{ form_end(app, 'Supprimer le chapitre', false) }}
 {% endif %}
+
 {% endblock %}

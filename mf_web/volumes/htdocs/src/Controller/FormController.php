@@ -2,6 +2,8 @@
 
 namespace MF\Controller;
 
+use Closure;
+use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
@@ -21,6 +23,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class FormController
 {
+    const DELETE_FORM_ID = '_DELETE_FORM';
+
     public function __construct(
         private FormFactory $formFactory,
         private ModelValidator $modelValidator,
@@ -38,7 +42,7 @@ class FormController
      * a page allowing them to see, create or update an entity of a certain
      * model.
      * 
-     * @param ?string $requestedId The ID of the entity requested by the user’s
+     * @param ?string $id The ID of the entity requested by the user’s
      * request.
      * @param IModel $model The model of entities handled by this controller.
      * @param array $formConfig Any additional configuration for the form.
@@ -59,60 +63,38 @@ class FormController
      * @todo Make $page required.
      */
     public function generateResponse(
-        ?string $requestedId,
-        array $formConfig,
-        array $routeParams,
         IModel $model,
         IRepository $repository,
         Page $page,
         ServerRequestInterface $request,
-        string $idAlreadyTakenMessage,
-        string $successfulInsertMessage,
-        string $successfulUpdateMessage,
+        Closure $getSuccessfulRedirect,
         string $twigFilename,
-        array $additionalTwigParams = [],
-        bool $alwaysFetchEntity = false,
-        bool $hasDeleteForm = false,
+        ?AppObject $entity = null,
+        ?string $id = null,
         ?string $redirectAfterDeletion = null,
-        ?array $redirectAfterDeletionParams = null,
+        array $addBeforeCreateOrUpdate = [],
+        array $formConfig = [],
+        array $twigAdditionalParams = [],
+        string $idAlreadyTakenMessage = 'Cet identifiant est déjà pris.',
+        string $successfulInsertMessage = 'L’objet a bien été ajouté.',
+        string $successfulUpdateMessage = 'L’objet a bien été mis à jour.',
     ): ResponseInterface {
         // @todo Put formData and formErrors in the same object?
         $formData = null;
-        $requestedEntity = ($alwaysFetchEntity && null !== $requestedId) ? $repository->find($requestedId) : null;
         $formErrors = null;
         $form = $this->formFactory->createForm(
             $model,
             $formConfig,
         );
-
-        $deleteFormModel = new AbstractEntity([
-            'delete_id' => new StringModel()
-        ]);
-        $deleteForm = $hasDeleteForm ? $this->formFactory->createForm(
-            $deleteFormModel,
-        ) : null;
         $deleteFormErrors = null;
 
         if ('POST' === $request->getMethod()) {
-            if ($hasDeleteForm && isset($request->getParsedBody()['_DELETE_FORM'])) {
-                $deleteFormData = $deleteForm->extractValueFromRequest(
-                    $request->getParsedBody(),
-                    $request->getUploadedFiles(),
-                );
-                $deleteFormErrors = $this->modelValidator->validate($deleteFormData, $deleteFormModel);
-                if (null === $requestedEntity) {
-                    throw new IllegalUserInputException();
-                }
-                elseif ("Supprimer $requestedId" !== $deleteFormData['delete_id']) {
-                    $deleteFormErrors['delete_id'][] = "Veuillez rentrer « Supprimer {$requestedId} » si vous voulez le supprimer.";
-                }
+            if (isset($request->getParsedBody()[self::DELETE_FORM_ID])) {
+                $deleteFormErrors = $this->processDeleteRequest($request, $id);
                 if (0 === count($deleteFormErrors)) {
-                    $repository->delete($requestedId);
+                    $repository->delete($id);
                     $this->sessionManager->addMessage('La suppression a bien été effectuée.');
-                    return $this->router->generateRedirect(
-                        $this->router->getRouteId($redirectAfterDeletion),
-                        $redirectAfterDeletionParams ?? [],
-                    );
+                    return new Response(302, ['Location' => $redirectAfterDeletion]);
                 }
             }
             else {
@@ -124,16 +106,20 @@ class FormController
                 $formErrors = $this->modelValidator->validate($formData, $model);
     
                 if (0 === count($formErrors)) {
+                    if (null !== $entity) {
+                        $formData += $entity->toArray();
+                    }
+                    $formData += $addBeforeCreateOrUpdate;
                     $appObject = new AppObject($formData);
                     try {
-                        if (null === $requestedId) {
+                        if (null === $id) {
                             $repository->add($appObject);
                             $this->sessionManager->addMessage($successfulInsertMessage);
-                            return $this->getSuccessfulRedirect($routeParams, $requestedId, $appObject['id']);
+                            return $getSuccessfulRedirect($appObject);
                         } else {
-                            $repository->update($appObject, $requestedId);
+                            $repository->update($appObject, $id);
                             $this->sessionManager->addMessage($successfulUpdateMessage);
-                            return $this->getSuccessfulRedirect($routeParams, $requestedId, $appObject['id']);
+                            return $getSuccessfulRedirect($appObject);
                         }
                     } catch (PDOException $e) {
                         if ('23000' === $e->getCode()) {
@@ -146,12 +132,12 @@ class FormController
             }
         }
         
-        if (null !== $requestedId && null === $formData) {
-            $requestedEntity = $requestedEntity ?? $repository->find($requestedId);
-            if (null === $requestedEntity) {
+        if (null !== $id && null === $formData) {
+            $entity = $entity ?? $repository->find($id);
+            if (null === $entity) {
                 throw new RequestedResourceNotFound();
             }
-            $formData = $requestedEntity->toArray();
+            $formData = $entity->toArray();
         }
 
         return $this->twig->respond(
@@ -160,19 +146,32 @@ class FormController
             [
                 'formData' => $formData,
                 'formErrors' => $formErrors,
-                'entity' => $requestedEntity,
+                'entity' => $entity,
                 'deleteFormErrors' => $deleteFormErrors,
-            ] + $additionalTwigParams,
+            ] + $twigAdditionalParams,
         );
     }
 
-    private function getSuccessfulRedirect(array $routeParams, ?string $requestedId, string $newEntityId): ResponseInterface {
-        if (null === $requestedId) {
-            $newRouteParams = array_slice($routeParams, 1);
-        } else {
-            $newRouteParams = array_slice($routeParams, 1, -1);
+    private function processDeleteRequest(ServerRequestInterface $request, ?string $id): array
+    {
+        $deleteFormModel = new AbstractEntity([
+            self::DELETE_FORM_ID => new StringModel()
+        ]);
+        $deleteForm = $this->formFactory->createForm(
+            $deleteFormModel,
+        );
+        $deleteFormData = $deleteForm->extractValueFromRequest(
+            $request->getParsedBody(),
+            $request->getUploadedFiles(),
+        );
+        $deleteFormErrors = $this->modelValidator->validate($deleteFormData, $deleteFormModel);
+        if (null === $id) {
+            throw new IllegalUserInputException();
         }
-        array_push($newRouteParams, $newEntityId);
-        return $this->router->generateRedirect($routeParams[0], $newRouteParams);
+        elseif ("Supprimer $id" !== $deleteFormData[self::DELETE_FORM_ID]) {
+            $deleteFormErrors[self::DELETE_FORM_ID][] = "Veuillez rentrer « Supprimer {$id} » si vous voulez le supprimer.";
+        }
+
+        return $deleteFormErrors;
     }
 }

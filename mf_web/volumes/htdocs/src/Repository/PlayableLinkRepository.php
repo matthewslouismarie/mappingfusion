@@ -23,6 +23,16 @@ class PlayableLinkRepository implements IRepository
         return $this->conn->getPdo()->lastInsertId();
     }
 
+    public function delete(string $id): void
+    {
+        $this->conn->run(
+            'DELETE FROM e_playable_link WHERE playable_link_id = :id;',
+            [
+                'id' => $id,
+            ],
+        );
+    }
+
     public function find(string $id): ?AppObject {
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_playable_link WHERE link_id = :?;');
         $stmt->execute([$id]);

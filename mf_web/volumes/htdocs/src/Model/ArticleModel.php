@@ -15,6 +15,7 @@ class ArticleModel extends AbstractEntity
         ?AuthorModel $authorModel = null,
         ?CategoryModel $categoryModel = null,
         ?ReviewModel $reviewModel = null,
+        ?ChapterIndexModel $chapterIndexModel = null,
         bool $chapterId = false,
     ) {
         $properties = [
@@ -42,6 +43,9 @@ class ArticleModel extends AbstractEntity
         }
         if (null !== $authorModel) {
             $properties['redactor'] = $authorModel;
+        }
+        if (null !== $chapterIndexModel) {
+            $properties['chapter_index'] = $chapterIndexModel;
         }
         parent::__construct($properties);
     }

@@ -26,7 +26,7 @@ class ReviewRepository implements IRepository
         return $this->conn->getPdo()->lastInsertId();
     }
 
-    public function delete(int $id): void {
+    public function delete(string $id): void {
         $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_review WHERE review_id = ?;');
         $stmt->execute([$id]);
     }

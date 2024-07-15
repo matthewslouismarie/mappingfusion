@@ -51,6 +51,7 @@ class ChapterRepository implements IRepository
             ]),
             new BookModel(),
         );
+
         return $this->em->toAppData($data, $model, 'chapter');
     }
 

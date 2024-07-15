@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% from 'macros/macros.html.twig' import errorList, form_start, form_end, formRow, numberRow %}
+
+{% block bodyContent %}
+<h1 class="_h1">{{ page.name }}</h1>
+
+{{ form_start(app) }}
+
+<div class="form-row">
+    <label class="label" for="chapter-id">Chapitre</label>
+    <select id="chapter-id" name="chapter_id" required>
+        {% for b in books %}
+        <optgroup label="{{ b.title }}">
+            {% for c in b.chapters %}
+            <option value="{{ c.id }}"{% if formData and c.id == formData.chapter_id %} selected{% endif %}>{{ c.title }}</option>
+            {% endfor %}
+        </optgroup>
+        {% endfor %}
+    </select>
+    {% if formErrors %}{{ errorList( formErrors.chapter_id ?? null) }}{% endif %}
+</div>
+
+{{ numberRow('order', 'Position dans le chapitre', formData, formErrors, 255) }}
+
+{{ form_end(app) }}
+
+{% if entity %}
+{{ form_start(app) }}
+
+{{ formRow('_DELETE_FORM', 'Retirer l’article du chapitre', null, deleteFormErrors) }}
+
+{{ form_end(app, 'Enlever du chapitre', false) }}
+{% endif %}
+
+{% endblock %}

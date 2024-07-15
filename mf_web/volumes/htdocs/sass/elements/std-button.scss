@@ -1,12 +1,19 @@
 .std-button {
     display: inline-flex;
     align-items: center;
-    border: $border-xxs solid $color-white;
+    border: $border-xxs solid $color-grey;
     justify-content: center;
 
     @include asymetric-padding;
 
+    background: none;
     border-radius: $border-radius-m;
+    color: $color-grey;
+
+    &:hover {
+        color: $color-white;
+        border-color: $color-white;
+    }
 
     &.-blue {
         background-color: $color-blue-2;
