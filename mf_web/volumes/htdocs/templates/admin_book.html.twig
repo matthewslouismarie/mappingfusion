@@ -8,6 +8,14 @@
 
 <h1 class="_h1">{{ page.name }}</h1>
 
+{% if entity %}
+<ul class="std-inline-list _marginm -mgbottom">
+    <li class="item">
+        <a class="std-button" href="{{ app.router.generateUrl('tutoriel', [entity.id]) }}">Visualiser le tutoriel</a>
+    </li>
+</ul>
+{% endif %}
+
 <form autocomplete="on" class="form-row-container" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="form-row">
         <label class="label" for="id">ID (peut être laissé vide)</label>
