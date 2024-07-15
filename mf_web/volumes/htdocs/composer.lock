@@ -694,7 +694,7 @@
         },
         {
             "name": "matthewslouismarie/lm-web-framework",
-            "version": "2.8.0",
+            "version": "2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthewslouismarie/lm-web-framework.git",
@@ -735,7 +735,7 @@
             ],
             "support": {
                 "issues": "https://github.com/matthewslouismarie/lm-web-framework/issues",
-                "source": "https://github.com/matthewslouismarie/lm-web-framework/tree/2.8.0"
+                "source": "https://github.com/matthewslouismarie/lm-web-framework/tree/2.8.1"
             },
             "time": "2024-07-11T20:01:19+00:00"
         },
