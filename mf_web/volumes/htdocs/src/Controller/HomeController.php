@@ -9,6 +9,7 @@ use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\Page;
 use MF\Repository\ArticleRepository;
+use MF\Repository\CategoryRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,7 +18,8 @@ class HomeController implements ControllerInterface, SinglePageOwner
 {
     public function __construct(
         private ArticleRepository $articleRepo,
-        private Configuration $configuration,
+        private CategoryRepository $catRepo,
+        private Configuration $config,
         private TwigService $twig,
     ) {
     }
@@ -31,6 +33,7 @@ class HomeController implements ControllerInterface, SinglePageOwner
                 'reviews' => $this->articleRepo->findAllReviews(),
                 'last_articles' => $this->articleRepo->findLastArticles(),
                 'last_reviews' => $this->articleRepo->findLastReviews(),
+                'other_articles' => $this->catRepo->find($this->config->getSetting('otherCategoryId')),
             ],
         ));
     }
@@ -44,7 +47,7 @@ class HomeController implements ControllerInterface, SinglePageOwner
         return new Page(
             null,
             'Mapping-Fusion',
-            $this->configuration->getHomeUrl(),
+            $this->config->getHomeUrl(),
         );
     }
 }

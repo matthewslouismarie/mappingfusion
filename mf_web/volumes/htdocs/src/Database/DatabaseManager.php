@@ -99,11 +99,11 @@ class DatabaseManager
         return $stmt;
     }
 
-    public function fetchRows(string $query, array $arguments, int $maxNumberOfRows): array {
+    public function fetchRows(string $query, array $arguments, ?int $maxNumberOfRows = null): array {
         $stmt = $this->prepare($query);
         $stmt->execute($arguments);
         $dbRows = $stmt->fetchAll();
-        if (count($dbRows) > $maxNumberOfRows) {
+        if (null !== $maxNumberOfRows && count($dbRows) > $maxNumberOfRows) {
             throw new UnexpectedValueException('Fetched rows exceed maximum number.');
         }
         return $dbRows;

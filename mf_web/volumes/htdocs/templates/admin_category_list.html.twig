@@ -3,12 +3,12 @@
 {% block bodyContent %}
 <h1 class="_h1">{{ page.name }}</h1>
 
-<a class="std-button _std" href="{{ app.router.generateUrl('admin-manage-category') }}">Créer une nouvelle catégorie</a>
+<a class="std-button _std" href="{{ app.router.generateUrl('admin-categorie') }}">Créer une nouvelle catégorie</a>
 
 <ul class="std-list _std">
     {% for c in categories %}
     <li class="item">
-        <a class="std-link" href="{{ app.router.generateUrl('admin-manage-category', {id: c.id}) }}">{{ c.name }}</a>
+        <a class="std-link" href="{{ app.router.generateUrl('admin-categorie', {id: c.id}) }}">{{ c.name }}</a>
     </li>
     {% endfor %}
 </ul>
