@@ -11,10 +11,10 @@ use LM\WebFramework\Model\ListModel;
 use LM\WebFramework\Model\SlugModel;
 use LM\WebFramework\Model\StringModel;
 use LM\WebFramework\Test\IUnitTest;
-use MF\Model\ArticleModel;
-use MF\Model\BookModel;
-use MF\Model\CategoryModel;
-use MF\Model\ChapterModel;
+use MF\Model\ArticleModelFactory;
+use MF\Model\BookModelFactory;
+use MF\Model\CategoryModelFactory;
+use MF\Model\ChapterModelFactory;
 
 class DbEntityManagerTest implements IUnitTest
 {
@@ -24,7 +24,7 @@ class DbEntityManagerTest implements IUnitTest
     }
 
     public function run(): array {
-        $bookModel = new BookModel();
+        $bookModel = new BookModelFactory();
         $em = $this->dbEntityManager;
         $tester = new Tester();
 
@@ -66,7 +66,7 @@ class DbEntityManagerTest implements IUnitTest
                 'playable_game_release_date_time' => NULL,
                 'playable_game_game_id' => NULL,
             ],
-            new ArticleModel(categoryModel: new CategoryModel())
+            $this->articleModelFactory->create(categoryModel: $this->categoryModelFactory->create())
         , 'article');
 
         $expectedAppObject = new AppObject([
@@ -108,7 +108,7 @@ class DbEntityManagerTest implements IUnitTest
               'book_id' => 'a-book',
               'book_title' => 'Mon premier livre !',
             ],
-        ], new ListModel(new BookModel()), 'book');
+        ], new ListModel(new BookModelFactory()), 'book');
 
         $appObjectList = new AppObject([
             new AppObject([
@@ -137,7 +137,7 @@ class DbEntityManagerTest implements IUnitTest
             'book_title' => null,
         ];
 
-        $nullableBookModel = new class extends BookModel {
+        $nullableBookModel = new class extends BookModelFactory {
             public function isNullable(): bool
             {
                 return true;
@@ -171,7 +171,7 @@ class DbEntityManagerTest implements IUnitTest
             $em->toAppData($unPetitTrucEnPlus, $bookModel, 'book')->toArray(),
         );
 
-        $dbNestedModel = new BookModel(new ChapterModel(new AbstractEntity([
+        $dbNestedModel = new BookModelFactory(new ChapterModelFactory(new AbstractEntity([
             'id' => new SlugModel(),
             'title' => new StringModel(),
         ])));

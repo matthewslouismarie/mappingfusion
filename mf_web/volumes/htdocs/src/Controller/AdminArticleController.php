@@ -8,11 +8,11 @@ use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
-use LM\WebFramework\Model\AbstractEntity;
 use LM\WebFramework\Session\SessionManager;
-use LM\WebFramework\Type\ModelValidator;
-use MF\Model\ArticleModel;
+use LM\WebFramework\Validator\ModelValidator;
+use MF\Model\ArticleModelFactory;
 use LM\WebFramework\DataStructures\Slug;
+use LM\WebFramework\Model\Type\EntityModel;
 use MF\Repository\ArticleRepository;
 use MF\Repository\BookRepository;
 use MF\Repository\CategoryRepository;
@@ -24,22 +24,23 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminArticleController implements ControllerInterface
 {
-    private AbstractEntity $model;
+    private EntityModel $model;
 
     public function __construct(
+        private ArticleModelFactory $articleModelFactory,
         private ArticleRepository $repo,
         private BookRepository $bookRepository,
         private CategoryRepository $catRepo,
         private DbEntityManager $em,
         private FormFactory $formFactory,
-        private ModelValidator $modelValidator,
         private PageFactory $pageFactory,
         private Router $router,
         private SessionManager $session,
         private TemplateHelper $templateHelper,
         private TwigService $twig,
     ) {
-        $this->model = (new ArticleModel(chapterId: true))
+        $this->model = $articleModelFactory
+            ->create(chapterId: true)
             ->removeProperty('creation_date_time')
             ->removeProperty('last_update_date_time')
         ;
@@ -71,7 +72,8 @@ class AdminArticleController implements ControllerInterface
             $formData['id'] = $formData['id'] ?? (null !== $formData['title'] ? (new Slug($formData['title'], true))->__toString() : null);
             $formData['author_id'] = $this->session->getCurrentMemberUsername();
             $lastUpdateDateTimeUtc = time() * 1000;
-            $formErrors = $this->modelValidator->validate($formData, $this->model);
+            $validator = new ModelValidator($this->model);
+            $formErrors = $validator->validate($formData, $this->model);
     
             if (0 === count($formErrors)) {
                 $article = new AppObject($formData);

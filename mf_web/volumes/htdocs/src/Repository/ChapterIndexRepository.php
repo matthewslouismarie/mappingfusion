@@ -5,7 +5,7 @@ namespace MF\Repository;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\Database\DatabaseManager;
-use MF\Model\ChapterIndexModel;
+use MF\Model\ChapterIndexModelFactory;
 
 class ChapterIndexRepository implements IRepository
 {
@@ -37,6 +37,6 @@ class ChapterIndexRepository implements IRepository
     public function find(string $id): ?AppObject
     {
         $row = $this->db->fetchNullableRow('SELECT * FROM e_chapter_index WHERE chapter_index_id = ?;', [$id]);
-        return $this->em->toAppData($row, new ChapterIndexModel(), 'chapter_index');
+        return $this->em->toAppData($row, new ChapterIndexModelFactory(), 'chapter_index');
     }
 }

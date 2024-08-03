@@ -5,13 +5,13 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
-use MF\Model\PlayableLinkModel;
+use MF\Model\PlayableLinkModelFactory;
 
 class PlayableLinkRepository implements IRepository
 {
     public function __construct(
         private DatabaseManager $conn,
-        private PlayableLinkModel $model,
+        private PlayableLinkModelFactory $model,
         private DbEntityManager $em,
     ) {
     }

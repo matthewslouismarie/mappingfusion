@@ -9,8 +9,8 @@ use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Session\SessionManager;
-use LM\WebFramework\Type\ModelValidator;
-use MF\Model\CategoryModel;
+use LM\WebFramework\Validator\ModelValidator;
+use MF\Model\CategoryModelFactory;
 use LM\WebFramework\DataStructures\Slug;
 use MF\Repository\CategoryRepository;
 use MF\Router;
@@ -21,10 +21,9 @@ use Psr\Http\Message\ServerRequestInterface;
 class AdminCategoryController implements ControllerInterface
 {
     public function __construct(
-        private CategoryModel $model,
+        private CategoryModelFactory $categoryModelFactory,
         private CategoryRepository $repo,
         private FormFactory $formFactory,
-        private ModelValidator $modelValidator,
         private PageFactory $pageFactory,
         private Router $router,
         private SessionManager $sessionManager,
@@ -38,7 +37,8 @@ class AdminCategoryController implements ControllerInterface
         $formData = null;
         $formErrors = null;
 
-        $form = $this->formFactory->createForm($this->model, config: [
+        $model = $this->categoryModelFactory->create();
+        $form = $this->formFactory->createForm($model, config: [
             'id' => [
                 'required' => false,
             ]
@@ -47,7 +47,8 @@ class AdminCategoryController implements ControllerInterface
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
             $formData['id'] = $formData['id'] ?? (null !== $formData['name'] ? (new Slug($formData['name'], true))->__toString() : null);
-            $formErrors = $this->modelValidator->validate($formData, $this->model);
+            $validator = new ModelValidator($model);
+            $formErrors = $validator->validate($formData, $model);
 
             if (0 === count($formErrors)) {
                 $category = new AppObject($formData);

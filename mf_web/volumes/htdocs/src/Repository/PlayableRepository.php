@@ -6,15 +6,15 @@ use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\Exception\Database\EntityNotFoundException;
-use MF\Model\ContributionModel;
-use MF\Model\PlayableLinkModel;
-use MF\Model\PlayableModel;
+use MF\Model\ContributionModelFactory;
+use MF\Model\PlayableLinkModelFactory;
+use MF\Model\PlayableModelFactory;
 
 class PlayableRepository implements IRepository
 {
     public function __construct(
         private DatabaseManager $conn,
-        private PlayableModel $model,
+        private PlayableModelFactory $model,
         private DbEntityManager $em,
         private PlayableLinkRepository $linkRepo,
         private ContributionRepository $contributionRepository,
@@ -83,11 +83,11 @@ class PlayableRepository implements IRepository
         }
 
         $rows = $stmt->fetchAll();
-        $linkModel = new PlayableLinkModel();
+        $linkModel = new PlayableLinkModelFactory();
         $linkIds = [null];
         $links = [];
         $contributions = [];
-        $contributionModel = new ContributionModel();
+        $contributionModel = new ContributionModelFactory();
         $contribIds = [null];
         for ($i = 0; $i < count($rows); $i++) {
             if (!in_array($rows[$i]['link_id'], $linkIds, true)) {
@@ -100,8 +100,8 @@ class PlayableRepository implements IRepository
             }
         }
 
-        $gameModel = null !== $rows[0]['playable_game_id'] ? new PlayableModel() : null;
-        $playable = $this->em->toAppData($rows[0], new PlayableModel($gameModel), 'playable');
+        $gameModel = null !== $rows[0]['playable_game_id'] ? new PlayableModelFactory() : null;
+        $playable = $this->em->toAppData($rows[0], new PlayableModelFactory($gameModel), 'playable');
         return $playable->set('links', $links)->set('contributions', $contributions);
     }
 

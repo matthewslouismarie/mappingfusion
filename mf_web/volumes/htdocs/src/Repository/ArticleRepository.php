@@ -7,30 +7,35 @@ use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Searchable;
 use LM\WebFramework\DataStructures\SearchQuery;
+use LM\WebFramework\Model\Type\ListModel;
 use LM\WebFramework\SearchEngine\SearchEngine;
-use MF\Model\AuthorModel;
-use MF\Model\CategoryModel;
-use MF\Model\ContributionModel;
-use MF\Model\PlayableLinkModel;
+use MF\Model\AuthorModelFactory;
+use MF\Model\CategoryModelFactory;
+use MF\Model\ContributionModelFactory;
+use MF\Model\PlayableLinkModelFactory;
 use LM\WebFramework\Session\SessionManager;
-use MF\Model\ArticleModel;
-use MF\Model\ChapterIndexModel;
-use MF\Model\PlayableModel;
-use MF\Model\ReviewModel;
+use MF\Model\ArticleModelFactory;
+use MF\Model\ChapterIndexModelFactory;
+use MF\Model\PlayableModelFactory;
+use MF\Model\ReviewModelFactory;
 use OutOfBoundsException;
 
 class ArticleRepository implements IRepository
 {
     public function __construct(
-        private ArticleModel $model,
+        private ArticleModelFactory $articleModelFactory,
+        private AuthorModelFactory $authorModelFactory,
+        private CategoryModelFactory $categoryModelFactory,
+        private ChapterIndexModelFactory $chapterIndexModelFactory,
+        private ContributionModelFactory $contributionModelFactory,
         private DatabaseManager $conn,
         private DbEntityManager $em,
+        private PlayableLinkModelFactory $playableLinkModelFactory,
+        private PlayableModelFactory $playableModelFactory,
+        private ReviewModelFactory $reviewModelFactory,
         private SearchEngine $searchEngine,
         private SessionManager $session,
     ) {
-        $this->model = new ArticleModel(
-            categoryModel: new CategoryModel(),
-        );
     }
 
     public function add(AppObject $appObject): string {
@@ -76,23 +81,23 @@ class ArticleRepository implements IRepository
         $data[0]['links'] = $links;
         $data[0]['contributions'] = $contribs;
 
-        $reviewModel = new ReviewModel(
-            new PlayableModel(
-                gameModel: new PlayableModel(isNullable: true),
-                contributionModel: $fetchPlayableContributors ? new ContributionModel(new AuthorModel()) : null,
-                playableLinkModel: new PlayableLinkModel(),
+        $reviewModel = $this->reviewModelFactory->create(
+           $this->playableModelFactory->create(
+                gameModel: $this->playableModelFactory->create(isNullable: true),
+                contributionModel: $fetchPlayableContributors ? $this->contributionModelFactory->create($this->authorModelFactory->create()) : null,
+                playableLinkModel: $this->playableLinkModelFactory->create(),
             ),
             isNullable: true,
         );
 
-        $articleModel = new ArticleModel(
-            authorModel: new AuthorModel(),
-            categoryModel: new CategoryModel(),
+        $articleModel = $this->articleModelFactory->create(
+            authorModel: $this->authorModelFactory->create(),
+            categoryModel: $this->categoryModelFactory->create(),
             reviewModel: $reviewModel,
-            chapterIndexModel: new ChapterIndexModel(isNullable: true),
+            chapterIndexModel: $this->chapterIndexModelFactory->create(isNullable: true),
         );
 
-        return $this->em->toAppData($data[0], $articleModel, 'article');
+        return $this->em->convertDbRowsToAppObject($data, $articleModel);
     }
 
     public function findAll(bool $onlyPublished = true): array {
@@ -101,13 +106,16 @@ class ArticleRepository implements IRepository
         $results = $this->conn->getPdo()->query("SELECT * FROM {$selectFrom} ORDER BY article_creation_date_time DESC;")->fetchAll();
 
         $articles = [];
-        foreach ($results as $r) {
+        foreach ($results as $rowNumber => $r) {
 
-            $model = new ArticleModel(
-                categoryModel: new CategoryModel(),
-                reviewModel: new ReviewModel(new PlayableModel(new PlayableModel(isNullable: true), isNullable: true), articleModel: null, isNullable: true)
+            $model = $this->articleModelFactory->create(
+                categoryModel: $this->categoryModelFactory->create(),
+                reviewModel: $this->reviewModelFactory->create(
+                    $this->playableModelFactory->create($this->playableModelFactory->create(isNullable: true), isNullable: true),
+                    isNullable: true,
+                ),
             );
-            $articles[] = $this->em->toAppData($r, $model, 'article');
+            $articles[] = $this->em->convertDbRowsToAppObject($results, $model, $rowNumber);
         }
         return $articles;
     }
@@ -136,12 +144,12 @@ class ArticleRepository implements IRepository
 
         $articles = [];
 
-        $model = new ArticleModel(
-            categoryModel: new CategoryModel(),
-            reviewModel: new ReviewModel(new PlayableModel(new PlayableModel(isNullable: true)), articleModel: null, isNullable: true)
+        $model = $this->articleModelFactory->create(
+            categoryModel: $this->categoryModelFactory->create(),
+            reviewModel: $this->reviewModelFactory->create($this->playableModelFactory->create($this->playableModelFactory->create(isNullable: true)), isNullable: true)
         );
-        foreach ($results as $r) {
-            $articles[] = $this->em->toAppData($r, $model, 'article');
+        foreach ($results as $rowNumber => $r) {
+            $articles[] = $this->em->convertDbRowsToAppObject($results, $model, $rowNumber);
         }
         return $articles;
     }
@@ -149,74 +157,72 @@ class ArticleRepository implements IRepository
     /**
      * @return AppObject[]
      */
-    public function findAllReviews(bool $onlyPublished = true): array {
+    public function findAllReviews(bool $onlyPublished = true): array
+    {
         $wherePublished = $onlyPublished ? 'AND article_is_published = 1' : '';
-        $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE review_id IS NOT NULL $wherePublished;");
-        $articles = [];
-        $model = new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel(new PlayableModel(isNullable: true))));
-        foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, $model, 'article');
-        }
+        $results = $this->conn->fetchRows("SELECT * FROM v_article WHERE review_id IS NOT NULL $wherePublished;");
+
+        $model = $this->articleModelFactory->create(categoryModel: $this->categoryModelFactory->create(), reviewModel: $this->reviewModelFactory->create($this->playableModelFactory->create($this->playableModelFactory->create(isNullable: true))));
+        $articles = $this->em->convertDbList($results, new ListModel($model));
+
         return $articles;
+    }
+
+    /**
+     * @todo Create and use fetchRows method that takes the filename of a SQL query?
+     * @return AppObject[]
+     */
+    public function findArticlesFrom(string $memberId): array
+    {
+        $articleRows = $this->conn->fetchRows('SELECT * FROM v_article WHERE article_is_published = 1 AND article_author_id = ? ORDER BY article_last_update_date_time DESC;', [$memberId]);
+
+        $model = $this->articleModelFactory->create(categoryModel: $this->categoryModelFactory->create());
+        $articles = $this->em->convertDbList($articleRows, new ListModel($model));
+
+        return $articles;
+    }
+
+    public function findAvailableArticles(): array
+    {
+        $articleRows = $this->conn->fetchRows('SELECT * FROM v_article WHERE review_id IS NULL;');
+        $model = $this->articleModelFactory->create();
+        return $this->em->convertDbList($articleRows, new ListModel($model));
+    }
+
+    public function findFeatured(): array
+    {
+        $articleRows = $this->conn->fetchRows('SELECT * FROM v_article WHERE article_is_featured = 1 AND article_is_published = 1 ORDER BY article_last_update_date_time DESC;');
+
+        return $this->em->convertDbList($articleRows, new ListModel($this->articleModelFactory->create()));
     }
 
     /**
      * @return AppObject[]
      */
-    public function findArticlesFrom(string $memberId): array {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_article WHERE article_is_published = 1 AND article_author_id = ? ORDER BY article_last_update_date_time DESC;');
-        $stmt->execute([$memberId]);
-        $articles = [];
-        foreach ($stmt->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, new ArticleModel(categoryModel: new CategoryModel()), 'article');
-        }
-        return $articles;
-    }
-
-    public function findAvailableArticles(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NULL;')->fetchAll();
-        $entities = [];
-        foreach ($results as $r) {
-            $entities[] = $this->em->toAppData($r, new ArticleModel(), 'article');
-        }
-        return $entities;
-    }
-
-    public function findFeatured(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE article_is_featured = 1 AND article_is_published = 1 ORDER BY article_last_update_date_time DESC;');
-        $articles = [];
-        foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, $this->model, 'article');
-        }
-        return $articles;
-    }
-
-    /**
-     * @return AppObject[]
-     */
-    public function findLastArticles(int $limit = 8, bool $onlyReviews = false): array {
+    public function findLastArticles(int $limit = 8, bool $onlyReviews = false): array
+    {
         $whereClause = $onlyReviews ? 'AND article_review_id IS NOT NULL' : '';
-        $results = $this->conn->getPdo()->query("SELECT * FROM v_article WHERE article_is_published = 1 {$whereClause} ORDER BY article_creation_date_time DESC LIMIT {$limit};");
-        $articles = [];
-        foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, new ArticleModel(categoryModel: new CategoryModel()), 'article');
-        }
+        $articleRows = $this->conn->fetchRows("SELECT * FROM v_article WHERE article_is_published = 1 {$whereClause} ORDER BY article_creation_date_time DESC LIMIT {$limit};");
+        $model = $this->articleModelFactory->create(categoryModel: $this->categoryModelFactory->create());
+        $articles = $this->em->convertDbList($articleRows, new ListModel($model));
+
         return $articles;
     }
 
     /**
      * @return AppObject[]
      */
-    public function findLastReviews(): array {
-        $results = $this->conn->getPdo()->query("SELECT * FROM v_article_published WHERE review_id IS NOT NULL ORDER BY article_creation_date_time DESC LIMIT 4;");
-        $articles = [];
-        foreach ($results->fetchAll() as $article) {
-            $articles[] = $this->em->toAppData($article, new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel(new PlayableModel(isNullable: true)))), 'article');
-        }
-        return $articles;
+    public function findLastReviews(): array
+    {
+        $articleRows = $this->conn->fetchRows("SELECT * FROM v_article_published WHERE review_id IS NOT NULL ORDER BY article_creation_date_time DESC LIMIT 4;");
+
+        $model = $this->articleModelFactory->create(categoryModel: $this->categoryModelFactory->create(), reviewModel: $this->reviewModelFactory->create(playableModel: $this->playableModelFactory->create(gameModel: $this->playableModelFactory->create(isNullable: true))));
+
+        return $this->em->convertDbList($articleRows, new ListModel($model));
     }
 
-    public function findOne(string $id): AppObject {
+    public function findOne(string $id): AppObject
+    {
         $article = $this->find($id);
         if (null === $article) {
             throw new OutOfBoundsException();
@@ -227,14 +233,11 @@ class ArticleRepository implements IRepository
     /**
      * @return AppObject[]
      */
-    public function findRelatedArticles(AppObject $article): array {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_article WHERE article_is_published = 1 AND article_category_id = :category_id AND article_id != :id;');
-        $stmt->execute(['category_id' => $article->category_id, 'id' => $article->id]);
-        $relatedArticles = [];
-        foreach ($stmt->fetchAll() as $row) {
-            $relatedArticles[] = $this->em->toAppData($row, new ArticleModel(), 'article');
-        }
-        return $relatedArticles;
+    public function findRelatedArticles(AppObject $article): array
+    {
+        $articleRows = $this->conn->fetchRows('SELECT * FROM e_article WHERE article_is_published = 1 AND article_category_id = :category_id AND article_id != :id;', ['category_id' => $article->category_id, 'id' => $article->id]);
+
+        return $this->em->convertDbList($articleRows, new ListModel($this->articleModelFactory->create()));
     }
 
     /**
@@ -259,8 +262,7 @@ class ArticleRepository implements IRepository
         }
         $sqlQuery .= ')';
 
-        $stmt = $this->conn->getPdo()->prepare($sqlQuery);
-        $stmt->execute($parameters);
+        $dbRows = $this->conn->fetchRows($sqlQuery, $parameters);
         $searchables = [
             new Searchable('article_title', 1),
             new Searchable('article_sub_title', .95),
@@ -270,13 +272,13 @@ class ArticleRepository implements IRepository
             new Searchable('review_cons', .7),
             new Searchable('review_pros', .7),
         ];
-        $articleReviewModel = new ArticleModel(categoryModel: new CategoryModel(), reviewModel: new ReviewModel(new PlayableModel()));
-        $articleModel = new ArticleModel(categoryModel: new CategoryModel());
+        $articleReviewModel = $this->articleModelFactory->create(categoryModel: $this->categoryModelFactory->create(), reviewModel: $this->reviewModelFactory->create($this->playableModelFactory->create()));
+        $articleModel = $this->articleModelFactory->create(categoryModel: $this->categoryModelFactory->create());
         $results = [];
-        foreach ($stmt->fetchAll() as $row) {
+        foreach ($dbRows as $rowNo => $row) {
             $ranking = $this->searchEngine->rankResult($searchQuery, $row, $searchables);
             if ($ranking >= $minRanking) {
-                $a = $this->em->toAppData($row, null !== $row['review_id'] ? $articleReviewModel : $articleModel, 'article');
+                $a = $this->em->convertDbRowsToAppObject($dbRows, null !== $row['review_id'] ? $articleReviewModel : $articleModel, $rowNo);
                 $results[] = $a->set('ranking', $ranking);
             }
         }

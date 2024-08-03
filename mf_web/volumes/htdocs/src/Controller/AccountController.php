@@ -7,10 +7,10 @@ use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
-use LM\WebFramework\Model\StringModel;
+use LM\WebFramework\Model\Type\StringModel;
 use LM\WebFramework\Session\SessionManager;
-use LM\WebFramework\Type\ModelValidator;
-use MF\Model\MemberModel;
+use LM\WebFramework\Validator\ModelValidator;
+use MF\Model\MemberModelFactory;
 use MF\Repository\AuthorRepository;
 use MF\Repository\MemberRepository;
 use MF\TwigService;
@@ -22,8 +22,8 @@ class AccountController implements ControllerInterface
     public function __construct(
         private AuthorRepository $authorRepository,
         private FormFactory $formFactory,
+        private MemberModelFactory $memberModelFactory,
         private MemberRepository $repo,
-        private ModelValidator $modelValidator,
         private PageFactory $pageFactory,
         private SessionManager $session,
         private TwigService $twig,
@@ -31,7 +31,8 @@ class AccountController implements ControllerInterface
     }    
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $model = (new MemberModel())
+        $model = $this->memberModelFactory
+            ->create()
             ->removeProperty('password')
             ->addProperty('password', new StringModel(isNullable: true))
         ;
@@ -44,7 +45,8 @@ class AccountController implements ControllerInterface
         $form = $this->formFactory->createForm($model);
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
-            $formErrors = $this->modelValidator->validate($formData, $model);
+            $validator = new ModelValidator($model);
+            $formErrors = $validator->validate($formData, $model);
             if (0 === count($formErrors)) {
                 $appObject = new AppObject($formData);
                 if (null !== $formData['password']) {

@@ -5,16 +5,18 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
-use MF\Model\AuthorModel;
-use MF\Model\MemberModel;
+use LM\WebFramework\Model\Type\ListModel;
+use MF\Model\AuthorModelFactory;
+use MF\Model\MemberModelFactory;
 use UnexpectedValueException;
 
 class AuthorRepository implements IRepository
 {
     public function __construct(
+        private AuthorModelFactory $authorModelFactory,
         private DatabaseManager $conn,
-        private AuthorModel $model,
         private DbEntityManager $em,
+        private MemberModelFactory $memberModelFactory,
     ) {
     }
 
@@ -33,43 +35,27 @@ class AuthorRepository implements IRepository
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_author LEFT JOIN e_member ON author_id = member_author_id WHERE author_id = ? LIMIT 1;');
         $stmt->execute([$id]);
 
-        $data = $stmt->fetchAll();
-        if (0 === count($data)) {
+        $authorRows = $stmt->fetchAll();
+        if (0 === count($authorRows)) {
             return null;
-        } elseif (1 === count($data)) {
-            $row = $data[0];
-            $memberModel = null !== $row['member_id'] ? new MemberModel() : null;
-            $author = $this->em->toAppData($row, new AuthorModel($memberModel), 'author');
-            if (null === $memberModel) {
-                return $author->set('member', null);
-            } else {
-                return $author;
-            }
+        } elseif (1 === count($authorRows)) {
+            return $this->em->convertDbRowsToAppObject($authorRows, $this->authorModelFactory->create($this->memberModelFactory->create(isNullable: true)), 'author');
         } else {
             throw new UnexpectedValueException();
         }
     }
 
-    public function findAll(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM e_author;')->fetchAll();
-        $entities = [];
-        foreach ($results as $r) {
-            $entities[] = $this->em->toAppData($r, $this->model, 'author');
-        }
-        return $entities;
+    public function findAll(): array
+    {
+        $authorRows = $this->conn->fetchRows('SELECT * FROM e_author;');
+        
+        return $this->em->convertDbList($authorRows, new ListModel($this->authorModelFactory->create()));
     }
 
     public function findAuthorsOf(string $playableId): array {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_contribution LEFT JOIN e_author ON contribution_author_id = author_id WHERE contribution_playable_id = ? AND contribution_is_author;');
-        $stmt->execute([$playableId]);
-        $row = $stmt->fetch();
-        $authors = [];
-        while (false !== $row) {
-            $authors[] = $this->em->toAppData($row, $this->model);
-            $row = $stmt->fetch();
-        }
+        $dbRows = $this->conn->fetchRows('SELECT * FROM e_contribution LEFT JOIN e_author ON contribution_author_id = author_id WHERE contribution_playable_id = ? AND contribution_is_author;', [$playableId]);
 
-        return $authors;
+        return $this->em->convertDbList($dbRows, new ListModel($this->authorModelFactory->create()));
     }
 
     public function findOne(string $id): AppObject {

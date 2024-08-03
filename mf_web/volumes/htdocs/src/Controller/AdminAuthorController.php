@@ -8,8 +8,8 @@ use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
-use LM\WebFramework\Type\ModelValidator;
-use MF\Model\AuthorModel;
+use LM\WebFramework\Validator\ModelValidator;
+use MF\Model\AuthorModelFactory;
 use LM\WebFramework\DataStructures\Slug;
 use MF\Repository\AuthorRepository;
 use MF\Router;
@@ -21,10 +21,9 @@ use Psr\Http\Message\ServerRequestInterface;
 class AdminAuthorController implements ControllerInterface
 {
     public function __construct(
-        private AuthorModel $model,
+        private AuthorModelFactory $authorModelFactory,
         private AuthorRepository $repo,
         private FormFactory $formFactory,
-        private ModelValidator $modelValidator,
         private PageFactory $pageFactory,
         private Router $router,
         private TwigService $twig,
@@ -36,8 +35,9 @@ class AdminAuthorController implements ControllerInterface
         $requestedEntity = null;
         $formData = null;
         $formErrors = null;
+        $model = $this->authorModelFactory->create();
 
-        $form = $this->formFactory->createForm($this->model, config: [
+        $form = $this->formFactory->createForm($model, config: [
             'id' => [
                 'required' => false,
             ]
@@ -46,7 +46,8 @@ class AdminAuthorController implements ControllerInterface
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
             $formData['id'] = $formData['id'] === null && $formData['name'] !== null ? (new Slug($formData['name'], true))->__toString() : $formData['id'];
-            $formErrors = $this->modelValidator->validate($formData, $this->model);
+            $validator = new ModelValidator($model);
+            $formErrors = $validator->validate($formData, $model);
 
             if (0 === count($formErrors)) {
                 $author = new AppObject($formData); 

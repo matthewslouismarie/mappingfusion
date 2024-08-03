@@ -7,8 +7,8 @@ use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Session\SessionManager;
-use LM\WebFramework\Type\ModelValidator;
-use MF\Model\MemberModel;
+use LM\WebFramework\Validator\ModelValidator;
+use MF\Model\MemberModelFactory;
 use MF\Repository\MemberRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
@@ -18,8 +18,8 @@ class LoginController implements ControllerInterface
 {
     public function __construct(
         private FormFactory $formFactory,
+        private MemberModelFactory $memberModelFactory,
         private MemberRepository $repo,
-        private ModelValidator $validator,
         private PageFactory $pageFactory,
         private SessionManager $session,
         private TwigService $twig,
@@ -31,14 +31,15 @@ class LoginController implements ControllerInterface
      * @todo Redirect to success / error page instead?
      */
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $model = (new MemberModel())->removeProperty('author_id');
+        $model = $this->memberModelFactory->create()->removeProperty('author_id');
         $form = $this->formFactory->createTransformer($model);
         $formErrors = [];
         $formData = null;
 
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
-            $formErrors = $this->validator->validate($formData, $model);
+            $validator = new ModelValidator($model);
+            $formErrors = $validator->validate($formData, $model);
             if (0 === count($formErrors)) {
                 $member = $this->repo->find($formData['id']);
                 if (null === $member || !password_verify($request->getParsedBody()['password'], $member->password)) {

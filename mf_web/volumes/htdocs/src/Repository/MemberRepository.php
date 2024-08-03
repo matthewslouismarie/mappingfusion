@@ -5,16 +5,17 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
-use MF\Model\AuthorModel;
-use MF\Model\MemberModel;
+use MF\Model\AuthorModelFactory;
+use MF\Model\MemberModelFactory;
 use UnexpectedValueException;
 
 class MemberRepository implements IRepository
 {
     public function __construct(
+        private AuthorModelFactory $authorModelFactory,
         private DatabaseManager $conn,
         private DbEntityManager $em,
-        private MemberModel $model,
+        private MemberModelFactory $memberModelFactory,
     ) {
     }
 
@@ -41,8 +42,12 @@ class MemberRepository implements IRepository
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
-            $model = null !== $data[0]['author_id'] ? new MemberModel(new AuthorModel()) : new MemberModel();
-            return $this->em->toAppData($data[0], $model, 'member');
+            if (null === $data[0]['author_id']) {
+                $model = $this->memberModelFactory->create();
+            } else {
+                $model = $this->memberModelFactory->create($this->authorModelFactory->create());
+            }
+            return $this->em->convertDbRowsToAppObject($data, $model);
         } else {
             throw new UnexpectedValueException();
         }

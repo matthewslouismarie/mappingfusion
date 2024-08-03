@@ -6,37 +6,40 @@ use MF\Database\DatabaseManager;
 use MF\Exception\Database\EntityNotFoundException;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
-use MF\Model\CategoryModel;
+use LM\WebFramework\Model\Type\EntityModel;
+use MF\Model\CategoryModelFactory;
 use UnexpectedValueException;
 
 class CategoryRepository implements IRepository
 {
+    private EntityModel $model;
+
     public function __construct(
-        private CategoryModel $model,
+        private CategoryModelFactory $categoryModelFactory,
         private DatabaseManager $conn,
         private DbEntityManager $em,
     ) {
+        $this->model = $this->categoryModelFactory->create();
     }
 
-    public function add(AppObject $category): string {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_category VALUES (:id, :name, :parent_id);');
-        $stmt->execute($this->em->toDbValue($category));
+    public function add(AppObject $category): string
+    {
+        $this->conn->run('INSERT INTO e_category VALUES (:id, :name, :parent_id);', $this->em->toDbValue($category));
         return $this->conn->getPdo()->lastInsertId();
     }
 
-    public function delete(string $id): void {
-        $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_category WHERE category_id = ?;');
-        $stmt->execute([$id]);
+    public function delete(string $id): void
+    {
+        $stmt = $this->conn->run('DELETE FROM e_category WHERE category_id = ?;', [$id]);
     }
 
-    public function find(string $id): ?AppObject {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_category WHERE category_id = ? LIMIT 1;');
-        $stmt->execute([$id]);
-        $data = $stmt->fetchAll();
-        if (0 === count($data)) {
+    public function find(string $id): ?AppObject
+    {
+        $dbRows = $this->conn->fetchRows('SELECT * FROM e_category WHERE category_id = ? LIMIT 1;', [$id]);
+        if (0 === count($dbRows)) {
             return null;
-        } elseif (1 === count($data)) {
-            return $this->em->toAppData($data[0], $this->model, 'category');
+        } elseif (1 === count($dbRows)) {
+            return $this->em->convertDbRowsToAppObject($dbRows, $this->model);
         } else {
             throw new UnexpectedValueException();
         }
@@ -45,15 +48,16 @@ class CategoryRepository implements IRepository
     /**
      * @return array<string, AppObject> An array of categories, indexed by ID.
      */
-    public function findAll(): array {
-        $rows = $this->conn->getPdo()->query('SELECT * FROM e_category')->fetchAll();
-        $categories = [];
-        foreach ($rows as $row) {
-            $c = $this->em->toAppData($row, $this->model, 'category')->set('children', []);
-            $categories[$row['category_id']] = $c;
+    public function findAll(): array
+    {
+        $dbRows = $this->conn->fetchRows('SELECT * FROM e_category');
+        $categories = $this->em->convertDbRowsToList($dbRows, $this->model);
+        $categoriesByKey = [];
+        foreach ($categories as $cat) {
+            $categoriesByKey[$cat[$this->model->getIdKey()]] = $cat;
         }
 
-        return $categories;
+        return $categoriesByKey;
     }
 
     private function findChildren(array $categories, AppObject $parent): AppObject {
@@ -66,13 +70,10 @@ class CategoryRepository implements IRepository
         return $parent->set('children', $foundChildren);
     }
 
-    public function findAllRoot(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM e_category WHERE category_parent_id IS NULL;')->fetchAll();
-        $entities = [];
-        foreach ($results as $r) {
-            $entities[] = $this->em->toAppData($r, $this->model, 'category');
-        }
-        return $entities;
+    public function findAllRoot(): array
+    {
+        $dbRows = $this->conn->fetchRows('SELECT * FROM e_category WHERE category_parent_id IS NULL;');
+        return $this->em->convertDbRowsToList($dbRows, $this->model);
     }
 
     public function findOne(string $id): AppObject {
@@ -83,17 +84,17 @@ class CategoryRepository implements IRepository
         $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_category WHERE category_id = :id OR category_parent_id = :id;');
         $stmt->execute(['id' => $id]);
 
-        $rows = $stmt->fetchAll();
-        if (0 === count($rows)) {
+        $dbRows = $stmt->fetchAll();
+        if (0 === count($dbRows)) {
             throw new EntityNotFoundException();
         }
 
         $children = [];
         $parent = null;
-        foreach ($rows as $r) {
+        foreach ($dbRows as $r) {
             if ($id === $r['category_id']) {
-                $parentModel = null !== $r['category_parent_id'] ? new CategoryModel() : null;
-                $model = new CategoryModel(parentCategory: $parentModel);
+                $parentModel = null !== $r['category_parent_id'] ? $this->categoryModelFactory->create() : null;
+                $model = $this->categoryModelFactory->create(parentCategory: $parentModel);
                 $parent = $this->em->toAppData($r, $model, 'category');
                 if (null === $parentModel) {
                     $parent = $parent->set('parent', null);

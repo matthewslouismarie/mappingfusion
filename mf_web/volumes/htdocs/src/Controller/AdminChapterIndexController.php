@@ -6,7 +6,7 @@ use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
-use MF\Model\ChapterIndexModel;
+use MF\Model\ChapterIndexModelFactory;
 use MF\Repository\ArticleRepository;
 use MF\Repository\BookRepository;
 use MF\Repository\ChapterIndexRepository;
@@ -33,7 +33,7 @@ class AdminChapterIndexController implements ControllerInterface
         $article = $this->articleRepository->find($routeParams[1], onlyPublished: false);
         $router = $this->router;
 
-        $formModel = (new ChapterIndexModel(isNew: null === $article->chapterIndex))
+        $formModel = (new ChapterIndexModelFactory(isNew: null === $article->chapterIndex))
             ->removeProperty('id')
             ->removeProperty('article_id');
         

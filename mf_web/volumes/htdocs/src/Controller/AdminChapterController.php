@@ -11,7 +11,7 @@ use LM\WebFramework\DataStructures\Slug;
 use LM\WebFramework\Model\AbstractEntity;
 use LM\WebFramework\Model\SlugModel;
 use LM\WebFramework\Model\StringModel;
-use MF\Model\ChapterModel;
+use MF\Model\ChapterModelFactory;
 use MF\Repository\BookRepository;
 use MF\Repository\ChapterRepository;
 use MF\Router;
@@ -48,7 +48,7 @@ class AdminChapterController implements ControllerInterface
         }
 
         return $this->formController->generateResponse(
-            new ChapterModel(
+            new ChapterModelFactory(
                 new AbstractEntity([
                     'id' => new SlugModel(),
                     'title' => new StringModel(),

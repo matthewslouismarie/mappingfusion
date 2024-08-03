@@ -24,7 +24,7 @@ class TwigService
     ) {
         $this->templateHelper = $templateHelper;
         $twigLoader = new FilesystemLoader($configuration->getPathOfProjectDirectory() . '/templates');
-        $dev = $configuration->getSetting('dev');
+        $dev = $configuration->getBoolSetting('dev');
         $this->twig = new Environment($twigLoader, [
             'debug' => $dev ? true : false,
             'cache' => $dev ? false : 'cache',

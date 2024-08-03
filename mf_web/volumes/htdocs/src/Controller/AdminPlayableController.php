@@ -8,13 +8,13 @@ use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
-use LM\WebFramework\Type\ModelValidator;
+use LM\WebFramework\Validator\ModelValidator;
 use MF\Enum\LinkType;
 use MF\Enum\PlayableType;
 use MF\Exception\Database\EntityNotFoundException;
-use MF\Model\ContributionModel;
-use MF\Model\PlayableLinkModel;
-use MF\Model\PlayableModel;
+use MF\Model\ContributionModelFactory;
+use MF\Model\PlayableLinkModelFactory;
+use MF\Model\PlayableModelFactory;
 use LM\WebFramework\DataStructures\Slug;
 use LM\WebFramework\Session\SessionManager;
 use MF\Repository\AuthorRepository;
@@ -29,10 +29,12 @@ class AdminPlayableController implements ControllerInterface
 {
     public function __construct(
         private AuthorRepository $authorRepo,
+        private ContributionModelFactory $contributionModelFactory,
         private FormFactory $formFactory,
-        private ModelValidator $validator,
         private PageFactory $pageFactory,
+        private PlayableLinkModelFactory $playableLinkModelFactory,
         private PlayableLinkRepository $linkRepo,
+        private PlayableModelFactory $playableModelFactory,
         private PlayableRepository $repo,
         private Router $router,
         private SessionManager $sessionManager,
@@ -41,9 +43,9 @@ class AdminPlayableController implements ControllerInterface
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $model = new PlayableModel(
-            playableLinkModel: new PlayableLinkModel(),
-            contributionModel: new ContributionModel(),
+        $model = $this->playableModelFactory->create(
+            playableLinkModel: $this->playableLinkModelFactory->create(),
+            contributionModel: $this->contributionModelFactory->create(),
         );
 
         $requestedId = $routeParams[1] ?? null;
@@ -78,7 +80,8 @@ class AdminPlayableController implements ControllerInterface
             foreach ($formData['links'] as $key => $c) {
                 $formData['links'][$key]['playable_id'] = $formData['id'];
             }
-            $formErrors = $this->validator->validate($formData, $model);
+            $validator = new ModelValidator($model);
+            $formErrors = $validator->validate($formData, $model);
 
             if (0 === count($formErrors)) {
                 $playable = new AppObject($formData);

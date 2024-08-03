@@ -8,14 +8,14 @@ use LM\WebFramework\Model\AbstractEntity;
 use LM\WebFramework\Model\SlugModel;
 use LM\WebFramework\Model\StringModel;
 use MF\Database\DatabaseManager;
-use MF\Model\BookModel;
-use MF\Model\ChapterModel;
+use MF\Model\BookModelFactory;
+use MF\Model\ChapterModelFactory;
 use OutOfBoundsException;
 
 class ChapterRepository implements IRepository
 {
     public function __construct(
-        private ChapterModel $model,
+        private ChapterModelFactory $model,
         private DatabaseManager $conn,
         private DbEntityManager $em,
     ) {
@@ -44,12 +44,12 @@ class ChapterRepository implements IRepository
             return null;
         }
 
-        $model = new ChapterModel(
+        $model = new ChapterModelFactory(
             new AbstractEntity([
                 'id' => new SlugModel(),
                 'title' => new StringModel(),
             ]),
-            new BookModel(),
+            new BookModelFactory(),
         );
 
         return $this->em->toAppData($data, $model, 'chapter');

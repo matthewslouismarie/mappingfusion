@@ -9,11 +9,11 @@ use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\Exceptions\IllegalUserInputException;
 use LM\WebFramework\Form\FormFactory;
-use LM\WebFramework\Model\AbstractEntity;
-use LM\WebFramework\Model\IModel;
-use LM\WebFramework\Model\StringModel;
+use LM\WebFramework\Model\Type\EntityModel;
+use LM\WebFramework\Model\Type\IModel;
+use LM\WebFramework\Model\Type\StringModel;
 use LM\WebFramework\Session\SessionManager;
-use LM\WebFramework\Type\ModelValidator;
+use LM\WebFramework\Validator\ModelValidator;
 use MF\Repository\IRepository;
 use MF\Router;
 use MF\TwigService;
@@ -27,7 +27,6 @@ class FormController
 
     public function __construct(
         private FormFactory $formFactory,
-        private ModelValidator $modelValidator,
         private SessionManager $sessionManager,
         private Router $router,
         private TwigService $twig,
@@ -103,7 +102,8 @@ class FormController
                     $request->getUploadedFiles(),
                 );
     
-                $formErrors = $this->modelValidator->validate($formData, $model);
+                $validator = new ModelValidator($model);
+                $formErrors = $validator->validate($formData, $model);
     
                 if (0 === count($formErrors)) {
                     if (null !== $entity) {
@@ -154,9 +154,12 @@ class FormController
 
     private function processDeleteRequest(ServerRequestInterface $request, ?string $id): array
     {
-        $deleteFormModel = new AbstractEntity([
-            self::DELETE_FORM_ID => new StringModel()
-        ]);
+        $deleteFormModel = new EntityModel(
+            'delete-form',
+            [
+                self::DELETE_FORM_ID => new StringModel(),
+            ],
+        );
         $deleteForm = $this->formFactory->createForm(
             $deleteFormModel,
         );
@@ -164,7 +167,8 @@ class FormController
             $request->getParsedBody(),
             $request->getUploadedFiles(),
         );
-        $deleteFormErrors = $this->modelValidator->validate($deleteFormData, $deleteFormModel);
+        $validator = new ModelValidator($deleteFormModel);
+        $deleteFormErrors = $validator->validate($deleteFormData, $deleteFormModel);
         if (null === $id) {
             throw new IllegalUserInputException();
         }

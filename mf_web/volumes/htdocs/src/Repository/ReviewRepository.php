@@ -5,9 +5,9 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\Database\DbEntityManager;
-use MF\Model\PlayableModel;
+use MF\Model\PlayableModelFactory;
 use LM\WebFramework\Session\SessionManager;
-use MF\Model\ReviewModel;
+use MF\Model\ReviewModelFactory;
 use UnexpectedValueException;
 
 class ReviewRepository implements IRepository
@@ -16,7 +16,7 @@ class ReviewRepository implements IRepository
         private DatabaseManager $conn,
         private DbEntityManager $em,
         private SessionManager $session,
-        private ReviewModel $model,
+        private ReviewModelFactory $model,
     ) {
     }
 
@@ -52,7 +52,7 @@ class ReviewRepository implements IRepository
         $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;')->fetchAll();
         $reviews = [];
         foreach ($results as $row) {
-            $reviews[] = $this->em->toAppData($row, new ReviewModel(new PlayableModel()), 'review');
+            $reviews[] = $this->em->toAppData($row, new ReviewModelFactory(new PlayableModelFactory()), 'review');
         }
         return $reviews;
     }

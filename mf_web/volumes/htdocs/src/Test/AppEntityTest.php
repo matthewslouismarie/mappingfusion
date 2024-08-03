@@ -3,21 +3,21 @@
 namespace MF\Test;
 
 use InvalidArgumentException;
-use LM\WebFramework\Type\ModelValidator;
+use LM\WebFramework\Validator\ModelValidator;
 use LM\WebFramework\Test\IUnitTest;
-use MF\Model\AuthorModel;
+use MF\Model\AuthorModelFactory;
 
 class AppEntityTest implements IUnitTest
 {
     public function __construct(
-        private ModelValidator $modelValidator,
-    ) {
+        private AuthorModelFactory $authorModelFactory,
+    ) {  
     }
 
     public function run(): array {
         $tester = new Tester();
-        $modelValidator = $this->modelValidator;
-        $model = new AuthorModel();
+        $model = $this->authorModelFactory->create();
+        $modelValidator = new ModelValidator($model);
 
         $tester->assertEquals(0, count($modelValidator->validate([
                 'id' => 'a',

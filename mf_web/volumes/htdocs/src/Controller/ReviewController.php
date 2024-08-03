@@ -8,8 +8,8 @@ use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
-use LM\WebFramework\Type\ModelValidator;
-use MF\Model\ReviewModel;
+use LM\WebFramework\Validator\ModelValidator;
+use MF\Model\ReviewModelFactory;
 use MF\Repository\ArticleRepository;
 use MF\Repository\PlayableRepository;
 use MF\Repository\ReviewRepository;
@@ -23,10 +23,9 @@ class ReviewController implements ControllerInterface
     public function __construct(
         private ArticleRepository $articleRepo,
         private FormFactory $formFactory,
-        private ModelValidator $modelValidator,
         private PageFactory $pageFactory,
         private PlayableRepository $playableRepo,
-        private ReviewModel $model,
+        private ReviewModelFactory $reviewModelFactory,
         private ReviewRepository $repo,
         private Router $router,
         private TwigService $twig,
@@ -38,11 +37,14 @@ class ReviewController implements ControllerInterface
 
         $formData = null;
         $formErrors = null;
-        $form = $this->formFactory->createForm($this->model);
+
+        $model = $this->reviewModelFactory->create();
+        $form = $this->formFactory->createForm($model);
 
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
-            $formErrors = $this->modelValidator->validate($formData, $this->model);
+            $validator = new ModelValidator($model);
+            $formErrors = $validator->validate($formData, $model);
 
             if (0 === count($formErrors)) {
                 $review = new AppObject($formData);

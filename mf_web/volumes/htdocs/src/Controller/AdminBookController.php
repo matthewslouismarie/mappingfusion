@@ -8,8 +8,8 @@ use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\DataStructures\Slug;
-use MF\Model\BookModel;
-use MF\Model\ChapterModel;
+use MF\Model\BookModelFactory;
+use MF\Model\ChapterModelFactory;
 use MF\Repository\BookRepository;
 use MF\Router;
 use Psr\Http\Message\ResponseInterface;
@@ -40,7 +40,7 @@ class AdminBookController implements ControllerInterface
         $book = isset($routeParams[1]) ? $this->bookRepository->find($routeParams[1]) : null;
 
         return $this->formController->generateResponse(
-            model: new BookModel(new ChapterModel()),
+            model: new BookModelFactory(new ChapterModelFactory()),
             repository: $this->bookRepository,
             page: $this->getPage($book),
             request: $request,

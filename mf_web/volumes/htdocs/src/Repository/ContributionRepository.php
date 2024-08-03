@@ -5,13 +5,13 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
-use MF\Model\ContributionModel;
+use MF\Model\ContributionModelFactory;
 
 class ContributionRepository implements IRepository
 {
     public function __construct(
         private DatabaseManager $conn,
-        private ContributionModel $model,
+        private ContributionModelFactory $model,
         private DbEntityManager $em,
     ) {
     }
