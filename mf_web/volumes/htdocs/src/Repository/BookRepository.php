@@ -17,26 +17,28 @@ class BookRepository implements IRepository
 
     public function __construct(
         private BookModelFactory $bookModelFactory,
-        private DatabaseManager $conn,
+        private DatabaseManager $dbManager,
         private DbEntityManager $em,
     ) {
         $this->model = $this->bookModelFactory->createWithChapterModel();
     }
 
-    public function add(AppObject $appObject): string {
-        $dbArray = $this->em->toDbValue($appObject);
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_book SET book_id = :id, book_title = :title;');
-        $stmt->execute($dbArray);
-        return $this->conn->getPdo()->lastInsertId();
+    public function add(AppObject $appObject): string
+    {
+        $stmt = $this->dbManager->run(
+            'INSERT INTO e_book SET book_id = :id, book_title = :title;',
+            $this->em->toDbValue($appObject),
+        );
+        return $this->dbManager->getLastInsertId();
     }
 
     public function delete(string $id): void {
-        $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_book WHERE book_id = ?;');
+        $stmt = $this->dbManager->getPdo()->prepare('DELETE FROM e_book WHERE book_id = ?;');
         $stmt->execute([$id]);
     }
 
     public function find(string $id): ?AppObject {
-        $dbRows = $this->conn->fetchRows("SELECT * FROM v_book WHERE book_id = ?;", [$id]);
+        $dbRows = $this->dbManager->fetchRows("SELECT * FROM v_book WHERE book_id = ?;", [$id]);
 
         if (0 === count($dbRows)) {
             return null;
@@ -47,7 +49,7 @@ class BookRepository implements IRepository
 
     public function findAll(): array
     {
-        $dbRows = $this->conn->fetchRows("SELECT * FROM v_book ORDER BY book_title;");
+        $dbRows = $this->dbManager->fetchRows('SELECT * FROM v_book ORDER BY book_title;');
 
         return $this->em->convertDbRowsToList($dbRows, $this->model);
     }
@@ -61,7 +63,7 @@ class BookRepository implements IRepository
     }
 
     public function update(AppObject $appObject, ?string $previousId = null): void {
-        $this->conn->run(
+        $this->dbManager->run(
             'UPDATE e_book SET book_id = :id, book_title = :title WHERE book_id = :previous_id;',
             ['previous_id' => $previousId ?? $appObject['id']] + $this->em->toDbValue($appObject),
         );

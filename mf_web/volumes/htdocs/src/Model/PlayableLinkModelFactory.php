@@ -23,7 +23,7 @@ class PlayableLinkModelFactory
 
     public function create(): EntityModel {
         return new EntityModel(
-            'playable_link',
+            'link',
             [
                 'id' => new IntModel(isNullable: true),
                 'playable_id' => $this->slugModelFactory->getSlugModel(),

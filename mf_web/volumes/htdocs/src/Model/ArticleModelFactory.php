@@ -7,6 +7,7 @@ use LM\WebFramework\Model\Factory\UploadedImageModelFactory;
 use LM\WebFramework\Model\Type\BoolModel;
 use LM\WebFramework\Model\Type\DateTimeModel;
 use LM\WebFramework\Model\Type\EntityModel;
+use LM\WebFramework\Model\Type\ForeignEntityModel;
 use LM\WebFramework\Model\Type\StringModel;
 
 class ArticleModelFactory
@@ -28,32 +29,50 @@ class ArticleModelFactory
         $slugModel = $this->slugFactory->getSlugModel();
         $properties = [
             'id' => $slugModel,
-            'author_id' => $slugModel,
+            'writer_id' => $slugModel,
             'category_id' => $slugModel,
             'body' => new StringModel(),
             'is_featured' => new BoolModel(),
             'is_published' => new BoolModel(),
             'title' => new StringModel(),
             'sub_title' => new StringModel(isNullable: true),
-            'cover_filename' => $this->uploadedImageModelFactory->createModel(),
+            'cover_filename' => $this->uploadedImageModelFactory->getModel(),
             'creation_date_time' => new DateTimeModel(),
             'last_update_date_time' => new DateTimeModel(),
-            'thumbnail_filename' => $this->uploadedImageModelFactory->createModel(true),
+            'thumbnail_filename' => $this->uploadedImageModelFactory->getModel(true),
         ];
         if ($chapterId) {
             $properties['chapter_id'] = $slugModel;
         }
         if (null !== $reviewModel) {
-            $properties['review'] = $reviewModel;
+            $properties['review'] = new ForeignEntityModel(
+                $reviewModel,
+                'article_id',
+                'id',
+                true,
+            );
         }
         if (null !== $categoryModel) {
-            $properties['category'] = $categoryModel;
+            $properties['category'] = new ForeignEntityModel(
+                $categoryModel,
+                'id',
+                'category_id',
+            );
         }
         if (null !== $authorModel) {
-            $properties['redactor'] = $authorModel;
+            $properties['writer'] = new ForeignEntityModel(
+                $authorModel,
+                'id',
+                'writer_id',
+            );
         }
         if (null !== $chapterIndexModel) {
-            $properties['chapter_index'] = $chapterIndexModel;
+            $properties['chapter_index'] = new ForeignEntityModel(
+                $chapterIndexModel,
+                'article_id',
+                'id',
+                true
+            );
         }
         
         return new EntityModel(

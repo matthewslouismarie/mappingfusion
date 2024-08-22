@@ -8,7 +8,7 @@ use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
-use MF\Exception\Database\EntityNotFoundException;
+use MF\Repository\Exception\EntityNotFoundException;
 use MF\Repository\ArticleRepository;
 use MF\Repository\CategoryRepository;
 use MF\TwigService;

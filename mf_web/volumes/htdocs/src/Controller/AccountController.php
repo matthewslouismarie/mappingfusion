@@ -50,7 +50,6 @@ class AccountController implements ControllerInterface
             if (0 === count($formErrors)) {
                 $appObject = new AppObject($formData);
                 if (null !== $formData['password']) {
-                    $formData['password'] =  password_hash($formData['password'], PASSWORD_DEFAULT);
                     $this->repo->update($appObject, $this->session->getCurrentMemberUsername());
                 } else {
                     $this->repo->update($appObject, $this->session->getCurrentMemberUsername(), false);

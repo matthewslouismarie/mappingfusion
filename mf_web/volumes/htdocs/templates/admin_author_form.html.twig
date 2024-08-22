@@ -27,6 +27,7 @@
         {% endif %}
         {% if formErrors.avatar_filename is defined %}{{ errorList( formErrors.avatar_filename ?? null) }}{% endif %}
     </div>
+
     {{ csrf(app) }}
 
     <div class="form-row -buttons">

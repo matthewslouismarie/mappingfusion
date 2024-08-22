@@ -22,8 +22,8 @@ class ChapterIndexModelFactory
                 max: DatabaseManager::SMALLINT_UNSIGNED_MAX,
                 isNullable: $isNew,
             ),
-            'article_id' => $this->slugModelFactory,
-            'chapter_id' => $this->slugModelFactory,
+            'article_id' => $this->slugModelFactory->getSlugModel(),
+            'chapter_id' => $this->slugModelFactory->getSlugModel(),
             'order' => new IntModel(min: 0, max: DatabaseManager::TINYINT_UNSIGNED_MAX),
         ];
         

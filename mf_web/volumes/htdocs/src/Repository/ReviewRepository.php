@@ -13,26 +13,29 @@ use UnexpectedValueException;
 class ReviewRepository implements IRepository
 {
     public function __construct(
-        private DatabaseManager $conn,
+        private DatabaseManager $dbManager,
         private DbEntityManager $em,
         private SessionManager $session,
         private ReviewModelFactory $model,
     ) {
     }
 
-    public function add(AppObject $review): string {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_review VALUES (:id, :article_id, :playable_id, :rating, :body, :cons, :pros);');
-        $stmt->execute($this->em->toDbValue($review));
-        return $this->conn->getPdo()->lastInsertId();
+    public function add(AppObject $review): string
+    {
+        $this->dbManager->run(
+            'INSERT INTO e_review VALUES (:id, :article_id, :playable_id, :rating, :body, :cons, :pros);',
+            $this->em->toDbValue($review),
+        );
+        return $this->dbManager->getLastInsertId();
     }
 
     public function delete(string $id): void {
-        $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_review WHERE review_id = ?;');
+        $stmt = $this->dbManager->getPdo()->prepare('DELETE FROM e_review WHERE review_id = ?;');
         $stmt->execute([$id]);
     }
 
     public function find(string $id): ?AppObject {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_review WHERE (review_id = ?) LIMIT 1;');
+        $stmt = $this->dbManager->getPdo()->prepare('SELECT * FROM e_review WHERE (review_id = ?) LIMIT 1;');
         $stmt->execute([$id]);
 
         $data = $stmt->fetchAll();
@@ -49,7 +52,7 @@ class ReviewRepository implements IRepository
      * @return \LM\WebFramework\DataStructures\AppObject[]
      */
     public function findAll(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;')->fetchAll();
+        $results = $this->dbManager->getPdo()->query('SELECT * FROM v_article WHERE review_id IS NOT NULL;')->fetchAll();
         $reviews = [];
         foreach ($results as $row) {
             $reviews[] = $this->em->toAppData($row, new ReviewModelFactory(new PlayableModelFactory()), 'review');
@@ -58,7 +61,7 @@ class ReviewRepository implements IRepository
     }
 
     public function update(AppObject $review, ?string $previousId = null): void {
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_review SET review_article_id = :article_id, review_playable_id = :playable_id, review_rating = :rating, review_body = :body, review_cons = :cons, review_pros = :pros WHERE review_id = :previous_id;');
+        $stmt = $this->dbManager->getPdo()->prepare('UPDATE e_review SET review_article_id = :article_id, review_playable_id = :playable_id, review_rating = :rating, review_body = :body, review_cons = :cons, review_pros = :pros WHERE review_id = :previous_id;');
         $stmt->execute($this->em->toDbValue($review) + ['previous_id' => $previous_id ?? $review['id']]);
     }
 }

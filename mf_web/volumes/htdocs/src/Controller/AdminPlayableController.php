@@ -11,12 +11,12 @@ use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Validator\ModelValidator;
 use MF\Enum\LinkType;
 use MF\Enum\PlayableType;
-use MF\Exception\Database\EntityNotFoundException;
 use MF\Model\ContributionModelFactory;
 use MF\Model\PlayableLinkModelFactory;
 use MF\Model\PlayableModelFactory;
 use LM\WebFramework\DataStructures\Slug;
 use LM\WebFramework\Session\SessionManager;
+use MF\Repository\Exception\EntityNotFoundException;
 use MF\Repository\AuthorRepository;
 use MF\Repository\PlayableLinkRepository;
 use MF\Repository\PlayableRepository;
@@ -42,7 +42,8 @@ class AdminPlayableController implements ControllerInterface
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {
         $model = $this->playableModelFactory->create(
             playableLinkModel: $this->playableLinkModelFactory->create(),
             contributionModel: $this->contributionModelFactory->create(),
@@ -50,6 +51,9 @@ class AdminPlayableController implements ControllerInterface
 
         $requestedId = $routeParams[1] ?? null;
         $requestedEntity = null;
+
+        $formErrors = null;
+        $formData = null;
 
         $form = $this->formFactory->createForm($model, config: [
             'id' => [
@@ -66,9 +70,6 @@ class AdminPlayableController implements ControllerInterface
                 ]
             ],
         ]);
-    
-        $formErrors = null;
-        $formData = null;
 
         if ('POST' === $request->getMethod()) {
             // Form Data extraction, generation and validation.

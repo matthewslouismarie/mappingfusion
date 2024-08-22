@@ -5,39 +5,43 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
-use MF\Exception\Database\EntityNotFoundException;
+use LM\WebFramework\Model\Type\StringModel;
+use MF\DataStructure\SqlFilename;
+use MF\Repository\Exception\EntityNotFoundException;
 use MF\Model\ContributionModelFactory;
+use MF\Model\ModelFactory;
 use MF\Model\PlayableLinkModelFactory;
 use MF\Model\PlayableModelFactory;
 
 class PlayableRepository implements IRepository
 {
     public function __construct(
-        private DatabaseManager $conn,
-        private PlayableModelFactory $model,
-        private DbEntityManager $em,
-        private PlayableLinkRepository $linkRepo,
         private ContributionRepository $contributionRepository,
+        private DatabaseManager $dbManager,
+        private DbEntityManager $em,
+        private ModelFactory $modelFactory,
+        private PlayableLinkRepository $linkRepo,
     ) {
     }
 
-    public function add(AppObject $playable): string {
+    public function add(AppObject $playable): string
+    {
         $dbArray = $this->em->toDbValue($playable);
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_playable VALUES (:id, :name, :release_date_time, :type, :game_id);');
-        $stmt->execute($dbArray);
-        $playable->set('id', $this->conn->getPdo()->lastInsertId());
-        return $this->conn->getPdo()->lastInsertId();
+        $this->dbManager->run(
+            'INSERT INTO e_playable VALUES (:id, :name, :release_date_time, :type, :game_id);',
+            $dbArray,
+        );
+        return $this->dbManager->getLastInsertId();
     }
 
     public function addOrUpdate(AppObject $playable, ?string $previousId = null, bool $add = false): void {
         $dbArray = $this->em->toDbValue($playable);
 
-        $this->conn->getPdo()->beginTransaction();
+        $this->dbManager->getPdo()->beginTransaction();
         if ($add) {
             $this->add($playable);
         } else {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET playable_id = :id, playable_name = :name, playable_type = :type, playable_game_id = :game_id, playable_release_date_time = :release_date_time WHERE playable_id = :previous_id;');
-            $stmt->execute($dbArray + ['previous_id' => $previousId ?? $dbArray['id']]);
+            $this->dbManager->runFilename('stmt_update_playable', $dbArray + ['previous_id' => $previousId ?? $dbArray['id']]);
         }
 
         $linkIds = [];
@@ -63,11 +67,11 @@ class PlayableRepository implements IRepository
         }
         $this->contributionRepository->filterOutPlayableContributions($playable->id, $contribIds);
 
-        $this->conn->getPdo()->commit();
+        $this->dbManager->getPdo()->commit();
     }
 
     public function delete(string $id): void {
-        $stmt = $this->conn->getPdo()->prepare('DELETE FROM e_playable WHERE playable_id = ?;');
+        $stmt = $this->dbManager->getPdo()->prepare('DELETE FROM e_playable WHERE playable_id = ?;');
         $stmt->execute([$id]);
     }
 
@@ -75,59 +79,39 @@ class PlayableRepository implements IRepository
      * @todo Fetch playable too
      */
     public function find(string $id): ?AppObject {
-        $stmt = $this->conn->getPdo()->prepare('SELECT v_playable.*, game.playable_id AS game_id, game.playable_name AS game_name, game.playable_release_date_time AS game_release_date_time, game.playable_game_id AS game_game_id FROM v_playable LEFT JOIN e_playable AS game ON v_playable.playable_game_id = game.playable_id WHERE v_playable.playable_id = ?;');
-        $stmt->execute([$id]);
+        $dbRows = $this->dbManager->fetchRowsFromQueryFile(
+            new SqlFilename('stmt_find_playable_full.sql'),
+            [
+                'id' => $id,
+            ],
+        );
 
-        if (0 === $stmt->rowCount()) {
+        if (0 === count($dbRows)) {
             return null;
         }
 
-        $rows = $stmt->fetchAll();
-        $linkModel = new PlayableLinkModelFactory();
-        $linkIds = [null];
-        $links = [];
-        $contributions = [];
-        $contributionModel = new ContributionModelFactory();
-        $contribIds = [null];
-        for ($i = 0; $i < count($rows); $i++) {
-            if (!in_array($rows[$i]['link_id'], $linkIds, true)) {
-                $linkIds[] = $rows[$i]['link_id'];
-                $links[] = $this->em->toAppData($rows[$i], $linkModel, 'link');
-            }
-            if (!in_array($rows[$i]['contribution_id'], $contribIds, true)) {
-                $contribIds[] = $rows[$i]['contribution_id'];
-                $contributions[] = $this->em->toAppData($rows[$i], $contributionModel, 'contribution');
-            }
-        }
-
-        $gameModel = null !== $rows[0]['playable_game_id'] ? new PlayableModelFactory() : null;
-        $playable = $this->em->toAppData($rows[0], new PlayableModelFactory($gameModel), 'playable');
-        return $playable->set('links', $links)->set('contributions', $contributions);
+        $model = $this->modelFactory->getPlayableModel(contributions: true, game: true, links: true, mods: true);
+        return $this->em->convertDbRowsToAppObject($dbRows, $model);
     }
 
     /**
      * @return AppObject[]
      */
     public function findAll(): array {
-        $results = $this->conn->getPdo()->query('SELECT * FROM e_playable;')->fetchAll();
-        $playables = [];
-        foreach ($results as $row) {
-            $playables[] = $this->em->toAppData($row, $this->model, 'playable');
-        }
+        $dbRows = $this->dbManager->fetchRows('SELECT * FROM e_playable;');
+        $playables = $this->em->convertDbRowsToList($dbRows, $this->modelFactory->getPlayableModel());
         return $playables;
     }
 
     /**
      * @return AppObject[]
      */
-    public function findFrom(string $authorId): array {
-        $stmt = $this->conn->getPdo()->prepare('SELECT DISTINCT v_playable.*, v_article_published.article_id FROM v_playable LEFT JOIN v_article_published ON v_playable.playable_id = v_article_published.playable_id WHERE author_id = ? GROUP BY v_playable.playable_id;');
-        $stmt->execute([$authorId]);
-        $playables = [];
-        foreach ($stmt->fetchAll() as $row) {
-            $playables[] = $this->em->toAppData($row, $this->model, 'playable')->set('article_id', $row['article_id']);
-        }
-        return $playables;
+    public function findFrom(string $authorId): array
+    {
+        $model = $this->modelFactory->getPlayableModel()->addProperty('article_id', new StringModel(isNullable: true));
+        $dbRows = $this->dbManager->fetchRowsFromQueryFile(new SqlFilename('stmt_find_playables_from_author.sql'), [$authorId]);
+
+        return $this->em->convertDbRowsToEntityList($dbRows, $model);
     }
 
     public function findOne(string $id): AppObject {
@@ -136,7 +120,7 @@ class PlayableRepository implements IRepository
     }
 
     public function update(AppObject $entity, string $previousId): void {
-        // $stmt = $this->conn->getPdo()->prepare('UPDATE e_playable SET ')
+        // $stmt = $this->dbManager->getPdo()->prepare('UPDATE e_playable SET ')
         $this->addOrUpdate($entity, $previousId);
     }
 }

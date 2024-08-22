@@ -4,6 +4,7 @@ namespace MF\Model;
 
 use LM\WebFramework\Model\Factory\SlugModelFactory;
 use LM\WebFramework\Model\Type\EntityModel;
+use LM\WebFramework\Model\Type\ForeignEntityModel;
 use LM\WebFramework\Model\Type\IntModel;
 use LM\WebFramework\Model\Type\StringModel;
 
@@ -33,10 +34,10 @@ class ReviewModelFactory
             'pros' => new StringModel(),
         ];
         if (null !== $playableModel) {
-            $properties['playable'] = $playableModel;
+            $properties['playable'] = new ForeignEntityModel($playableModel, 'id', 'playable_id');
         }
         if (null !== $articleModel) {
-            $properties['article'] = $articleModel;
+            $properties['article'] = new ForeignEntityModel($articleModel, 'id', 'article_id');
         }
 
         return new EntityModel(

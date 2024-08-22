@@ -10,7 +10,7 @@
 <meta property="og:type" content="article">
 <meta property="og:published_time" content="{{ article.creation_date_time|date('Y-m-d\\TH:i') }}Z">
 <meta property="og:modified_time" content="{{ article.last_update_date_time|date('Y-m-d\\TH:i') }}Z">
-<meta property="og:author" content="{{ article.author_id }}">
+<meta property="og:author" content="{{ article.writer_id }}">
 <meta property="og:section" content="{{ article.category.name }}">
 <meta property="og:url" content="{{ app.router.generateUrl('article', [article.id]) }}">
 {% if app.rm.exists(app.thumbnail(article)) %}
@@ -67,7 +67,7 @@
                                     {% if c.is_author %}
                                     {% if not loop.first %}<span class="comma">, </span>{% endif %}
                                     {# @todo Make sure it is not an organisation #}
-                                    {{ authorLink(app, c.author, 20, 'creator') }}
+                                    {{ authorLink(app, c.author.id, 20, 'creator') }}
                                     {% endif %}
                                     {% endfor %}
                                 </dd>
@@ -178,7 +178,7 @@
                             <div class="item -author">
                                 <dt class="term">Rédigé par :</dt>
                                 <dd class="def">
-                                    {{ authorLink(app, article.redactor, 16, 'author') }}
+                                    {{ authorLink(app, article.writer_id, 16, 'author') }}
                                 </dd>
                             </div>
                         </dl>

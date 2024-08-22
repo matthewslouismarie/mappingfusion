@@ -152,6 +152,11 @@ class FormController
         );
     }
 
+    public function isCheckboxChecked(ServerRequestInterface $request, string $checkboxName): bool
+    {
+        return key_exists($checkboxName, $request->getParsedBody()) && 'on' === $request->getParsedBody()[$checkboxName];
+    }
+
     private function processDeleteRequest(ServerRequestInterface $request, ?string $id): array
     {
         $deleteFormModel = new EntityModel(

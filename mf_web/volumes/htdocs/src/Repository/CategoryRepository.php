@@ -3,11 +3,12 @@
 namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
-use MF\Exception\Database\EntityNotFoundException;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\Model\Type\EntityModel;
+use MF\Repository\Exception\EntityNotFoundException;
 use MF\Model\CategoryModelFactory;
+use MF\Model\ModelFactory;
 use UnexpectedValueException;
 
 class CategoryRepository implements IRepository
@@ -16,26 +17,27 @@ class CategoryRepository implements IRepository
 
     public function __construct(
         private CategoryModelFactory $categoryModelFactory,
-        private DatabaseManager $conn,
+        private DatabaseManager $dbManager,
         private DbEntityManager $em,
+        private ModelFactory $modelFactory,
     ) {
-        $this->model = $this->categoryModelFactory->create();
+        $this->model = $modelFactory->getCategoryModel();
     }
 
     public function add(AppObject $category): string
     {
-        $this->conn->run('INSERT INTO e_category VALUES (:id, :name, :parent_id);', $this->em->toDbValue($category));
-        return $this->conn->getPdo()->lastInsertId();
+        $this->dbManager->run('INSERT INTO e_category VALUES (:id, :name, :parent_id);', $this->em->toDbValue($category));
+        return $this->dbManager->getLastInsertId();
     }
 
     public function delete(string $id): void
     {
-        $stmt = $this->conn->run('DELETE FROM e_category WHERE category_id = ?;', [$id]);
+        $stmt = $this->dbManager->run('DELETE FROM e_category WHERE category_id = ?;', [$id]);
     }
 
     public function find(string $id): ?AppObject
     {
-        $dbRows = $this->conn->fetchRows('SELECT * FROM e_category WHERE category_id = ? LIMIT 1;', [$id]);
+        $dbRows = $this->dbManager->fetchRows('SELECT * FROM e_category WHERE category_id = ? LIMIT 1;', [$id]);
         if (0 === count($dbRows)) {
             return null;
         } elseif (1 === count($dbRows)) {
@@ -50,7 +52,7 @@ class CategoryRepository implements IRepository
      */
     public function findAll(): array
     {
-        $dbRows = $this->conn->fetchRows('SELECT * FROM e_category');
+        $dbRows = $this->dbManager->fetchRows('SELECT * FROM e_category;');
         $categories = $this->em->convertDbRowsToList($dbRows, $this->model);
         $categoriesByKey = [];
         foreach ($categories as $cat) {
@@ -72,16 +74,18 @@ class CategoryRepository implements IRepository
 
     public function findAllRoot(): array
     {
-        $dbRows = $this->conn->fetchRows('SELECT * FROM e_category WHERE category_parent_id IS NULL;');
+        $dbRows = $this->dbManager->fetchRows('SELECT * FROM e_category WHERE category_parent_id IS NULL;');
         return $this->em->convertDbRowsToList($dbRows, $this->model);
     }
 
-    public function findOne(string $id): AppObject {
+    public function findOne(string $id): AppObject
+    {
         return $this->find($id);
     }
 
-    public function findWithChildren(string $id): AppObject {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM v_category WHERE category_id = :id OR category_parent_id = :id;');
+    public function findWithChildren(string $id): AppObject
+    {
+        $stmt = $this->dbManager->getPdo()->prepare('SELECT * FROM v_category WHERE category_id = :id OR category_parent_id = :id;');
         $stmt->execute(['id' => $id]);
 
         $dbRows = $stmt->fetchAll();
@@ -111,7 +115,7 @@ class CategoryRepository implements IRepository
     }
 
     public function update(AppObject $category, ?string $previousId = null): void {
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_category SET category_id = :id, category_name = :name, category_parent_id = :parent_id WHERE category_id = :previous_id;');
+        $stmt = $this->dbManager->getPdo()->prepare('UPDATE e_category SET category_id = :id, category_name = :name, category_parent_id = :parent_id WHERE category_id = :previous_id;');
         $stmt->execute($this->em->toDbValue($category) + ['previous_id' => $previousId ?? $category->id]);
     }
 }

@@ -30,7 +30,8 @@ class AdminAuthorController implements ControllerInterface
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {
         $requestedId = $routeParams[1] ?? null;
         $requestedEntity = null;
         $formData = null;
@@ -44,6 +45,7 @@ class AdminAuthorController implements ControllerInterface
         ]);
 
         if ('POST' === $request->getMethod()) {
+            var_dump($request->getUploadedFiles());
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
             $formData['id'] = $formData['id'] === null && $formData['name'] !== null ? (new Slug($formData['name'], true))->__toString() : $formData['id'];
             $validator = new ModelValidator($model);

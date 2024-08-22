@@ -7,8 +7,8 @@ use LM\WebFramework\Model\Factory\SlugModelFactory;
 use LM\WebFramework\Model\Factory\UploadedImageModelFactory;
 use LM\WebFramework\Model\Factory\UrlModelFactory;
 use LM\WebFramework\Model\Factory\VarcharModelFactory;
-use LM\WebFramework\Model\SlugModel;
 use LM\WebFramework\Validator\ModelValidator;
+use MF\DataStructure\SqlFilename;
 use MF\Enum\LinkType;
 use MF\Enum\PlayableType;
 use PDO;
@@ -16,17 +16,17 @@ use PDOException;
 use PDOStatement;
 use UnexpectedValueException;
 
+/**
+ * @todo Move in lm-web-framework.
+ * @todo Add caching mechanism for database queries.
+ */
 class DatabaseManager
 {
-    /**
-     * @todo Theses const should go in lm-web-framework.
-     */
     const UNEXISTING_DB_CODE = '42000';
     const SMALLINT_UNSIGNED_MAX = 65535;
     const TINYINT_UNSIGNED_MAX = 255;
 
     private PDO $pdo;
-    private SlugModelFactory $slugModelFactory;
     private string $dbHost;
     private string $dbName;
     private string $dbPwd;
@@ -34,6 +34,7 @@ class DatabaseManager
 
     public function __construct(
         Configuration $config,
+        private SlugModelFactory $slugModelFactory,
     ) {
         $this->dbName = $config->getSetting('DB_NAME');
         $this->dbPwd = $config->getSetting('DB_PASSWORD');
@@ -61,11 +62,16 @@ class DatabaseManager
         return $this->pdo->lastInsertId();
     }
 
-    public function getPdo(): PDO {
+    /**
+     * @todo Remove.
+     */
+    public function getPdo(): PDO
+    {
         return $this->pdo;
     }
 
-    private function createDatabase(): void {
+    private function createDatabase(): void
+    {
         $this->pdo->exec("CREATE DATABASE $this->dbName");
         
         $this->pdo->exec('USE ' . $this->dbName . ';');
@@ -90,7 +96,13 @@ class DatabaseManager
         $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_person.sql'));
     }
 
-    public function prepare(string $query): PDOStatement {
+    public function dropDatabase(): void
+    {
+        $this->pdo->exec("DROP DATABASE {$this->dbName};");
+    }
+
+    public function prepare(string $query): PDOStatement
+    {
         $stmt = $this->pdo->prepare($query);
         if (false === $stmt) {
             throw new UnexpectedValueException('PDO::prepare returned false!');
@@ -131,5 +143,15 @@ class DatabaseManager
         $filePath = realpath(dirname(__FILE__) . "/../../sql/{$fileShortName}.sql");
         $query = file_get_contents($filePath);
         $this->run($query, $arguments);
+    }
+
+    public function fetchRowsFromQueryFile(SqlFilename $fileShortName, array $queryArgs, string ...$fileArgs): array
+    {
+
+        $filePath = realpath(dirname(__FILE__) . "/../../sql/{$fileShortName}");
+        $query = sprintf(file_get_contents($filePath), ...$fileArgs);
+        $stmt = $this->prepare($query);
+        $stmt->execute($queryArgs);
+        return $stmt->fetchAll();
     }
 }

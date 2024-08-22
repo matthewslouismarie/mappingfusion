@@ -4,6 +4,7 @@ namespace MF\Controller;
 
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
@@ -13,6 +14,7 @@ use LM\WebFramework\Validator\ModelValidator;
 use MF\Model\ArticleModelFactory;
 use LM\WebFramework\DataStructures\Slug;
 use LM\WebFramework\Model\Type\EntityModel;
+use MF\Repository\Exception\EntityNotFoundException;
 use MF\Repository\ArticleRepository;
 use MF\Repository\BookRepository;
 use MF\Repository\CategoryRepository;
@@ -32,6 +34,7 @@ class AdminArticleController implements ControllerInterface
         private BookRepository $bookRepository,
         private CategoryRepository $catRepo,
         private DbEntityManager $em,
+        private FormController $formController,
         private FormFactory $formFactory,
         private PageFactory $pageFactory,
         private Router $router,
@@ -46,7 +49,8 @@ class AdminArticleController implements ControllerInterface
         ;
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {
         $formData = null;
         $formErrors = null;
         $lastUpdateDateTimeUtc = null;
@@ -60,7 +64,7 @@ class AdminArticleController implements ControllerInterface
                 'cover_filename' => [
                     'required' => null === $requestedId,
                 ],
-                'author_id' => [
+                'writer_id' => [
                     'ignore' => true,
                 ],
             ],
@@ -68,37 +72,28 @@ class AdminArticleController implements ControllerInterface
         ;
 
         if ('POST' === $request->getMethod()) {
+            $lastUpdateDateTimeUtc = time() * 1000;
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
             $formData['id'] = $formData['id'] ?? (null !== $formData['title'] ? (new Slug($formData['title'], true))->__toString() : null);
-            $formData['author_id'] = $this->session->getCurrentMemberUsername();
-            $lastUpdateDateTimeUtc = time() * 1000;
+            $formData['writer_id'] = $this->session->getCurrentMemberUsername();
             $validator = new ModelValidator($this->model);
-            $formErrors = $validator->validate($formData, $this->model);
+            $formErrors = $validator->validate($formData);
     
             if (0 === count($formErrors)) {
-                $article = new AppObject($formData);
-                if (null === $requestedId) {
-                    $this->repo->add($article);
-                } else {
-                    if (isset($request->getParsedBody()['update_author']) && 'on' === $request->getParsedBody()['update_author']) {
-                        $this->session->addMessage('Article mis à jour et auteur modifié.');
-                        $this->repo->update($article, $requestedId, true);
-                    } else {
-                        $this->session->addMessage('Article mis à jour.');
-                        $this->repo->update($article, $requestedId);
-                    }
-                }
-                return $this->router->generateRedirect('manage-article', [$article->id]);
+                return $this->persistPostData($request, $formData, $requestedId);
             }
         }
         
         if (null !== $requestedId) {
-            $requestedEntity = $this->repo->find($requestedId, onlyPublished: false);
+            try {
+                $requestedEntity = $this->repo->findOne($requestedId);
+            } catch (EntityNotFoundException $e) {
+                throw new RequestedResourceNotFound(previous: $e);
+            }
 
             if (null === $formData) {
-                $formData = $requestedEntity?->toArray();
-                $lastUpdateDateTime = $formData['last_update_date_time'];
-                $lastUpdateDateTimeUtc = $lastUpdateDateTime->getTimestamp() * 1000;
+                $formData = $requestedEntity->toArray();
+                $lastUpdateDateTimeUtc = $formData['last_update_date_time']->getTimestamp() * 1000;
             }
         }
 
@@ -133,5 +128,30 @@ class AdminArticleController implements ControllerInterface
             AdminArticleListController::class,
             isIndexed: false,
         );
+    }
+
+    /**
+     * @param mixed[] $formData The prepared, validated form data.
+     * @param ?string $requestedId The ID of the article, if it already exists
+     * in the database.
+     */
+    private function persistPostData(
+        ServerRequestInterface $request,
+        array $formData,
+        ?string $requestedId,
+    ): ResponseInterface {
+        $article = new AppObject($formData);
+        if (null === $requestedId) {
+            $this->repo->add($article);
+        } else {
+            if ($this->formController->isCheckboxChecked($request, 'update_author')) {
+                $this->session->addMessage('Article mis à jour et auteur modifié.');
+                $this->repo->update($article, $requestedId, true);
+            } else {
+                $this->session->addMessage('Article mis à jour.');
+                $this->repo->update($article, $requestedId);
+            }
+        }
+        return $this->router->generateRedirect('manage-article', [$article->id]);
     }
 }

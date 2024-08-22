@@ -37,7 +37,7 @@ class DbEntityManagerTest implements IUnitTest
         $appObject = $em->toAppData(
             [
                 'article_id' => 'prout-prite',
-                'article_author_id' => 'root',
+                'article_writer_id' => 'root',
                 'article_category_id' => 'cat',
                 'article_body' => 'Ceci est un contenu.',
                 'article_is_featured' => 0,

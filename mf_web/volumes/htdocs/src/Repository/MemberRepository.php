@@ -13,20 +13,23 @@ class MemberRepository implements IRepository
 {
     public function __construct(
         private AuthorModelFactory $authorModelFactory,
-        private DatabaseManager $conn,
+        private DatabaseManager $dbManager,
         private DbEntityManager $em,
         private MemberModelFactory $memberModelFactory,
     ) {
     }
 
-    public function add(AppObject $member): string {
-        $stmt = $this->conn->getPdo()->prepare('INSERT INTO e_member VALUES (:id, :password, :author_id )');
-        $stmt->execute($this->em->toDbValue($member));
-        return $this->conn->getPdo()->lastInsertId();
+    public function add(AppObject $member): string
+    {
+        $this->dbManager->run(
+            'INSERT INTO e_member VALUES (:id, :password, :author_id );',
+            $this->em->toDbValue($member),
+        );
+        return $this->dbManager->getLastInsertId();
     }
 
     public function delete(string $id): void {
-        $this->conn->run(
+        $this->dbManager->run(
             'DELETE FROM e_member WHERE member_id = :id;',
             [
                 'id' => $id,
@@ -35,7 +38,7 @@ class MemberRepository implements IRepository
     }
 
     public function find(string $username): ?AppObject {
-        $stmt = $this->conn->getPdo()->prepare('SELECT * FROM e_member LEFT JOIN e_author ON member_author_id = author_id WHERE (member_id=?) LIMIT 1');
+        $stmt = $this->dbManager->getPdo()->prepare('SELECT * FROM e_member LEFT JOIN e_author ON member_author_id = author_id WHERE (member_id=?) LIMIT 1');
         $stmt->execute([$username]);
 
         $data = $stmt->fetchAll();
@@ -55,15 +58,18 @@ class MemberRepository implements IRepository
 
     public function update(AppObject $entity, string $oldId, bool $updatePassword = true): void {
         if ($updatePassword) {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_member SET member_id = :id, member_password = :password, member_author_id = :author_id WHERE member_id = :old_id;');
+            $dbData = $this->em->toDbValue($entity);
+            $dbData['password'] = password_hash($dbData['password'], PASSWORD_DEFAULT);
+            $this->dbManager->runFilename('stmt_update_account', $dbData + ['old_id' => $oldId]);
         } else {
-            $stmt = $this->conn->getPdo()->prepare('UPDATE e_member SET member_id = :id, member_author_id = :author_id WHERE member_id = :old_id;');
+            $dbData = $this->em->toDbValue($entity);
+            unset($dbData['password']);
+            $this->dbManager->runFilename('stmt_update_account_except_password', $dbData + ['old_id' => $oldId]);
         }
-        $stmt->execute($this->em->toDbValue($entity) + [$oldId]);
     }
 
     public function updateId(string $oldId, string $newId): void {
-        $stmt = $this->conn->getPdo()->prepare('UPDATE e_member SET member_id = :new_id WHERE member_id = :old_id');
+        $stmt = $this->dbManager->getPdo()->prepare('UPDATE e_member SET member_id = :new_id WHERE member_id = :old_id');
         $stmt->execute(['old_id' => $oldId, 'new_id' => $newId]);
     }
 }

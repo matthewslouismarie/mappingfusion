@@ -31,7 +31,8 @@ class AdminCategoryController implements ControllerInterface
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {    
         $requestedId = $routeParams[1] ?? null;
 
         $formData = null;
@@ -41,7 +42,7 @@ class AdminCategoryController implements ControllerInterface
         $form = $this->formFactory->createForm($model, config: [
             'id' => [
                 'required' => false,
-            ]
+            ],
         ]);
 
         if ('POST' === $request->getMethod()) {
@@ -59,7 +60,7 @@ class AdminCategoryController implements ControllerInterface
                     $this->repo->update($category, $requestedId);
                     $this->sessionManager->addMessage('La catégorie a bien été mise à jour.');
                 }
-                return $this->router->generateRedirect('admin-manage-category', [$category->id]);
+                return $this->router->generateRedirect('admin-categorie', [$category->id]);
             }
         } elseif (null !== $requestedId) {
             $formData = $this->repo->find($requestedId)?->toArray();

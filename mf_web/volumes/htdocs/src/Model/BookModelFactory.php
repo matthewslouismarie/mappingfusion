@@ -3,13 +3,16 @@
 namespace MF\Model;
 
 use LM\WebFramework\Model\Factory\SlugModelFactory;
+use LM\WebFramework\Model\Type\EntityListModel;
 use LM\WebFramework\Model\Type\EntityModel;
+use LM\WebFramework\Model\Type\ForeignEntityModel;
 use LM\WebFramework\Model\Type\ListModel;
-use LM\WebFramework\Model\Type\StringModel as TypeStringModel;
+use LM\WebFramework\Model\Type\StringModel;
 
 class BookModelFactory
 {
     public function __construct(
+        private ChapterIndexModelFactory $chapterIndexModelFactory,
         private ArticleModelFactory $articleModelFactory,
         private SlugModelFactory $slugModelFactory,
         private ChapterModelFactory $chapterModelFactory,
@@ -20,10 +23,12 @@ class BookModelFactory
     {
         $properties = [
             'id' => $this->slugModelFactory->getSlugModel(),
-            'title' => new TypeStringModel(),
+            'title' => new StringModel(),
         ];
         if (null !== $chapterModel) {
-            $properties['chapters'] = new ListModel($chapterModel);
+            $properties['chapters'] = new EntityListModel(
+                new ForeignEntityModel($chapterModel, 'book_id', 'id'),
+            );
         }
         
         return new EntityModel(
@@ -39,6 +44,7 @@ class BookModelFactory
             ->create()
             ->prune(['id', 'title'])
         ;
-        return $this->create($this->chapterModelFactory->create($articleModel));
+        $chapterIndexModel = $this->chapterIndexModelFactory->create(isNew: false);
+        return $this->create($this->chapterModelFactory->create($chapterIndexModel));
     }
 }

@@ -5,7 +5,8 @@ namespace MF\Model;
 use LM\WebFramework\Model\Factory\SlugModelFactory;
 use LM\WebFramework\Model\Factory\UploadedImageModelFactory;
 use LM\WebFramework\Model\Type\EntityModel;
-use LM\WebFramework\Model\Type\StringModel as TypeStringModel;
+use LM\WebFramework\Model\Type\ForeignEntityModel;
+use LM\WebFramework\Model\Type\StringModel;
 
 /**
  * @todo Add knowsAbout, memberOf
@@ -23,17 +24,17 @@ class AuthorModelFactory
     {
         $properties = [
             'id' => $this->slugModelFactory->getSlugModel(),
-            'name' => new TypeStringModel(lowerLimit: 1),
-            'avatar_filename' => $this->uploadedImageModelFactory->createModel(true),
+            'name' => new StringModel(lowerLimit: 1),
+            'avatar_filename' => $this->uploadedImageModelFactory->getModel(isNullable: true),
         ];
+        
         if (null !== $memberModel) {
-            $properties['member'] = $memberModel;
+            $properties['member'] = new ForeignEntityModel($memberModel, 'author_id', 'id', true);
         }
         
         return new EntityModel(
             'author',
             $properties,
-            'id',
         );
     }
 }

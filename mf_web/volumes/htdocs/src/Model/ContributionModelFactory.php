@@ -5,6 +5,7 @@ namespace MF\Model;
 use LM\WebFramework\Model\Factory\SlugModelFactory;
 use LM\WebFramework\Model\Type\BoolModel;
 use LM\WebFramework\Model\Type\EntityModel;
+use LM\WebFramework\Model\Type\ForeignEntityModel;
 use LM\WebFramework\Model\Type\IntModel;
 use LM\WebFramework\Model\Type\StringModel;
 
@@ -26,7 +27,11 @@ class ContributionModelFactory
         ];
 
         if (null !== $authorModel) {
-            $properties['author'] = $authorModel;
+            $properties['author'] = new ForeignEntityModel(
+                $authorModel,
+                'id',
+                'author_id'
+            );
         }
         
         return new EntityModel(
