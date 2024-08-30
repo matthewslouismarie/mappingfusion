@@ -46,7 +46,7 @@
 {% endmacro %}
 
 {% macro links(app, linkType, links, playable) %}
-{% if app.hasLinks(linkType, links) %}
+{% if app.hasLinksOfType(links, linkType) %}
 <ul class="list -dormant">
     <button class="std-button -p">
         <div class="text _txt -bold">{% if linkType == 'download' %}Télécharger{% elseif linkType == 'homepage' %}Site officiel{% else %}Autre{%endif%} ▼</div>

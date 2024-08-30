@@ -51,11 +51,13 @@ class Router
         return $this->config->getSetting('homeUrl') . $url;
     }
 
-    public function generateRedirect(string $routeId, $parameters = []): ResponseInterface {
+    public function generateRedirect(string $routeId, $parameters = []): ResponseInterface
+    {
         return new Response(302, ['Location' => $this->generateUrl($routeId, $parameters)]);
     }
 
-    public function redirect(string $controllerFqcn, $parameters = []): ResponseInterface {
+    public function redirect(string $controllerFqcn, $parameters = []): ResponseInterface
+    {
         return $this->generateRedirect(
             $this->getRouteId($controllerFqcn),
             $parameters,

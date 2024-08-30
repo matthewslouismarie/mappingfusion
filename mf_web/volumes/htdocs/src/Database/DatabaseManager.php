@@ -3,11 +3,12 @@
 namespace MF\Database;
 
 use LM\WebFramework\Configuration;
+use LM\WebFramework\Model\Constraints\IUploadedImageConstraint;
 use LM\WebFramework\Model\Factory\SlugModelFactory;
 use LM\WebFramework\Model\Factory\UploadedImageModelFactory;
 use LM\WebFramework\Model\Factory\UrlModelFactory;
 use LM\WebFramework\Model\Factory\VarcharModelFactory;
-use LM\WebFramework\Validator\ModelValidator;
+use LM\WebFramework\Validation\Validator;
 use MF\DataStructure\SqlFilename;
 use MF\Enum\LinkType;
 use MF\Enum\PlayableType;
@@ -84,8 +85,8 @@ class DatabaseManager
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_category.sql'), VarcharModelFactory::MAX_LENGTH, SlugModelFactory::SLUG_REGEX));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_book.sql'), VarcharModelFactory::MAX_LENGTH, SlugModelFactory::SLUG_REGEX));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_chapter.sql'), VarcharModelFactory::MAX_LENGTH, SlugModelFactory::SLUG_REGEX));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_article.sql'), VarcharModelFactory::MAX_LENGTH, SlugModelFactory::SLUG_REGEX, UploadedImageModelFactory::FILENAME_REGEX));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_chapter_index.sql'), VarcharModelFactory::MAX_LENGTH, SlugModelFactory::SLUG_REGEX, UploadedImageModelFactory::FILENAME_REGEX));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_article.sql'), VarcharModelFactory::MAX_LENGTH, SlugModelFactory::SLUG_REGEX, IUploadedImageConstraint::FILENAME_REGEX));
+        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_chapter_index.sql'), VarcharModelFactory::MAX_LENGTH, SlugModelFactory::SLUG_REGEX, IUploadedImageConstraint::FILENAME_REGEX));
         $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_playable_link.sql'), VarcharModelFactory::MAX_LENGTH, UrlModelFactory::URL_MAX_LENGTH, LinkType::Download->value, LinkType::HomePage->value, LinkType::Other->value));
 
         $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_book.sql'));
@@ -139,8 +140,8 @@ class DatabaseManager
 
     public function runFilename(string $fileShortName, array $arguments): void
     {
-        (new ModelValidator($this->slugModelFactory->getSlugModel()))->validate($fileShortName);
-        $filePath = realpath(dirname(__FILE__) . "/../../sql/{$fileShortName}.sql");
+        (new Validator($this->slugModelFactory->getSlugModel()))->validate($fileShortName);
+        $filePath = realpath(dirname(__FILE__) . "/../../sql/{$fileShortName}");
         $query = file_get_contents($filePath);
         $this->run($query, $arguments);
     }

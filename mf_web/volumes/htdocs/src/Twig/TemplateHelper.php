@@ -155,9 +155,14 @@ class TemplateHelper
         return $hash;
     }
 
-    public function hasLinks(string $linkType, IteratorAggregate $links): bool {
+    /**
+     * @param string $linkType The type that is tested for.
+     * @param AppObject[] $links The "links" property of the object.
+     */
+    public function hasLinksOfType(array $links, string $linkType): bool
+    {
         foreach ($links as $l) {
-            if ($l->type == $linkType) {
+            if ($l['type'] == $linkType) {
                 return true;
             }
         }

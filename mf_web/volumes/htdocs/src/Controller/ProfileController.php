@@ -43,7 +43,7 @@ class ProfileController implements ControllerInterface
             [
                 'articles' => $articles,
                 'author' => $author,
-                'playables' => $this->playableRepository->findFrom($author->id),
+                'playables' => $this->playableRepository->findFromAuthor($author->id),
             ],
         );
     }

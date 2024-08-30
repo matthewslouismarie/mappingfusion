@@ -23,7 +23,7 @@ class TwigService
         Configuration $configuration,
     ) {
         $this->templateHelper = $templateHelper;
-        $twigLoader = new FilesystemLoader($configuration->getPathOfProjectDirectory() . '/templates');
+        $twigLoader = new FilesystemLoader($configuration->getPathOfAppDirectory() . '/templates');
         $dev = $configuration->getBoolSetting('dev');
         $this->twig = new Environment($twigLoader, [
             'debug' => $dev ? true : false,

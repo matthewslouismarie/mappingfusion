@@ -10,7 +10,7 @@ use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Session\SessionManager;
-use LM\WebFramework\Validator\ModelValidator;
+use LM\WebFramework\Validation\Validator;
 use MF\Model\ArticleModelFactory;
 use LM\WebFramework\DataStructures\Slug;
 use LM\WebFramework\Model\Type\EntityModel;
@@ -34,7 +34,7 @@ class AdminArticleController implements ControllerInterface
         private BookRepository $bookRepository,
         private CategoryRepository $catRepo,
         private DbEntityManager $em,
-        private FormController $formController,
+        private FormRequestHandler $formController,
         private FormFactory $formFactory,
         private PageFactory $pageFactory,
         private Router $router,
@@ -76,7 +76,7 @@ class AdminArticleController implements ControllerInterface
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
             $formData['id'] = $formData['id'] ?? (null !== $formData['title'] ? (new Slug($formData['title'], true))->__toString() : null);
             $formData['writer_id'] = $this->session->getCurrentMemberUsername();
-            $validator = new ModelValidator($this->model);
+            $validator = new Validator($this->model);
             $formErrors = $validator->validate($formData);
     
             if (0 === count($formErrors)) {

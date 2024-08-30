@@ -9,7 +9,7 @@ use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Model\Type\StringModel;
 use LM\WebFramework\Session\SessionManager;
-use LM\WebFramework\Validator\ModelValidator;
+use LM\WebFramework\Validation\Validator;
 use MF\Model\MemberModelFactory;
 use MF\Repository\AuthorRepository;
 use MF\Repository\MemberRepository;
@@ -45,7 +45,7 @@ class AccountController implements ControllerInterface
         $form = $this->formFactory->createForm($model);
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
-            $validator = new ModelValidator($model);
+            $validator = new Validator($model);
             $formErrors = $validator->validate($formData, $model);
             if (0 === count($formErrors)) {
                 $appObject = new AppObject($formData);

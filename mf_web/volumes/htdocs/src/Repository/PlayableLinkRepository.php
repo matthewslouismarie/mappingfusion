@@ -5,13 +5,15 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
+use MF\Model\ModelFactory;
 use MF\Model\PlayableLinkModelFactory;
+use MF\Repository\Exception\EntityNotFoundException;
 
 class PlayableLinkRepository implements IRepository
 {
     public function __construct(
         private DatabaseManager $dbManager,
-        private PlayableLinkModelFactory $model,
+        private ModelFactory $modelFactory,
         private DbEntityManager $em,
     ) {
     }
@@ -27,18 +29,21 @@ class PlayableLinkRepository implements IRepository
     public function delete(string $id): void
     {
         $this->dbManager->run(
-            'DELETE FROM e_playable_link WHERE playable_link_id = :id;',
+            'DELETE FROM e_playable_link WHERE link_id = :id;',
             [
                 'id' => $id,
             ],
         );
     }
 
-    public function find(string $id): ?AppObject {
-        $stmt = $this->dbManager->getPdo()->prepare('SELECT * FROM e_playable_link WHERE link_id = :?;');
-        $stmt->execute([$id]);
-        $data = $stmt->fetch();
-        return null !== $data ? $this->em->toAppData($data, $this->model, 'link') : null;
+    public function find(string $id): AppObject
+    {
+        $dbRows = $this->dbManager->fetchRows('SELECT * FROM e_playable_link WHERE link_id = ?;', [$id]);
+        if (0 === count($dbRows)) {
+            throw new EntityNotFoundException();
+        }
+        $model = $this->modelFactory->getPlayableLinkModel();
+        return $this->em->convertDbRowsToAppObject($dbRows, $model);
     }
 
     public function remove(string $id): void {
@@ -57,8 +62,11 @@ class PlayableLinkRepository implements IRepository
         }
     }
 
-    public function update(AppObject $link, ?string $previousId = null): void {
-        $stmt = $this->dbManager->getPdo()->prepare('UPDATE e_playable_link SET link_playable_id = :playable_id, link_name = :name, link_type = :type, link_url = :url WHERE link_id = :previous_id;');
-        $stmt->execute($this->em->toDbValue($link) + ['previous_id' => $previousId ?? $link['id']]);
+    public function update(AppObject $entity, ?string $previousId = null): void
+    {
+        $this->dbManager->runFilename(
+            'stmt_update_playable_link.sql',
+            $this->em->toDbValue($entity) + ['previous_id' => $previousId ?? $entity['id']],
+        );
     }
 }

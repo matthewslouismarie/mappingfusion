@@ -20,7 +20,7 @@ class AdminChapterIndexController implements ControllerInterface
     public function __construct(
         private BookRepository $bookRepository,
         private ChapterIndexRepository $chapterIndexRepository,
-        private FormController $formController,
+        private FormRequestHandler $formController,
         private PageFactory $pageFactory,
         private TwigService $twigService,
         private ArticleRepository $articleRepository,

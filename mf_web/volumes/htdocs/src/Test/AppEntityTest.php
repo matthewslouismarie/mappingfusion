@@ -3,7 +3,7 @@
 namespace MF\Test;
 
 use InvalidArgumentException;
-use LM\WebFramework\Validator\ModelValidator;
+use LM\WebFramework\Validation\Validator;
 use LM\WebFramework\Test\IUnitTest;
 use MF\Model\AuthorModelFactory;
 
@@ -17,7 +17,7 @@ class AppEntityTest implements IUnitTest
     public function run(): array {
         $tester = new Tester();
         $model = $this->authorModelFactory->create();
-        $modelValidator = new ModelValidator($model);
+        $modelValidator = new Validator($model);
 
         $tester->assertEquals(0, count($modelValidator->validate([
                 'id' => 'a',

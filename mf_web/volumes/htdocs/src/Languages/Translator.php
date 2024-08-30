@@ -13,7 +13,7 @@ class Translator
     )
     {
         if ($configuration->getLanguage() != 'fr') {
-            $this->translations = require_once($configuration->getPathOfProjectDirectory() . '/translations/' . $configuration->getLanguage() . '.php');
+            $this->translations = require_once($configuration->getPathOfAppDirectory() . '/translations/' . $configuration->getLanguage() . '.php');
         }
     }
 

@@ -17,8 +17,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AdminImageController implements ControllerInterface, SinglePageOwner
 {
-    private string $uploaded;
-
     public function __construct(
         private Configuration $configuration,
         private FileService $fileService,
@@ -26,25 +24,28 @@ class AdminImageController implements ControllerInterface, SinglePageOwner
         private SessionManager $sessionManager,
         private TwigService $twig,
     ) {
-        $this->uploaded = dirname(__FILE__) . '/../../public/uploaded/';
     }
 
     /**
      * @todo Use form with validation and success messages.
+     * @todo Image deletion logic should be moved elsewhere. In ImageRepository?
      */
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): Response {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): Response
+    {
+        $uploadPath = $this->configuration->getPathOfUploadedFiles();
+
         if ('POST' === $request->getMethod()) {
             $imgToDelete = $request->getParsedBody()['image-to-delete'] ?? null;
             if (null !== $imgToDelete) {
                 $filename = new Filename($imgToDelete);
-                $deletion = unlink($this->uploaded . $filename->__toString());
+                $deletion = unlink($uploadPath . '/' . $filename->__toString());
 
-                $smallImgFilename = $this->uploaded . $filename->getFilenameNoExtension() . '.small.webp';
+                $smallImgFilename = $uploadPath . '/' . $filename->getFilenameNoExtension() . '.small.webp';
                 if (file_exists($smallImgFilename)) {
                     unlink($smallImgFilename);
                 }
 
-                $mediumImgFilename = $this->uploaded . $filename->getFilenameNoExtension() . '.medium.webp';
+                $mediumImgFilename = $uploadPath . '/' . $filename->getFilenameNoExtension() . '.medium.webp';
                 if (file_exists($mediumImgFilename)) {
                     unlink($mediumImgFilename);
                 }

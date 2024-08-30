@@ -19,7 +19,7 @@ class AdminBookController implements ControllerInterface
 {
     public function __construct(
         private BookRepository $bookRepository,
-        private FormController $formController,
+        private FormRequestHandler $formController,
         private PageFactory $pageFactory,
         private Router $router,
     ) {

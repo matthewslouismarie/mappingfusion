@@ -26,13 +26,14 @@ class ContributionRepository implements IRepository
         return $this->dbManager->getLastInsertId();
     }
 
-    public function delete(string $id): void {
-        $stmt = $this->dbManager->getPdo()->prepare('DELETE FROM e_contribution WHERE contribution_id = :?;');
-        $stmt->execute([$id]);
+    public function delete(string $id): void
+    {
+        $this->dbManager->run('DELETE FROM e_contribution WHERE contribution_id = ?;', [$id]);
     }
 
-    public function find(string $id): ?AppObject {
-        $stmt = $this->dbManager->getPdo()->prepare('SELECT * FROM e_contribution WHERE contribution_id = :?;');
+    public function find(string $id): ?AppObject
+    {
+        $stmt = $this->dbManager->getPdo()->prepare('SELECT * FROM e_contribution WHERE contribution_id = ?;');
         $stmt->execute([$id]);
         $data = $stmt->fetch();
         return null !== $data ? $this->em->toAppData($data, $this->model, 'contribution') : null;

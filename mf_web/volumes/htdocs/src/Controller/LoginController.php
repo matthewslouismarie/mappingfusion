@@ -7,7 +7,7 @@ use LM\WebFramework\Controller\ControllerInterface;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Session\SessionManager;
-use LM\WebFramework\Validator\ModelValidator;
+use LM\WebFramework\Validation\Validator;
 use MF\Model\MemberModelFactory;
 use MF\Repository\MemberRepository;
 use MF\TwigService;
@@ -38,7 +38,7 @@ class LoginController implements ControllerInterface
 
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
-            $validator = new ModelValidator($model);
+            $validator = new Validator($model);
             $formErrors = $validator->validate($formData, $model);
             if (0 === count($formErrors)) {
                 $member = $this->repo->find($formData['id']);

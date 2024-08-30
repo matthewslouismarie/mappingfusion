@@ -60,11 +60,11 @@ class MemberRepository implements IRepository
         if ($updatePassword) {
             $dbData = $this->em->toDbValue($entity);
             $dbData['password'] = password_hash($dbData['password'], PASSWORD_DEFAULT);
-            $this->dbManager->runFilename('stmt_update_account', $dbData + ['old_id' => $oldId]);
+            $this->dbManager->runFilename('stmt_update_account.sql', $dbData + ['old_id' => $oldId]);
         } else {
             $dbData = $this->em->toDbValue($entity);
             unset($dbData['password']);
-            $this->dbManager->runFilename('stmt_update_account_except_password', $dbData + ['old_id' => $oldId]);
+            $this->dbManager->runFilename('stmt_update_account_except_password.sql', $dbData + ['old_id' => $oldId]);
         }
     }
 

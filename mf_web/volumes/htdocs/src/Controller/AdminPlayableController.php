@@ -2,60 +2,72 @@
 
 namespace MF\Controller;
 
+use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
-use LM\WebFramework\Controller\ControllerInterface;
-use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
-use LM\WebFramework\Form\FormFactory;
-use LM\WebFramework\Validator\ModelValidator;
 use MF\Enum\LinkType;
 use MF\Enum\PlayableType;
 use MF\Model\ContributionModelFactory;
 use MF\Model\PlayableLinkModelFactory;
 use MF\Model\PlayableModelFactory;
 use LM\WebFramework\DataStructures\Slug;
+use LM\WebFramework\Model\Type\EntityModel;
 use LM\WebFramework\Session\SessionManager;
-use MF\Repository\Exception\EntityNotFoundException;
 use MF\Repository\AuthorRepository;
-use MF\Repository\PlayableLinkRepository;
 use MF\Repository\PlayableRepository;
 use MF\Router;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AdminPlayableController implements ControllerInterface
+class AdminPlayableController implements IFormController
 {
+    private EntityModel $formModel;
+    
     public function __construct(
         private AuthorRepository $authorRepo,
         private ContributionModelFactory $contributionModelFactory,
-        private FormFactory $formFactory,
+        private FormRequestHandler $formRequestHandler,
         private PageFactory $pageFactory,
         private PlayableLinkModelFactory $playableLinkModelFactory,
-        private PlayableLinkRepository $linkRepo,
         private PlayableModelFactory $playableModelFactory,
         private PlayableRepository $repo,
         private Router $router,
         private SessionManager $sessionManager,
         private TwigService $twig,
     ) {
+        $this->formModel = $this->playableModelFactory->create(
+            playableLinkModel: $this->playableLinkModelFactory->create(),
+            contributionModel: $this->contributionModelFactory->create(),
+        );
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
     {
-        $model = $this->playableModelFactory->create(
-            playableLinkModel: $this->playableLinkModelFactory->create(),
-            contributionModel: $this->contributionModelFactory->create(),
+        $id = $routeParams[1] ?? null;
+        return $this->formRequestHandler->respondToRequest($this->repo, $request, $this, $id);
+    }
+
+    public function getAccessControl(): Clearance
+    {
+        return Clearance::ADMINS;
+    }
+
+    public function getPage(?array $formData, ?string $id): Page
+    {
+        return $this->pageFactory->create(
+            is_null($id) ? 'Nouveau jeu' : $formData['name'],
+            self::class,
+            is_null($id) ? [] : [$id],
+            parentFqcn: AdminPlayableListController::class,
+            isIndexed: false,
         );
+    }
 
-        $requestedId = $routeParams[1] ?? null;
-        $requestedEntity = null;
-
-        $formErrors = null;
-        $formData = null;
-
-        $form = $this->formFactory->createForm($model, config: [
+    public function getFormConfig(): array
+    {
+        return [
             'id' => [
                 'required' => false,
             ],
@@ -69,44 +81,57 @@ class AdminPlayableController implements ControllerInterface
                     'ignore' => true,
                 ]
             ],
-        ]);
+        ];
+    }
 
-        if ('POST' === $request->getMethod()) {
-            // Form Data extraction, generation and validation.
-            $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
-            $formData['id'] = $formData['id'] ?? $formData['name'] !== null ? (new Slug($formData['name'], true))->__toString() : null;
-            foreach ($formData['contributions'] as $key => $c) {
-                $formData['contributions'][$key]['playable_id'] = $formData['id'];
-            }
-            foreach ($formData['links'] as $key => $c) {
-                $formData['links'][$key]['playable_id'] = $formData['id'];
-            }
-            $validator = new ModelValidator($model);
-            $formErrors = $validator->validate($formData, $model);
+    public function getFormModel(): EntityModel
+    {
+        return $this->formModel;
+    }
 
-            if (0 === count($formErrors)) {
-                $playable = new AppObject($formData);
-                if (null === $requestedId) {
-                    $this->sessionManager->addMessage('Le jeu a bien été ajouté.');
-                    $this->repo->addOrUpdate($playable, add: true);
-                } else {
-                    $this->sessionManager->addMessage('Le jeu a bien été mis à jour.');
-                    $this->repo->addOrUpdate($playable, $requestedId);
-                }
-                return $this->router->generateRedirect('admin-manage-playable', [$playable->id]);
-            }
-        } elseif (isset($routeParams[1])) {
-            try {
-                $requestedEntity = $this->repo->findOne($routeParams[1]);
-                $formData = $requestedEntity->toArray();
-            } catch (EntityNotFoundException) {
-                throw new RequestedResourceNotFound();
-            }
+    public function prepareFormData(ServerRequestInterface $request, array $formData): array
+    {
+        $formData['id'] = $formData['id'] ?? $formData['name'] !== null ? (new Slug($formData['name'], true))->__toString() : null;
+        foreach (array_keys($formData['contributions']) as $key) {
+            $formData['contributions'][$key]['playable_id'] = $formData['id'];
+        }
+        foreach (array_keys($formData['links']) as $key) {
+            $formData['links'][$key]['playable_id'] = $formData['id'];
         }
 
+        return $formData;
+    }
+
+    public function respondToDeletion(string $entityId): ResponseInterface
+    {
+        $this->sessionManager->addMessage('Le jeu a bien été supprimé.');
+        return $this->router->generateRedirect('admin-playable-list');
+    }
+
+    public function respondToInsertion(AppObject $entity): ResponseInterface
+    {
+        $this->repo->add($entity);
+        $this->sessionManager->addMessage('Le jeu a bien été ajouté.');
+        return $this->router->generateRedirect('admin-manage-playable', [$entity['id']]);
+    }
+
+    public function respondToUpdate(AppObject $entity, string $previousId): ResponseInterface
+    {
+        $this->repo->update($entity, $previousId);
+        $this->sessionManager->addMessage('Le jeu a bien été mis à jour.');
+        return new Response(body: 'HELLO');
+        return $this->router->generateRedirect('admin-manage-playable', [$entity['id']]);
+    }
+
+    public function respondToNonPersistedRequest(
+        ?array $formData,
+        ?array $formErrors,
+        ?array $deleteFormErrors,
+        ?string $id,
+    ): ResponseInterface {
         return $this->twig->respond(
             'admin_playable_form.html.twig',
-            $this->getPage($requestedEntity),
+            $this->getPage($formData, $id),
             [
                 'authors' => $this->authorRepo->findAll(),
                 'formData' => $formData,
@@ -114,22 +139,13 @@ class AdminPlayableController implements ControllerInterface
                 'linkTypes' => LinkType::cases(),
                 'playables' => $this->repo->findAll(),
                 'playableTypes' => PlayableType::cases(),
-                'requestedId' => $requestedId,
+                'requestedId' => $id,
             ],
         );
     }
 
-    public function getAccessControl(): Clearance {
-        return Clearance::ADMINS;
-    }
-
-    public function getPage(?AppObject $playable): Page {
-        return $this->pageFactory->create(
-            is_null($playable) ? 'Nouveau jeu' : $playable->name,
-            self::class,
-            is_null($playable) ? [] : [$playable->id],
-            parentFqcn: AdminPlayableListController::class,
-            isIndexed: false,
-        );
+    public function getUniqueConstraintFailureMessage(): string
+    {
+        return 'Un jeu avec cet identifiant existe déjà.';
     }
 }

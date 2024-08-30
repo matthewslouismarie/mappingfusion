@@ -8,7 +8,7 @@ use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
-use LM\WebFramework\Validator\ModelValidator;
+use LM\WebFramework\Validation\Validator;
 use MF\Model\AuthorModelFactory;
 use LM\WebFramework\DataStructures\Slug;
 use MF\Repository\AuthorRepository;
@@ -45,10 +45,9 @@ class AdminAuthorController implements ControllerInterface
         ]);
 
         if ('POST' === $request->getMethod()) {
-            var_dump($request->getUploadedFiles());
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
             $formData['id'] = $formData['id'] === null && $formData['name'] !== null ? (new Slug($formData['name'], true))->__toString() : $formData['id'];
-            $validator = new ModelValidator($model);
+            $validator = new Validator($model);
             $formErrors = $validator->validate($formData, $model);
 
             if (0 === count($formErrors)) {
@@ -94,7 +93,7 @@ class AdminAuthorController implements ControllerInterface
         return $this->pageFactory->create(
             $author['name'] ?? 'Nouvel auteur',
             self::class,
-            [$author['id']] ?? [],
+            null === $author ? [] : [$author['id']],
             AdminAuthorListController::class,
             isIndexed: false,
         );

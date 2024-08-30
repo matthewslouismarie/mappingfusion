@@ -9,7 +9,7 @@ use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Session\SessionManager;
-use LM\WebFramework\Validator\ModelValidator;
+use LM\WebFramework\Validation\Validator;
 use MF\Model\CategoryModelFactory;
 use LM\WebFramework\DataStructures\Slug;
 use MF\Repository\CategoryRepository;
@@ -48,7 +48,7 @@ class AdminCategoryController implements ControllerInterface
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
             $formData['id'] = $formData['id'] ?? (null !== $formData['name'] ? (new Slug($formData['name'], true))->__toString() : null);
-            $validator = new ModelValidator($model);
+            $validator = new Validator($model);
             $formErrors = $validator->validate($formData, $model);
 
             if (0 === count($formErrors)) {

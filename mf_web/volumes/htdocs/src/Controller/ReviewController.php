@@ -3,12 +3,12 @@
 namespace MF\Controller;
 
 use LM\WebFramework\AccessControl\Clearance;
-use LM\WebFramework\Controller\ControllerInterface;
-use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
-use LM\WebFramework\Validator\ModelValidator;
+use LM\WebFramework\Model\Type\IModel;
+use LM\WebFramework\Session\SessionManager;
+use MF\Model\ModelFactory;
 use MF\Model\ReviewModelFactory;
 use MF\Repository\ArticleRepository;
 use MF\Repository\PlayableRepository;
@@ -18,7 +18,7 @@ use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ReviewController implements ControllerInterface
+class ReviewController implements IFormController
 {
     public function __construct(
         private ArticleRepository $articleRepo,
@@ -29,53 +29,21 @@ class ReviewController implements ControllerInterface
         private ReviewRepository $repo,
         private Router $router,
         private TwigService $twig,
+        private FormRequestHandler $formRequestHandler,
+        private ModelFactory $modelFactory,
+        private SessionManager $sessionManager,
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {
         $requestedId = $routeParams[1] ?? null;
 
-        $formData = null;
-        $formErrors = null;
-
-        $model = $this->reviewModelFactory->create();
-        $form = $this->formFactory->createForm($model);
-
-        if ('POST' === $request->getMethod()) {
-            $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
-            $validator = new ModelValidator($model);
-            $formErrors = $validator->validate($formData, $model);
-
-            if (0 === count($formErrors)) {
-                $review = new AppObject($formData);
-                if (null === $requestedId) {
-                    $requestedId = $this->repo->add($review);
-                } else {
-                    $this->repo->update($review);
-                }
-
-                return $this->router->generateRedirect('gestion-de-tests', [$requestedId]);
-            }
-        } elseif (null !== $requestedId) {
-            $formData = $this->repo->find($requestedId)?->toArray();
-            if (null === $formData) {
-                throw new RequestedResourceNotFound();
-            }
-        }
-
-        return $this->twig->respond(
-            'admin_review_form.html.twig',
-            $this->getPage(is_null($requestedId) ? null : new AppObject($formData)),
-            [
-                'formData' => $formData,
-                'formErrors' => $formErrors,
-                'playables' => $this->playableRepo->findAll(),
-                'availableArticles' => $this->articleRepo->findAvailableArticles(),
-            ],
-        );
+        return $this->formRequestHandler->respondToRequest($this->repo, $request, $this, $requestedId);
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ADMINS;
     }
 
@@ -96,5 +64,66 @@ class ReviewController implements ControllerInterface
                 parentFqcn: HomeController::class,
             );
         }
+    }
+
+    
+    public function getFormConfig(): array
+    {
+        return [];
+    }
+
+    public function getFormModel(): IModel
+    {
+        return $this->modelFactory->getReviewModel();
+    }
+
+    public function respondToDeletion(string $entityId): ResponseInterface
+    {
+        $this->sessionManager->addMessage('Le test a bien été supprimé.');
+        return $this->router->redirect(AdminReviewListController::class);
+    }
+
+    public function respondToInsertion(AppObject $entity): ResponseInterface
+    {
+        $id = $this->repo->add($entity);
+        $this->sessionManager->addMessage('Le nouveau test a bien été sauvegardé.');
+        return $this->router->redirect(self::class, [$id]);
+    }
+
+    public function respondToUpdate(AppObject $entity, string $previousId): ResponseInterface
+    {
+        $this->repo->update($entity, $previousId);
+        $this->sessionManager->addMessage('Le test a bien été mis à jour.');
+        return $this->router->redirect(self::class, [$entity['id']]);
+    }
+
+    public function respondToNonPersistedRequest(
+        ?array $formData,
+        ?array $formErrors,
+        ?array $deleteFormErrors,
+        ?string $id,
+    ): ResponseInterface {
+        return $this->twig->respond(
+            'admin_review_form.html.twig',
+            $this->getPage(is_null($id) ? null : new AppObject($formData)),
+            [
+                'formData' => $formData,
+                'formErrors' => $formErrors,
+                'playables' => $this->playableRepo->findAll(),
+                'availableArticles' => $this->articleRepo->findAvailableArticles(),
+            ],
+        );
+    }
+
+    public function getUniqueConstraintFailureMessage(): string
+    {
+        return 'Il existe déjà un test avec cet identifiant.';
+    }
+
+    public function prepareFormData(ServerRequestInterface $request, array $formData): array
+    {
+        // $id = explode('/', $request->getQueryParams()['route_params'])[1] ?? null;
+        // $formData['id'] = $id;
+        return $formData;
     }
 }

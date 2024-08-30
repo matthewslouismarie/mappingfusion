@@ -18,7 +18,7 @@ class ChapterIndexRepository implements IRepository
     public function add(AppObject $entity): string
     {
         $dbData = $this->em->toDbValue($entity);
-        $this->dbManager->runFilename('tr_chapter_index_add', $dbData);
+        $this->dbManager->runFilename('tr_chapter_index_add.sql', $dbData);
 
         return $this->dbManager->getLastInsertId();
     }
@@ -31,7 +31,7 @@ class ChapterIndexRepository implements IRepository
     public function update(AppObject $entity, string $previousId): void
     {
         $dbData = $this->em->toDbValue($entity);
-        $this->dbManager->runFilename('tr_chapter_index_update', $dbData + ['previous_id' => $previousId]);
+        $this->dbManager->runFilename('tr_chapter_index_update.sql', $dbData + ['previous_id' => $previousId]);
     }
 
     public function find(string $id): ?AppObject
