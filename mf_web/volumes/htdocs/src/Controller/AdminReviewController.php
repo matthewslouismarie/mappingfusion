@@ -18,7 +18,7 @@ use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ReviewController implements IFormController
+class AdminReviewController implements IFormController
 {
     public function __construct(
         private ArticleRepository $articleRepo,
