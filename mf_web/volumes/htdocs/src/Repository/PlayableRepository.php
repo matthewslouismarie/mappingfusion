@@ -48,9 +48,9 @@ class PlayableRepository implements IRepository
         $this->dbManager->getPdo()->commit();
     }
 
-    public function delete(string $id): void {
-        $stmt = $this->dbManager->getPdo()->prepare('DELETE FROM e_playable WHERE playable_id = ?;');
-        $stmt->execute([$id]);
+    public function delete(string $id): void
+    {
+        $this->dbManager->run('DELETE FROM e_playable WHERE playable_id = ?;', [$id]);
     }
 
     public function find(string $id): ?AppObject

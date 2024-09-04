@@ -32,8 +32,7 @@ class AuthorRepository implements IRepository
     }
 
     public function delete(string $id): void {
-        $stmt = $this->dbManager->getPdo()->prepare('DELETE FROM e_author WHERE author_id = ?;');
-        $stmt->execute([$id]);
+        $stmt = $this->dbManager->run('DELETE FROM e_author WHERE author_id = ?;', [$id]);
     }
 
     public function find(string $id): ?AppObject
@@ -67,8 +66,11 @@ class AuthorRepository implements IRepository
         return $this->find($id);
     }
 
-    public function update(AppObject $author, ?string $previousId = null): void {
-        $stmt = $this->dbManager->getPdo()->prepare('UPDATE e_author SET author_id = :id, author_name = :name, author_avatar_filename = :avatar_filename WHERE author_id = :previous_id;');
-        $stmt->execute(['previous_id' => $previousId ?? $author->id] + $this->em->toDbValue($author));
+    public function update(AppObject $author, ?string $previousId = null): void
+    {
+        $this->dbManager->runFilename(
+            'stmt_update_author.sql',
+            ['previous_id' => $previousId ?? $author->id] + $this->em->toDbValue($author),
+        );
     }
 }

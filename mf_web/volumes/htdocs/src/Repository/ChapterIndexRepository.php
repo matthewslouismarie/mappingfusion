@@ -36,7 +36,7 @@ class ChapterIndexRepository implements IRepository
 
     public function find(string $id): ?AppObject
     {
-        $row = $this->dbManager->fetchNullableRow('SELECT * FROM e_chapter_index WHERE chapter_index_id = ?;', [$id]);
+        $row = $this->dbManager->fetchFirstRow('SELECT * FROM e_chapter_index WHERE chapter_index_id = ?;', [$id]);
         return $this->em->toAppData($row, new ChapterIndexModelFactory(), 'chapter_index');
     }
 }

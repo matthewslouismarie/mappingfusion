@@ -43,7 +43,7 @@ class AdminArticleController implements ControllerInterface
         private TwigService $twig,
     ) {
         $this->model = $articleModelFactory
-            ->create(chapterId: true)
+            ->create()
             ->removeProperty('creation_date_time')
             ->removeProperty('last_update_date_time')
         ;

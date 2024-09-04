@@ -34,44 +34,36 @@ class ChapterRepository implements IRepository
 
     public function delete(string $id): void
     {
-        $stmt = $this->dbManager->getPdo()->prepare('DELETE FROM e_chapter WHERE chapter_id = ?;');
-        $stmt->execute([$id]);
+        $stmt = $this->dbManager->run(
+            'DELETE FROM e_chapter WHERE chapter_id = ?;',
+            [$id],
+        );
     }
 
-    public function find(string $id): ?AppObject {
-        $stmt = $this->dbManager->getPdo()->prepare("SELECT * FROM v_book WHERE chapter_id = ?;");
-        $stmt->execute([$id]);
-
-        $data = $stmt->fetchAll();
+    public function find(string $id): ?AppObject
+    {
+        $data = $this->dbManager->fetchRows(
+            'SELECT * FROM v_book WHERE chapter_id = ?;',
+            [$id],
+        );
 
         if (0 === count($data)) {
             return null;
         }
-
-        $model = new ChapterModelFactory(
-            new AbstractEntity([
-                'id' => new SlugModel(),
-                'title' => new StringModel(),
-            ]),
-            new BookModelFactory(),
-        );
-
-        return $this->em->toAppData($data, $model, 'chapter');
+        return $this->em->convertDbRowsToAppObject($data, $this->model->create());
     }
 
-    public function findAll(): array {
+    public function findAll(): array
+    {
 
-        $results = $this->dbManager->getPdo()->query("SELECT * FROM e_chapter ORDER BY chapter_title;")->fetchAll();
+        $dbRows = $this->dbManager->fetchRows('SELECT * FROM e_chapter ORDER BY chapter_title;');
 
-        $chapters = [];
-        foreach ($results as $r) {
-
-            $chapters[] = $this->em->toAppData($r, $this->model, 'chapter');
-        }
+        $chapters = $this->em->convertDbRowsToEntityList($dbRows, $this->model->create());
         return $chapters;
     }
 
-    public function findOne(string $id): AppObject {
+    public function findOne(string $id): AppObject
+    {
         $chapter = $this->find($id);
         if (null === $chapter) {
             throw new OutOfBoundsException();
@@ -79,7 +71,8 @@ class ChapterRepository implements IRepository
         return $chapter;
     }
 
-    public function update(AppObject $entity, string $previousId): void {
+    public function update(AppObject $entity, string $previousId): void
+    {
         $stmt = $this->dbManager->getPdo()->prepare('UPDATE e_chapter SET chapter_id = :id, chapter_book_id = :book_id, chapter_order = :order, chapter_title = :title WHERE chapter_id = :previous_id;');
         $stmt->execute($this->em->toDbValue($entity) + ['previous_id' => $previousId]);
     }

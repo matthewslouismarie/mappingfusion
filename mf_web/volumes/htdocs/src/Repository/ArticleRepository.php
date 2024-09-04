@@ -53,9 +53,9 @@ class ArticleRepository implements IRepository
         return $this->dbManager->getLastInsertId();
     }
 
-    public function delete(string $id): void {
-        $stmt = $this->dbManager->getPdo()->prepare('DELETE FROM e_article WHERE article_id = ?;');
-        $stmt->execute([$id]);
+    public function delete(string $id): void
+    {
+        $stmt = $this->dbManager->run('DELETE FROM e_article WHERE article_id = ?;', [$id]);
     }
 
     public function find(
@@ -89,26 +89,10 @@ class ArticleRepository implements IRepository
     }
 
     public function findByCategory(string $categoryId): array {
-        $stmt = $this->dbManager->getPdo()->prepare("
-            WITH RECURSIVE CategoryHierarchy AS (
-                SELECT category_id, category_name, category_parent_id
-                FROM e_category AS rootcat
-                WHERE rootcat.category_id = ?
-
-                UNION ALL
-
-                SELECT descendantcat.category_id, descendantcat.category_name, descendantcat.category_parent_id
-                FROM e_category AS descendantcat
-                JOIN CategoryHierarchy ch ON descendantcat.category_parent_id = ch.category_id
-            )
-            SELECT *
-            FROM v_article_published AS a
-            JOIN CategoryHierarchy ch ON a.article_category_id = ch.category_id
-            ORDER BY article_creation_date_time DESC;
-        ");
-        $stmt->execute([$categoryId]);
-        $results = $stmt->fetchAll();
-
+        $results = $this->dbManager->fetchRowsFromQueryFile(
+            new SqlFilename('stmt_find_articles_by_category.sql'),
+            [$categoryId],
+        );
 
         $articles = [];
 
@@ -258,7 +242,7 @@ class ArticleRepository implements IRepository
 
         $this->dbManager->getPdo()->beginTransaction();
 
-        $stmt = $this->dbManager->getPdo()->prepare('UPDATE e_article SET article_id = :id, ' . ($updateAuthor ? 'article_writer_id = :writer_id, ' : '') . 'article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_title = :title, article_sub_title = :sub_title, article_cover_filename = :cover_filename, article_last_update_date_time = NOW(), article_thumbnail_filename = :thumbnail_filename WHERE article_id = :old_id;');
+        $stmt = $this->dbManager->prepare('UPDATE e_article SET article_id = :id, ' . ($updateAuthor ? 'article_writer_id = :writer_id, ' : '') . 'article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_title = :title, article_sub_title = :sub_title, article_cover_filename = :cover_filename, article_last_update_date_time = NOW(), article_thumbnail_filename = :thumbnail_filename WHERE article_id = :old_id;');
         
         if (!$updateAuthor) {
             unset($dbArray['writer_id']);
@@ -269,7 +253,7 @@ class ArticleRepository implements IRepository
 
         $stmt->execute($dbArray);
 
-        $previousChapterIndex = $this->dbManager->fetchNullableRow(
+        $previousChapterIndex = $this->dbManager->fetchFirstRow(
             'SELECT * FROM e_chapter_index WHERE chapter_index_article_id = :previous_id;',
             [
                 'previous_id' => $previousId,
@@ -284,7 +268,7 @@ class ArticleRepository implements IRepository
             );
         }
         elseif (null !== $chapterId) {
-            $highestChapterOrder = $this->dbManager->fetchNullableRow(
+            $highestChapterOrder = $this->dbManager->fetchFirstRow(
                 'SELECT * FROM e_chapter_index WHERE chapter_index_chapter_id = :chapter_id;',
                 [
                     'chapter_id' => $chapterId,

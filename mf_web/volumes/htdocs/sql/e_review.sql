@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS e_review (
+CREATE TABLE e_review (
     review_id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     review_article_id VARCHAR(%1$s) NOT NULL,
     review_playable_id VARCHAR(%1$s) NOT NULL,

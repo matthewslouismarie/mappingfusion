@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS e_contribution (
+CREATE TABLE e_contribution (
     contribution_id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     contribution_author_id VARCHAR(%1$s) NOT NULL,
     contribution_playable_id VARCHAR(%1$s) NOT NULL,

@@ -32,12 +32,13 @@ class BookRepository implements IRepository
         return $this->dbManager->getLastInsertId();
     }
 
-    public function delete(string $id): void {
-        $stmt = $this->dbManager->getPdo()->prepare('DELETE FROM e_book WHERE book_id = ?;');
-        $stmt->execute([$id]);
+    public function delete(string $id): void
+    {
+        $this->dbManager->run('DELETE FROM e_book WHERE book_id = ?;', [$id]);
     }
 
-    public function find(string $id): ?AppObject {
+    public function find(string $id): ?AppObject
+    {
         $dbRows = $this->dbManager->fetchRows("SELECT * FROM v_book WHERE book_id = ?;", [$id]);
 
         if (0 === count($dbRows)) {

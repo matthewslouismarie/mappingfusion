@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS e_playable (
+CREATE TABLE e_playable (
     playable_id VARCHAR(%1$s) PRIMARY KEY,
     playable_name VARCHAR(%1$s) NOT NULL,
     playable_release_date_time TIMESTAMP NOT NULL,

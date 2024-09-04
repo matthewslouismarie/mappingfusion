@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS e_playable_link (
+CREATE TABLE e_playable_link (
     link_id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     link_playable_id VARCHAR(%1$s) NOT NULL,
     link_name VARCHAR(%1$s) NOT NULL,

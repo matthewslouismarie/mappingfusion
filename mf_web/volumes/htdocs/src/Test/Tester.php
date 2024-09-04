@@ -10,11 +10,13 @@ class Tester
 {
     private array $errors;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->errors = [];
     }
 
-    public function assertEquals(mixed $expected, mixed $actual, ?string $message = null): bool {
+    public function assertEquals(mixed $expected, mixed $actual, ?string $message = null): bool
+    {
         $expectedType = gettype($expected);
         $actualType = gettype($actual);
         if ($expected !== $actual) {
@@ -28,7 +30,8 @@ class Tester
         return true;
     }
 
-    public function assertArrayEquals(array $expected, array $actual, ?string $message = null): bool {
+    public function assertArrayEquals(array $expected, array $actual, ?string $message = null): bool
+    {
         $diffExpectedActual = $this->getSetDifference($expected, $actual);
         $diffActualExpected = $this->getSetDifference($actual, $expected);
         if ([] !== $diffActualExpected || [] !== $diffExpectedActual) {
@@ -42,7 +45,21 @@ class Tester
         return true;
     }
 
-    public function assertNull(mixed $actual, ?string $message = null): bool {
+    public function assertArraySize(array $actual, int $expectedSize, ?string $message = null): bool
+    {
+        $actualSize = count($actual);
+        if ($actualSize !== $expectedSize) {
+            $this->errors[] = new AssertionFailure(
+                $message ?? 'The actual array does not have the expected length.',
+                "Expected size {$expectedSize}, got a size of {$actualSize}.",
+            );
+            return false;
+        }
+        return true;
+    }
+
+    public function assertNull(mixed $actual, ?string $message = null): bool
+    {
         if (null !== $actual) {
             $this->errors[] = new AssertionError(
                 $message ?? 'Actual data is not null.',
@@ -54,7 +71,8 @@ class Tester
         return true;
     }
 
-    public function getSetDifference(array $subset, array $superset): array {
+    public function getSetDifference(array $subset, array $superset): array
+    {
         $diffs = [];
         foreach ($subset as $key => $value) {
             if (!key_exists($key, $superset)) {
@@ -74,7 +92,8 @@ class Tester
         return $diffs;
     }
 
-    public function assertException(string $expectedExceptionClass, Closure $statement, ?string $message = null): bool {
+    public function assertException(string $expectedExceptionClass, Closure $statement, ?string $message = null): bool
+    {
         try {
             $statement->call($this);
         } catch (Exception $e) {
@@ -98,7 +117,8 @@ class Tester
         return false;
     }
 
-    public function assertNoException(Closure $statement, ?string $message = null): bool {
+    public function assertNoException(Closure $statement, ?string $message = null): bool
+    {
         try {
             $statement->call($this);
         } catch (Exception $e) {
@@ -112,7 +132,8 @@ class Tester
         return true;
     }
 
-    public function assertTrue(mixed $variable, ?string $message = null): bool {
+    public function assertTrue(mixed $variable, ?string $message = null): bool
+    {
         if ($variable !== true) {
             $this->errors[] = new AssertionFailure(
                 $message ?? 'Expected true, got ' . gettype($variable),
@@ -123,7 +144,8 @@ class Tester
         return true;
     }
 
-    public function getErrors(): array {
+    public function getErrors(): array
+    {
         return $this->errors;
     }
 }

@@ -38,10 +38,11 @@ class MemberRepository implements IRepository
     }
 
     public function find(string $username): ?AppObject {
-        $stmt = $this->dbManager->getPdo()->prepare('SELECT * FROM e_member LEFT JOIN e_author ON member_author_id = author_id WHERE (member_id=?) LIMIT 1');
-        $stmt->execute([$username]);
+        $data = $this->dbManager->fetchRows(
+            'SELECT * FROM e_member LEFT JOIN e_author ON member_author_id = author_id WHERE (member_id=?) LIMIT 1;',
+            [$username],
+        );
 
-        $data = $stmt->fetchAll();
         if (0 === count($data)) {
             return null;
         } elseif (1 === count($data)) {
@@ -68,8 +69,11 @@ class MemberRepository implements IRepository
         }
     }
 
-    public function updateId(string $oldId, string $newId): void {
-        $stmt = $this->dbManager->getPdo()->prepare('UPDATE e_member SET member_id = :new_id WHERE member_id = :old_id');
-        $stmt->execute(['old_id' => $oldId, 'new_id' => $newId]);
+    public function updateId(string $oldId, string $newId): void
+    {
+        $stmt = $this->dbManager->run(
+            'UPDATE e_member SET member_id = :new_id WHERE member_id = :old_id',
+            ['old_id' => $oldId, 'new_id' => $newId],
+        );
     }
 }

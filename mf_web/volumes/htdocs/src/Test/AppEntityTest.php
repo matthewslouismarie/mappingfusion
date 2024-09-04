@@ -2,9 +2,7 @@
 
 namespace MF\Test;
 
-use InvalidArgumentException;
 use LM\WebFramework\Validation\Validator;
-use LM\WebFramework\Test\IUnitTest;
 use MF\Model\AuthorModelFactory;
 
 class AppEntityTest implements IUnitTest
@@ -14,52 +12,60 @@ class AppEntityTest implements IUnitTest
     ) {  
     }
 
-    public function run(): array {
+    public function run(): array
+    {
         $tester = new Tester();
         $model = $this->authorModelFactory->create();
         $modelValidator = new Validator($model);
 
-        $tester->assertEquals(0, count($modelValidator->validate([
+        $tester->assertArraySize(
+            $modelValidator->validate([
                 'id' => 'a',
                 'name' => 'The Author',
                 'avatar_filename' => null,
-            ],
-            $model,
-        )));
+            ]),
+            0,
+        );
 
-        $tester->assertEquals(1, count($modelValidator->validate([
+        $tester->assertArraySize(
+            $modelValidator->validate([
                 'id' => null,
                 'name' => 'The Author',
                 'avatar_filename' => null,
-            ],
-            $model,
-        )));
-
-        $tester->assertException(
-            InvalidArgumentException::class,
-            function () use ($model, $modelValidator) {
-                $modelValidator->validate([
-                    'id' => 'a',
-                    'name' => 'The Author',
-                    'avatar_filename' => null,
-                    'extra' => 'The Author',
-                ], $model);
-            },
+            ]),
+            1,
         );
 
-        $tester->assertEquals(2, count($modelValidator->validate([
+        $tester->assertArraySize(
+            $modelValidator->validate([
+                'id' => 'a',
+                'name' => 'The Author',
+                'avatar_filename' => null,
+                'extra' => 'The Author',
+            ]),
+            0,
+        );
+
+        $tester->assertArraySize(
+            $modelValidator->validate([
+                'id' => 'a',
+                'name' => 'The Author',
+            ]),
+            1,
+        );
+
+        $tester->assertArraySize(
+            $modelValidator->validate([
                 'id' => 'I do not match the regex',
                 'name' => '',
                 'avatar_filename' => null,
-            ],
-            $model,
-        )));
+            ]),
+            2,
+        );
 
-        $tester->assertException(
-            InvalidArgumentException::class,
-            function () use ($model, $modelValidator) {
-                $modelValidator->validate('', $model);
-            },
+        $tester->assertArraySize(
+            $modelValidator->validate(''),
+            1,
         );
 
         return $tester->getErrors();

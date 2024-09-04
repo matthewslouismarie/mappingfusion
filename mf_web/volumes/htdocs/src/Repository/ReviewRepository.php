@@ -23,9 +23,9 @@ class ReviewRepository implements IRepository
 
     public function add(AppObject $entity): string
     {
-        $this->dbManager->run(
-            'INSERT INTO e_review VALUES (:id, :article_id, :playable_id, :rating, :body, :cons, :pros);',
-            $this->em->toDbValue($entity),
+        $this->dbManager->runFilename(
+            'stmt_add_review.sql',
+            $this->em->toDbValue($entity->removeProperty('id')),
         );
         return $this->dbManager->getLastInsertId();
     }

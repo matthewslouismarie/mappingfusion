@@ -85,10 +85,11 @@ class CategoryRepository implements IRepository
 
     public function findWithChildren(string $id): AppObject
     {
-        $stmt = $this->dbManager->getPdo()->prepare('SELECT * FROM v_category WHERE category_id = :id OR category_parent_id = :id;');
-        $stmt->execute(['id' => $id]);
+        $dbRows = $this->dbManager->fetchRows(
+            'SELECT * FROM v_category WHERE category_id = :id OR category_parent_id = :id;',
+            ['id' => $id],
+        );
 
-        $dbRows = $stmt->fetchAll();
         if (0 === count($dbRows)) {
             throw new EntityNotFoundException();
         }
@@ -99,12 +100,12 @@ class CategoryRepository implements IRepository
             if ($id === $r['category_id']) {
                 $parentModel = null !== $r['category_parent_id'] ? $this->categoryModelFactory->create() : null;
                 $model = $this->categoryModelFactory->create(parentCategory: $parentModel);
-                $parent = $this->em->toAppData($r, $model, 'category');
+                $parent = $this->em->convertDbRowsToAppObject($r, $model);
                 if (null === $parentModel) {
                     $parent = $parent->set('parent', null);
                 }
             } else {
-                $children[] = $this->em->toAppData($r, $this->model, 'category');
+                $children[] = $this->em->convertDbRowsToAppObject($r, $this->model);
             }
         }
         if (null === $parent) {
@@ -114,8 +115,11 @@ class CategoryRepository implements IRepository
         return $parent;
     }
 
-    public function update(AppObject $category, ?string $previousId = null): void {
-        $stmt = $this->dbManager->getPdo()->prepare('UPDATE e_category SET category_id = :id, category_name = :name, category_parent_id = :parent_id WHERE category_id = :previous_id;');
-        $stmt->execute($this->em->toDbValue($category) + ['previous_id' => $previousId ?? $category->id]);
+    public function update(AppObject $category, ?string $previousId = null): void
+    {
+        $stmt = $this->dbManager->run(
+            'UPDATE e_category SET category_id = :id, category_name = :name, category_parent_id = :parent_id WHERE category_id = :previous_id;',
+            $this->em->toDbValue($category) + ['previous_id' => $previousId ?? $category->id],
+        );
     }
 }

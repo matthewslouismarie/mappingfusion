@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS e_article (
+CREATE TABLE e_article (
     article_id VARCHAR(%1$s) PRIMARY KEY CHECK(article_id REGEXP '%2$s'),
     article_writer_id VARCHAR(%1$s) NOT NULL,
     article_category_id VARCHAR(%1$s) NOT NULL,

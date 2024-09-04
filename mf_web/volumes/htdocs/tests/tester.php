@@ -1,7 +1,7 @@
 <?php
 
 use LM\WebFramework\Logging\Logger;
-use LM\WebFramework\Test\IUnitTest;
+use MF\Test\IUnitTest;
 
 $container = require_once(dirname(__FILE__) . '/../index.php');
 

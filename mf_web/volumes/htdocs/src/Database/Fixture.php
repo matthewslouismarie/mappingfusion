@@ -40,7 +40,6 @@ class Fixture
     {
         $this->dbManager->getPdo()->beginTransaction();
 
-
         /**
          * Authors
          */

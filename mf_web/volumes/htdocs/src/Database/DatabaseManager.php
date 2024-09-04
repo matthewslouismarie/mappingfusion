@@ -5,7 +5,6 @@ namespace MF\Database;
 use LM\WebFramework\Configuration;
 use LM\WebFramework\Model\Constraints\IUploadedImageConstraint;
 use LM\WebFramework\Model\Factory\SlugModelFactory;
-use LM\WebFramework\Model\Factory\UploadedImageModelFactory;
 use LM\WebFramework\Model\Factory\UrlModelFactory;
 use LM\WebFramework\Model\Factory\VarcharModelFactory;
 use LM\WebFramework\Validation\Validator;
@@ -18,7 +17,7 @@ use PDOStatement;
 use UnexpectedValueException;
 
 /**
- * @todo Move in lm-web-framework.
+ * @todo Move part of it in lm-web-framework.
  * @todo Add caching mechanism for database queries.
  */
 class DatabaseManager
@@ -37,17 +36,23 @@ class DatabaseManager
         Configuration $config,
         private SlugModelFactory $slugModelFactory,
     ) {
-        $this->dbName = $config->getSetting('DB_NAME');
-        $this->dbPwd = $config->getSetting('DB_PASSWORD');
-        $this->dbUsername = $config->getSetting('DB_USERNAME');
-        $this->dbHost = $config->getSetting('DB_HOST');
-        $this->pdo = new PDO("mysql:host=$this->dbHost", $this->dbUsername, $this->dbPwd, [
-            PDO::ATTR_PERSISTENT => true,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        ]);
+        $dbConfig = $config->getConfigAppData()->getValueAsAppObject('db');
+        $this->dbName = $dbConfig->getValueAsString('name');
+        $this->dbPwd = $dbConfig->getValueAsString('password');
+        $this->dbUsername = $dbConfig->getValueAsString('username');
+        $this->dbHost = $dbConfig->getValueAsString('host');
+        $this->pdo = new PDO(
+            "mysql:host={$this->dbHost}",
+            $this->dbUsername,
+            $this->dbPwd,
+            [
+                PDO::ATTR_PERSISTENT => true,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            ],
+        );
 
         try {
-            $this->pdo->exec('USE ' . $this->dbName);
+            $this->pdo->exec("USE {$this->dbName};");
         } catch (PDOException $e) {
             if (self::UNEXISTING_DB_CODE !== $e->getCode()) {
                 throw $e;
@@ -73,28 +78,94 @@ class DatabaseManager
 
     private function createDatabase(): void
     {
-        $this->pdo->exec("CREATE DATABASE $this->dbName");
+        $this->pdo->exec("CREATE DATABASE {$this->dbName};");
         
-        $this->pdo->exec('USE ' . $this->dbName . ';');
+        $this->pdo->exec("USE {$this->dbName};");
 
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_author.sql'), VarcharModelFactory::MAX_LENGTH));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_member.sql'), VarcharModelFactory::MAX_LENGTH));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_playable.sql'), VarcharModelFactory::MAX_LENGTH, implode(',', array_map(function ($case) {return "'$case->value'";}, PlayableType::cases()))));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_contribution.sql'), VarcharModelFactory::MAX_LENGTH));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_review.sql'), VarcharModelFactory::MAX_LENGTH));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_category.sql'), VarcharModelFactory::MAX_LENGTH, SlugModelFactory::SLUG_REGEX));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_book.sql'), VarcharModelFactory::MAX_LENGTH, SlugModelFactory::SLUG_REGEX));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_chapter.sql'), VarcharModelFactory::MAX_LENGTH, SlugModelFactory::SLUG_REGEX));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_article.sql'), VarcharModelFactory::MAX_LENGTH, SlugModelFactory::SLUG_REGEX, IUploadedImageConstraint::FILENAME_REGEX));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_chapter_index.sql'), VarcharModelFactory::MAX_LENGTH, SlugModelFactory::SLUG_REGEX, IUploadedImageConstraint::FILENAME_REGEX));
-        $this->pdo->exec(sprintf(file_get_contents(dirname(__FILE__) . '/../../sql/e_playable_link.sql'), VarcharModelFactory::MAX_LENGTH, UrlModelFactory::URL_MAX_LENGTH, LinkType::Download->value, LinkType::HomePage->value, LinkType::Other->value));
+        $this->runFilename(
+            'e_author.sql',
+			[],
+			VarcharModelFactory::MAX_LENGTH,
+        );
 
-        $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_book.sql'));
-        $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_article.sql'));
-        $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_article_published.sql'));
-        $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_category.sql'));
-        $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_playable.sql'));
-        $this->pdo->exec(file_get_contents(dirname(__FILE__) . '/../../sql/v_person.sql'));
+        $this->runFilename(
+            'e_member.sql',
+			[],
+			VarcharModelFactory::MAX_LENGTH,
+        );
+
+        $this->runFilename(
+            'e_playable.sql',
+			[],
+			VarcharModelFactory::MAX_LENGTH,
+			implode(',', array_map(function ($case) {return "'$case->value'";}, PlayableType::cases())),
+        );
+
+        $this->runFilename(
+            'e_contribution.sql',
+			[],
+			VarcharModelFactory::MAX_LENGTH,
+        );
+
+        $this->runFilename(
+            'e_review.sql',
+			[],
+			VarcharModelFactory::MAX_LENGTH,
+        );
+
+        $this->runFilename(
+            'e_category.sql',
+			[],
+			VarcharModelFactory::MAX_LENGTH,
+			SlugModelFactory::SLUG_REGEX,
+        );
+
+        $this->runFilename(
+            'e_book.sql',
+			[],
+			VarcharModelFactory::MAX_LENGTH,
+			SlugModelFactory::SLUG_REGEX,
+        );
+
+        $this->runFilename(
+            'e_chapter.sql',
+			[],
+			VarcharModelFactory::MAX_LENGTH,
+			SlugModelFactory::SLUG_REGEX,
+        );
+
+        $this->runFilename(
+            'e_article.sql',
+			[],
+			VarcharModelFactory::MAX_LENGTH,
+			SlugModelFactory::SLUG_REGEX,
+			IUploadedImageConstraint::FILENAME_REGEX,
+        );
+
+        $this->runFilename(
+            'e_chapter_index.sql',
+			[],
+			VarcharModelFactory::MAX_LENGTH,
+			SlugModelFactory::SLUG_REGEX,
+			IUploadedImageConstraint::FILENAME_REGEX,
+        );
+    
+        $this->runFilename(
+            'e_playable_link.sql',
+			[],
+			VarcharModelFactory::MAX_LENGTH,
+			UrlModelFactory::URL_MAX_LENGTH,
+			LinkType::Download->value,
+			LinkType::HomePage->value,
+			LinkType::Other->value,
+        );
+
+        $this->runFilename('v_book.sql');
+        $this->runFilename('v_article.sql');
+        $this->runFilename('v_article_published.sql');
+        $this->runFilename('v_category.sql');
+        $this->runFilename('v_playable.sql');
+        $this->runFilename('v_person.sql');
     }
 
     public function dropDatabase(): void
@@ -109,6 +180,12 @@ class DatabaseManager
             throw new UnexpectedValueException('PDO::prepare returned false!');
         }
         return $stmt;
+    }
+
+    public function fetchFirstRow(string $query, array $arguments): ?array
+    {
+        $rows = $this->fetchRows($query, $arguments, 1);
+        return $rows[0] ?? null;
     }
 
     public function fetchRows(string $query, array $arguments = [], ?int $maxNumberOfRows = null): array
@@ -126,26 +203,6 @@ class DatabaseManager
         return $dbRows;
     }
 
-    public function fetchNullableRow(string $query, array $arguments): ?array
-    {
-        $rows = $this->fetchRows($query, $arguments, 1);
-        return $rows[0] ?? null;
-    }
-
-    public function run(string $query, array $arguments): void
-    {
-        $stmt = $this->prepare($query);
-        $stmt->execute($arguments);
-    }
-
-    public function runFilename(string $fileShortName, array $arguments): void
-    {
-        (new Validator($this->slugModelFactory->getSlugModel()))->validate($fileShortName);
-        $filePath = realpath(dirname(__FILE__) . "/../../sql/{$fileShortName}");
-        $query = file_get_contents($filePath);
-        $this->run($query, $arguments);
-    }
-
     public function fetchRowsFromQueryFile(SqlFilename $fileShortName, array $queryArgs, string ...$fileArgs): array
     {
 
@@ -154,5 +211,19 @@ class DatabaseManager
         $stmt = $this->prepare($query);
         $stmt->execute($queryArgs);
         return $stmt->fetchAll();
+    }
+
+    public function run(string $query, array $arguments): void
+    {
+        $stmt = $this->prepare($query);
+        $stmt->execute($arguments);
+    }
+
+    public function runFilename(string $fileShortName, array $arguments = [], string ...$fileArgs): void
+    {
+        (new Validator($this->slugModelFactory->getSlugModel()))->validate($fileShortName);
+        $filePath = realpath(dirname(__FILE__) . "/../../sql/{$fileShortName}");
+        $query = sprintf(file_get_contents($filePath), ...$fileArgs);
+        $this->run($query, $arguments);
     }
 }

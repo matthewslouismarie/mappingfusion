@@ -13,7 +13,7 @@ jobs:
       - name: Generate style.css
         run: docker-compose exec -T mf_web ./sass.sh
       - name: Create configuration
-        run: docker-compose exec -T mf_web cp .env.json.dist .env.local.json
+        run: docker-compose exec -T mf_web cp .env.json.dist .env.json.local
       - name: Running basic tests
         run: docker-compose exec -T mf_web php -f tests/tester.php "MF\Test\AppEntityTest"
       - name: Running other tests

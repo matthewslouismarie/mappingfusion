@@ -46,19 +46,20 @@ class PlayableLinkRepository implements IRepository
         return $this->em->convertDbRowsToAppObject($dbRows, $model);
     }
 
-    public function remove(string $id): void {
-        $stmt = $this->dbManager->getPdo()->prepare('DELETE FROM e_playable_link WHERE link_id = ?;');
-        $stmt->execute([$id]);
+    public function remove(string $id): void
+    {
+        $this->dbManager->run('DELETE FROM e_playable_link WHERE link_id = ?;', [$id]);
     }
 
     public function filterOutPlayableLinks(string $playableId, array $linkIds): void {
         if (0 === count($linkIds)) {
-            $delLinkStmt = $this->dbManager->getPdo()->prepare("DELETE FROM e_playable_link WHERE link_playable_id = ?;");
-            $delLinkStmt->execute([$playableId]);
+            $this->dbManager->run('DELETE FROM e_playable_link WHERE link_playable_id = ?;', [$playableId]);
         } else {
             $inQuery = str_repeat('?,', count($linkIds) - 1) . '?';
-            $delLinkStmt = $this->dbManager->getPdo()->prepare("DELETE FROM e_playable_link WHERE link_playable_id = ? AND link_id NOT IN ($inQuery);");
-            $delLinkStmt->execute(array_merge_recursive([$playableId], $linkIds));
+            $this->dbManager->run(
+                "DELETE FROM e_playable_link WHERE link_playable_id = ? AND link_id NOT IN ({$inQuery});",
+                array_merge_recursive([$playableId], $linkIds),
+            );
         }
     }
 

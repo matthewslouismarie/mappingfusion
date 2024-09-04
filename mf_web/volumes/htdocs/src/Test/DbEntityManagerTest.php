@@ -10,10 +10,7 @@ use LM\WebFramework\Model\AbstractEntity;
 use LM\WebFramework\Model\ListModel;
 use LM\WebFramework\Model\SlugModel;
 use LM\WebFramework\Model\StringModel;
-use LM\WebFramework\Test\IUnitTest;
-use MF\Model\ArticleModelFactory;
 use MF\Model\BookModelFactory;
-use MF\Model\CategoryModelFactory;
 use MF\Model\ChapterModelFactory;
 
 class DbEntityManagerTest implements IUnitTest
