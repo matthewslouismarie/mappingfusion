@@ -196,16 +196,14 @@ class FormRequestHandler
                 $formData = $controller->prepareFormData($request, $formData);
     
                 $validator = new Validator($controller->getFormModel());
-                $formErrors = $validator->validate($formData, $controller->getFormModel());
+                $formErrors = $validator->validate($formData);
     
                 if (0 === count($formErrors)) {
                     $appObject = new AppObject($formData);
                     try {
                         if (null === $id) {
-                            $repository->add($appObject);
                             return $controller->respondToInsertion($appObject);
                         } else {
-                            $repository->update($appObject, $id);
                             return $controller->respondToUpdate($appObject, $id);
                         }
                     } catch (PDOException $e) {

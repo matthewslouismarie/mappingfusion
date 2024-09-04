@@ -134,11 +134,11 @@ class ArticleRepository implements IRepository
         return $articles;
     }
 
-    public function findAvailableArticles(): array
+    public function findArticlesWithNoReview(): array
     {
         $articleRows = $this->dbManager->fetchRows('SELECT * FROM v_article WHERE review_id IS NULL;');
         $model = $this->articleModelFactory->create();
-        return $this->em->convertDbList($articleRows, new ListModel($model));
+        return $this->em->convertDbRowsToEntityList($articleRows, $model);
     }
 
     public function findFeatured(): array

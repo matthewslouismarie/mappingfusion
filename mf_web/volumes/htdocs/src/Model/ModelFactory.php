@@ -93,9 +93,10 @@ class ModelFactory
 
     public function getReviewModel(
         bool $playable = false,
+        bool $gameIfPlayable = true,
     ) : EntityModel {
         $model = $this->reviewModelFactory->create(
-            $playable ? $this->getPlayableModel(game: true) : null,
+            $playable ? $this->getPlayableModel(game: $gameIfPlayable) : null,
         );
         return $model;
     }

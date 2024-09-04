@@ -55,10 +55,9 @@ class AdminReviewController implements IFormController
                 controllerFqcn: self::class,
                 parentFqcn: HomeController::class,
             );
-        }
-        else {
+        } else {
             return $this->pageFactory->create(
-                name: "Test de {$review->playable_id}",
+                name: "Test de {$review->playable->name}",
                 controllerFqcn: self::class,
                 controllerParams: [$review->id],
                 parentFqcn: HomeController::class,
@@ -67,9 +66,19 @@ class AdminReviewController implements IFormController
     }
 
     
+    /**
+     * @todo Why is it useless?
+     */
     public function getFormConfig(): array
     {
-        return [];
+        return [
+            'id' => [
+                'ignore' => true,
+            ],
+            'playable' => [
+                'ignore' => true,
+            ],
+        ];
     }
 
     public function getFormModel(): IModel
@@ -79,6 +88,7 @@ class AdminReviewController implements IFormController
 
     public function respondToDeletion(string $entityId): ResponseInterface
     {
+        $this->repo->delete($entityId);
         $this->sessionManager->addMessage('Le test a bien été supprimé.');
         return $this->router->redirect(AdminReviewListController::class);
     }
@@ -86,13 +96,13 @@ class AdminReviewController implements IFormController
     public function respondToInsertion(AppObject $entity): ResponseInterface
     {
         $id = $this->repo->add($entity);
-        $this->sessionManager->addMessage('Le nouveau test a bien été sauvegardé.');
+        $this->sessionManager->addMessage('Le nouveau test a bien été enregistré.');
         return $this->router->redirect(self::class, [$id]);
     }
 
     public function respondToUpdate(AppObject $entity, string $previousId): ResponseInterface
     {
-        $this->repo->update($entity, $previousId);
+        $this->repo->update($entity->removeProperty('playable'), $previousId);
         $this->sessionManager->addMessage('Le test a bien été mis à jour.');
         return $this->router->redirect(self::class, [$entity['id']]);
     }
@@ -103,6 +113,7 @@ class AdminReviewController implements IFormController
         ?array $deleteFormErrors,
         ?string $id,
     ): ResponseInterface {
+        // var_dump($formErrors);
         return $this->twig->respond(
             'admin_review_form.html.twig',
             $this->getPage(is_null($id) ? null : new AppObject($formData)),
@@ -110,20 +121,21 @@ class AdminReviewController implements IFormController
                 'formData' => $formData,
                 'formErrors' => $formErrors,
                 'playables' => $this->playableRepo->findAll(),
-                'availableArticles' => $this->articleRepo->findAvailableArticles(),
+                'availableArticles' => $this->articleRepo->findArticlesWithNoReview(),
             ],
         );
     }
 
     public function getUniqueConstraintFailureMessage(): string
     {
-        return 'Il existe déjà un test avec cet identifiant.';
+        return 'Erreur lors de l’enregistrement du test.';
     }
 
     public function prepareFormData(ServerRequestInterface $request, array $formData): array
     {
-        // $id = explode('/', $request->getQueryParams()['route_params'])[1] ?? null;
-        // $formData['id'] = $id;
+        $id = explode('/', $request->getQueryParams()['route_params'])[1] ?? null;
+        $formData['id'] = (int) $id;
+        $formData['playable'] = $this->playableRepo->find($formData['playable_id']);
         return $formData;
     }
 }

@@ -166,6 +166,7 @@ class DatabaseManager
         $this->runFilename('v_category.sql');
         $this->runFilename('v_playable.sql');
         $this->runFilename('v_person.sql');
+        $this->runFilename('v_review.sql');
     }
 
     public function dropDatabase(): void

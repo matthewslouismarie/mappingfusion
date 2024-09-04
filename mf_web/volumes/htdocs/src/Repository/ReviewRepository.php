@@ -37,12 +37,12 @@ class ReviewRepository implements IRepository
 
     public function find(string $id): ?AppObject
     {
-        $dbRows = $this->dbManager->fetchRows('SELECT * FROM e_review WHERE (review_id = ?) LIMIT 1;', [$id]);
+        $dbRows = $this->dbManager->fetchRows('SELECT * FROM v_review WHERE (review_id = ?) LIMIT 1;', [$id]);
 
         if (0 === count($dbRows)) {
             return null;
         } elseif (1 === count($dbRows)) {
-            $model = $this->modelFactory->getReviewModel();
+            $model = $this->modelFactory->getReviewModel(playable: true, gameIfPlayable: false);
             return $this->em->convertDbRowsToAppObject($dbRows, $model);
         } else {
             throw new UnexpectedValueException();
@@ -58,7 +58,6 @@ class ReviewRepository implements IRepository
 
     public function update(AppObject $entity, ?string $previousId = null): void
     {
-
         $this->dbManager->runFilename(
             'stmt_update_review.sql',
             $this->em->toDbValue($entity->removeProperty('id')) + ['previous_id' => $previous_id ?? $entity['id']]
