@@ -14,11 +14,7 @@ jobs:
         run: docker-compose exec -T mf_web ./sass.sh
       - name: Create configuration
         run: docker-compose exec -T mf_web cp .env.json.dist .env.json.local
-      - name: Running basic tests
-        run: docker-compose exec -T mf_web php -f tests/tester.php "MF\Test\AppEntityTest"
-      - name: Running other tests
-        run: docker-compose exec -T mf_web php -f tests/tester.php "MF\Test\DbEntityManagerTest"
+      - name: Populating the database with fixtures
+        run: docker-compose exec -T mf_web ./fixtures.sh
       - name: Running integration test
-        run: |
-          docker-compose exec -T mf_web php -f scripts/fixtures.php
-          docker-compose exec -T mf_web php -f scripts/tests.php
+        run: docker-compose exec -T mf_web ./tests.sh

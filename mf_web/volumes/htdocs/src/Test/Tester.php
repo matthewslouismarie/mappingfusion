@@ -15,7 +15,7 @@ class Tester
         $this->errors = [];
     }
 
-    public function assertEquals(mixed $expected, mixed $actual, ?string $message = null): bool
+    public function assertEquals(mixed $actual, mixed $expected, ?string $message = null): bool
     {
         $expectedType = gettype($expected);
         $actualType = gettype($actual);
@@ -68,6 +68,18 @@ class Tester
             return false;
         }
 
+        return true;
+    }
+
+    public function assertStringContains(mixed $actual, string $expectedNeedle, ?string $message = null): bool
+    {
+        if (!str_contains($actual, $expectedNeedle)) {
+            $this->errors[] = new AssertionFailure(
+                $message ?? "String does not contain expected needle.",
+                "Expected to find {$expectedNeedle} in {$actual}.",
+            );
+            return false;
+        }
         return true;
     }
 
