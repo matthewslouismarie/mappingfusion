@@ -20,6 +20,11 @@
     <li class="item">
         <a class="std-button" href="{{ app.router.url('AdminChapterIndexController', [requestedId]) }}">Ajouter l’article à un chapitre</a>
     </li>
+    {% if formData.review %}
+    <li class="item">
+        <a class="std-button" href="{{ app.router.url('AdminReviewController', [formData.review.id]) }}">Voir le test associé</a>
+    </li>
+    {% endif %}
 </ul>
 {% endif %}
 
