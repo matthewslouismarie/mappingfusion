@@ -102,7 +102,7 @@ class AdminReviewController implements IFormController
 
     public function respondToUpdate(AppObject $entity, string $previousId): ResponseInterface
     {
-        $this->repo->update($entity->removeProperty('playable'), $previousId);
+        $this->repo->update($entity, $previousId);
         $this->sessionManager->addMessage('Le test a bien été mis à jour.');
         return $this->router->redirect(self::class, [$entity['id']]);
     }

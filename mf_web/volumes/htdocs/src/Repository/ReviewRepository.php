@@ -23,9 +23,13 @@ class ReviewRepository implements IRepository
 
     public function add(AppObject $entity): string
     {
+        $prunedEntity = $this->em->pruneAppObject(
+            $entity,
+            $this->modelFactory->getReviewModel(false),
+        );
         $this->dbManager->runFilename(
             'stmt_add_review.sql',
-            $this->em->toDbValue($entity->removeProperty('id')),
+            $this->em->toDbValue($prunedEntity, ignoreProperties: ['id']),
         );
         return $this->dbManager->getLastInsertId();
     }
@@ -58,9 +62,13 @@ class ReviewRepository implements IRepository
 
     public function update(AppObject $entity, ?string $previousId = null): void
     {
+        $prunedEntity = $this->em->pruneAppObject(
+            $entity,
+            $this->modelFactory->getReviewModel(false),
+        );
         $this->dbManager->runFilename(
             'stmt_update_review.sql',
-            $this->em->toDbValue($entity->removeProperty('id')) + ['previous_id' => $previous_id ?? $entity['id']]
+            $this->em->toDbValue($prunedEntity, ignoreProperties: ['id']) + ['previous_id' => $previous_id ?? $entity['id']]
         );
     }
 }
