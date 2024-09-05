@@ -42,6 +42,7 @@ class ModelFactory
             isNullable: true,
         );
         $model = $this->articleModelFactory->create(
+            authorModel: $this->getAuthorModel()->setIdentifier('writer')->removeProperty('avatar_filename'),
             categoryModel: $this->getCategoryModel(),
             reviewModel: $reviewModel,
         );

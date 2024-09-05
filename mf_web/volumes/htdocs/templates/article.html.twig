@@ -67,7 +67,7 @@
                                     {% if c.is_author %}
                                     {% if not loop.first %}<span class="comma">, </span>{% endif %}
                                     {# @todo Make sure it is not an organisation #}
-                                    {{ authorLink(app, c.author.id, 20, 'creator') }}
+                                    {{ authorLink(app, c.author, 20, 'creator') }}
                                     {% endif %}
                                     {% endfor %}
                                 </dd>
@@ -178,7 +178,7 @@
                             <div class="item -author">
                                 <dt class="term">Rédigé par :</dt>
                                 <dd class="def">
-                                    {{ authorLink(app, article.writer_id, 16, 'author') }}
+                                    {{ authorLink(app, article.writer, 16, 'author') }}
                                 </dd>
                             </div>
                         </dl>

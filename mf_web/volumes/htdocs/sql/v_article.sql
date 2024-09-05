@@ -1,7 +1,7 @@
 CREATE OR REPLACE VIEW v_article AS SELECT
     e_article.*,
-    e_member.member_id AS writer_id,
-    e_member.member_author_id AS writer_author_id,
+    e_author.author_id AS writer_id,
+    e_author.author_name AS writer_name,
     e_category.*,
     e_chapter_index.*,
     e_review.*,
