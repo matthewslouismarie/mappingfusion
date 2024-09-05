@@ -4,6 +4,15 @@
 
 {% block bodyContent %}
 <h1 class="_h1">{{ page.name }}</h1>
+
+{% if formData and formData.article_id %}
+<ul class="std-inline-list _marginm -mgbottom">
+    <li class="item">
+        <a class="std-button" href="{{ app.router.generateUrl('article', [formData.article_id]) }}">Visualiser l’article associé</a>
+    </li>
+</ul>
+{% endif %}
+
 <form autocomplete="on" class="form-row-container _flex -gap" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
 
     {{ errorList(formErrors.form ?? null) }}
