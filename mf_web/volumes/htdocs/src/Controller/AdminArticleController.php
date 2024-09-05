@@ -124,7 +124,7 @@ class AdminArticleController implements ControllerInterface
         return $this->pageFactory->createPage(
             $pageName,
             self::class,
-            null === $pageName ? [] : [$article['id']],
+            null === $article ? [] : [$article['id']],
             AdminArticleListController::class,
             isIndexed: false,
         );
