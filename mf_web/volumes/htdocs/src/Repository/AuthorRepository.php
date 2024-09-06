@@ -11,7 +11,7 @@ use MF\Model\AuthorModelFactory;
 use MF\Model\MemberModelFactory;
 use UnexpectedValueException;
 
-class AuthorRepository implements IRepository
+class AuthorRepository implements IUpdatableIdRepository
 {
     public function __construct(
         private AuthorModelFactory $authorModelFactory,
@@ -66,11 +66,11 @@ class AuthorRepository implements IRepository
         return $this->find($id);
     }
 
-    public function update(AppObject $author, ?string $previousId = null): void
+    public function update(AppObject $author, ?string $persistedId = null): void
     {
         $this->dbManager->runFilename(
             'stmt_update_author.sql',
-            ['previous_id' => $previousId ?? $author->id] + $this->em->toDbValue($author),
+            ['persisted_id' => $persistedId ?? $author->id] + $this->em->toDbValue($author),
         );
     }
 }

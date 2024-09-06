@@ -100,9 +100,9 @@ class AdminReviewController implements IFormController
         return $this->router->redirect(self::class, [$id]);
     }
 
-    public function respondToUpdate(AppObject $entity, string $previousId): ResponseInterface
+    public function respondToUpdate(AppObject $entity, string $persistedId): ResponseInterface
     {
-        $this->repo->update($entity, $previousId);
+        $this->repo->update($entity, $persistedId);
         $this->sessionManager->addMessage('Le test a bien été mis à jour.');
         return $this->router->redirect(self::class, [$entity['id']]);
     }

@@ -5,13 +5,14 @@ namespace MF\Repository;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\Database\DatabaseManager;
-use MF\Model\ChapterIndexModelFactory;
+use MF\Model\ModelFactory;
 
-class ChapterIndexRepository implements IRepository
+class ChapterIndexRepository implements IConstIdRepository
 {
     public function __construct(
         private DatabaseManager $dbManager,
         private DbEntityManager $em,
+        private ModelFactory $modelFactory,
     ) {
     }
 
@@ -28,15 +29,15 @@ class ChapterIndexRepository implements IRepository
         $this->dbManager->run('DELETE FROM e_chapter_index WHERE chapter_index_id = ?;', [$id]);
     }
 
-    public function update(AppObject $entity, string $previousId): void
+    public function update(AppObject $entity): void
     {
         $dbData = $this->em->toDbValue($entity);
-        $this->dbManager->runFilename('tr_chapter_index_update.sql', $dbData + ['previous_id' => $previousId]);
+        $this->dbManager->runFilename('tr_chapter_index_update.sql', $dbData + ['persisted_id' => $entity['id']]);
     }
 
     public function find(string $id): ?AppObject
     {
         $row = $this->dbManager->fetchFirstRow('SELECT * FROM e_chapter_index WHERE chapter_index_id = ?;', [$id]);
-        return $this->em->toAppData($row, new ChapterIndexModelFactory(), 'chapter_index');
+        return $this->em->convertDbRowsToAppObject($row, $this->modelFactory->getChapterIndexModel());
     }
 }

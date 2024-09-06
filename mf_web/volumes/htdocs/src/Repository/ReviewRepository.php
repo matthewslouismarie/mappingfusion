@@ -60,7 +60,7 @@ class ReviewRepository implements IRepository
         return $this->em->convertDbRowsToEntityList($dbRows, $model);
     }
 
-    public function update(AppObject $entity, ?string $previousId = null): void
+    public function update(AppObject $entity, string $persistedId): void
     {
         $prunedEntity = $this->em->pruneAppObject(
             $entity,
@@ -68,7 +68,7 @@ class ReviewRepository implements IRepository
         );
         $this->dbManager->runFilename(
             'stmt_update_review.sql',
-            $this->em->toDbValue($prunedEntity, ignoreProperties: ['id']) + ['previous_id' => $previous_id ?? $entity['id']]
+            $this->em->toDbValue($prunedEntity, ignoreProperties: ['id']) + ['persisted_id' => $persistedId ?? $entity['id']]
         );
     }
 }

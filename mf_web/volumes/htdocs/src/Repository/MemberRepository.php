@@ -9,7 +9,7 @@ use MF\Model\AuthorModelFactory;
 use MF\Model\MemberModelFactory;
 use UnexpectedValueException;
 
-class MemberRepository implements IRepository
+class MemberRepository implements IUpdatableIdRepository
 {
     public function __construct(
         private AuthorModelFactory $authorModelFactory,
@@ -28,7 +28,8 @@ class MemberRepository implements IRepository
         return $this->dbManager->getLastInsertId();
     }
 
-    public function delete(string $id): void {
+    public function delete(string $id): void
+    {
         $this->dbManager->run(
             'DELETE FROM e_member WHERE member_id = :id;',
             [
@@ -37,7 +38,8 @@ class MemberRepository implements IRepository
         );
     }
 
-    public function find(string $username): ?AppObject {
+    public function find(string $username): ?AppObject
+    {
         $data = $this->dbManager->fetchRows(
             'SELECT * FROM e_member LEFT JOIN e_author ON member_author_id = author_id WHERE (member_id=?) LIMIT 1;',
             [$username],
@@ -57,23 +59,16 @@ class MemberRepository implements IRepository
         }
     }
 
-    public function update(AppObject $entity, string $oldId, bool $updatePassword = true): void {
-        if ($updatePassword) {
-            $dbData = $this->em->toDbValue($entity);
-            $dbData['password'] = password_hash($dbData['password'], PASSWORD_DEFAULT);
-            $this->dbManager->runFilename('stmt_update_account.sql', $dbData + ['old_id' => $oldId]);
-        } else {
-            $dbData = $this->em->toDbValue($entity);
-            unset($dbData['password']);
-            $this->dbManager->runFilename('stmt_update_account_except_password.sql', $dbData + ['old_id' => $oldId]);
-        }
+    public function update(AppObject $entity, string $persistedId): void
+    {
+        $dbData = $this->em->toDbValue($entity);
+        $dbData['password'] = password_hash($dbData['password'], PASSWORD_DEFAULT);
+        $this->dbManager->runFilename('stmt_update_account.sql', $dbData + ['persisted_id' => $persistedId]);
     }
 
-    public function updateId(string $oldId, string $newId): void
+    public function updateExceptPassword(AppObject $entity, string $persistedId): void
     {
-        $stmt = $this->dbManager->run(
-            'UPDATE e_member SET member_id = :new_id WHERE member_id = :old_id',
-            ['old_id' => $oldId, 'new_id' => $newId],
-        );
+        $dbData = $this->em->toDbValue($entity, ignoreProperties: ['password']);
+        $this->dbManager->runFilename('stmt_update_account_except_password.sql', $dbData + ['persisted_id' => $persistedId]);
     }
 }

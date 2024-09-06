@@ -4,15 +4,11 @@ namespace MF\Repository;
 
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
-use LM\WebFramework\Model\AbstractEntity;
-use LM\WebFramework\Model\SlugModel;
-use LM\WebFramework\Model\StringModel;
 use MF\Database\DatabaseManager;
-use MF\Model\BookModelFactory;
 use MF\Model\ChapterModelFactory;
 use OutOfBoundsException;
 
-class ChapterRepository implements IRepository
+class ChapterRepository implements IUpdatableIdRepository
 {
     public function __construct(
         private ChapterModelFactory $model,
@@ -71,9 +67,9 @@ class ChapterRepository implements IRepository
         return $chapter;
     }
 
-    public function update(AppObject $entity, string $previousId): void
+    public function update(AppObject $entity, string $persistedId): void
     {
-        $stmt = $this->dbManager->getPdo()->prepare('UPDATE e_chapter SET chapter_id = :id, chapter_book_id = :book_id, chapter_order = :order, chapter_title = :title WHERE chapter_id = :previous_id;');
-        $stmt->execute($this->em->toDbValue($entity) + ['previous_id' => $previousId]);
+        $stmt = $this->dbManager->getPdo()->prepare('UPDATE e_chapter SET chapter_id = :id, chapter_book_id = :book_id, chapter_order = :order, chapter_title = :title WHERE chapter_id = :persisted_id;');
+        $stmt->execute($this->em->toDbValue($entity) + ['persisted_id' => $persistedId]);
     }
 }

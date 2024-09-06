@@ -13,6 +13,7 @@ class ModelFactory
         private ArticleModelFactory $articleModelFactory,
         private AuthorModelFactory $authorModelFactory,
         private CategoryModelFactory $categoryModelFactory,
+        private ChapterIndexModelFactory $chapterIndexModelFactory,
         private ContributionModelFactory $contributionModelFactory,
         private MemberModelFactory $memberModelFactory,
         private PlayableLinkModelFactory $playableLinkModelFactory,
@@ -62,6 +63,11 @@ class ModelFactory
         return $model;
     }
 
+    public function getChapterIndexModel(): EntityModel
+    {
+        return $this->chapterIndexModelFactory->create();
+    }
+
     public function getContributionModel(bool $author = true): EntityModel
     {
         return $this->contributionModelFactory->create($author ? $this->getAuthorModel() : null);
@@ -84,7 +90,7 @@ class ModelFactory
         bool $mods = false,
     ): EntityModel {
         $model = $this->playableModelFactory->create(
-            $game ? $this->playableModelFactory->create(isGame: true, isNullable: true) : null,
+            $game ? $this->playableModelFactory->create(isGame: true) : null,
             $links ? $this->getPlayableLinkModel() : null,
             $contributions ? $this->getContributionModel() : null,
             $mods ? $this->getPlayableModel() : null,

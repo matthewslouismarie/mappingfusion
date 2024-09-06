@@ -5,5 +5,5 @@ SET
     chapter_index_chapter_id = :chapter_id,
     chapter_index_order = :order
 WHERE
-    chapter_index_id = :previous_id
+    chapter_index_id = :persisted_id
 ;

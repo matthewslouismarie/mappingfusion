@@ -35,12 +35,4 @@ interface IRepository
      * @todo Return AppObject or throw exception.
      */
     public function find(string $id): ?AppObject;
-
-    /**
-     * Update an already persisted entity.
-     * 
-     * @param AppObject $entity The updated entity to persist.
-     * @param string $previousId The updated entity ID prior to being modified.
-     */
-    public function update(AppObject $entity, string $previousId): void;
 }

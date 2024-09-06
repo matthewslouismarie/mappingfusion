@@ -6,5 +6,5 @@ SET
     review_body = :body,
     review_cons = :cons,
     review_pros = :pros
-WHERE review_id = :previous_id
+WHERE review_id = :persisted_id
 ;

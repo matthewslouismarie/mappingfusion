@@ -5,5 +5,5 @@ SET
     playable_type = :type,
     playable_game_id = :game_id,
     playable_release_date_time = :release_date_time
-WHERE playable_id = :previous_id
+WHERE playable_id = :persisted_id
 ;

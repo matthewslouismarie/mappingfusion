@@ -6,10 +6,12 @@ use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\Model\ModelFactory;
-use MF\Model\PlayableLinkModelFactory;
 use MF\Repository\Exception\EntityNotFoundException;
 
-class PlayableLinkRepository implements IRepository
+/**
+ * @todo Same as for ContributionRepository, should not allow ID editing.
+ */
+class PlayableLinkRepository implements IConstIdRepository
 {
     public function __construct(
         private DatabaseManager $dbManager,
@@ -63,11 +65,11 @@ class PlayableLinkRepository implements IRepository
         }
     }
 
-    public function update(AppObject $entity, ?string $previousId = null): void
+    public function update(AppObject $entity): void
     {
         $this->dbManager->runFilename(
             'stmt_update_playable_link.sql',
-            $this->em->toDbValue($entity) + ['previous_id' => $previousId ?? $entity['id']],
+            $this->em->toDbValue($entity),
         );
     }
 }

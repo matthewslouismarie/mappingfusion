@@ -11,6 +11,9 @@ use LM\WebFramework\Model\Type\ForeignEntityModel;
 use LM\WebFramework\Model\Type\StringModel;
 use MF\Enum\PlayableType;
 
+/**
+ * @todo Add minimum length to playable name. (and other constraints?)
+ */
 class PlayableModelFactory
 {
     public function __construct(
@@ -59,8 +62,7 @@ class PlayableModelFactory
         return new EntityModel(
             $isGame ? 'game' : 'playable',
             $properties,
-            'id',
-            $isNullable,
+            isNullable: $isNullable,
         );
     }
 }

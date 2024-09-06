@@ -11,7 +11,7 @@ use MF\Model\CategoryModelFactory;
 use MF\Model\ModelFactory;
 use UnexpectedValueException;
 
-class CategoryRepository implements IRepository
+class CategoryRepository implements IUpdatableIdRepository
 {
     private EntityModel $model;
 
@@ -115,11 +115,11 @@ class CategoryRepository implements IRepository
         return $parent;
     }
 
-    public function update(AppObject $category, ?string $previousId = null): void
+    public function update(AppObject $category, string $persistedId): void
     {
         $stmt = $this->dbManager->run(
-            'UPDATE e_category SET category_id = :id, category_name = :name, category_parent_id = :parent_id WHERE category_id = :previous_id;',
-            $this->em->toDbValue($category) + ['previous_id' => $previousId ?? $category->id],
+            'UPDATE e_category SET category_id = :id, category_name = :name, category_parent_id = :parent_id WHERE category_id = :persisted_id;',
+            $this->em->toDbValue($category) + ['persisted_id' => $persistedId],
         );
     }
 }

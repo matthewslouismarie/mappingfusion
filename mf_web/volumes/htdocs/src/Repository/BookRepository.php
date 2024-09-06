@@ -4,14 +4,13 @@ namespace MF\Repository;
 
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
-use LM\WebFramework\Model\ListModel;
 use LM\WebFramework\Model\Type\EntityModel;
 use MF\Database\DatabaseManager;
 use MF\Model\BookModelFactory;
 use OutOfBoundsException;
 
 // It was you, Oswald!
-class BookRepository implements IRepository
+class BookRepository implements IUpdatableIdRepository
 {
     private EntityModel $model;
 
@@ -63,10 +62,11 @@ class BookRepository implements IRepository
         return $book;
     }
 
-    public function update(AppObject $appObject, ?string $previousId = null): void {
+    public function update(AppObject $appObject, string $persistedId): void
+    {
         $this->dbManager->run(
-            'UPDATE e_book SET book_id = :id, book_title = :title WHERE book_id = :previous_id;',
-            ['previous_id' => $previousId ?? $appObject['id']] + $this->em->toDbValue($appObject),
+            'UPDATE e_book SET book_id = :id, book_title = :title WHERE book_id = :persisted_id;',
+            ['persisted_id' => $persistedId] + $this->em->toDbValue($appObject),
         );
     }
 }

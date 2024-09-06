@@ -7,7 +7,6 @@ use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Searchable;
 use LM\WebFramework\DataStructures\SearchQuery;
-use LM\WebFramework\Model\Type\ForeignEntityModel;
 use LM\WebFramework\Model\Type\ListModel;
 use LM\WebFramework\SearchEngine\SearchEngine;
 use MF\Model\AuthorModelFactory;
@@ -23,7 +22,7 @@ use MF\Model\PlayableModelFactory;
 use MF\Model\ReviewModelFactory;
 use OutOfBoundsException;
 
-class ArticleRepository implements IRepository
+class ArticleRepository implements IUpdatableIdRepository
 {
     public function __construct(
         private ArticleModelFactory $articleModelFactory,
@@ -237,33 +236,33 @@ class ArticleRepository implements IRepository
         return $results;
     }
 
-    public function update(AppObject $appObject, ?string $previousId = null, bool $updateAuthor = false): void {
+    public function update(AppObject $appObject, ?string $persistedId = null, bool $updateAuthor = false): void {
         $dbArray = $this->em->toDbValue($appObject);
 
         $this->dbManager->getPdo()->beginTransaction();
 
-        $stmt = $this->dbManager->prepare('UPDATE e_article SET article_id = :id, ' . ($updateAuthor ? 'article_writer_id = :writer_id, ' : '') . 'article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_title = :title, article_sub_title = :sub_title, article_cover_filename = :cover_filename, article_last_update_date_time = NOW(), article_thumbnail_filename = :thumbnail_filename WHERE article_id = :old_id;');
+        $stmt = $this->dbManager->prepare('UPDATE e_article SET article_id = :id, ' . ($updateAuthor ? 'article_writer_id = :writer_id, ' : '') . 'article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_title = :title, article_sub_title = :sub_title, article_cover_filename = :cover_filename, article_last_update_date_time = NOW(), article_thumbnail_filename = :thumbnail_filename WHERE article_id = :persisted_id;');
         
         if (!$updateAuthor) {
             unset($dbArray['writer_id']);
         }
         $chapterId = $dbArray['chapter_id'];
         unset($dbArray['chapter_id']);
-        $dbArray['old_id'] = $previousId ?? $dbArray['id'];
+        $dbArray['persisted_id'] = $persistedId ?? $dbArray['id'];
 
         $stmt->execute($dbArray);
 
         $previousChapterIndex = $this->dbManager->fetchFirstRow(
-            'SELECT * FROM e_chapter_index WHERE chapter_index_article_id = :previous_id;',
+            'SELECT * FROM e_chapter_index WHERE chapter_index_article_id = :persisted_id;',
             [
-                'previous_id' => $previousId,
+                'persisted_id' => $persistedId,
             ]
         );
         if (null === $chapterId && null !== $previousChapterIndex) {
             $stmt = $this->dbManager->run(
                 'DELETE FROM e_chapter_index WHERE chapter_index_article_id = :article_id;',
                 [
-                    'article_id' => $previousId
+                    'article_id' => $persistedId
                 ]
             );
         }
@@ -286,11 +285,11 @@ class ArticleRepository implements IRepository
             }
             else {
                 $this->dbManager->run(
-                    'UPDATE e_chapter_index SET chapter_index_article_id = :id, chapter_index_chapter_id = :chapter_id, chapter_index_order = :order WHERE chapter_index_article_id = :previous_id;',
+                    'UPDATE e_chapter_index SET chapter_index_article_id = :id, chapter_index_chapter_id = :chapter_id, chapter_index_order = :order WHERE chapter_index_article_id = :persisted_id;',
                     [
                         'id' => $dbArray['id'],
                         'chapter_id' => $chapterId,
-                        'previous_id' => $previousId,
+                        'persisted_id' => $persistedId,
                         'order' => $highestChapterOrder ?? 0,
                     ]
                 );

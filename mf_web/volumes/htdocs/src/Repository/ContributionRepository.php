@@ -7,7 +7,10 @@ use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\Model\ContributionModelFactory;
 
-class ContributionRepository implements IRepository
+/**
+ * @todo Should implement a repository that does not allow ID update.
+ */
+class ContributionRepository implements IConstIdRepository
 {
     public function __construct(
         private DatabaseManager $dbManager,
@@ -55,12 +58,12 @@ class ContributionRepository implements IRepository
         }
     }
 
-    public function update(AppObject $contrib, ?string $previousId = null): void
+    public function update(AppObject $entity): void
     {
-        $dbArray = $this->em->toDbValue($contrib);
+        $dbArray = $this->em->toDbValue($entity);
         $this->dbManager->run(
-            'UPDATE e_contribution SET contribution_id = :id, contribution_author_id = :author_id, contribution_playable_id = :playable_id, contribution_is_author = :is_author, contribution_summary = :summary WHERE contribution_id = :previous_id;',
-            $dbArray + ['previous_id' => $previousId ?? $dbArray['id']],
+            'UPDATE e_contribution SET contribution_author_id = :author_id, contribution_playable_id = :playable_id, contribution_is_author = :is_author, contribution_summary = :summary WHERE contribution_id = :id;',
+            $dbArray,
         );
     }
 }

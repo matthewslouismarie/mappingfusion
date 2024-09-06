@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
@@ -57,9 +56,9 @@ class AdminPlayableController implements IFormController
     public function getPage(?array $formData, ?string $id): Page
     {
         return $this->pageFactory->create(
-            is_null($id) ? 'Nouveau jeu' : $formData['name'],
+            null === $id ? 'Nouveau jeu' : $formData['name'],
             self::class,
-            is_null($id) ? [] : [$id],
+            null === $id ? [] : [$id],
             parentFqcn: AdminPlayableListController::class,
             isIndexed: false,
         );
@@ -91,10 +90,14 @@ class AdminPlayableController implements IFormController
 
     public function prepareFormData(ServerRequestInterface $request, array $formData): array
     {
-        $formData['id'] = $formData['id'] ?? $formData['name'] !== null ? (new Slug($formData['name'], true))->__toString() : null;
+        if (null === $formData['id'] && null !== $formData['name']) {
+            $formData['id'] = (new Slug($formData['name'], true))->__toString();
+        }
+
         foreach (array_keys($formData['contributions']) as $key) {
             $formData['contributions'][$key]['playable_id'] = $formData['id'];
         }
+        
         foreach (array_keys($formData['links']) as $key) {
             $formData['links'][$key]['playable_id'] = $formData['id'];
         }
@@ -115,11 +118,10 @@ class AdminPlayableController implements IFormController
         return $this->router->generateRedirect('admin-manage-playable', [$entity['id']]);
     }
 
-    public function respondToUpdate(AppObject $entity, string $previousId): ResponseInterface
+    public function respondToUpdate(AppObject $entity, string $persistedId): ResponseInterface
     {
-        $this->repo->update($entity, $previousId);
+        $this->repo->update($entity, $persistedId);
         $this->sessionManager->addMessage('Le jeu a bien été mis à jour.');
-        return new Response(body: 'HELLO');
         return $this->router->generateRedirect('admin-manage-playable', [$entity['id']]);
     }
 
