@@ -40,7 +40,6 @@ class ModelFactory
     {
         $reviewModel = $this->reviewModelFactory->create(
             playableModel: $this->getPlayableModel(contributions: true, game: true, links: true),
-            isNullable: true,
         );
         $model = $this->articleModelFactory->create(
             authorModel: $this->getAuthorModel()->setIdentifier('writer')->removeProperty('avatar_filename'),

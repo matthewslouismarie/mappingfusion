@@ -42,7 +42,7 @@ class AuthorRepository implements IUpdatableIdRepository
         if (0 === count($dbRows)) {
             return null;
         } elseif (1 === count($dbRows)) {
-            $model = $this->authorModelFactory->create($this->memberModelFactory->create(isNullable: true));
+            $model = $this->authorModelFactory->create($this->memberModelFactory->create());
             return $this->em->convertDbRowsToAppObject($dbRows, $model);
         } else {
             throw new UnexpectedValueException();

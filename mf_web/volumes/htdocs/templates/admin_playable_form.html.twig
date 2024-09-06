@@ -7,6 +7,7 @@
 
 <form class="form-row-container" autocomplete="on" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="_flex -col -gaps">
+
         <div class="form-row">
             <label class="label" for="id">ID (générée automatiquement)</label>
             <input class="input -text" id="id" name="id" value="{{ formData.id ?? null }}">
@@ -98,6 +99,7 @@
 
 {% macro linkForm(linkTypes, i = '{{ i }}', link = null, linkErrors = null) %}
 <div class="form-row-container" data-type="dynamic-form">
+
     <div class="form-row">
         <label class="label" for="link-{{ i }}-name">Nom du lien</label>
         <input class="input -text" id="link-{{ i }}-name" name="links[{{ i }}][name]"{% if link %} value="{{ link.name }}"{% endif %}>
@@ -125,6 +127,7 @@
     </div>
 
     <input class="input -text" name="links[{{ i }}][id]" type="hidden" value="{{ link.id ?? null }}">
+    
 </div>
 {% endmacro %}
 
