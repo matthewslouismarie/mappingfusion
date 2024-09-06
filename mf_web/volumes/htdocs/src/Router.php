@@ -51,6 +51,9 @@ class Router
         return $this->config->getSetting('homeUrl') . $url;
     }
 
+    /**
+     * @todo To delete / rename?
+     */
     public function generateRedirect(string $routeId, $parameters = []): ResponseInterface
     {
         return new Response(302, ['Location' => $this->generateUrl($routeId, $parameters)]);

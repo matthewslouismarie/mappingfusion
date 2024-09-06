@@ -8,10 +8,10 @@
 
 <h1 class="_h1">{{ page.name }}</h1>
 
-{% if entity %}
+{% if requestedId %}
 <ul class="std-inline-list _marginm -mgbottom">
     <li class="item">
-        <a class="std-button" href="{{ app.router.generateUrl('tutoriel', [entity.id]) }}">Visualiser le tutoriel</a>
+        <a class="std-button" href="{{ app.router.generateUrl('tutoriel', [requestedId]) }}">Visualiser le tutoriel</a>
     </li>
 </ul>
 {% endif %}
@@ -35,12 +35,12 @@
     </div>
 </form>
 
-{% if entity %}
+{# {% if entity %}
 {% for chapter in entity.chapters %}
 <h2>
     <a href="{{ app.router.generateUrl('admin-chapitre', [entity.id, chapter.id]) }}">{{ chapter.title }}</a>
 </h2>
 {% endfor %}
 <a class="std-link" href="{{ app.router.generateUrl('admin-chapitre', [entity.id]) }}">Nouveau chapitre</a>
-{% endif %}
+{% endif %} #}
 {% endblock %}

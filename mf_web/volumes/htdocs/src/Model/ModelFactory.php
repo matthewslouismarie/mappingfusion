@@ -12,6 +12,7 @@ class ModelFactory
     public function __construct(
         private ArticleModelFactory $articleModelFactory,
         private AuthorModelFactory $authorModelFactory,
+        private BookModelFactory $bookModelFactory,
         private CategoryModelFactory $categoryModelFactory,
         private ChapterIndexModelFactory $chapterIndexModelFactory,
         private ContributionModelFactory $contributionModelFactory,
@@ -53,6 +54,11 @@ class ModelFactory
     public function getAuthorModel(): EntityModel
     {
         return $this->authorModelFactory->create();
+    }
+
+    public function getBookModel(): EntityModel
+    {
+        return $this->bookModelFactory->create();
     }
 
     public function getCategoryModel(): EntityModel
