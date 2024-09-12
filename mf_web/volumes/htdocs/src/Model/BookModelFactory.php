@@ -6,7 +6,6 @@ use LM\WebFramework\Model\Factory\SlugModelFactory;
 use LM\WebFramework\Model\Type\EntityListModel;
 use LM\WebFramework\Model\Type\EntityModel;
 use LM\WebFramework\Model\Type\ForeignEntityModel;
-use LM\WebFramework\Model\Type\ListModel;
 use LM\WebFramework\Model\Type\StringModel;
 
 class BookModelFactory

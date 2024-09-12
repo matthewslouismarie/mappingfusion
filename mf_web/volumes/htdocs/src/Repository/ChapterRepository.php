@@ -6,6 +6,7 @@ use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\Database\DatabaseManager;
 use MF\Model\ChapterModelFactory;
+use MF\Model\ModelFactory;
 use OutOfBoundsException;
 
 class ChapterRepository implements IUpdatableIdRepository
@@ -14,6 +15,7 @@ class ChapterRepository implements IUpdatableIdRepository
         private ChapterModelFactory $model,
         private DatabaseManager $dbManager,
         private DbEntityManager $em,
+        private ModelFactory $modelFactory,
     ) {
 
     }
@@ -46,7 +48,7 @@ class ChapterRepository implements IUpdatableIdRepository
         if (0 === count($data)) {
             return null;
         }
-        return $this->em->convertDbRowsToAppObject($data, $this->model->create());
+        return $this->em->convertDbRowsToAppObject($data, $this->modelFactory->getChapterModel());
     }
 
     public function findAll(): array

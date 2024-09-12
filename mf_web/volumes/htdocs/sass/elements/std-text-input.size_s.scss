@@ -1,0 +1,7 @@
+.std-text-input {
+    max-width: 512px;
+
+    &.-short {
+        max-width: 256px;
+    }
+}

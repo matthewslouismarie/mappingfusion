@@ -15,6 +15,7 @@ class ModelFactory
         private BookModelFactory $bookModelFactory,
         private CategoryModelFactory $categoryModelFactory,
         private ChapterIndexModelFactory $chapterIndexModelFactory,
+        private ChapterModelFactory $chapterModelFactory,
         private ContributionModelFactory $contributionModelFactory,
         private MemberModelFactory $memberModelFactory,
         private PlayableLinkModelFactory $playableLinkModelFactory,
@@ -66,6 +67,11 @@ class ModelFactory
         $model = $this->categoryModelFactory->create();
         $model->addItselfAsProperty('parent', 'id', 'parent_id', true);
         return $model;
+    }
+
+    public function getChapterModel(bool $withBookModel = true): EntityModel
+    {
+        return $this->chapterModelFactory->create(bookModel: $withBookModel ? $this->getBookModel() : null);
     }
 
     public function getChapterIndexModel(): EntityModel

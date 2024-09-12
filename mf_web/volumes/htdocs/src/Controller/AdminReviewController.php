@@ -133,7 +133,8 @@ class AdminReviewController implements IFormController
 
     public function prepareFormData(ServerRequestInterface $request, array $formData): array
     {
-        $id = explode('/', $request->getQueryParams()['route_params'])[1] ?? null;
+        $routeParams = $this->router->getRouteParams($request);
+        $id = $routeParams[1] ?? null;
         $formData['id'] = (int) $id;
         $formData['playable'] = $this->playableRepo->find($formData['playable_id']);
         return $formData;

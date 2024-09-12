@@ -5,7 +5,7 @@ use MF\Test\IUnitTest;
 
 $container = require_once(dirname(__FILE__) . '/../index.php');
 
-$logger = new Logger('Tester');
+$logger = $container->get(Logger::class);
 
 if (count($argv) < 2) {
     $logger->log('No unit test was passed.');

@@ -1,0 +1,11 @@
+.vertical-section {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: $gap-s;
+    padding-top: $gap-s;
+    gap: $gap-xs;
+
+    &.-gaps {
+        gap: $gap-xxs;
+    }
+}

@@ -59,6 +59,14 @@ class Router
         return new Response(302, ['Location' => $this->generateUrl($routeId, $parameters)]);
     }
 
+    /**
+     * @return string[]
+     */
+    public function getRouteParams(ServerRequestInterface $request): array
+    {
+        return explode('/', $request->getQueryParams()['route_params']);
+    }
+
     public function redirect(string $controllerFqcn, $parameters = []): ResponseInterface
     {
         return $this->generateRedirect(

@@ -20,7 +20,7 @@ interface IFormController extends ControllerInterface
 
     public function respondToUpdate(AppObject $entity, string $persistedId): ResponseInterface;
 
-    public function respondToNonPersistedRequest(?array $formData, ?array $formErrors, ?array $deleteFormErrors, ?string $id): ResponseInterface;
+    public function respondToNonPersistedRequest(ServerRequestInterface $request, ?array $formData, ?array $formErrors, ?array $deleteFormErrors): ResponseInterface;
 
     public function getUniqueConstraintFailureMessage(): string;
 

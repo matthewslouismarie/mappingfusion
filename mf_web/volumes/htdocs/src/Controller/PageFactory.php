@@ -21,7 +21,7 @@ class PageFactory
         string $controllerFqcn,
         array $controllerParams = [],
         ?string $parentFqcn = null,
-        array $parentControllerParams = [],
+        mixed $parentControllerParams = null,
         bool $isIndexed = true,
         bool $isPartOfHierarchy = true,
     ) {

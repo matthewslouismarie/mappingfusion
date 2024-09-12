@@ -97,8 +97,9 @@ class AdminBookController implements IFormController
         return $this->router->redirect(AdminBookController::class, [$entity['id']]);
     }
 
-    public function respondToNonPersistedRequest(?array $formData, ?array $formErrors, ?array $deleteFormErrors, ?string $id): ResponseInterface
+    public function respondToNonPersistedRequest(ServerRequestInterface $request, ?array $formData, ?array $formErrors, ?array $deleteFormErrors): ResponseInterface
     {
+        $id = $this->router->getRouteParams($request)[1];
         return $this->twigService->respond(
             'admin_book.html.twig',
             $this->getPage(null === $id ? null : new AppObject($formData)),

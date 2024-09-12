@@ -7,7 +7,6 @@ use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Searchable;
 use LM\WebFramework\DataStructures\SearchQuery;
-use LM\WebFramework\Model\Type\ListModel;
 use LM\WebFramework\SearchEngine\SearchEngine;
 use MF\Model\AuthorModelFactory;
 use MF\Model\CategoryModelFactory;
@@ -83,7 +82,7 @@ class ArticleRepository implements IUpdatableIdRepository
         $selectFrom = $onlyPublished ? 'v_article_published' : 'v_article';
 
         $dbRows = $this->dbManager->fetchRows("SELECT * FROM {$selectFrom} ORDER BY article_creation_date_time DESC;");
-        $articles = $this->em->convertDbList($dbRows, new ListModel($this->modelFactory->getArticleModel()));
+        $articles = $this->em->convertDbRowsToEntityList($dbRows, $this->modelFactory->getArticleModel());
         return $articles;
     }
 
@@ -114,7 +113,7 @@ class ArticleRepository implements IUpdatableIdRepository
         $results = $this->dbManager->fetchRows("SELECT * FROM v_article WHERE review_id IS NOT NULL $wherePublished;");
 
         $model = $this->modelFactory->getArticleModel();
-        $articles = $this->em->convertDbList($results, new ListModel($model));
+        $articles = $this->em->convertDbRowsToEntityList($results, $model);
 
         return $articles;
     }
@@ -128,7 +127,7 @@ class ArticleRepository implements IUpdatableIdRepository
         $articleRows = $this->dbManager->fetchRows('SELECT * FROM v_article WHERE article_is_published = 1 AND article_writer_id = ? ORDER BY article_last_update_date_time DESC;', [$memberId]);
 
         $model = $this->articleModelFactory->create(categoryModel: $this->categoryModelFactory->create());
-        $articles = $this->em->convertDbList($articleRows, new ListModel($model));
+        $articles = $this->em->convertDbRowsToEntityList($articleRows, $model);
 
         return $articles;
     }
@@ -144,7 +143,7 @@ class ArticleRepository implements IUpdatableIdRepository
     {
         $articleRows = $this->dbManager->fetchRows('SELECT * FROM v_article WHERE article_is_featured = 1 AND article_is_published = 1 ORDER BY article_last_update_date_time DESC;');
 
-        return $this->em->convertDbList($articleRows, new ListModel($this->articleModelFactory->create()));
+        return $this->em->convertDbRowsToEntityList($articleRows, $this->articleModelFactory->create());
     }
 
     /**
@@ -155,7 +154,7 @@ class ArticleRepository implements IUpdatableIdRepository
         $whereClause = $onlyReviews ? 'AND article_review_id IS NOT NULL' : '';
         $articleRows = $this->dbManager->fetchRows("SELECT * FROM v_article WHERE article_is_published = 1 {$whereClause} ORDER BY article_creation_date_time DESC LIMIT {$limit};");
         $model = $this->modelFactory->getArticleModel();
-        $articles = $this->em->convertDbList($articleRows, new ListModel($model));
+        $articles = $this->em->convertDbRowsToEntityList($articleRows, $model);
 
         return $articles;
     }
@@ -168,7 +167,7 @@ class ArticleRepository implements IUpdatableIdRepository
         $articleRows = $this->dbManager->fetchRows("SELECT * FROM v_article_published WHERE review_id IS NOT NULL ORDER BY article_creation_date_time DESC LIMIT 4;");
         $model = $this->modelFactory->getArticleModel(review: true);
 
-        return $this->em->convertDbList($articleRows, new ListModel($model));
+        return $this->em->convertDbRowsToEntityList($articleRows, $model);
     }
 
     public function findOne(string $id): AppObject
@@ -187,7 +186,7 @@ class ArticleRepository implements IUpdatableIdRepository
     {
         $articleRows = $this->dbManager->fetchRows('SELECT * FROM e_article WHERE article_is_published = 1 AND article_category_id = :category_id AND article_id != :id;', ['category_id' => $article->category_id, 'id' => $article->id]);
 
-        return $this->em->convertDbList($articleRows, new ListModel($this->articleModelFactory->create()));
+        return $this->em->convertDbRowsToEntityList($articleRows, $this->articleModelFactory->create());
     }
 
     /**

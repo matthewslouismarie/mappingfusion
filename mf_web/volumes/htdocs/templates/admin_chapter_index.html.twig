@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% from 'macros/macros.html.twig' import csrf, errorList, form_start, formRow, numberRow, form_end %}
+
+{% block bodyContent %}
+
+<h1 class="_h1">{{ page.name }}</h1>
+
+{# {{ form_start(app, formErrors) }}
+    {{ formRow('id', 'ID (peut être laissé vide)', formData, formErrors, false) }}
+
+    {{ formRow('title', 'Titre', formData, formErrors) }}
+
+    {{ numberRow('order', 'Position dans le chapitre', formData, formErrors, 255) }}
+
+    {% if entity %}
+    {% for article in entity.articles %}
+    <h2><a href="{{ app.router.generateUrl('manage-article', [article.id]) }}">{{ article.title }}</a></h2>
+    {% endfor %}
+    {% endif %}
+
+    <input name="book_id" type="hidden" value="{{ book.id }}">
+
+{{ form_end(app) }}
+
+{% if entity %}
+{{ form_start(app) }}
+
+{{ formRow('_DELETE_FORM', 'Supprimer définitivement le chapitre', null, deleteFormErrors) }}
+
+{{ form_end(app, 'Supprimer le chapitre', false) }}
+{% endif %} #}
+
+{% endblock %}

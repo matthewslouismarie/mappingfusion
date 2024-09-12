@@ -5,7 +5,6 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
-use LM\WebFramework\Model\Type\ListModel;
 use MF\DataStructure\SqlFilename;
 use MF\Model\AuthorModelFactory;
 use MF\Model\MemberModelFactory;
@@ -53,13 +52,13 @@ class AuthorRepository implements IUpdatableIdRepository
     {
         $authorRows = $this->dbManager->fetchRows('SELECT * FROM e_author;');
         
-        return $this->em->convertDbList($authorRows, new ListModel($this->authorModelFactory->create()));
+        return $this->em->convertDbRowsToEntityList($authorRows, $this->authorModelFactory->create());
     }
 
     public function findAuthorsOf(string $playableId): array {
         $dbRows = $this->dbManager->fetchRows('SELECT * FROM e_contribution LEFT JOIN e_author ON contribution_author_id = author_id WHERE contribution_playable_id = ? AND contribution_is_author;', [$playableId]);
 
-        return $this->em->convertDbList($dbRows, new ListModel($this->authorModelFactory->create()));
+        return $this->em->convertDbRowsToEntityList($dbRows, $this->authorModelFactory->create());
     }
 
     public function findOne(string $id): AppObject {

@@ -6,11 +6,12 @@ use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Configuration;
 use LM\WebFramework\Controller\ControllerInterface;
+use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\Page;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ServerErrorController implements ControllerInterface
+class ServerErrorController implements ControllerInterface, SinglePageOwner
 {
     private ?Page $page;
 
@@ -34,7 +35,8 @@ class ServerErrorController implements ControllerInterface
         return Clearance::ALL;
     }
 
-    public function getPage(array $pageParams): Page {
+    public function getPage(): Page
+    {
         if (null === $this->page) {
             $this->page = $this->pageFactory->createPage(
                 name: 'Erreur serveur',

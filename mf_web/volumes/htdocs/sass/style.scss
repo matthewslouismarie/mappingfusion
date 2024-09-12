@@ -50,10 +50,10 @@
 
 @import 'elements/section-heading.scss';
 
+@import 'elements/form-row-container.scss';
 @import 'elements/std-article.scss';
 @import 'elements/std-badge.scss';
 @import 'elements/std-button.scss';
-@import 'elements/form-row-container.scss';
 @import 'elements/std-info-message.scss';
 @import 'elements/std-inline-list.scss';
 @import 'elements/std-interactive.scss';
@@ -64,6 +64,7 @@
 @import 'elements/std-mosaic-list.scss';
 @import 'elements/std-rating-container.scss';
 @import 'elements/std-review.scss';
+@import 'elements/std-text-input.scss';
 
 @import 'elements/tag-link.scss';
 @import 'elements/tag-list.scss';
@@ -91,3 +92,5 @@
 @import 'elements/profile-header.scss';
 
 @import 'elements/previous-link.scss';
+
+@import 'elements/vertical-section.scss';

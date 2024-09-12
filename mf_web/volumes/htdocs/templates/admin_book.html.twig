@@ -9,10 +9,9 @@
 <h1 class="_h1">{{ page.name }}</h1>
 
 {% if requestedId %}
-<ul class="std-inline-list _marginm -mgbottom">
-    <li class="item">
-        <a class="std-button" href="{{ app.router.generateUrl('tutoriel', [requestedId]) }}">Visualiser le tutoriel</a>
-    </li>
+<ul class="vertical-section">
+    <a class="std-button" href="{{ app.router.generateUrl('tutoriel', [requestedId]) }}">Visualiser le tutoriel</a>
+    <a class="std-button" href="{{ app.router.generateUrl('admin-liste-des-chapitres', [requestedId]) }}">Gérer les chapitres</a>
 </ul>
 {% endif %}
 
@@ -27,6 +26,11 @@
         <input class="input -text" id="title" name="title" required{% if formData %} value="{{ formData.title }}"{% endif %}>
         {% if formErrors.title is defined %}{{ errorList(formErrors.title) }}{% endif %}
     </div>
+
+    {# {% if requestedId %}
+    {{ _self.addBookForm(formData) }}
+    {% endif %} #}
+
 
     {{ csrf(app) }}
 
@@ -44,3 +48,14 @@
 <a class="std-link" href="{{ app.router.generateUrl('admin-chapitre', [entity.id]) }}">Nouveau chapitre</a>
 {% endif %} #}
 {% endblock %}
+
+{# {% macro addBookForm(formData, i) %}
+<div class="vertical-section -gaps">
+    <label for="chapters[{{ i}}][name]">Nom du chapitre :</label>
+    <input class="std-text-input -short" id="chapters[{{ i}}][name]" name="chapters[{{ i}}][name]" required{% if formData and i %} value="{{ formData['books'][i] }}"{% endif %}>
+</div>
+
+{% if i in formData['chapters']|keys %}
+<input type="hidden" value="{{ formData['chapters'][i]['id'] }}">
+{% endif %}
+{% endmacro %}ç #}
