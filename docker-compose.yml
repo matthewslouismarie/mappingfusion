@@ -5,8 +5,7 @@ services:
         ports:
             - "${WEB_EXT_PORT}:80"
         volumes:
-            - ./mf_web/volumes/htdocs/:/var/www/localhost/htdocs/
-            - ./mf_web/volumes/lighttpd/:/etc/lighttpd/
+            - ./mf_web/src/:/var/www/html/src/
         tty: true
         links:
             - mf_db
