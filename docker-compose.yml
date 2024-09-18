@@ -1,11 +1,11 @@
 services:
     mf_web:
         build:
-            context: ./mf_web/init
+            context: ./mf_web
         ports:
             - "${WEB_EXT_PORT}:80"
         volumes:
-            - ./mf_web/src/:/var/www/html/src/
+            - ./src/:/var/www/html/
         tty: true
         links:
             - mf_db

@@ -1,0 +1,11 @@
+RewriteEngine On
+
+RewriteRule ^favicon\.ico$ public\/favicon\.ico [L]
+RewriteRule ^public\/(.*)$ public\/$1 [L,QSA]
+RewriteRule ^(.*)$ index.php?route_params=$1 [L,QSA]
+
+# <Directory public>
+#     ExpiresActive On
+#     ExpiresDefault "access plus 1 year"
+#     Header set Cache-Control "max-age=31536000, immutable, public"
+# </Directory>

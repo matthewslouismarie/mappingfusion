@@ -5,8 +5,8 @@ namespace MF\Controller;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
 use MF\Router;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class AdminArticleChapterIndexController implements IController
 {
@@ -22,7 +22,6 @@ class AdminArticleChapterIndexController implements IController
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
     {
         $articleId = $this->extractArticleIdFromRequest($request);
-        
     }
 
     private function extractArticleIdFromRequest(ServerRequestInterface $request): string

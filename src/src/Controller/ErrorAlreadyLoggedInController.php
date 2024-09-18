@@ -2,7 +2,7 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\Controller\ResponseGenerator;
+use LM\WebFramework\Controller\IResponseGenerator;
 use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\Page;
 use MF\Router;
@@ -10,7 +10,7 @@ use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ErrorAlreadyLoggedInController implements ResponseGenerator
+class ErrorAlreadyLoggedInController implements IResponseGenerator
 {
     public function __construct(
         private PageFactory $pageFactory,
