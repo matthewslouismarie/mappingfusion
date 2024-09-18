@@ -17,7 +17,7 @@ class ChapterModelFactory
     ) {
     }
 
-    public function create(?EntityModel $indexModel = null, ?EntityModel $bookModel = null): EntityModel
+    public function create(?EntityModel $articleModel = null, ?EntityModel $bookModel = null): EntityModel
     {
         $properties = [
             'id' => $this->slugModelFactory->getSlugModel(),
@@ -25,9 +25,9 @@ class ChapterModelFactory
             'title' => new StringModel(),
             'order' => new IntModel(min: 0, max: DatabaseManager::TINYINT_UNSIGNED_MAX),
         ];
-        if (null !== $indexModel) {
+        if (null !== $articleModel) {
             $properties['articles'] = new EntityListModel(
-                new ForeignEntityModel($indexModel, 'chapter_id', 'id'),
+                new ForeignEntityModel($articleModel, 'chapter_id', 'id'),
             );
         }
         if (null !== $bookModel) {

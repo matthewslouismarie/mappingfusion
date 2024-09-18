@@ -69,9 +69,12 @@ class ModelFactory
         return $model;
     }
 
-    public function getChapterModel(bool $withBookModel = true): EntityModel
+    public function getChapterModel(bool $withBookModel = true, bool $withArticles = false): EntityModel
     {
-        return $this->chapterModelFactory->create(bookModel: $withBookModel ? $this->getBookModel() : null);
+        return $this->chapterModelFactory->create(
+            articleModel: $withArticles ? $this->getArticleModel(category: false) : null,
+            bookModel: $withBookModel ? $this->getBookModel() : null,
+        );
     }
 
     public function getChapterIndexModel(): EntityModel

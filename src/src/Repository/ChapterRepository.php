@@ -40,15 +40,16 @@ class ChapterRepository implements IUpdatableIdRepository
 
     public function find(string $id): ?AppObject
     {
-        $data = $this->dbManager->fetchRows(
-            'SELECT * FROM v_book WHERE chapter_id = ?;',
+        $dbRows = $this->dbManager->fetchRows(
+            'SELECT * FROM v_chapter WHERE chapter_id = ?;',
             [$id],
         );
 
-        if (0 === count($data)) {
+        if (0 === count($dbRows)) {
             return null;
         }
-        return $this->em->convertDbRowsToAppObject($data, $this->modelFactory->getChapterModel());
+
+        return $this->em->convertDbRowsToAppObject($dbRows, $this->modelFactory->getChapterModel(true, true));
     }
 
     public function findAll(): array

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block bodyContent %}
+
+{% if chapter.articles %}
+
+<ul>
+    {% for a in chapter.articles %}
+    <li class="item">
+        <a class="std-link" href="">{{ a.title }}</a>
+    {% endfor %}
+</ul>
+
+{% endif %}
+{% endblock %}
