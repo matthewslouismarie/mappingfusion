@@ -138,6 +138,9 @@ class AdminChapterController implements IController, IFormController
     public function prepareFormData(ServerRequestInterface $request, array $formData): array
     {
         $formData['book_id'] = $this->router->getRouteParams($request)[1];
+        if (null === $formData['id'] && null !== $formData['title']) {
+            $formData['id'] = (new Slug($formData['title'], true, true))->__toString();
+        }
         return $formData;
     }
 
