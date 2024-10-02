@@ -36,11 +36,11 @@ class DatabaseManager
         Configuration $config,
         private SlugModelFactory $slugModelFactory,
     ) {
-        $dbConfig = $config->getConfigAppData()->getValueAsAppObject('db');
-        $this->dbName = $dbConfig->getValueAsString('name');
-        $this->dbPwd = $dbConfig->getValueAsString('password');
-        $this->dbUsername = $dbConfig->getValueAsString('username');
-        $this->dbHost = $dbConfig->getValueAsString('host');
+        $dbConfig = $config->getConfigAppData()->getAppObject('db');
+        $this->dbName = $dbConfig->getString('name');
+        $this->dbPwd = $dbConfig->getString('password');
+        $this->dbUsername = $dbConfig->getString('username');
+        $this->dbHost = $dbConfig->getString('host');
         $this->pdo = new PDO(
             "mysql:host={$this->dbHost}",
             $this->dbUsername,
