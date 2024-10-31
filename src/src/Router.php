@@ -48,7 +48,7 @@ class Router
         if ('' !== $hash) {
             $url .= "#$hash";
         }
-        return $this->config->getSetting('homeUrl') . $url;
+        return $this->config->getHomeUrl() . $url;
     }
 
     /**
