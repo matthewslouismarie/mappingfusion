@@ -69,7 +69,7 @@ class AuthorRepository implements IUpdatableIdRepository
     {
         $this->dbManager->runFilename(
             'stmt_update_author.sql',
-            ['persisted_id' => $persistedId ?? $author->id] + $this->em->toDbValue($author),
+            ['persisted_id' => $persistedId ?? $author['id']] + $this->em->toDbValue($author),
         );
     }
 }

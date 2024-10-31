@@ -60,7 +60,7 @@ class AdminCategoryController implements IController
                     $this->repo->update($category, $requestedId);
                     $this->sessionManager->addMessage('La catégorie a bien été mise à jour.');
                 }
-                return $this->router->generateRedirect('admin-categorie', [$category->id]);
+                return $this->router->generateRedirect('admin-categorie', [$category['id']]);
             }
         } elseif (null !== $requestedId) {
             $formData = $this->repo->find($requestedId)?->toArray();
@@ -88,9 +88,9 @@ class AdminCategoryController implements IController
     public function getPage(?AppObject $category): Page
     {
         return $this->pageFactory->create(
-            is_null($category) ? 'Nouvelle catégorie' : $category->name,
+            is_null($category) ? 'Nouvelle catégorie' : $category['name'],
             self::class,
-            is_null($category) ? [] : [$category->id],
+            is_null($category) ? [] : [$category['id']],
             AdminCategoryListController::class,
             isIndexed: false,
         );

@@ -65,7 +65,7 @@ class CategoryRepository implements IUpdatableIdRepository
     private function findChildren(array $categories, AppObject $parent): AppObject {
         $foundChildren = [];
         foreach ($categories as $cat) {
-            if ($cat->parentId == $parent->id) {
+            if ($cat->parentId == $parent['id']) {
                 $foundChildren[] = $cat->set('children', $this->findChildren($categories, $cat));
             }
         }

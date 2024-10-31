@@ -48,8 +48,8 @@ class AdminBookController implements IFormController
     }
 
     public function getPage(?AppObject $book): Page {
-        $pageName = null === $book ? 'Nouveau tutoriel' : "Gestion de {$book->title}";
-        $params = null === $book ? [] : [$book->id];
+        $pageName = null === $book ? 'Nouveau tutoriel' : "Gestion de {$book['title']}";
+        $params = null === $book ? [] : [$book['id']];
         return $this->pageFactory->createPage(
             name: $pageName,
             controllerFqcn: self::class,

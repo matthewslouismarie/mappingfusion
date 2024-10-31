@@ -98,7 +98,7 @@ class ArticleListController implements IController
     public function getPage(null|AppObject|string $pageParam = null): Page
     {
         $category = is_string($pageParam) ? $this->categoryRepository->find($pageParam) : $pageParam;
-        $parentCategoryId = $category?->parent_id;
+        $parentCategoryId = $category['parent_id'] ?? null;
 
         if (null === $category) {
             return $this->pageFactory->create(
@@ -113,9 +113,9 @@ class ArticleListController implements IController
         }
         elseif (null === $parentCategoryId) {
             return $this->pageFactory->create(
-                $category->name,
+                $category['name'],
                 self::class,
-                [$category->id],
+                [$category['id']],
                 self::class,
                 function (ArticleListController $parentController) {
                     return $parentController->getPage();
@@ -127,9 +127,9 @@ class ArticleListController implements IController
              * @todo Optimize, fetch all ancestor categories at once
              */
             return $this->pageFactory->create(
-                $category->name,
+                $category['name'],
                 self::class,
-                [$category->id],
+                [$category['id']],
                 self::class,
                 function (ArticleListController $parentController) use ($parentCategoryId) {
                     return $parentController->getPage($parentCategoryId);
@@ -157,7 +157,7 @@ class ArticleListController implements IController
         $descendants = [];
         foreach ($categories as $cat) {
             if ($cat->parentId == $id) {
-                $descendants = array_merge($descendants, [$cat], $this->getCategoryDescendants($categories, $cat->id));
+                $descendants = array_merge($descendants, [$cat], $this->getCategoryDescendants($categories, $cat['id']));
             }
         }
         return $descendants;

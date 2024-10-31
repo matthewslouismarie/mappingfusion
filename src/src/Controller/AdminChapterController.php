@@ -63,7 +63,7 @@ class AdminChapterController implements IController, IFormController
             );
         } else {
             return $this->pageFactory->createPage(
-                name: $chapter->title,
+                name: $chapter['title'],
                 controllerFqcn: self::class,
                 controllerParams: [$chapter['book_id'], $chapter['id']],
                 parentFqcn: AdminChapterListController::class,

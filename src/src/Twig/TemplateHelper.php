@@ -5,15 +5,16 @@ namespace MF\Twig;
 use DateTimeInterface;
 use IteratorAggregate;
 use LM\WebFramework\Configuration;
-use MF\Enum\LinkType;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\File\FileService;
 use LM\WebFramework\Session\SessionManager;
+use MF\Enum\LinkType;
 use MF\Languages\Translator;
 use MF\MarkdownService;
 use MF\Router;
 use RuntimeException;
+use Traversable;
 use UnexpectedValueException;
 
 class TemplateHelper
@@ -38,7 +39,7 @@ class TemplateHelper
     }
 
     public function getThumbnail(AppObject $article): string {
-        $original = $article->thumbnail_filename ?? $article->cover_filename;
+        $original = $article['thumbnail_filename'] ?? $article['cover_filename'];
     
         return $this->resourceManager->getSmallFilename($original);
     }
@@ -159,7 +160,7 @@ class TemplateHelper
      * @param string $linkType The type that is tested for.
      * @param AppObject[] $links The "links" property of the object.
      */
-    public function hasLinksOfType(array $links, string $linkType): bool
+    public function hasLinksOfType(Traversable $links, string $linkType): bool
     {
         foreach ($links as $l) {
             if ($l['type'] == $linkType) {

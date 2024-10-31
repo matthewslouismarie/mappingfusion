@@ -35,7 +35,7 @@ class ProfileController implements IController
             throw new RequestedResourceNotFound();
         }
 
-        $articles = null !== $author->member ? $this->articleRepository->findArticlesFrom($author->member->id) : null;
+        $articles = null !== $author->member ? $this->articleRepository->findArticlesFrom($author->member['id']) : null;
 
         return $this->twig->respond(
             'author.html.twig',
@@ -43,7 +43,7 @@ class ProfileController implements IController
             [
                 'articles' => $articles,
                 'author' => $author,
-                'playables' => $this->playableRepository->findFromAuthor($author->id),
+                'playables' => $this->playableRepository->findFromAuthor($author['id']),
             ],
         );
     }
@@ -57,9 +57,9 @@ class ProfileController implements IController
      */
     public function getPage(AppObject $author): Page {
         return $this->pageFactory->create(
-            $author->name,
+            $author['name'],
             self::class,
-            [$author->id],
+            [$author['id']],
             parentFqcn: HomeController::class,
         );
     }

@@ -184,7 +184,7 @@ class ArticleRepository implements IUpdatableIdRepository
      */
     public function findRelatedArticles(AppObject $article): array
     {
-        $articleRows = $this->dbManager->fetchRows('SELECT * FROM e_article WHERE article_is_published = 1 AND article_category_id = :category_id AND article_id != :id;', ['category_id' => $article->category_id, 'id' => $article->id]);
+        $articleRows = $this->dbManager->fetchRows('SELECT * FROM e_article WHERE article_is_published = 1 AND article_category_id = :category_id AND article_id != :id;', ['category_id' => $article['category_id'], 'id' => $article['id']]);
 
         return $this->em->convertDbRowsToEntityList($articleRows, $this->articleModelFactory->create());
     }

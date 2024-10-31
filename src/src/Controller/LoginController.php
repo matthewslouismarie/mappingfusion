@@ -42,10 +42,10 @@ class LoginController implements IController
             $formErrors = $validator->validate($formData, $model);
             if (0 === count($formErrors)) {
                 $member = $this->repo->find($formData['id']);
-                if (null === $member || !password_verify($request->getParsedBody()['password'], $member->password)) {
+                if (null === $member || !password_verify($request->getParsedBody()['password'], $member['password'])) {
                     $formErrors[] = 'Identifiants invalides.';
                 } else {
-                    $this->session->setCurrentMemberUsername($member->id);
+                    $this->session->setCurrentMemberUsername($member['id']);
                     return $this->twig->respond(
                         'success.html.twig',
                         $this->getPage(),

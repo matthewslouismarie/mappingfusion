@@ -43,14 +43,14 @@ class AdminChapterIndexController implements IController
             page: $this->getPage($article, $article->chapterIndex),
             request: $request,
             getSuccessfulRedirect: function (AppObject $appObject) use ($article, $router) {
-                return $router->redirect(self::class, [$article->id]);
+                return $router->redirect(self::class, [$article['id']]);
             },
             twigFilename: 'admin_chapter_index_form.html.twig',
             entity: $article->chapterIndex,
-            id: $article->chapterIndex?->id,
-            redirectAfterDeletion: $this->router->getUrl('AdminArticleController', [$article->id]),
+            id: $article->chapterIndex['id'] ?? null,
+            redirectAfterDeletion: $this->router->getUrl('AdminArticleController', [$article['id']]),
             addBeforeCreateOrUpdate: $article->chapterIndex?->toArray() ?? [
-                'article_id' => $article->id,
+                'article_id' => $article['id'],
             ],
             twigAdditionalParams: [
                 'books' => $this->bookRepository->findAll(),

@@ -57,9 +57,9 @@ class AdminReviewController implements IFormController
             );
         } else {
             return $this->pageFactory->create(
-                name: "Test de {$review->playable->name}",
+                name: "Test de {$review->playable['name']}",
                 controllerFqcn: self::class,
-                controllerParams: [$review->id],
+                controllerParams: [$review['id']],
                 parentFqcn: AdminReviewListController::class,
             );
         }

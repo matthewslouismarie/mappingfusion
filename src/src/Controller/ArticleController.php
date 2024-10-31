@@ -36,7 +36,6 @@ class ArticleController implements IController
         if (null === $article) {
             throw new RequestedResourceNotFound();
         }
-        
 
         return new Response(
             body: $this->twig->render(
@@ -57,12 +56,12 @@ class ArticleController implements IController
     public function getPage(AppObject $article): Page
     {
         return $this->pageFactory->create(
-            $article->title,
+            $article['title'],
             self::class,
-            [$article->id],
+            [$article['id']],
             ArticleListController::class,
             function (ArticleListController $parentController) use ($article) {
-                return $parentController->getPage($article->category);
+                return $parentController->getPage($article['category']);
             },
         );
     }

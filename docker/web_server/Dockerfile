@@ -16,4 +16,8 @@ RUN a2enmod rewrite
 # Enable PDO
 RUN docker-php-ext-install pdo pdo_mysql
 
+# Enable PHP GD
+RUN apt install libpng-dev -y
+RUN docker-php-ext-install gd
+
 WORKDIR /var/www/html/

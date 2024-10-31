@@ -18,6 +18,7 @@ Security:
  - CSRF
  - XSS
  - Check origin is server settings
+ - Search for var_dump and dump on push
 
 Responsiveness:
  - Add srcset to images

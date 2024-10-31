@@ -12,7 +12,7 @@ class AssertionFailure
 
     public function getTitle(): string
     {
-        return $this->title;
+        return $this['title'];
     }
 
     public function getMessage(): string

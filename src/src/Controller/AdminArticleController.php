@@ -119,7 +119,7 @@ class AdminArticleController implements IController
         /**
          * @todo Create function to remove any quotation mark (", ', «…)
          */
-        $pageName = (null === $article) ? 'Nouvel article' : "Édition de \"{$article->title}\"";
+        $pageName = (null === $article) ? 'Nouvel article' : "Édition de \"{$article['title']}\"";
 
         return $this->pageFactory->createPage(
             $pageName,
@@ -152,6 +152,6 @@ class AdminArticleController implements IController
                 $this->repo->update($article, $requestedId);
             }
         }
-        return $this->router->generateRedirect('manage-article', [$article->id]);
+        return $this->router->generateRedirect('manage-article', [$article['id']]);
     }
 }
