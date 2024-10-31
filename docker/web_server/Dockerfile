@@ -1,8 +1,9 @@
 FROM php:8.3-apache
 
-RUN apt-get update
+RUN apt update
 
 # Install Composer
+RUN apt install git -y
 WORKDIR /usr/bin
 COPY install-composer.sh .
 RUN ./install-composer.sh
