@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46ac1d10fe2bb86bbb85305469cc4ec6",
+    "content-hash": "22e494255f1f47249cfc5743e47d88c4",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -699,12 +699,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthewslouismarie/lm-web-framework.git",
-                "reference": "aa770dd4dad697bb3bfe7f5ddd66804d06d4e639"
+                "reference": "deca2eb5f3c0cf82e2cd7161d51a3dc99d696a14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/aa770dd4dad697bb3bfe7f5ddd66804d06d4e639",
-                "reference": "aa770dd4dad697bb3bfe7f5ddd66804d06d4e639",
+                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/deca2eb5f3c0cf82e2cd7161d51a3dc99d696a14",
+                "reference": "deca2eb5f3c0cf82e2cd7161d51a3dc99d696a14",
                 "shasum": ""
             },
             "require": {
