@@ -22,7 +22,7 @@ class ServerErrorController implements IController, SinglePageOwner
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        $body = $this->configuration->isDev() ? $routeParams[count($routeParams) - 1]->__toString() : 'Ce n’est probablement pas un problème… probablement pas mais j’ai quelques écarts anormaux sur…';
+        $body = $this->configuration->isDev() ? $routeParams[count($routeParams) - 1] : 'Ce n’est probablement pas un problème… probablement pas mais j’ai quelques écarts anormaux sur…';
     
         return new Response(
             status: 500,
