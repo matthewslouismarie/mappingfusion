@@ -8,6 +8,10 @@ use LM\WebFramework\Model\Type\IModel;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * Interface that makes it possible for a controller to delegate processing
+ * forms to an implementation of this interface.
+ */
 interface IFormController extends IController
 {
     public function getFormConfig(): array;

@@ -126,11 +126,12 @@ class AdminPlayableController implements IFormController
     }
 
     public function respondToNonPersistedRequest(
+        ServerRequestInterface $request,
         ?array $formData,
         ?array $formErrors,
         ?array $deleteFormErrors,
-        ?string $id,
     ): ResponseInterface {
+        $id = $routeParams[1] ?? null;
         return $this->twig->respond(
             'admin_playable_form.html.twig',
             $this->getPage($formData, $id),

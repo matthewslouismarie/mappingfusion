@@ -398,6 +398,19 @@ class Fixture
         ]);
         $this->articleRepo->add($article8);
 
+        $article9 = new AppObject([
+            'id'=> 'crossed-paths',
+            'writer_id'=> $rootAccount['id'],
+            'category_id'=> $cat1['id'],
+            'body' => file_get_contents($this->config->getPathOfAppDirectory() .'/fixtures/crossed_paths.md'),
+            'is_featured' => true,
+            'is_published' => true,
+            'title'=> 'Crossed Paths',
+            'sub_title' => 'Une campagne pleine de surprises !',
+            'cover_filename' => '20220907214616-1.webp',
+            'thumbnail_filename'=> null,
+        ]);
+        $this->articleRepo->add($article9);
 
         /**
          * Reviews
@@ -457,6 +470,18 @@ class Fixture
             'pros' => '- Tout',
         ]);
         $this->reviewRepo->add($review5);
+
+        $review6 = new AppObject([
+            'id'=> null,
+            'article_id' => 'crossed-paths',
+            'playable_id' => 'crossed-paths',
+            'rating' => 5,
+            'body' => 'Une campagne riche et maîtrisée incluant de nombreux rebondissements et pleins de détails à découvrir offrant une belle re-jouabilité .',
+            'cons' => " - Peu de variété d'ennemis.\n - Les puzzles et les situations qui parfois peuvent être difficiles à comprendre.",
+            'pros' => " - Qualité du mapping.\n - Puzzle et détails très intéressants et bien mis en scène.\n - Une bonne re-jouabilité.",
+        ]);
+        $this->reviewRepo->add($review6);
+
         
         $this->dbManager->getPdo()->commit();
     }

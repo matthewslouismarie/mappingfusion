@@ -19,6 +19,7 @@ Security:
  - XSS
  - Check origin is server settings
  - Search for var_dump and dump on push
+ - CSP: remove unsafe-inline
 
 Responsiveness:
  - Add srcset to images

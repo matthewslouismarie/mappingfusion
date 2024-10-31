@@ -235,7 +235,11 @@ class ArticleRepository implements IUpdatableIdRepository
         return $results;
     }
 
-    public function update(AppObject $appObject, ?string $persistedId = null, bool $updateAuthor = false): void {
+    public function update(AppObject $appObject, ?string $persistedId = null, bool $updateAuthor = false): void
+    {
+        if ($appObject->hasProperty('chapter_id')) {
+            $appObject = $appObject->removeProperty('chapter_id');
+        }
         $dbArray = $this->em->toDbValue($appObject);
 
         $this->dbManager->getPdo()->beginTransaction();
@@ -245,55 +249,55 @@ class ArticleRepository implements IUpdatableIdRepository
         if (!$updateAuthor) {
             unset($dbArray['writer_id']);
         }
-        $chapterId = $dbArray['chapter_id'];
-        unset($dbArray['chapter_id']);
+
         $dbArray['persisted_id'] = $persistedId ?? $dbArray['id'];
 
         $stmt->execute($dbArray);
 
-        $previousChapterIndex = $this->dbManager->fetchFirstRow(
-            'SELECT * FROM e_chapter_index WHERE chapter_index_article_id = :persisted_id;',
-            [
-                'persisted_id' => $persistedId,
-            ]
-        );
-        if (null === $chapterId && null !== $previousChapterIndex) {
-            $stmt = $this->dbManager->run(
-                'DELETE FROM e_chapter_index WHERE chapter_index_article_id = :article_id;',
-                [
-                    'article_id' => $persistedId
-                ]
-            );
-        }
-        elseif (null !== $chapterId) {
-            $highestChapterOrder = $this->dbManager->fetchFirstRow(
-                'SELECT * FROM e_chapter_index WHERE chapter_index_chapter_id = :chapter_id;',
-                [
-                    'chapter_id' => $chapterId,
-                ]
-            );
-            if (null == $previousChapterIndex) {
-                $this->dbManager->run(
-                    'INSERT INTO e_chapter_index SET chapter_index_article_id = :id, chapter_index_chapter_id = :chapter_id, chapter_index_order = :order;',
-                    [
-                        'id' => $dbArray['id'],
-                        'chapter_id' => $chapterId,
-                        'order' => $highestChapterOrder ?? 0,
-                    ]
-                );
-            }
-            else {
-                $this->dbManager->run(
-                    'UPDATE e_chapter_index SET chapter_index_article_id = :id, chapter_index_chapter_id = :chapter_id, chapter_index_order = :order WHERE chapter_index_article_id = :persisted_id;',
-                    [
-                        'id' => $dbArray['id'],
-                        'chapter_id' => $chapterId,
-                        'persisted_id' => $persistedId,
-                        'order' => $highestChapterOrder ?? 0,
-                    ]
-                );
-            }
-        }
+        // $previousChapterIndex = $this->dbManager->fetchFirstRow(
+        //     'SELECT * FROM e_chapter_index WHERE chapter_index_article_id = :persisted_id;',
+        //     [
+        //         'persisted_id' => $persistedId,
+        //     ],
+        // );
+
+        // if (null === $chapterId && null !== $previousChapterIndex) {
+        //     $stmt = $this->dbManager->run(
+        //         'DELETE FROM e_chapter_index WHERE chapter_index_article_id = :article_id;',
+        //         [
+        //             'article_id' => $persistedId,
+        //         ],
+        //     );
+        // }
+        // elseif (null !== $chapterId) {
+        //     $highestChapterOrder = $this->dbManager->fetchFirstRow(
+        //         'SELECT * FROM e_chapter_index WHERE chapter_index_chapter_id = :chapter_id;',
+        //         [
+        //             'chapter_id' => $chapterId,
+        //         ]
+        //     );
+        //     if (null == $previousChapterIndex) {
+        //         $this->dbManager->run(
+        //             'INSERT INTO e_chapter_index SET chapter_index_article_id = :id, chapter_index_chapter_id = :chapter_id, chapter_index_order = :order;',
+        //             [
+        //                 'id' => $dbArray['id'],
+        //                 'chapter_id' => $chapterId,
+        //                 'order' => $highestChapterOrder ?? 0,
+        //             ]
+        //         );
+        //     }
+        //     else {
+        //         $this->dbManager->run(
+        //             'UPDATE e_chapter_index SET chapter_index_article_id = :id, chapter_index_chapter_id = :chapter_id, chapter_index_order = :order WHERE chapter_index_article_id = :persisted_id;',
+        //             [
+        //                 'id' => $dbArray['id'],
+        //                 'chapter_id' => $chapterId,
+        //                 'persisted_id' => $persistedId,
+        //                 'order' => $highestChapterOrder ?? 0,
+        //             ]
+        //         );
+        //     }
+        // }
 
         $this->dbManager->getPdo()->commit();
     }

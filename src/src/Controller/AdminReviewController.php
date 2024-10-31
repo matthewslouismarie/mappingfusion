@@ -108,12 +108,12 @@ class AdminReviewController implements IFormController
     }
 
     public function respondToNonPersistedRequest(
+        ServerRequestInterface $request,
         ?array $formData,
         ?array $formErrors,
         ?array $deleteFormErrors,
-        ?string $id,
     ): ResponseInterface {
-        // var_dump($formErrors);
+        $id = $routeParams[1] ?? null;
         return $this->twig->respond(
             'admin_review_form.html.twig',
             $this->getPage(is_null($id) ? null : new AppObject($formData)),

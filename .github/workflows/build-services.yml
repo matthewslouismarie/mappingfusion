@@ -8,6 +8,8 @@ jobs:
         run: cp .env.dist .env
       - name: Run the Docker Compose script
         run: DOCKER_BUILDKIT=1 docker-compose up -d
+      - name: Create folder for uploaded images
+        run: docker-compose exec -T -u www-data web_server_dcn mkdir public/uploaded
       - name: Install Composer dependencies
         run: docker-compose exec -T web_server_dcn composer install
       - name: Generate style.css

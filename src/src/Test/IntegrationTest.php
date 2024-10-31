@@ -55,6 +55,10 @@ class IntegrationTest implements IUnitTest
                 $this->router->generateUrl('articles', ['tests']),
                 404,
             ],
+            [
+                $this->router->generateUrl('admin-manage-author', ['neophus']),
+                403
+            ]
         ];
 
         // @todo Does context have a point?

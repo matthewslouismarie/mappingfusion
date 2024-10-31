@@ -4,6 +4,7 @@ namespace MF;
 
 use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\Configuration;
+use LM\WebFramework\Http\HttpRequestHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -11,6 +12,7 @@ class Router
 {
     public function __construct(
         private Configuration $config,
+        private HttpRequestHandler $httpRequestHandler,
     ) {
     }
 
@@ -64,7 +66,7 @@ class Router
      */
     public function getRouteParams(ServerRequestInterface $request): array
     {
-        return explode('/', $request->getQueryParams()['route_params']);
+        return $this->httpRequestHandler->extractRouteParams($request);
     }
 
     public function redirect(string $controllerFqcn, $parameters = []): ResponseInterface
