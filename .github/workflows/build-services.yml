@@ -9,12 +9,12 @@ jobs:
       - name: Run the Docker Compose script
         run: DOCKER_BUILDKIT=1 docker-compose up -d
       - name: Install Composer dependencies
-        run: docker-compose exec -T mf_web composer install
+        run: docker-compose exec -T web_server_dcn composer install
       - name: Generate style.css
-        run: docker-compose exec -T mf_web ./sass.sh
+        run: docker-compose exec -T web_server_dcn ./sass.sh
       - name: Create configuration
-        run: docker-compose exec -T mf_web cp .env.json.dist .env.json.local
+        run: docker-compose exec -T web_server_dcn cp .env.json.dist .env.json.local
       - name: Populating the database with fixtures
-        run: docker-compose exec -T mf_web ./fixtures.sh
+        run: docker-compose exec -T web_server_dcn ./fixtures.sh
       - name: Running integration test
-        run: docker-compose exec -T mf_web ./tests.sh
+        run: docker-compose exec -T web_server_dcn ./tests.sh
