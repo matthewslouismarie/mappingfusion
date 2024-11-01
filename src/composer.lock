@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f0513aae40f86ca6828b658b83dcabf3",
+    "content-hash": "e13062b818ee39bbefcf2bd4361316b8",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -699,12 +699,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthewslouismarie/lm-web-framework.git",
-                "reference": "c49504f46beffc3971f0cd5f4031547495db0fd0"
+                "reference": "dfa0e8e169a45cbd667d82af57f7a6a3dd03af8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/c49504f46beffc3971f0cd5f4031547495db0fd0",
-                "reference": "c49504f46beffc3971f0cd5f4031547495db0fd0",
+                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/dfa0e8e169a45cbd667d82af57f7a6a3dd03af8e",
+                "reference": "dfa0e8e169a45cbd667d82af57f7a6a3dd03af8e",
                 "shasum": ""
             },
             "require": {
@@ -744,7 +744,7 @@
                 "issues": "https://github.com/matthewslouismarie/lm-web-framework/issues",
                 "source": "https://github.com/matthewslouismarie/lm-web-framework/tree/master"
             },
-            "time": "2024-10-31T16:35:33+00:00"
+            "time": "2024-11-01T14:26:02+00:00"
         },
         {
             "name": "nette/schema",
