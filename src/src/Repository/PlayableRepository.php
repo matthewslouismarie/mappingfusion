@@ -50,7 +50,8 @@ class PlayableRepository implements IUpdatableIdRepository
 
         $this->persistListProperty(
             $this->modelFactory->getPlayableLinkModel(),
-            $this->linkRepo, $entity['links'],
+            $this->linkRepo,
+            $entity['links'],
             $previousEntity['links'],
         );
 
@@ -136,22 +137,20 @@ class PlayableRepository implements IUpdatableIdRepository
     public function persistListProperty(
         EntityModel $model,
         IConstIdRepository $repo,
-        array $newEntityList,
+        AppList $newEntityList,
         AppList $previousEntityList,
     ): void {
         $persistedIds = [];
         foreach ($newEntityList as $entity) {
             $entityId = $entity[$model->getIdKey()];
-            $persistedEntitiesWithSameId = array_values(
-                array_filter($previousEntityList->toArray(), fn ($e) => $entityId === $e[$model->getIdKey()]),
-            );
+            $persistedEntitiesWithSameId = $previousEntityList->filter(fn ($e) => $entityId === $e[$model->getIdKey()]);
             if (null === $entityId) {
                 $entityId = $repo->add($entity);
-            } elseif (0 === count($persistedEntitiesWithSameId)) {
+            } elseif (0 === $persistedEntitiesWithSameId->count()) {
                 $repo->add($entity);
-            } elseif (1 === count($persistedEntitiesWithSameId)) {
+            } elseif (1 === $persistedEntitiesWithSameId->count()) {
                 $persistedEntity = $persistedEntitiesWithSameId[0];
-                if (!$persistedEntity->isEqualTo($entity)) {
+                if (!$persistedEntity->isEqual($entity)) {
                     $repo->update($entity);
                 }
             } else {

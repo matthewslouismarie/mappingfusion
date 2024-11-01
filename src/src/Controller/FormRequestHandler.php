@@ -6,6 +6,7 @@ use Closure;
 use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
+use LM\WebFramework\DataStructures\Factory\CollectionFactory;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\Exceptions\IllegalUserInputException;
 use LM\WebFramework\Form\FormFactory;
@@ -26,9 +27,10 @@ class FormRequestHandler
     const DELETE_FORM_ID = '_DELETE_FORM';
 
     public function __construct(
+        private CollectionFactory $collectionFactory,
         private FormFactory $formFactory,
-        private SessionManager $sessionManager,
         private Router $router,
+        private SessionManager $sessionManager,
         private TwigService $twig,
     ) {
     }
@@ -81,7 +83,7 @@ class FormRequestHandler
                 $formErrors = $validator->validate($formData);
     
                 if (0 === count($formErrors)) {
-                    $appObject = new AppObject($formData);
+                    $appObject = $this->collectionFactory->createDeepAppObject($formData);
                     try {
                         if (null === $id) {
                             return $controller->respondToInsertion($appObject);
