@@ -2,6 +2,7 @@
 
 namespace MF\Repository;
 
+use LM\WebFramework\DataStructures\AppList;
 use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
@@ -136,13 +137,13 @@ class PlayableRepository implements IUpdatableIdRepository
         EntityModel $model,
         IConstIdRepository $repo,
         array $newEntityList,
-        array $previousEntityList,
+        AppList $previousEntityList,
     ): void {
         $persistedIds = [];
         foreach ($newEntityList as $entity) {
             $entityId = $entity[$model->getIdKey()];
             $persistedEntitiesWithSameId = array_values(
-                array_filter($previousEntityList, fn ($e) => $entityId === $e[$model->getIdKey()]),
+                array_filter($previousEntityList->toArray(), fn ($e) => $entityId === $e[$model->getIdKey()]),
             );
             if (null === $entityId) {
                 $entityId = $repo->add($entity);
