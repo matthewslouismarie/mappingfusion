@@ -1,6 +1,6 @@
 {% macro review(app, playable, review, variant, metadata = true) %}
     <div class="std-review{% if variant %} {{ variant }}{% endif %}">
-        <div class="box _padding -padding-m"{% if metadata %} id="review-box"{% endif %}>
+        <div class="box"{% if metadata %} id="review-box"{% endif %}>
             <div class="std-rating-container">
                 <div class="rating"{% if metadata %} itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating"{% endif %}>
                     {% if metadata %}<meta itemprop="worstRating" content="1">{% endif %}
