@@ -1,4 +1,5 @@
 /cache
 /public/*.css
+/public/uploaded
 /var
 /vendor
