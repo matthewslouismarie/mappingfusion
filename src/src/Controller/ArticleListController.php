@@ -144,8 +144,8 @@ class ArticleListController implements IController
         $ancestors = [];
         while (null !== $cat) {
             $ancestors[] = $cat;
-            if (null !== $cat->parentId) {
-                $cat = $categories[$cat->parentId];
+            if (null !== $cat['parent_id']) {
+                $cat = $categories[$cat['parent_id']];
             } else {
                 $cat = null;
             }
@@ -156,7 +156,7 @@ class ArticleListController implements IController
     private function getCategoryDescendants(array $categories, string $id): array {
         $descendants = [];
         foreach ($categories as $cat) {
-            if ($cat->parentId == $id) {
+            if ($cat['parent_id'] == $id) {
                 $descendants = array_merge($descendants, [$cat], $this->getCategoryDescendants($categories, $cat['id']));
             }
         }

@@ -41,7 +41,7 @@ class PlayableModelFactory
             ];
         }
         if (null !== $gameModel) {
-            $properties['game'] = new ForeignEntityModel($gameModel, 'id', 'game_id', true);
+            $properties['game'] = new ForeignEntityModel($gameModel, 'id', 'game_id', isNullable: true);
         }
         if (null !== $playableLinkModel) {
             $properties['links'] = new EntityListModel(

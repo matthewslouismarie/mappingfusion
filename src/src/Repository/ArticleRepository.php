@@ -96,7 +96,7 @@ class ArticleRepository implements IUpdatableIdRepository
 
         $model = $this->articleModelFactory->create(
             categoryModel: $this->categoryModelFactory->create(),
-            reviewModel: $this->reviewModelFactory->create($this->playableModelFactory->create($this->playableModelFactory->create(isNullable: true)), isNullable: true)
+            reviewModel: $this->reviewModelFactory->create($this->playableModelFactory->create($this->playableModelFactory->create()))
         );
         foreach ($results as $rowNumber => $r) {
             $articles[] = $this->em->convertDbRowsToAppObject($results, $model, $rowNumber);
