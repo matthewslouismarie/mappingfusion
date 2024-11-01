@@ -17,9 +17,6 @@ jobs:
         with:
           compose-file: "./docker-compose.yml"
 
-      - name: Create folder for uploaded images
-        run: docker-compose exec -T -u www-data web_server_dcn mkdir public/uploaded
-
       - name: Install Composer dependencies
         run: docker-compose exec -T web_server_dcn composer install
 
@@ -28,6 +25,9 @@ jobs:
 
       - name: Create configuration
         run: docker-compose exec -T web_server_dcn cp .env.json.dist .env.json.local
+
+      - name: Create folder for uploaded images
+        run: docker-compose exec -T -u www-data web_server_dcn mkdir public/uploaded
 
       - name: Populating the database with fixtures
         run: docker-compose exec -T web_server_dcn ./fixtures.sh
