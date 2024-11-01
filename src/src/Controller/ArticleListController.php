@@ -42,7 +42,7 @@ class ArticleListController implements IController
                 $articles = $this->repo->findByCategory($requestedCategoryId);
                 $onlyReviews = null;
                 foreach ($articles as $a) {
-                    if (null === $a->review) {
+                    if (null === $a['review']) {
                         $onlyReviews = false;
                     }
                 }
