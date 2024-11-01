@@ -4,11 +4,10 @@ RUN apt update
 
 # Install Composer
 RUN apt install git -y
-WORKDIR /usr/bin
 COPY install-composer.sh .
+RUN chmod +x install-composer.sh
 RUN ./install-composer.sh
 RUN rm install-composer.sh
-RUN ln composer.phar composer
 
 # Enable Apache Rewrite module
 RUN a2enmod rewrite
