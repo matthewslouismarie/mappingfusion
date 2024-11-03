@@ -231,7 +231,7 @@ class ArticleRepository implements IUpdatableIdRepository
                 $results[] = $a->set('ranking', $ranking);
             }
         }
-        usort($results, fn ($a, $b) => $b->ranking - $a->ranking);
+        usort($results, fn ($a, $b) => $b['ranking'] - $a['ranking']);
         return $results;
     }
 
