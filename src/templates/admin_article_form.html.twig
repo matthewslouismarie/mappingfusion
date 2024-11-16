@@ -12,7 +12,7 @@
 
 <h1 class="_h1">{{ page.name }}</h1>
 
-{% if requestedId %}
+{% if requestedEntity %}
 <ul class="std-inline-list _marginm -mgbottom">
     <li class="item">
         <a class="std-button" href="{{ app.router.generateUrl('article', [requestedId]) }}">Visualiser l’article</a>
@@ -20,9 +20,9 @@
     <li class="item">
         <a class="std-button" href="{{ app.router.url('AdminChapterIndexController', [requestedId]) }}">Ajouter l’article à un chapitre</a>
     </li>
-    {% if formData.review %}
+    {% if requestedEntity.review %}
     <li class="item">
-        <a class="std-button" href="{{ app.router.url('AdminReviewController', [formData.review.id]) }}">Voir le test associé</a>
+        <a class="std-button" href="{{ app.router.url('AdminReviewController', [requestedEntity.review.id]) }}">Voir le test associé</a>
     </li>
     {% endif %}
 </ul>

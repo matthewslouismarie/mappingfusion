@@ -101,11 +101,12 @@ class AdminArticleController implements IController
             'admin_article_form.html.twig',
             $this->getPage($requestedEntity),
             [
-                'categories' => $this->catRepo->findAll(),
                 'books' => $books,
+                'categories' => $this->catRepo->findAll(),
                 'formData' => $formData,
                 'formErrors' => $formErrors,
                 'lastUpdateDateTimeUtc' => $lastUpdateDateTimeUtc,
+                'requestedEntity' => $requestedEntity,
                 'requestedId' => $requestedId,
             ],
         );
