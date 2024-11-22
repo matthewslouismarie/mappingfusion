@@ -22,7 +22,7 @@ class TemplateHelper
     public function __construct(
         private Configuration $config,
         private FileService $fileService,
-        private MarkdownService $mk,
+        private MarkdownService $md,
         private ResourceManager $resourceManager,
         private Router $router,
         private SessionManager $session,
@@ -119,8 +119,8 @@ class TemplateHelper
         return LinkType::cases();
     }
 
-    public function getMk(): MarkdownService {
-        return $this->mk;
+    public function getMd(): MarkdownService {
+        return $this->md;
     }
 
     public function getPageAncestors(Page $page): array {

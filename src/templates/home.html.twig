@@ -29,8 +29,8 @@
             {% for a in featured_articles %}
                 <li class="glide__slide" itemscope itemid="{{ app.articleItemId(a.id) }}">
                     <a class="link _txt -txtxl" href="{{ app.router.generateUrl('article', {id: a.id}) }}" style="background-image: url({{ app.resource(a.cover_filename) }});">
-                        {% if a.sub_title %}<div class="sub-title">{{ app.mk.format(a.sub_title)|raw }}</div>{% endif %}
-                        <div class="title">{{ app.mk.format(a.title)|raw }}</div>
+                        {% if a.sub_title %}<div class="sub-title">{{ app.md.format(a.sub_title)|raw }}</div>{% endif %}
+                        <div class="title">{{ app.md.format(a.title)|raw }}</div>
                     </a>
                 </li>
             {% endfor %}

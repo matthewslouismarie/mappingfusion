@@ -6,7 +6,7 @@
 
 {% block resources %}
 <link rel="stylesheet" href="https://unpkg.com/@glidejs/glide@3.6.0/dist/css/glide.core.css">
-<meta property="og:description" content="{{ app.shorten(app.mk.getText(article.body), 128, '…') }}">
+<meta property="og:description" content="{{ app.shorten(app.md.getText(article.body), 128, '…') }}">
 <meta property="og:type" content="article">
 <meta property="og:published_time" content="{{ article.creation_date_time|date('Y-m-d\\TH:i') }}Z">
 <meta property="og:modified_time" content="{{ article.last_update_date_time|date('Y-m-d\\TH:i') }}Z">
@@ -22,7 +22,7 @@
 {% endif %}
 {% endblock %}
 
-{% block description %}{{ app.shorten(app.mk.getText(article.body), 128, '…') }}{% endblock %}
+{% block description %}{{ app.shorten(app.md.getText(article.body), 128, '…') }}{% endblock %}
 
 {% block breadcrumb %}{% endblock breadcrumb %}
 
@@ -93,7 +93,7 @@
                             {% endif %}
                         </dl>
 
-                        <div class="std-markdown-container">{{ app.mk.format(article.review.body)|raw }}</div>
+                        <div class="std-markdown-container">{{ app.md.format(article.review.body)|raw }}</div>
 
                         {{ review(app, article.review.playable, article.review) }}
                         {% endif %}
@@ -111,7 +111,7 @@
                     {% if article.review %}<meta itemprop="itemReviewed" itemscope itemtype="https://schema.org/VideoGame" itemref="playable-object playable-links">{% endif %}
                     <div class="sectioncontent">
                         <div class="std-markdown-container" itemprop="articleBody">
-                            {{ app.mk.formatArticleBody(article.body).main|raw }}
+                            {{ app.md.formatArticleBody(article.body).main|raw }}
                         </div>
                     </div>
                 </div>
@@ -149,11 +149,11 @@
                 </div>
                 {% endif %}
 
-                {% if app.mk.formatArticleBody(article.body).advice %}
+                {% if app.md.formatArticleBody(article.body).advice %}
                 <div class="section">
                     <div class="sectioncontent">
                         <aside class="article-advice">
-                            {{ app.mk.formatArticleBody(article.body).advice|raw }}
+                            {{ app.md.formatArticleBody(article.body).advice|raw }}
                         </aside>
                     </div>
                 </div>

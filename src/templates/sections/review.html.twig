@@ -13,7 +13,7 @@
 
             {% if variant == '-summary' %}
             <div class="body"{% if metadata %} itemprop="reviewBody"{% endif %}>
-                {{ app.mk.format(review.body)|raw }}
+                {{ app.md.format(review.body)|raw }}
             </div>
             {% endif %}
 
@@ -21,14 +21,14 @@
                 <div class="part -pros _flex -col _gap -gap-row-s">
                     <h3 class="subheading _txt -txtl">Les plus</h3>
                     <div class="markdown -pros">
-                        {% if review.pros %}{{ app.mk.format(review.pros)|raw }}{% else %}Rien à afficher.{% endif %}
+                        {% if review.pros %}{{ app.md.format(review.pros)|raw }}{% else %}Rien à afficher.{% endif %}
                     </div>
                 </div>
 
                 <div class="part -cons _flex -col _gap -gap-row-s">
                     <h3 class="subheading _txt -txtl">Les moins</h3>
                     <div class="markdown -cons">
-                        {% if review.cons %}{{ app.mk.format(review.cons)|raw }}{% else %}Rien à afficher.{% endif %}
+                        {% if review.cons %}{{ app.md.format(review.cons)|raw }}{% else %}Rien à afficher.{% endif %}
                     </div>
                 </div>
             </div>

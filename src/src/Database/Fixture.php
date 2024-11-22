@@ -290,7 +290,7 @@ class Fixture
             'id' => 'nouvel-article',
             'writer_id' => $rootAccount['id'],
             'category_id' => $cat0['id'],
-            'body' => file_get_contents(dirname(__FILE__) . '/../../fixtures/article.mk'),
+            'body' => file_get_contents(dirname(__FILE__) . '/../../fixtures/article.md'),
             'is_featured' => true,
             'is_published' => true,
             'title' => 'Crossed Paths v3.8.8',
@@ -422,8 +422,8 @@ class Fixture
             'playable_id' => $sc['id'],
             'rating' => 4,
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
-            'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
-            'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
+            'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.md'),
+            'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.md'),
         ]);
         $this->reviewRepo->add($review1);
 
@@ -433,8 +433,8 @@ class Fixture
             'playable_id' => $sc['id'],
             'rating' => 4,
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
-            'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
-            'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
+            'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.md'),
+            'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.md'),
         ]);
         $this->reviewRepo->add($review2);
 
@@ -444,8 +444,8 @@ class Fixture
             'playable_id' => $sc['id'],
             'rating' => 4,
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
-            'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
-            'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
+            'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.md'),
+            'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.md'),
         ]);
         $this->reviewRepo->add($review3);
 
@@ -455,8 +455,8 @@ class Fixture
             'playable_id' => $sc['id'],
             'rating' => 4,
             'body' =>  'En somme, un jeu vraiment pas mal. Je recommande.',
-            'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.mk'),
-            'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.mk'),
+            'cons' => file_get_contents(dirname(__FILE__) . '/../../fixtures/cons.md'),
+            'pros' => file_get_contents(dirname(__FILE__) . '/../../fixtures/pros.md'),
         ]);
         $this->reviewRepo->add($review4);
 
