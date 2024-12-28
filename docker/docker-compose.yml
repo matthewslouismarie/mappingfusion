@@ -1,0 +1,18 @@
+name: mf_dcpn
+services:
+    web_server_dcsn:
+        build:
+            context: ./web_server
+        ports:
+            - "${MF_WEB_PORT_EXT:?error}:80"
+        volumes:
+            - ../:/var/www/html/
+        tty: true
+        links:
+            - db_dcsn
+    db_dcsn:
+        image: mariadb:11.0
+        ports:
+            - "${MF_DB_PORT_EXT:?error}:3306"
+        environment:
+            - MARIADB_ROOT_PASSWORD=${MF_DB_PWD:?error}
