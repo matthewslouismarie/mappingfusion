@@ -61,9 +61,9 @@ class ArticleRepository implements IUpdatableIdRepository
         bool $fetchPlayableContributors = false,
         bool $onlyPublished = true,
     ): ?AppObject {
-        $selectFrom = $onlyPublished ? 'v_article_published' : 'v_article';
+        $tableName = $onlyPublished ? 'v_article_published' : 'v_article';
 
-        $articleDbRows = $this->dbManager->fetchRowsFromQueryFile(new SqlFilename('s_find_article.sql'), [$id], $selectFrom);
+        $articleDbRows = $this->dbManager->fetchRowsFromQueryFile(new SqlFilename('s_find_article.sql'), [$id], $tableName);
 
         if (0 === count($articleDbRows)) {
             return null;

@@ -27,9 +27,6 @@
 {% block breadcrumb %}{% endblock breadcrumb %}
 
 {% block body %}
-{# @todo https://schema.org/HowTo #}
-{# https://schema.org/Review #}
-{# https://schema.org/VideoGame #}
 
 <div class="page-article" id="article">
     <div class="std-article">
@@ -60,6 +57,8 @@
                                     <span itemprop="name">{{ article.review.playable.name }}</span>
                                 </dd>
                             </div>
+
+                            {% if article.review.playable.contributions is not empty %}
                             <div class="item">
                                 <dt class="term">Auteurs :</dt>
                                 <dd class="def">
@@ -72,6 +71,8 @@
                                     {% endfor %}
                                 </dd>
                             </div>
+                            {% endif %}
+
                             <div class="item">
                                 <dt class="term">Date de sortie :</dt>
                                 <dd class="def">
