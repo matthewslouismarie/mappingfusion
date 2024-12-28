@@ -3,7 +3,7 @@ services:
         build:
             context: ./docker/web_server
         ports:
-            - "${WEB_EXT_PORT}:80"
+            - "${MF_WEB_PORT_EXT:?error}:80"
         volumes:
             - ./src/:/var/www/html/
         tty: true
@@ -12,6 +12,6 @@ services:
     db_dcn:
         image: mariadb:11.0
         ports:
-            - "${DB_EXT_PORT}:3306"
+            - "${MF_DB_PORT_EXT:?error}:3306"
         environment:
-            - MARIADB_ROOT_PASSWORD=${DB_PASSWORD}
+            - MARIADB_ROOT_PASSWORD=${MF_DB_PWD:?error}
