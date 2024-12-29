@@ -2,6 +2,10 @@
 
 {% from 'macros/macros.html.twig' import csrf, errorList, previous %}
 
+{% block scriptInit %}
+<script src="{{ app.asset('dynamic-form.js') }}"></script>
+{% endblock %}
+
 {% block bodyContent %}
 
 {{ previous(app, page) }}

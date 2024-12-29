@@ -38,6 +38,6 @@ class ChapterIndexRepository implements IConstIdRepository
     public function find(string $id): ?AppObject
     {
         $row = $this->dbManager->fetchFirstRow('SELECT * FROM e_chapter_index WHERE chapter_index_id = ?;', [$id]);
-        return $this->em->convertDbRowsToAppObject($row, $this->modelFactory->getChapterIndexModel());
+        return $this->em->convertDbRowsToAppObject($row, $this->modelFactory->getChapterIndexModel(isNew: true  ));
     }
 }

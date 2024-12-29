@@ -1,0 +1,7 @@
+.shadow-container {
+    > .shadow {
+        width: 200%;
+        
+        box-shadow: 0 (-$cover-height/8) $cover-height/4 ($cover-height/8) $color-blue-2;
+    }
+}

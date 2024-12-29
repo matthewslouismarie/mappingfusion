@@ -11,6 +11,7 @@ use LM\WebFramework\DataStructures\Slug;
 use LM\WebFramework\Model\Type\IModel;
 use LM\WebFramework\Session\SessionManager;
 use MF\Model\ModelFactory;
+use MF\Repository\ArticleRepository;
 use MF\Repository\BookRepository;
 use MF\Repository\ChapterRepository;
 use MF\Router;
@@ -21,6 +22,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class AdminChapterController implements IController, IFormController
 {
     public function __construct(
+        private ArticleRepository $articleRepository,
         private BookRepository $bookRepository,
         private ChapterRepository $chapterRepository,
         private FormRequestHandler $formController,
@@ -42,6 +44,8 @@ class AdminChapterController implements IController, IFormController
         }
 
         list($book, $chapter) = $this->getBookAndChapter($request);
+
+        // $freeArticles = 3 === count($routeParams) ? $this->articleRepository->findFreeArticles($routeParams[2]) : null;
 
         return $this->formController->respondToRequest($this->chapterRepository, $request, $this, $chapter['id'] ?? null);
     }

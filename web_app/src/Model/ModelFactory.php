@@ -27,11 +27,13 @@ class ModelFactory
     public function getArticleModel(
         bool $author = false,
         bool $category = true,
+        bool $chapterIndex = false,
         bool $review = false,
     ): EntityModel
     {
         $model = $this->articleModelFactory->create(
             categoryModel: $category ? $this->getCategoryModel() : null,
+            chapterIndexModel: $chapterIndex ? $this->getChapterIndexModel(isNew: true) : null,
             reviewModel: $review ? $this->getReviewModel(playable: true) : null,
         );
 
@@ -77,9 +79,9 @@ class ModelFactory
         );
     }
 
-    public function getChapterIndexModel(): EntityModel
+    public function getChapterIndexModel(bool $isNew): EntityModel
     {
-        return $this->chapterIndexModelFactory->create();
+        return $this->chapterIndexModelFactory->create(isNew: true);
     }
 
     public function getContributionModel(bool $author = true): EntityModel

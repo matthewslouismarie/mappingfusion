@@ -8,14 +8,10 @@
 {{ form_start(app) }}
 
 <div class="form-row">
-    <label class="label" for="chapter-id">Chapitre</label>
-    <select id="chapter-id" name="chapter_id" required>
-        {% for b in books %}
-        <optgroup label="{{ b.title }}">
-            {% for c in b.chapters %}
-            <option value="{{ c.id }}"{% if formData and c.id == formData.chapter_id %} selected{% endif %}>{{ c.title }}</option>
-            {% endfor %}
-        </optgroup>
+    <label class="label" for="article-id">Article</label>
+    <select class="input" id="article-id" name="article_id" required>
+        {% for a in free_articles %}
+        <option value="{{ a.id }}">{{ a.title }}</option>
         {% endfor %}
     </select>
     {% if formErrors %}{{ errorList( formErrors.chapter_id ?? null) }}{% endif %}
@@ -25,12 +21,12 @@
 
 {{ form_end(app) }}
 
-{% if entity %}
+{# {% if entity %}
 {{ form_start(app) }}
 
 {{ formRow('_DELETE_FORM', 'Retirer l’article du chapitre', null, deleteFormErrors) }}
 
 {{ form_end(app, 'Enlever du chapitre', false) }}
-{% endif %}
+{% endif %} #}
 
 {% endblock %}

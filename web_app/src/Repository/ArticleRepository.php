@@ -146,6 +146,12 @@ class ArticleRepository implements IUpdatableIdRepository
         return $this->em->convertDbRowsToEntityList($articleRows, $this->articleModelFactory->create());
     }
 
+    public function findFreeArticles(): array
+    {
+        $articleRows = $this->dbManager->fetchRowsFromQueryFile(new SqlFilename('stmt_find_free_articles_for_chapter.sql'), []);
+        return $this->em->convertDbRowsToEntityList($articleRows, $this->modelFactory->getArticleModel(category: false, chapterIndex: true));
+    }
+
     /**
      * @return AppObject[]
      */
