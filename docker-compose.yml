@@ -1,16 +1,16 @@
 name: mf_dcpn
 services:
-    web_server_dcsn:
+    web_app_dsn:
         build:
-            context: ./web_server
+            context: ./web_app
         ports:
             - "${MF_WEB_PORT_EXT:?error}:80"
         volumes:
-            - ../:/var/www/html/
+            - ./web_app:/var/www/html
         tty: true
         links:
-            - db_dcsn
-    db_dcsn:
+            - db_dsn
+    db_dsn:
         image: mariadb:11.0
         ports:
             - "${MF_DB_PORT_EXT:?error}:3306"

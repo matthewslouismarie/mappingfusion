@@ -12,9 +12,6 @@ RUN rm install-composer.sh
 # Enable Apache Rewrite module
 RUN a2enmod rewrite
 
-# Create Apache configuration
-COPY ./000-default.conf /etc/apache2/sites-enabled/000-default.conf
-
 # Enable PDO
 RUN docker-php-ext-install pdo pdo_mysql
 
