@@ -40,9 +40,9 @@ class AdminBookListController implements IController, SinglePageOwner
 
     public function getPage(): Page {
         return $this->pageFactory->createPage(
-            'Liste des tutoriels',
-            self::class,
-            parentFqcn: AdminArticleListController::class,
+            name: 'Gestion des livres',
+            controllerFqcn: self::class,
+            parentFqcn: HomeController::class,
             isIndexed: false,
         );
     }

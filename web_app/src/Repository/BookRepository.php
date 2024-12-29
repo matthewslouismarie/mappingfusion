@@ -6,6 +6,7 @@ use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\Model\Type\EntityModel;
 use MF\Database\DatabaseManager;
+use MF\DataStructure\SqlFilename;
 use MF\Model\BookModelFactory;
 use OutOfBoundsException;
 
@@ -38,7 +39,7 @@ class BookRepository implements IUpdatableIdRepository
 
     public function find(string $id): ?AppObject
     {
-        $dbRows = $this->dbManager->fetchRows("SELECT * FROM v_book WHERE book_id = ? ORDER BY chapter_order;", [$id]);
+        $dbRows = $this->dbManager->fetchRowsFromQueryFile(new SqlFilename('stmt_find_book.sql'), ['id' => $id]);
 
         if (0 === count($dbRows)) {
             return null;
@@ -64,8 +65,8 @@ class BookRepository implements IUpdatableIdRepository
 
     public function update(AppObject $appObject, string $persistedId): void
     {
-        $this->dbManager->run(
-            'UPDATE e_book SET book_id = :id, book_title = :title WHERE book_id = :persisted_id;',
+        $this->dbManager->runFilename(
+            'stmt_update_book.sql',
             ['persisted_id' => $persistedId] + $this->em->toDbValue($appObject),
         );
     }

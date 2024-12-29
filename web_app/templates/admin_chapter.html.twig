@@ -19,7 +19,7 @@
 {% endif %}
 
 <div class="vertical-section">
-    <a class="std-button" href="{{ app.router.generateUrl('tutoriel', [book.id]) }}">Visualiser le tutoriel</a>
+    <a class="std-button" href="{{ app.router.generateUrl('book', [book.id]) }}">Visualiser le tutoriel</a>
     {% if chapter %}
     <a class="std-button" href="{{ app.router.generateUrl('admin-articles-du-chapitre', [chapter.id]) }}">Gérer les articles</a>
     {% endif %}

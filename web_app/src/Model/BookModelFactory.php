@@ -23,6 +23,7 @@ class BookModelFactory
         $properties = [
             'id' => $this->slugModelFactory->getSlugModel(),
             'title' => new StringModel(),
+            'introduction' => new StringModel(isNullable: true),
         ];
         if (null !== $chapterModel) {
             $properties['chapters'] = new EntityListModel(
@@ -43,7 +44,7 @@ class BookModelFactory
             ->create()
             ->prune(['id', 'title'])
         ;
-        $chapterIndexModel = $this->chapterIndexModelFactory->create(isNew: false);
+        $chapterIndexModel = $this->chapterIndexModelFactory->create(isNew: false, articleModel: $articleModel);
         return $this->create($this->chapterModelFactory->create($chapterIndexModel));
     }
 }

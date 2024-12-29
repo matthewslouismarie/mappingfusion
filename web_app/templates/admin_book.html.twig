@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% from 'macros/macros.html.twig' import csrf, errorList, previous %}
+{% from 'macros/macros.html.twig' import csrf, errorList, previous, form_start, form_end, formRow %}
 
 {% block bodyContent %}
 
@@ -10,34 +10,39 @@
 
 {% if requestedId %}
 <ul class="vertical-section">
-    <a class="std-button" href="{{ app.router.generateUrl('tutoriel', [requestedId]) }}">Visualiser le tutoriel</a>
+    <a class="std-button" href="{{ app.router.generateUrl('book', [requestedId]) }}">Visualiser le tutoriel</a>
     <a class="std-button" href="{{ app.router.generateUrl('admin-liste-des-chapitres', [requestedId]) }}">Gérer les chapitres</a>
 </ul>
 {% endif %}
 
-<form autocomplete="on" class="form-row-container" enctype="multipart/form-data" method="post"{% if app.conf.dev %} novalidate{% endif %}>
-    <div class="form-row">
-        <label class="label" for="id">ID (peut être laissé vide)</label>
-        <input class="input -text" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
-        {% if formErrors.id is defined %}{{ errorList(formErrors.id) }}{% endif %}
-    </div>
-    <div class="form-row">
-        <label class="label" for="title">Titre</label>
-        <input class="input -text" id="title" name="title" required{% if formData %} value="{{ formData.title }}"{% endif %}>
-        {% if formErrors.title is defined %}{{ errorList(formErrors.title) }}{% endif %}
-    </div>
+{{ form_start(app) }}
 
-    {# {% if requestedId %}
-    {{ _self.addBookForm(formData) }}
-    {% endif %} #}
+<div class="form-row">
+    <label class="label" for="id">ID (peut être laissé vide)</label>
+    <input class="input -text" id="id" name="id"{% if formData %} value="{{ formData.id }}"{% endif %}>
+    {% if formErrors.id is defined %}{{ errorList(formErrors.id) }}{% endif %}
+</div>
+
+<div class="form-row">
+    <label class="label" for="title">Titre</label>
+    <input class="input -text" id="title" name="title" required{% if formData %} value="{{ formData.title }}"{% endif %}>
+    {% if formErrors.title is defined %}{{ errorList(formErrors.title) }}{% endif %}
+</div>
+
+{{ formRow("introduction", "Intro", formData, formErrors, false) }}
 
 
-    {{ csrf(app) }}
 
-    <div class="form-row -buttons">
-        <button class="std-button -big -bold -white" type="submit">Sauvegarder</button>
-    </div>
-</form>
+{# {% if requestedId %}
+{{ _self.addBookForm(formData) }}
+{% endif %} #}
+
+
+
+<div class="form-row -buttons">
+    <button class="std-button -big -bold -white" type="submit">Sauvegarder</button>
+</div>
+{{ form_end(app) }}
 
 {# {% if entity %}
 {% for chapter in entity.chapters %}

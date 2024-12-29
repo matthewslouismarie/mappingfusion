@@ -3,6 +3,7 @@
 namespace MF\Controller;
 
 use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
@@ -23,6 +24,9 @@ class BookController implements IController
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
     {
         $book = $this->bookRepository->find($routeParams[1]);
+        if (null === $book) {
+            throw new RequestedResourceNotFound();
+        }
         return $this->twigService->respond('book.html.twig', $this->getPage($book), ['book' => $book]);
     }
 

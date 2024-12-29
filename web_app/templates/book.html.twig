@@ -2,12 +2,13 @@
 
 {% block bodyContent %}
 <h1 class="_h1">{{ book.title }}</h1>
+<p>{{ book.introduction }}</p>
 {% for c in book.chapters %}
 <h2 class="_h2">{{ c.title }}</h2>
 <ol>
-{% for a in c.articles %}
+{% for ci in c.articles %}
 <li class="item">
-    <a href="{{ app.router.generateUrl('article', [a.id]) }}">{{ a.title }}</a>
+    <a href="{{ app.router.generateUrl('article', [ci.article.id]) }}">{{ ci.article.title }}</a>
 </li>
 {% endfor %}
 </ol>
