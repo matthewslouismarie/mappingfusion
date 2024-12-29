@@ -131,6 +131,7 @@ class AdminPlayableController implements IFormController
         ?array $formErrors,
         ?array $deleteFormErrors,
     ): ResponseInterface {
+        $routeParams = $this->router->getRouteParams($request);
         $id = $routeParams[1] ?? null;
         return $this->twig->respond(
             'admin_playable_form.html.twig',

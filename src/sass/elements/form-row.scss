@@ -1,12 +1,19 @@
 .form-row {
-    &.-buttons {
-        display: flex;
-        justify-content: center;
-        gap: $gap-xs;
+    display: flex;
+    gap: $gap-xxxs;
+    flex-direction: column;
 
-        &.-left {
-            justify-content: start;
-        }
+    &.-buttons {
+        align-items: center;
+    }
+
+    &.-checkbox {
+        flex-direction: row;
+    }
+
+    &:focus-within > .label,
+    &:hover > .label {
+        opacity: 1;
     }
 
     > .input,
@@ -14,18 +21,20 @@
         display: block;
     }
 
-    > .input.-text,
-    > .input.-textarea,
-    > .select > .option {
-        padding: $gap-xxxs-2;
+    > .label {
+        font-size: $txt-font-size-s;
+        opacity: 0.8;
+        transition: all $transition-duration ease-in;
     }
 
     > .input {
-        &.-text,
-        &.-textarea {
-            padding: $gap-xxxs-2;
-        }
+        border-radius: $txt-font-size-m;
+        font-size: $txt-font-size-m;
+        border-width: 0;
+        padding: $gap-xxs $gap-xs;
+    }
 
+    > .input {
         &.-text {
             min-width: 50%;
         }
@@ -36,28 +45,10 @@
         }
     }
 
-    &.-fullwidth {
-        > .input {
-            width: 100%;
-        }
-    }
-
     &.-titled {
         > .label {
             @include h2;
             margin-bottom: $gap-xs;
-        }
-    }
-
-    &.-checkbox {
-        > .input,
-        > .label {
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        > .input {
-            margin-right: $gap-xs;
         }
     }
 

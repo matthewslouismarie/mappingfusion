@@ -22,20 +22,24 @@ $color-white: #ffffff;
 // Dimensions
 $cover-height: 502px;
 
+// Paragraph width
 $block-width-paragraph-l: 768px;
 $block-width-paragraph-xl: 944px;
 $block-width-navbar: 256px;
 $block-width-interface-xl: 1270px;
 
+// Border width
 $border-m: 5px;
 $border-s: 3px;
 $border-xs: 2px;
 $border-xxs: 1.5px;
 
+// Border Radius
 $border-radius-xs: 6px;
 $border-radius-s: 8px;
 $border-radius-m: 12px;
 
+// Spacing
 $gap-xxxs: 2px;
 $gap-xxxs-2: 4px;
 $gap-xxs: 6px;
@@ -49,15 +53,13 @@ $gap-l2: 40px;
 $gap-xl: 64px;
 $gap-xxl: 128px;
 
+// Image size
 $img-size-m: 256px;
 $img-size-s: 176px;
 $img-size-xs: 128px;
 $img-size-xxs: 64px;
 
-$r-font-size-l: 1.2em;
-$r-font-size-m: 1em;
-$r-font-size-s: 0.8em;
-
+// Screen size
 $screen-size-xxl: 2560px;
 $screen-size-xl: 1920px;
 $screen-size-l2: 1440px;
@@ -65,6 +67,7 @@ $screen-size-l: 1024px;
 $screen-size-m: 768px;
 $screen-size-s: 425px;
 
+// Absolute font size
 $txt-font-size-xxl: 2.2rem;
 $txt-font-size-xl: 1.7rem;
 $txt-font-size-l2: 1.5rem;
@@ -73,15 +76,25 @@ $txt-font-size-m: 1rem;
 $txt-font-size-s: 0.8rem;
 $txt-font-size-xs: 0.5rem;
 
+// Relative font size
+$r-font-size-l: 1.2em;
+$r-font-size-m: 1em;
+$r-font-size-s: 0.8em;
+
+// Font weight
 $txt-weight-bold: 700;
 $txt-weight-light: 300;
 $txt-weight-regular: 400;
 $txt-weight-semi-bold: 600;
 
+// Z-index
 $z-index-glide-controls: 1;
 $z-index-article-navaside: 2;
 $z-index-img-preview: 10;
 
+// Shadows
 $box-shadow: 16px;
-
 $txt-shadow: 0.2em;
+
+// Transition Duration
+$transition-duration: 0.2s;

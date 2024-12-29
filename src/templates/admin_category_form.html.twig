@@ -20,7 +20,7 @@
 
     <div class="form-row">
         <label class="label" for="parent-id">Catégorie parente</label>
-        <select class="select" id="parent-id" name="parent_id">
+        <select class="input" id="parent-id" name="parent_id">
             <option class="option"></option>
             {% for c in categories %}
             {% if c.id != requestedId %}

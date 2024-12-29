@@ -6,6 +6,7 @@ class DynamicForm
                 const tplClone = document.getElementById(addBtn.dataset.templateId).content.cloneNode(true);
                 this.formatAttributes(tplClone, '{{ i }}', addBtn.dataset.index);
                 tplClone.querySelector('[data-type=remove-dynamic-form-button]').onclick = this.onDelClick;
+                tplClone.querySelector('[data-type=id]').textContent = addBtn.dataset.index;
                 document.getElementById(addBtn.dataset.target).append(tplClone);
                 addBtn.dataset.index = parseInt(addBtn.dataset.index) + 1;
             };

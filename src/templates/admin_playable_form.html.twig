@@ -51,28 +51,33 @@
     </div>
     
     <div class="form-row-container" id="links-container">
-    {% if formData %}
-    {% for key, link in formData.links %}
-    {{ _self.linkForm(app.linkTypes, loop.index0, link, formErrors.links[key] ?? []) }}
-    {% endfor %}
-    {% endif %}
+        {% if formData %}
+        {% for key, link in formData.links %}
+        {{ _self.linkForm(app.linkTypes, loop.index0, link, formErrors.links[key] ?? []) }}
+        {% endfor %}
+        {% endif %}
+
+        <div class="form-row -buttons">
+            <button class="std-button -big -transparent" data-target="links-container" data-type="add-dynamic-form" data-template-id="link-form-template" data-index="{{ null != formData ? formData.links|length : 0 }}" type="button">Ajouter un lien</button>
+        </div>
     </div>
 
+
     <div class="form-row-container" id="contributions-container">
-    {% if formData %}
+        {% if formData %}
         {% for c in formData.contributions %}
         {{ _self.contributionForm(authors, loop.index0, c) }}
         {% endfor %}
-    {% endif %}
+        {% endif %}
+
+        <div class="form-row -buttons">
+            <button class="std-button -big -transparent" data-target="contributions-container" data-type="add-dynamic-form" data-template-id="contrib-form-tpl" data-index="{{ null != formData ? formData.contributions|length : 0 }}" type="button">Ajouter un contributeur</button>
+        </div>
     </div>
 
-    <div class="form-row -buttons">
-        <button class="std-button -transparent" data-target="links-container" data-type="add-dynamic-form" data-template-id="link-form-template" data-index="{{ null != formData ? formData.links|length : 0 }}" type="button">Ajouter un lien</button>
-        <button class="std-button -transparent" data-target="contributions-container" data-type="add-dynamic-form" data-template-id="contrib-form-tpl" data-index="{{ null != formData ? formData.contributions|length : 0 }}" type="button">Ajouter un contributeur</button>
-    </div>
 
     <div class="form-row -buttons">
-        <button class="std-button" type="submit">Poster</button>
+        <button class="std-button -big -bold -white" type="submit">Sauvegarder</button>
     </div>
 
     {{ csrf(app) }}
@@ -99,6 +104,7 @@
 
 {% macro linkForm(linkTypes, i = '{{ i }}', link = null, linkErrors = null) %}
 <div class="form-row-container" data-type="dynamic-form">
+    <h2 class="_h2">Lien #<span data-type="id">{{ i }}</span></h2>
 
     <div class="form-row">
         <label class="label" for="link-{{ i }}-name">Nom du lien</label>
@@ -133,8 +139,10 @@
 
 {% macro contributionForm(authors, i = '{{ i }}', contribution = null, errors = null) %}
 <div class="form-row-container" data-type="dynamic-form">
+    <h2 class="_h2">Auteur #<span data-type="id">{{ i }}</span></h2>
     <div class="form-row">
-        <select id="contributions[{{ i }}][author_id]" name="contributions[{{ i }}][author_id]">
+        <label class="label" for="contributions[{{ i }}][author_id]">Auteur</label>
+        <select class="input" id="contributions[{{ i }}][author_id]" name="contributions[{{ i }}][author_id]">
             {% for a in authors %}
             <option value="{{ a.id }}"{% if contribution and a.id == contribution.author_id %} selected{% endif %}>{{ a.name }}</option>
             {% endfor %}
@@ -154,7 +162,7 @@
         {% if errors %}{{ errorList(errors.summary) }}{% endif %}
     </div>
 
-    <div class="form-row -buttons -left">
+    <div class="form-row -buttons">
         <button class="std-button" data-type="remove-dynamic-form-button" type="button">Supprimer la contribution</button>
     </div>
 

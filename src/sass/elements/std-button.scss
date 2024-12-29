@@ -20,6 +20,15 @@
         color: $color-white;
     }
 
+    &.-big {
+        padding: $gap-xs;
+        font-size: $txt-font-size-m;
+    }
+
+    &.-bold {
+        font-weight: $txt-weight-bold;
+    }
+
     &.-darkblue {
         background-color: $color-blue-3;
     }
