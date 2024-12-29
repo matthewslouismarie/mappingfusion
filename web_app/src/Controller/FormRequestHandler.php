@@ -10,6 +10,9 @@ use LM\WebFramework\DataStructures\Factory\CollectionFactory;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\Exceptions\IllegalUserInputException;
 use LM\WebFramework\Form\FormFactory;
+use LM\WebFramework\Form\Transformer\ArrayTransformer;
+use LM\WebFramework\Form\Transformer\CsrfTransformer;
+use LM\WebFramework\Form\Transformer\StringTransformer;
 use LM\WebFramework\Model\Type\EntityModel;
 use LM\WebFramework\Model\Type\IModel;
 use LM\WebFramework\Model\Type\StringModel;
@@ -28,6 +31,7 @@ class FormRequestHandler
 
     public function __construct(
         private CollectionFactory $collectionFactory,
+        private CsrfTransformer $csrfTransformer,
         private FormFactory $formFactory,
         private Router $router,
         private SessionManager $sessionManager,
@@ -119,21 +123,18 @@ class FormRequestHandler
 
     private function processDeleteRequest(ServerRequestInterface $request, ?string $id): array
     {
-        $deleteFormModel = new EntityModel(
-            'delete-form',
+
+        $deleteForm = new ArrayTransformer(
             [
-                self::DELETE_FORM_ID => new StringModel(),
+                self::DELETE_FORM_ID => $this->formFactory->createTransformer(new StringModel(), name: self::DELETE_FORM_ID),
             ],
-        );
-        $deleteForm = $this->formFactory->createForm(
-            $deleteFormModel,
+            $this->csrfTransformer,
         );
         $deleteFormData = $deleteForm->extractValueFromRequest(
             $request->getParsedBody(),
             $request->getUploadedFiles(),
         );
-        $validator = new Validator($deleteFormModel);
-        $deleteFormErrors = $validator->validate($deleteFormData, $deleteFormModel);
+        $deleteFormErrors = [];
         if (null === $id) {
             throw new IllegalUserInputException();
         }

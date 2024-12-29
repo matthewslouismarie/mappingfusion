@@ -5,7 +5,9 @@ namespace MF\Repository;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\Database\DatabaseManager;
+use MF\DataStructure\SqlFilename;
 use MF\Model\ModelFactory;
+use MF\Repository\Exception\EntityNotFoundException;
 
 class ChapterIndexRepository implements IConstIdRepository
 {
@@ -37,7 +39,16 @@ class ChapterIndexRepository implements IConstIdRepository
 
     public function find(string $id): ?AppObject
     {
-        $row = $this->dbManager->fetchFirstRow('SELECT * FROM e_chapter_index WHERE chapter_index_id = ?;', [$id]);
-        return $this->em->convertDbRowsToAppObject($row, $this->modelFactory->getChapterIndexModel(isNew: true  ));
+        $dbRows = $this->dbManager->fetchRowsFromQueryFile(new SqlFilename('stmt_find_chapter_index.sql'), ['id' => $id]);
+        return $this->em->convertDbRowsToAppObject($dbRows, $this->modelFactory->getChapterIndexModel(isNew: false));
+    }
+    
+    public function findOne(string $id): AppObject
+    {
+        $entity = $this->find($id);
+        if (null === $entity) {
+            throw new EntityNotFoundException();
+        }
+        return $entity;
     }
 }

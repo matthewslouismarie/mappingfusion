@@ -5,28 +5,33 @@
 {% block bodyContent %}
 <h1 class="_h1">{{ page.name }}</h1>
 
-{{ form_start(app) }}
+{{ form_start(app, formErrors) }}
 
 <div class="form-row">
     <label class="label" for="article-id">Article</label>
+
     <select class="input" id="article-id" name="article_id" required>
+        {% if chapter_index is defined %}
+        <option value="{{ chapter_index.article_id }}">{{ chapter_index.article.title }}</option>
+        {% endif %}
         {% for a in free_articles %}
-        <option value="{{ a.id }}">{{ a.title }}</option>
+        <option value="{{ a.id }}"{% if formData and a.id == formData.article_id %} selected{% endif %}>{{ a.title }}</option>
         {% endfor %}
     </select>
-    {% if formErrors %}{{ errorList( formErrors.chapter_id ?? null) }}{% endif %}
+
+    {% if formErrors %}{{ errorList( formErrors.article_id ?? null) }}{% endif %}
 </div>
 
 {{ numberRow('order', 'Position dans le chapitre', formData, formErrors, 255) }}
 
 {{ form_end(app) }}
 
-{# {% if entity %}
+{% if chapter_index is defined %}
 {{ form_start(app) }}
 
 {{ formRow('_DELETE_FORM', 'Retirer l’article du chapitre', null, deleteFormErrors) }}
 
 {{ form_end(app, 'Enlever du chapitre', false) }}
-{% endif %} #}
+{% endif %}
 
 {% endblock %}

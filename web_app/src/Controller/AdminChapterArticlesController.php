@@ -34,7 +34,7 @@ class AdminChapterArticlesController implements IController
         try {
             $chapter = $this->chapterRepository->findOne($id);
         } catch (EntityNotFoundException $e) {
-            throw new RequestedResourceNotFound('The requested chapter could not be found.');
+            throw new RequestedResourceNotFound($e);
         }
 
         return $this->twigService->respond(

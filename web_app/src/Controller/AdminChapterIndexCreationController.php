@@ -2,7 +2,9 @@
 
 namespace MF\Controller;
 
+use BadMethodCallException;
 use LM\WebFramework\AccessControl\Clearance;
+use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
@@ -13,13 +15,14 @@ use MF\Repository\ArticleRepository;
 use MF\Repository\BookRepository;
 use MF\Repository\ChapterIndexRepository;
 use MF\Repository\ChapterRepository;
+use MF\Repository\Exception\EntityNotFoundException;
 use MF\Router;
 use MF\TwigService;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Twig\Error\RuntimeError;
 
-class AdminChapterIndexController implements IController, IFormController
+class AdminChapterIndexCreationController implements IController, IFormController
 {
     private AppObject $chapter;
     private array $articles;
@@ -27,6 +30,7 @@ class AdminChapterIndexController implements IController, IFormController
     public function __construct(
         private ArticleRepository $articleRepository,
         private BookRepository $bookRepository,
+        private ChapterIndexModelFactory $chapterIndexModelFactory,
         private ChapterIndexRepository $chapterIndexRepository,
         private ChapterRepository $chapterRepository,
         private FormRequestHandler $formController,
@@ -40,39 +44,14 @@ class AdminChapterIndexController implements IController, IFormController
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
     {
         $chapterId = $routeParams[1];
-        $this->chapter = $this->chapterRepository->find($chapterId);
-        $this->articles = $this->articleRepository->findFreeArticles();
-
-        // $article = $this->articleRepository->find($routeParams[1], onlyPublished: false);
-        // $router = $this->router;
-
-        // $formModel = (new ChapterIndexModelFactory(isNew: null === $article->chapterIndex))
-        //     ->removeProperty('id')
-        //     ->removeProperty('article_id');
         
-        // return $this->formController->generateResponse(
-        //     model: $formModel,
-        //     repository: $this->chapterIndexRepository,
-        //     page: $this->getPage($article, $article->chapterIndex),
-        //     request: $request,
-        //     getSuccessfulRedirect: function (AppObject $appObject) use ($article, $router) {
-        //         return $router->redirect(self::class, [$article['id']]);
-        //     },
-        //     twigFilename: 'admin_chapter_index_form.html.twig',
-        //     entity: $article->chapterIndex,
-        //     id: $article->chapterIndex['id'] ?? null,
-        //     redirectAfterDeletion: $this->router->getUrl('AdminArticleController', [$article['id']]),
-        //     addBeforeCreateOrUpdate: $article->chapterIndex?->toArray() ?? [
-        //         'article_id' => $article['id'],
-        //     ],
-        //     twigAdditionalParams: [
-        //         'books' => $this->bookRepository->findAll(),
-        //     ],
-        //     idAlreadyTakenMessage: 'Une erreur est survenue.',
-        //     successfulInsertMessage: 'L’article a bien été ajouté au chapitre.',
-        //     successfulUpdateMessage: 'La position de l’article a bien été mise à jour.',
-            
-        // );
+        try {
+            $this->chapter = $this->chapterRepository->findOne($chapterId);
+        } catch (EntityNotFoundException $e) {
+            throw new RequestedResourceNotFound(previous: $e);
+        }
+
+        $this->articles = $this->articleRepository->findFreeArticles();
         return $this->formController->respondToRequest($this->chapterIndexRepository, $request, $this);
     }
 
@@ -86,7 +65,9 @@ class AdminChapterIndexController implements IController, IFormController
         return $this->pageFactory->create(
             "Ajouter un article au chapitre {$this->chapter['title']}",
             self::class,
-            [$this->chapter['id']],
+            [
+                $this->chapter['id'],
+            ],
             AdminChapterController::class,
             function (AdminChapterController $controller) {
                 return $controller->getPage($this->chapter['book'], $this->chapter);
@@ -110,22 +91,23 @@ class AdminChapterIndexController implements IController, IFormController
 
     public function getFormModel(): IModel
     {
-        return $this->modelFactory->getChapterIndexModel(true);
+        return $this->chapterIndexModelFactory->create(isNew: true);
     }
 
     public function respondToDeletion(string $entityId): ResponseInterface
     {
-        return $this->router->redirect(AdminChapterArticlesController::class, [$this->chapter['id']]);
+        throw new BadMethodCallException();
     }
 
     public function respondToInsertion(AppObject $entity): ResponseInterface
     {
-        return $this->router->redirect(self::class, [$this->chapter['id']]);
+        $chapterIndexId = $this->chapterIndexRepository->add($entity->removeProperty('id'));
+        return $this->router->redirect(AdminChapterIndexUpdateController::class, [$chapterIndexId]);
     }
 
     public function respondToUpdate(AppObject $entity, string $persistedId): ResponseInterface
     {
-        throw new RuntimeError("Should not happen.");
+        throw new BadMethodCallException();
     }
 
     public function respondToNonPersistedRequest(ServerRequestInterface $request, ?array $formData, ?array $formErrors, ?array $deleteFormErrors): ResponseInterface
@@ -135,7 +117,7 @@ class AdminChapterIndexController implements IController, IFormController
             $this->getPage(),
             [
                 'free_articles' => $this->articles,
-                'entity' => $this->chapter,
+                'chapter' => $this->chapter,
                 'formData' => $formData,
                 'formErrors' => $formErrors,
                 'deleteFormErrors' => $deleteFormErrors,
@@ -145,7 +127,7 @@ class AdminChapterIndexController implements IController, IFormController
 
     public function getUniqueConstraintFailureMessage(): string
     {
-        return 'Existe déjà.';
+        return 'Cet article fait déjà partie du chapitre.';
     }
 
     public function prepareFormData(ServerRequestInterface $request, array $formData): array

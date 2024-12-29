@@ -7,6 +7,7 @@ use LM\WebFramework\DataStructures\AppObject;
 use MF\Database\DatabaseManager;
 use MF\Model\ChapterModelFactory;
 use MF\Model\ModelFactory;
+use MF\Repository\Exception\EntityNotFoundException;
 use OutOfBoundsException;
 
 class ChapterRepository implements IUpdatableIdRepository
@@ -65,7 +66,7 @@ class ChapterRepository implements IUpdatableIdRepository
     {
         $chapter = $this->find($id);
         if (null === $chapter) {
-            throw new OutOfBoundsException();
+            throw new EntityNotFoundException();
         }
         return $chapter;
     }

@@ -30,7 +30,15 @@
 	// "shutdownAction": "none",
 
 	// Uncomment the next line to run commands after the container is created.
-	"postCreateCommand": "./set_up.sh"
+	"postCreateCommand": "./set_up.sh",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"bmewburn.vscode-intelephense-client",
+				"mblode.twig-language-2"
+			]
+		}
+	}
 
 	// Configure tool-specific properties.
 	// "customizations": {},

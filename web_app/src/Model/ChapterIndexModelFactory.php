@@ -14,8 +14,12 @@ class ChapterIndexModelFactory
     ) {
     }
 
-    public function create(bool $isNullable = false, bool $isNew = false): EntityModel
-    {
+    public function create(
+        bool $isNullable = false,
+        bool $isNew = false,
+        ?EntityModel $articleModel = null,
+        ?EntityModel $chapterModel = null,
+    ): EntityModel {
         $properties = [
             'id' => new IntModel(
                 min: 0,
@@ -26,6 +30,13 @@ class ChapterIndexModelFactory
             'chapter_id' => $this->slugModelFactory->getSlugModel(),
             'order' => new IntModel(min: 0, max: DatabaseManager::TINYINT_UNSIGNED_MAX),
         ];
+
+        if (null !== $articleModel) {
+            $properties['article'] = $articleModel;
+        }
+        if (null !== $chapterModel) {
+            $properties['chapter'] = $chapterModel;
+        }
         
         return new EntityModel(
             'chapter_index',

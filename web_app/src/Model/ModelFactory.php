@@ -81,7 +81,11 @@ class ModelFactory
 
     public function getChapterIndexModel(bool $isNew): EntityModel
     {
-        return $this->chapterIndexModelFactory->create(isNew: true);
+        return $this->chapterIndexModelFactory->create(
+            isNew: $isNew,
+            articleModel: $this->getArticleModel(category: false),
+            chapterModel: $this->getChapterModel(),
+        );
     }
 
     public function getContributionModel(bool $author = true): EntityModel

@@ -18,7 +18,7 @@
         <a class="std-button" href="{{ app.router.generateUrl('article', [requestedId]) }}">Visualiser l’article</a>
     </li>
     <li class="item">
-        <a class="std-button" href="{{ app.router.url('AdminChapterIndexController', [requestedId]) }}">Ajouter l’article à un chapitre</a>
+        <a class="std-button" href="{{ app.router.url('AdminChapterIndexCreationController', [requestedId]) }}">Ajouter l’article à un chapitre</a>
     </li>
     {% if requestedEntity.review %}
     <li class="item">
