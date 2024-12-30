@@ -49,6 +49,7 @@ class ModelFactory
             authorModel: $this->getAuthorModel()->setIdentifier('writer')->removeProperty('avatar_filename'),
             categoryModel: $this->getCategoryModel(),
             reviewModel: $reviewModel,
+            chapterIndexModel: $this->getChapterIndexModel(isNew: false, withArticleModel: false),
         );
 
         return $model;
@@ -79,11 +80,11 @@ class ModelFactory
         );
     }
 
-    public function getChapterIndexModel(bool $isNew): EntityModel
+    public function getChapterIndexModel(bool $isNew, bool $withArticleModel = true): EntityModel
     {
         return $this->chapterIndexModelFactory->create(
             isNew: $isNew,
-            articleModel: $this->getArticleModel(category: false),
+            articleModel: $withArticleModel ? $this->getArticleModel(category: false) : null,
             chapterModel: $this->getChapterModel(),
         );
     }

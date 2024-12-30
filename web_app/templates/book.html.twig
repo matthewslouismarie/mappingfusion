@@ -5,12 +5,12 @@
 <p>{{ book.introduction }}</p>
 {% for c in book.chapters %}
 <h2 class="_h2">{{ c.title }}</h2>
-<ol>
-{% for ci in c.articles %}
-<li class="item">
-    <a href="{{ app.router.generateUrl('article', [ci.article.id]) }}">{{ ci.article.title }}</a>
-</li>
-{% endfor %}
+<ol class="std-ol">
+    {% for ci in c.articles %}
+    <li class="item">
+        <a class="std-link -inverse" href="{{ app.router.generateUrl('article', [ci.article.id]) }}">{{ ci.article.title }}</a>
+    </li>
+    {% endfor %}
 </ol>
 {% endfor %}
 

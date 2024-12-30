@@ -1,4 +1,4 @@
-{% macro articleNav(app, article, relatedArticles) %}
+{% macro articleNav(app, article, relatedArticles, book = null) %}
 <nav class="article-nav _gap -gap-row-s2 _padding -padding-vert-l -padding-hori-s">
     {% if app.session.userLoggedIn %}
     <a class="std-button -upper -white _padding -padding-vert-s" href="{{ app.router.generateUrl('manage-article', [article.id]) }}">
@@ -6,6 +6,23 @@
             <span class="bold _txt -bold -txtm">✎ Modifier</span>
         </div>
     </a>
+    {% endif %}
+    {% if book %}
+    <div class="frame -book">
+        <h2 class="heading">
+            <a class="std-link -inverse" href="{{ app.router.generateUrl('book', [book.id]) }}">{{ book.title }}</a>
+        </h2>
+        {% for chapter in book.chapters %}
+        <h3 class="subheading">{{ chapter.title }}</h3>
+        <ol class="std-ol">
+            {% for ci in chapter.articles %}
+            <li class="item">
+                <a class="std-link -inverse" href="{{ app.router.generateUrl("article", [ci.article.id]) }}">{{ ci.article.title }}</a>
+            </li>
+            {% endfor %}
+        </ol>
+        {% endfor %}
+    </div>
     {% endif %}
     {% if article.review %}
     <div class="frame -articlenav _padding -padding-hori-s2 -padding-vert-s">
@@ -35,8 +52,8 @@
 
     {% endif %}
 
-    <div class="frame -related _gap -gap-row-m _padding -padding-hori-s2 -padding-vert-s">
-        <h2 class="heading _txt -txtm ">Tests et articles similaires</h2>
+    <div class="frame -related">
+        <h2 class="heading">Tests et articles similaires</h2>
         <ul class="list _gap -gap-col-xs -gap-row-s2" id="web-page-related-links">
             {% for r in relatedArticles %}
             {% if loop.index0 < 3 %}

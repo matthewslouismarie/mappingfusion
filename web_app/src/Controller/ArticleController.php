@@ -11,6 +11,7 @@ use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Session\SessionManager;
 use MF\Repository\ArticleRepository;
 use MF\Repository\AuthorRepository;
+use MF\Repository\BookRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -20,6 +21,7 @@ class ArticleController implements IController
     public function __construct(
         private ArticleRepository $repo,
         private AuthorRepository $authorRepo,
+        private BookRepository $bookRepository,
         private PageFactory $pageFactory,
         private SessionManager $sessionManager,
         private TwigService $twig,
@@ -37,12 +39,15 @@ class ArticleController implements IController
             throw new RequestedResourceNotFound();
         }
 
+        $book = null === $article['chapter_index'] ? null : $this->bookRepository->findOne($article['chapter_index']['chapter']['book_id']);
+
         return new Response(
             body: $this->twig->render(
                 'article.html.twig',
                 $this->getPage($article),
                 [
                     'article' => $article,
+                    'book' => $book,
                     'relatedArticles' => $this->repo->findRelatedArticles($article),
                 ],
             ),

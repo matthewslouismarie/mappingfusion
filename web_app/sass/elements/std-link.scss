@@ -4,4 +4,12 @@
     &:hover {
         text-decoration: none;
     }
+
+    &.-inverse {
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
