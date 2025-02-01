@@ -1,4 +1,16 @@
 .page-home {
+    > .glide > .glide__track > .blueshadow {
+        height: 30%;
+        position: absolute;
+        transform: translateY(-95%);
+        width: 100%;
+
+        pointer-events: none;
+
+        background-image: url("/public/blue-shadow.png");
+        background-size: 100% 100%;
+    }
+
     > .site-maps-and-mods-tests > ._wrapper,
     > .site-social-networks > .content {
         padding-top: 124px;
@@ -9,9 +21,7 @@
     }
 
     > .site-social-networks > .content {
-        background-color: #19577a;
-        box-shadow: 0 (-$cover-height/8) $cover-height/4 ($cover-height/8) $color-blue-2;
-        position: relative;
+        background-color: $color-blue-2;
         height: 0;
     }
 }
