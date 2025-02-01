@@ -76,7 +76,7 @@ class DatabaseManager
         return $this->pdo;
     }
 
-    private function createDatabase(): void
+    public function createDatabase(): void
     {
         $this->pdo->exec("CREATE DATABASE {$this->dbName};");
         
