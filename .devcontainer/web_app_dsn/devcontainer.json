@@ -35,7 +35,8 @@
 		"vscode": {
 			"extensions": [
 				"bmewburn.vscode-intelephense-client",
-				"mblode.twig-language-2"
+				"mblode.twig-language-2",
+				"-vscode.php-language-features"
 			]
 		}
 	}

@@ -295,7 +295,7 @@ class Fixture
             'is_published' => true,
             'title' => 'Crossed Paths v3.8.8',
             'sub_title' => null,
-            'cover_filename' => '202111271344571.jpg',
+            'cover_filename' => 'crossed-paths.webp',
             'thumbnail_filename' => null,
         ]);
         $this->articleRepo->add($article1);
@@ -309,7 +309,7 @@ class Fixture
             'is_published' => true,
             'title' => 'TCM',
             'sub_title' => '4:9.0',
-            'cover_filename' => '202111271344571.jpg',
+            'cover_filename' => 'tcm.webp',
             'thumbnail_filename' => null,
         ]);
         $this->articleRepo->add($article2);
@@ -323,7 +323,7 @@ class Fixture
             'is_published' => true,
             'title' => 'Encore un autre article',
             'sub_title' => null,
-            'cover_filename' => '202201051906201.jpg',
+            'cover_filename' => 'encore-un-autre-article.webp',
             'thumbnail_filename' => null,
         ]);
         $this->articleRepo->add($article3);
@@ -337,7 +337,7 @@ class Fixture
             'is_published' => true,
             'title' => 'L’inspiration c’est pas mon truc',
             'sub_title' => 'mais genre pas du tout',
-            'cover_filename' => '202111271348081.jpg',
+            'cover_filename' => 'tcm.webp',
             'thumbnail_filename' => null,
         ]);
         $this->articleRepo->add($article4);
@@ -393,8 +393,8 @@ class Fixture
             'is_published' => true,
             'title' => 'GoldSource : pour ou contre ?',
             'sub_title' => 'Grande question',
-            'cover_filename' => '202111271344571.jpg',
-            'thumbnail_filename' => '202111271348081.jpg',
+            'cover_filename' => 'goldsource-pour-ou-contre.webp',
+            'thumbnail_filename' => null,
         ]);
         $this->articleRepo->add($article8);
 
@@ -407,7 +407,7 @@ class Fixture
             'is_published' => true,
             'title'=> 'Crossed Paths',
             'sub_title' => 'Une campagne pleine de surprises !',
-            'cover_filename' => '20220907214616-1.webp',
+            'cover_filename' => 'crossed-paths.webp',
             'thumbnail_filename'=> null,
         ]);
         $this->articleRepo->add($article9);

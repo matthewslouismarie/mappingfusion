@@ -1,0 +1,7 @@
+{
+    "intelephense.codeLens.parent.enable": false,
+    "intelephense.environment.includePaths": [
+        "src"
+    ],
+    "intelephense.environment.shortOpenTag": false
+}

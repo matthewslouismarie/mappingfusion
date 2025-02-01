@@ -3,6 +3,7 @@
 namespace MF\Repository;
 
 use LM\WebFramework\Database\DbEntityManager;
+use LM\WebFramework\DataStructures\AppList;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\Model\Type\EntityModel;
 use MF\Database\DatabaseManager;
@@ -48,7 +49,7 @@ class BookRepository implements IUpdatableIdRepository
         return $this->em->convertDbRowsToAppObject($dbRows, $this->model);
     }
 
-    public function findAll(): array
+    public function findAll(): AppList
     {
         $dbRows = $this->dbManager->fetchRows('SELECT * FROM v_book ORDER BY book_title;');
 

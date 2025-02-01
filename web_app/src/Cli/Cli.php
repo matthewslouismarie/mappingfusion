@@ -23,7 +23,6 @@ class Cli
     }
 
     public function contains(string $value): bool {
-        var_dump($this->argv);
         return $this->argv->contains($value);
     }
 

@@ -4,6 +4,7 @@ namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
+use LM\WebFramework\DataStructures\AppList;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Searchable;
 use LM\WebFramework\DataStructures\SearchQuery;
@@ -78,7 +79,8 @@ class ArticleRepository implements IUpdatableIdRepository
         return $this->em->convertDbRowsToAppObject($dbRows, $articleModel);
     }
 
-    public function findAll(bool $onlyPublished = true): array {
+    public function findAll(bool $onlyPublished = true): AppList
+    {
         $selectFrom = $onlyPublished ? 'v_article_published' : 'v_article';
 
         $dbRows = $this->dbManager->fetchRows("SELECT * FROM {$selectFrom} ORDER BY article_creation_date_time DESC;");
@@ -86,7 +88,8 @@ class ArticleRepository implements IUpdatableIdRepository
         return $articles;
     }
 
-    public function findByCategory(string $categoryId): array {
+    public function findByCategory(string $categoryId): AppList
+    {
         $results = $this->dbManager->fetchRowsFromQueryFile(
             new SqlFilename('stmt_find_articles_by_category.sql'),
             [$categoryId],
@@ -101,13 +104,13 @@ class ArticleRepository implements IUpdatableIdRepository
         foreach ($results as $rowNumber => $r) {
             $articles[] = $this->em->convertDbRowsToAppObject($results, $model, $rowNumber);
         }
-        return $articles;
+        return new AppList($articles);
     }
 
     /**
      * @return AppObject[]
      */
-    public function findAllReviews(bool $onlyPublished = true): array
+    public function findAllReviews(bool $onlyPublished = true): AppList
     {
         $wherePublished = $onlyPublished ? 'AND article_is_published = 1' : '';
         $results = $this->dbManager->fetchRows("SELECT * FROM v_article WHERE review_id IS NOT NULL $wherePublished;");
@@ -122,7 +125,7 @@ class ArticleRepository implements IUpdatableIdRepository
      * @todo Create and use fetchRows method that takes the filename of a SQL query?
      * @return AppObject[]
      */
-    public function findArticlesFrom(string $memberId): array
+    public function findArticlesFrom(string $memberId): AppList
     {
         $articleRows = $this->dbManager->fetchRows('SELECT * FROM v_article WHERE article_is_published = 1 AND article_writer_id = ? ORDER BY article_last_update_date_time DESC;', [$memberId]);
 
@@ -132,21 +135,21 @@ class ArticleRepository implements IUpdatableIdRepository
         return $articles;
     }
 
-    public function findArticlesWithNoReview(): array
+    public function findArticlesWithNoReview(): AppList
     {
         $articleRows = $this->dbManager->fetchRows('SELECT * FROM v_article WHERE review_id IS NULL;');
         $model = $this->articleModelFactory->create();
         return $this->em->convertDbRowsToEntityList($articleRows, $model);
     }
 
-    public function findFeatured(): array
+    public function findFeatured(): AppList
     {
         $articleRows = $this->dbManager->fetchRows('SELECT * FROM v_article WHERE article_is_featured = 1 AND article_is_published = 1 ORDER BY article_last_update_date_time DESC;');
 
         return $this->em->convertDbRowsToEntityList($articleRows, $this->articleModelFactory->create());
     }
 
-    public function findFreeArticles(): array
+    public function findFreeArticles(): AppList
     {
         $articleRows = $this->dbManager->fetchRowsFromQueryFile(new SqlFilename('stmt_find_free_articles_for_chapter.sql'), []);
         return $this->em->convertDbRowsToEntityList($articleRows, $this->modelFactory->getArticleModel(category: false, chapterIndex: true));
@@ -155,7 +158,7 @@ class ArticleRepository implements IUpdatableIdRepository
     /**
      * @return AppObject[]
      */
-    public function findLastArticles(int $limit = 8, bool $onlyReviews = false): array
+    public function findLastArticles(int $limit = 8, bool $onlyReviews = false): AppList
     {
         $whereClause = $onlyReviews ? 'AND article_review_id IS NOT NULL' : '';
         $articleRows = $this->dbManager->fetchRows("SELECT * FROM v_article WHERE article_is_published = 1 {$whereClause} ORDER BY article_creation_date_time DESC LIMIT {$limit};");
@@ -168,7 +171,7 @@ class ArticleRepository implements IUpdatableIdRepository
     /**
      * @return AppObject[]
      */
-    public function findLastReviews(): array
+    public function findLastReviews(): AppList
     {
         $articleRows = $this->dbManager->fetchRows("SELECT * FROM v_article_published WHERE review_id IS NOT NULL ORDER BY article_creation_date_time DESC LIMIT 4;");
         $model = $this->modelFactory->getArticleModel(review: true);
@@ -188,7 +191,7 @@ class ArticleRepository implements IUpdatableIdRepository
     /**
      * @return AppObject[]
      */
-    public function findRelatedArticles(AppObject $article): array
+    public function findRelatedArticles(AppObject $article): AppList
     {
         $articleRows = $this->dbManager->fetchRows('SELECT * FROM e_article WHERE article_is_published = 1 AND article_category_id = :category_id AND article_id != :id;', ['category_id' => $article['category_id'], 'id' => $article['id']]);
 
