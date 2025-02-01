@@ -11,21 +11,26 @@ class MarkdownService
 
     private CommonMarkConverter $parser;
 
-    public function __construct() {
-        $this->parser = new CommonMarkConverter([
+    public function __construct()
+    {
+        $this->parser = new CommonMarkConverter(
+            [
             'allow_unsafe_links' => false,
-        ]);
+            ]
+        );
         $this->parser->getEnvironment()->addExtension(new EmojiExtension());
     }
 
-    public function format(string $text): string {
+    public function format(string $text): string
+    {
         return $this->parser->convert($text);
     }
 
     /**
      * @return string[]
      */
-    public function formatArticleBody(string $text): array {
+    public function formatArticleBody(string $text): array
+    {
         $split = explode(self::ADVICE_MARKER, $text);
         return [
             'main' => $this->format($split[0]),
@@ -33,7 +38,8 @@ class MarkdownService
         ];
     }
 
-    public function getText(string $text): string {
+    public function getText(string $text): string
+    {
         return strip_tags($this->format($text));
     }
 }

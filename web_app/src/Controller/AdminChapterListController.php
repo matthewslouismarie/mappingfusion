@@ -35,11 +35,13 @@ class AdminChapterListController implements IController
         );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ADMINS;
     }
 
-    public function getPage(AppObject $book): Page {
+    public function getPage(AppObject $book): Page
+    {
         return $this->pageFactory->createPage(
             'Liste des chapitres',
             self::class,

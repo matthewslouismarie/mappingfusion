@@ -84,11 +84,13 @@ class ArticleListController implements IController
         }
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ALL;
     }
 
-    public function getCategories(): array {
+    public function getCategories(): array
+    {
         if (null === $this->categories) {
             $this->categories = $this->categoryRepository->findAll();
         }
@@ -139,7 +141,8 @@ class ArticleListController implements IController
         
     }
 
-    private function getCategoryAncestors(array $categories, string $id): array {
+    private function getCategoryAncestors(array $categories, string $id): array
+    {
         $cat = $categories[$id];
         $ancestors = [];
         while (null !== $cat) {
@@ -153,7 +156,8 @@ class ArticleListController implements IController
         return array_reverse($ancestors);
     }
 
-    private function getCategoryDescendants(array $categories, string $id): array {
+    private function getCategoryDescendants(array $categories, string $id): array
+    {
         $descendants = [];
         foreach ($categories as $cat) {
             if ($cat['parent_id'] == $id) {

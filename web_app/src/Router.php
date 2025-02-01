@@ -16,12 +16,14 @@ class Router
     ) {
     }
 
-    public function getRequestUrl(ServerRequestInterface $request): string {
+    public function getRequestUrl(ServerRequestInterface $request): string
+    {
         $uri = $request->getUri();
         return "{$uri->getScheme()}://{$uri->getHost()}{$uri->getPath()}";
     }
 
-    public function getRouteId(string $controllerfqcn): ?string {
+    public function getRouteId(string $controllerfqcn): ?string
+    {
         foreach ($this->config->getRoutes() as $routeId => $fqcn) {
             if ($controllerfqcn === $fqcn) {
                 return $routeId;
@@ -40,7 +42,8 @@ class Router
         return $this->generateUrl($routeId, $parameters);
     }
 
-    public function generateUrl(string $routeId = '', array $parameters = [], string $paramStart = '?', string $hash = ''): string {
+    public function generateUrl(string $routeId = '', array $parameters = [], string $paramStart = '?', string $hash = ''): string
+    {
         $url = "/$routeId";
         if (0 !== count($parameters)) {
             foreach ($parameters as $param) {

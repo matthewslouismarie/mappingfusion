@@ -12,7 +12,8 @@ enum LinkType: string
 
     case Other = 'other';
 
-    public static function fromString(string $type) {
+    public static function fromString(string $type)
+    {
         foreach (self::cases() as $case) {
             if ($case->value === $type) {
                 return $case;

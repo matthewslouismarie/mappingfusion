@@ -45,12 +45,14 @@ class FormRequestHandler
      * This function simplifies the tasks required to extract, prepare, validate
      * and process submitted form data.
      * 
-     * @param IRepository $repository The entity's repository.
-     * @param ServerRequestInterface $request The HTTP request.
-     * @param IFormController $controller The controller tasked with generating
-     * the response to the user and persisting the form data after validation.
-     * @param string|null $id The ID of the entity requested by the user, if
-     * present.
+     * @param IRepository            $repository The entity's repository.
+     * @param ServerRequestInterface $request    The HTTP request.
+     * @param IFormController        $controller The controller tasked with generating
+     *                                           the response to the user and
+     *                                           persisting the form data after
+     *                                           validation.
+     * @param string|null            $id         The ID of the entity requested by the user, if
+     *                                           present.
      */
     public function respondToRequest(
         IRepository $repository,

@@ -45,8 +45,7 @@ class AdminArticleController implements IController
         $this->model = $articleModelFactory
             ->create()
             ->removeProperty('creation_date_time')
-            ->removeProperty('last_update_date_time')
-        ;
+            ->removeProperty('last_update_date_time');
     }
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
@@ -68,8 +67,7 @@ class AdminArticleController implements IController
                     'ignore' => true,
                 ],
             ],
-        )
-        ;
+        );
 
         if ('POST' === $request->getMethod()) {
             $lastUpdateDateTimeUtc = time() * 1000;
@@ -112,11 +110,13 @@ class AdminArticleController implements IController
         );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ADMINS;
     }
 
-    public function getPage(?AppObject $article): Page {
+    public function getPage(?AppObject $article): Page
+    {
         /**
          * @todo Create function to remove any quotation mark (", ', «…)
          */
@@ -132,9 +132,9 @@ class AdminArticleController implements IController
     }
 
     /**
-     * @param mixed[] $formData The prepared, validated form data.
+     * @param mixed[] $formData    The prepared, validated form data.
      * @param ?string $requestedId The ID of the article, if it already exists
-     * in the database.
+     *                             in the database.
      */
     private function persistPostData(
         ServerRequestInterface $request,

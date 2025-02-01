@@ -34,11 +34,13 @@ class AdminBookListController implements IController, SinglePageOwner
         );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ADMINS;
     }
 
-    public function getPage(): Page {
+    public function getPage(): Page
+    {
         return $this->pageFactory->createPage(
             name: 'Gestion des livres',
             controllerFqcn: self::class,

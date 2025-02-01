@@ -25,7 +25,8 @@ class SearchController implements IController
     /**
      * @todo There must be a better way to extract $queryStr.
      */
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): Response {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): Response
+    {
         $uriQuery = $request->getUri()->getQuery();
         $query = '';
         $articles = [];
@@ -47,7 +48,8 @@ class SearchController implements IController
         );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ALL;
     }
 

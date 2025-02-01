@@ -19,7 +19,8 @@ class ErrorPageNotFoundController implements IResponseGenerator
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {
         return new Response(
             status: 404,
             body: $this->twig->render(
@@ -36,7 +37,8 @@ class ErrorPageNotFoundController implements IResponseGenerator
     /**
      * @todo Maybe, error pages shouldn’t exist?
      */
-    public function getPage(ServerRequestInterface $request): Page {
+    public function getPage(ServerRequestInterface $request): Page
+    {
         $path = $this->router->getRequestUrl($request);
         
         return $this->pageFactory->createFromUri(

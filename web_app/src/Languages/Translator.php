@@ -10,14 +10,14 @@ class Translator
 
     public function __construct(
         Configuration $configuration,
-    )
-    {
+    ) {
         if ($configuration->getLanguage() != 'fr') {
-            $this->translations = require_once($configuration->getPathOfAppDirectory() . '/translations/' . $configuration->getLanguage() . '.php');
+            $this->translations = include_once $configuration->getPathOfAppDirectory() . '/translations/' . $configuration->getLanguage() . '.php';
         }
     }
 
-    public function translate(string $text): string {
+    public function translate(string $text): string
+    {
         return isset($this->translations[$text]) ? $this->translations[$text] : $text;
     }
 }

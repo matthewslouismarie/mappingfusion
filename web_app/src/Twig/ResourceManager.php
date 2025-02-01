@@ -18,18 +18,21 @@ class ResourceManager
         $this->resourceFolderPath = realpath(dirname(__FILE__) . '/../../public/uploaded');
     }
 
-    public function exists(string $filename): bool {
+    public function exists(string $filename): bool
+    {
         return file_exists($this->getResourcePath($filename));
     }
 
-    public function getAssetPath(string $filename): string {
+    public function getAssetPath(string $filename): string
+    {
         return $this->assetFolderPath . '/' . $filename;
     }
 
     /**
      * @return array<int, int>
      */
-    public function getResourceDimensions(string $filename): ?array {
+    public function getResourceDimensions(string $filename): ?array
+    {
         $filePathOnDisk =  $this->getResourcePath($filename);
         if (false !== $filePathOnDisk) {
             $dimensions = getimagesize($filePathOnDisk);
@@ -44,24 +47,28 @@ class ResourceManager
      * @return string The predicted path of the resource specified by the
      * filename, even if the resource does not exist.
      */
-    public function getResourcePath(string $filename): string {
+    public function getResourcePath(string $filename): string
+    {
         return $this->resourceFolderPath . '/' . $filename;
     }
 
-    public function getResourceUrl(string $filename): string {
+    public function getResourceUrl(string $filename): string
+    {
         $homeUrl = $this->config->getHomeUrl();
         $publicUrl = $this->config->getPublicUrl();
         return "$homeUrl$publicUrl/uploaded/$filename";
     }
     
-    public function getSmallFilename(string $filename): string {
+    public function getSmallFilename(string $filename): string
+    {
         $filenameObject = new Filename($filename);
         $fileExtension = $filenameObject->getExtension();
         $filenameNoExtension = $filenameObject->getFilenameNoExtension();
         return "$filenameNoExtension.small.$fileExtension";
     }
     
-    public function getMediumFilename(string $filename): string {
+    public function getMediumFilename(string $filename): string
+    {
         $filenameObject = new Filename($filename);
         $fileExtension = $filenameObject->getExtension();
         $filenameNoExtension = $filenameObject->getFilenameNoExtension();

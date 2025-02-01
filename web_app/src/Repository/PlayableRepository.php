@@ -129,10 +129,10 @@ class PlayableRepository implements IUpdatableIdRepository
     /**
      * Persists a list of entities, removing existing entities not part of the new list.
      * 
-     * @param EntityModel $model The model of the entities.
+     * @param EntityModel                                       $model              The model of the entities.
      * @param IConstIdRepository The repository of the entities.
-     * @param AppObject[] $newEntityList The new entity list to persist.
-     * @param AppObject[] $previousEntityList The previous, currently-persisted entity list.
+     * @param AppObject[]                                       $newEntityList      The new entity list to persist.
+     * @param AppObject[]                                       $previousEntityList The previous, currently-persisted entity list.
      */
     public function persistListProperty(
         EntityModel $model,

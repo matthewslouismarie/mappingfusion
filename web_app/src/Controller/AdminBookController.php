@@ -43,11 +43,13 @@ class AdminBookController implements IFormController
         return $this->formController->respondToRequest($this->bookRepository, $request, $this, $requestedId);
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ADMINS;
     }
 
-    public function getPage(?AppObject $book): Page {
+    public function getPage(?AppObject $book): Page
+    {
         $pageName = null === $book ? 'Nouveau tutoriel' : "Gestion de {$book['title']}";
         $params = null === $book ? [] : [$book['id']];
         return $this->pageFactory->createPage(

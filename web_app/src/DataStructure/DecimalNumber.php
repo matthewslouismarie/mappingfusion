@@ -9,7 +9,8 @@ class DecimalNumber
 
     private int $decimalPower;
 
-    public function __construct(int|string $number) {
+    public function __construct(int|string $number)
+    {
         if (is_int($number)) {
             $this->numerator = $number;
             $this->decimalPower = 0;
@@ -24,28 +25,34 @@ class DecimalNumber
         }
     }
 
-    public function getDecimalPart(): string {
+    public function getDecimalPart(): string
+    {
         return 0 === $this->decimalPower ? '' : substr(sprintf('%d', $this->numerator), -$this->decimalPower);
     }
 
-    public function getDecimalPower(): int {
+    public function getDecimalPower(): int
+    {
         return $this->decimalPower;
     }
 
-    public function getIntegralPart(): string {
+    public function getIntegralPart(): string
+    {
         $integralPart = substr(sprintf('%d', $this->numerator), 0, strlen(sprintf('%d', $this->numerator)) - $this->decimalPower);
         return '' === $integralPart ? '0' : $integralPart;
     }
 
-    public function getNumerator(): int {
+    public function getNumerator(): int
+    {
         return $this->numerator;
     }
 
-    public function toFloat(): float {
+    public function toFloat(): float
+    {
         return $this->numerator / 10**$this->decimalPower;
     }
 
-    public function toString(): string {
+    public function toString(): string
+    {
         return $this->getIntegralPart() . '.' . $this->getDecimalPart();
     }
 }

@@ -30,7 +30,8 @@ class AuthorRepository implements IUpdatableIdRepository
         return $this->dbManager->getLastInsertId();
     }
 
-    public function delete(string $id): void {
+    public function delete(string $id): void
+    {
         $stmt = $this->dbManager->run('DELETE FROM e_author WHERE author_id = ?;', [$id]);
     }
 
@@ -55,13 +56,15 @@ class AuthorRepository implements IUpdatableIdRepository
         return $this->em->convertDbRowsToEntityList($authorRows, $this->authorModelFactory->create());
     }
 
-    public function findAuthorsOf(string $playableId): array {
+    public function findAuthorsOf(string $playableId): array
+    {
         $dbRows = $this->dbManager->fetchRows('SELECT * FROM e_contribution LEFT JOIN e_author ON contribution_author_id = author_id WHERE contribution_playable_id = ? AND contribution_is_author;', [$playableId]);
 
         return $this->em->convertDbRowsToEntityList($dbRows, $this->authorModelFactory->create());
     }
 
-    public function findOne(string $id): AppObject {
+    public function findOne(string $id): AppObject
+    {
         return $this->find($id);
     }
 

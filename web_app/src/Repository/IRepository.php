@@ -16,7 +16,7 @@ interface IRepository
     /**
      * Persist a new entity.
      * 
-     * @param AppObject $entity The entity to be persisted.
+     * @param  AppObject $entity The entity to be persisted.
      * @return string The ID of the newly-inserted row.
      */
     public function add(AppObject $entity): string;
@@ -32,7 +32,7 @@ interface IRepository
      * Retrieve an already persisted entity.
      * 
      * @param string $id The ID of the entity to retrieve.
-     * @todo Return AppObject or throw exception.
+     * @todo  Return AppObject or throw exception.
      */
     public function find(string $id): ?AppObject;
 }

@@ -19,7 +19,8 @@ class ErrorAlreadyLoggedInController implements IResponseGenerator
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {
         return $this->twig->respond(
             'errors/error_page.html.twig',
             $this->getPage($request),
@@ -29,7 +30,8 @@ class ErrorAlreadyLoggedInController implements IResponseGenerator
         );
     }
 
-    public function getPage(ServerRequestInterface $request): Page {
+    public function getPage(ServerRequestInterface $request): Page
+    {
         $path = $this->router->getRequestUrl($request);
         return new Page(
             parent: null,

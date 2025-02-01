@@ -24,21 +24,25 @@ class HomeController implements IController, SinglePageOwner
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
-        return new Response(body: $this->twig->render(
-            'home.html.twig',
-            $this->getPage(),
-            [
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {
+        return new Response(
+            body: $this->twig->render(
+                'home.html.twig',
+                $this->getPage(),
+                [
                 'featured_articles' => $this->articleRepo->findFeatured(),
                 'reviews' => $this->articleRepo->findAllReviews(),
                 'last_articles' => $this->articleRepo->findLastArticles(),
                 'last_reviews' => $this->articleRepo->findLastReviews(),
                 'other_articles' => $this->catRepo->find($this->config->getSetting('otherCategoryId')),
-            ],
-        ));
+                ],
+            )
+        );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ALL;
     }
 

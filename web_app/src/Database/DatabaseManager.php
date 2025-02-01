@@ -84,80 +84,86 @@ class DatabaseManager
 
         $this->runFilename(
             'e_author.sql',
-			[],
-			VarcharModelFactory::MAX_LENGTH,
+            [],
+            VarcharModelFactory::MAX_LENGTH,
         );
 
         $this->runFilename(
             'e_member.sql',
-			[],
-			VarcharModelFactory::MAX_LENGTH,
+            [],
+            VarcharModelFactory::MAX_LENGTH,
         );
 
         $this->runFilename(
             'e_playable.sql',
-			[],
-			VarcharModelFactory::MAX_LENGTH,
-			implode(',', array_map(function ($case) {return "'$case->value'";}, PlayableType::cases())),
+            [],
+            VarcharModelFactory::MAX_LENGTH,
+            implode(
+                ',', array_map(
+                    function ($case) {
+                        return "'$case->value'";
+                    }, PlayableType::cases()
+                )
+            ),
         );
 
         $this->runFilename(
             'e_contribution.sql',
-			[],
-			VarcharModelFactory::MAX_LENGTH,
+            [],
+            VarcharModelFactory::MAX_LENGTH,
         );
 
         $this->runFilename(
             'e_review.sql',
-			[],
-			VarcharModelFactory::MAX_LENGTH,
+            [],
+            VarcharModelFactory::MAX_LENGTH,
         );
 
         $this->runFilename(
             'e_category.sql',
-			[],
-			VarcharModelFactory::MAX_LENGTH,
-			SlugModelFactory::SLUG_REGEX,
+            [],
+            VarcharModelFactory::MAX_LENGTH,
+            SlugModelFactory::SLUG_REGEX,
         );
 
         $this->runFilename(
             'e_book.sql',
-			[],
-			VarcharModelFactory::MAX_LENGTH,
-			SlugModelFactory::SLUG_REGEX,
+            [],
+            VarcharModelFactory::MAX_LENGTH,
+            SlugModelFactory::SLUG_REGEX,
         );
 
         $this->runFilename(
             'e_chapter.sql',
-			[],
-			VarcharModelFactory::MAX_LENGTH,
-			SlugModelFactory::SLUG_REGEX,
+            [],
+            VarcharModelFactory::MAX_LENGTH,
+            SlugModelFactory::SLUG_REGEX,
         );
 
         $this->runFilename(
             'e_article.sql',
-			[],
-			VarcharModelFactory::MAX_LENGTH,
-			SlugModelFactory::SLUG_REGEX,
-			IUploadedImageConstraint::FILENAME_REGEX,
+            [],
+            VarcharModelFactory::MAX_LENGTH,
+            SlugModelFactory::SLUG_REGEX,
+            IUploadedImageConstraint::FILENAME_REGEX,
         );
 
         $this->runFilename(
             'e_chapter_index.sql',
-			[],
-			VarcharModelFactory::MAX_LENGTH,
-			SlugModelFactory::SLUG_REGEX,
-			IUploadedImageConstraint::FILENAME_REGEX,
+            [],
+            VarcharModelFactory::MAX_LENGTH,
+            SlugModelFactory::SLUG_REGEX,
+            IUploadedImageConstraint::FILENAME_REGEX,
         );
     
         $this->runFilename(
             'e_playable_link.sql',
-			[],
-			VarcharModelFactory::MAX_LENGTH,
-			UrlModelFactory::URL_MAX_LENGTH,
-			LinkType::Download->value,
-			LinkType::HomePage->value,
-			LinkType::Other->value,
+            [],
+            VarcharModelFactory::MAX_LENGTH,
+            UrlModelFactory::URL_MAX_LENGTH,
+            LinkType::Download->value,
+            LinkType::HomePage->value,
+            LinkType::Other->value,
         );
 
         $this->runFilename('v_book.sql');

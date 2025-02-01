@@ -30,12 +30,12 @@ class AccountController implements IController
     ) {
     }    
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {
         $model = $this->memberModelFactory
             ->create()
             ->removeProperty('password')
-            ->addProperty('password', new StringModel(isNullable: true))
-        ;
+            ->addProperty('password', new StringModel(isNullable: true));
 
         $formData = [
             'id' => $this->session->getCurrentMemberUsername(),
@@ -72,11 +72,13 @@ class AccountController implements IController
         );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ADMINS;
     }
 
-    public function getPage(): Page {
+    public function getPage(): Page
+    {
         return $this->pageFactory->create(
             name: 'Gestion du compte',
             controllerFqcn: self::class,

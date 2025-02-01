@@ -122,7 +122,7 @@ class ArticleRepository implements IUpdatableIdRepository
     }
 
     /**
-     * @todo Create and use fetchRows method that takes the filename of a SQL query?
+     * @todo   Create and use fetchRows method that takes the filename of a SQL query?
      * @return AppObject[]
      */
     public function findArticlesFrom(string $memberId): AppList
@@ -201,7 +201,8 @@ class ArticleRepository implements IUpdatableIdRepository
     /**
      * @return array<AppObject>
      */
-    public function searchArticles(SearchQuery $searchQuery, float $minRanking = 0.1) {
+    public function searchArticles(SearchQuery $searchQuery, float $minRanking = 0.1)
+    {
         $sqlQuery = 'SELECT * FROM v_article WHERE article_is_published = 1 AND (';
         $parameters = [];
         for ($i = 0; $i < count($searchQuery->getKeywords()); $i++) {

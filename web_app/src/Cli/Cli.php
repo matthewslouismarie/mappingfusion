@@ -22,7 +22,8 @@ class Cli
         }
     }
 
-    public function contains(string $value): bool {
+    public function contains(string $value): bool
+    {
         return $this->argv->contains($value);
     }
 

@@ -21,7 +21,8 @@ class PlayableLinkModelFactory
     ) {
     }
 
-    public function create(): EntityModel {
+    public function create(): EntityModel
+    {
         return new EntityModel(
             'link',
             [

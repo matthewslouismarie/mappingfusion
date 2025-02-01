@@ -28,7 +28,8 @@ class ArticleController implements IController
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {
         if (!key_exists(1, $routeParams)) {
             throw new RequestedResourceNotFound();
         }
@@ -54,7 +55,8 @@ class ArticleController implements IController
         );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ALL;
     }
 

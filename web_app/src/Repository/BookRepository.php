@@ -56,7 +56,8 @@ class BookRepository implements IUpdatableIdRepository
         return $this->em->convertDbRowsToList($dbRows, $this->model);
     }
 
-    public function findOne(string $id): AppObject {
+    public function findOne(string $id): AppObject
+    {
         $book = $this->find($id);
         if (null === $book) {
             throw new OutOfBoundsException();

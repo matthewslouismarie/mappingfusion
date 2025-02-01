@@ -25,7 +25,8 @@ class ProfileController implements IController
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {
         if (!key_exists(1, $routeParams)) {
             throw new RequestedResourceNotFound();
         }
@@ -48,14 +49,16 @@ class ProfileController implements IController
         );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ALL;
     }
 
     /**
      * @todo Add list of authors page.
      */
-    public function getPage(AppObject $author): Page {
+    public function getPage(AppObject $author): Page
+    {
         return $this->pageFactory->create(
             $author['name'],
             self::class,

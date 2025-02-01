@@ -20,7 +20,8 @@ class PlayableLinkRepository implements IConstIdRepository
     ) {
     }
 
-    public function add(AppObject $link): string {
+    public function add(AppObject $link): string
+    {
         $this->dbManager->run(
             'INSERT INTO e_playable_link VALUES (:id, :playable_id, :name, :type, :url);',
             $this->em->toDbValue($link),
@@ -53,7 +54,8 @@ class PlayableLinkRepository implements IConstIdRepository
         $this->dbManager->run('DELETE FROM e_playable_link WHERE link_id = ?;', [$id]);
     }
 
-    public function filterOutPlayableLinks(string $playableId, array $linkIds): void {
+    public function filterOutPlayableLinks(string $playableId, array $linkIds): void
+    {
         if (0 === count($linkIds)) {
             $this->dbManager->run('DELETE FROM e_playable_link WHERE link_playable_id = ?;', [$playableId]);
         } else {

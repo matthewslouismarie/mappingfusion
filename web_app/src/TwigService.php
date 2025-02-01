@@ -25,35 +25,42 @@ class TwigService
         $this->templateHelper = $templateHelper;
         $twigLoader = new FilesystemLoader($configuration->getPathOfAppDirectory() . '/templates');
         $dev = $configuration->getBoolSetting('dev');
-        $this->twig = new Environment($twigLoader, [
+        $this->twig = new Environment(
+            $twigLoader, [
             'debug' => $dev ? true : false,
             'cache' => $dev ? false : 'cache',
             'strict_variables' => true,
-        ]);
+            ]
+        );
         if ($dev) {
             $this->twig->addExtension(new DebugExtension());
         }
     }
 
-    public function render(string $filename, Page $page, array $parameters = []): string {
+    public function render(string $filename, Page $page, array $parameters = []): string
+    {
         if (isset($parameters['app'])) {
             throw new InvalidArgumentException();
         }
 
-        return $this->twig->load($filename)->render($parameters + [
+        return $this->twig->load($filename)->render(
+            $parameters + [
             'page' => $page,
             'app' => $this->templateHelper,
-        ]);
+            ]
+        );
     }
 
-    public function respond(string $filename, Page $page, array $parameters = [], int $statusCode = 200): ResponseInterface {
+    public function respond(string $filename, Page $page, array $parameters = [], int $statusCode = 200): ResponseInterface
+    {
         return new Response(
             body: $this->render($filename, $page, $parameters),
             status: $statusCode,
         );
     }
 
-    public function getTwig(): Environment {
+    public function getTwig(): Environment
+    {
         return $this->twig;
     }
 }

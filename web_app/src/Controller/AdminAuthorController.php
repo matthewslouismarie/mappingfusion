@@ -38,11 +38,13 @@ class AdminAuthorController implements IController
         $formErrors = null;
         $model = $this->authorModelFactory->create();
 
-        $form = $this->formFactory->createForm($model, config: [
+        $form = $this->formFactory->createForm(
+            $model, config: [
             'id' => [
                 'required' => false,
             ]
-        ]);
+            ]
+        );
 
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
@@ -85,11 +87,13 @@ class AdminAuthorController implements IController
         );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ADMINS;
     }
 
-    public function getPage(?AppObject $author): Page {
+    public function getPage(?AppObject $author): Page
+    {
         return $this->pageFactory->create(
             $author['name'] ?? 'Nouvel auteur',
             self::class,

@@ -22,7 +22,8 @@ class LogoutController implements IController, SinglePageOwner
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {
         $formError = null;
         if ('POST' === $request->getMethod()) {
             $this->session->setCurrentMemberUsername(null);
@@ -41,7 +42,8 @@ class LogoutController implements IController, SinglePageOwner
         );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ADMINS;
     }
 

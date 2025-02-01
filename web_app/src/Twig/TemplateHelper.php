@@ -30,40 +30,48 @@ class TemplateHelper
     ) {
     }
 
-    public function estimateReadingTime(string $text): int {
+    public function estimateReadingTime(string $text): int
+    {
         return (int) round(str_word_count($text) / 238);
     }
 
-    public function getArticleItemId(string $id): string {
+    public function getArticleItemId(string $id): string
+    {
         return $this->getItemID() . "/article/{$id}#article";
     }
 
-    public function getThumbnail(AppObject $article): string {
+    public function getThumbnail(AppObject $article): string
+    {
         $original = $article['thumbnail_filename'] ?? $article['cover_filename'];
     
         return $this->resourceManager->getSmallFilename($original);
     }
 
-    public function getThumbnailUrl(AppObject $article): string {
+    public function getThumbnailUrl(AppObject $article): string
+    {
         return $this->getResource($this->getThumbnail($article));
     }
 
-    public function getAsset(string $filename): string {
+    public function getAsset(string $filename): string
+    {
         $websiteUrl = $this->config->getHomeUrl();
         $publicUrl = $this->config->getPublicUrl();
         $version = filemtime(dirname(__FILE__) . '/../../public/' . $filename);
         return "$websiteUrl$publicUrl/$filename?version=$version";
     }
 
-    public function getConf(): Configuration {
+    public function getConf(): Configuration
+    {
         return $this->config;
     }
 
-    public function getDate(DateTimeInterface $date): string {
+    public function getDate(DateTimeInterface $date): string
+    {
         return $date->format('Y-M-D');
     }
 
-    public function getImages(string $text): array {
+    public function getImages(string $text): array
+    {
         $foundImages = [];
 
         preg_match_all('/(?<=<!---img )(.+)(?= -->)/', $text, $foundImages);
@@ -71,7 +79,8 @@ class TemplateHelper
         return $foundImages[0];
     }
 
-    public function getImgAttr(string $alt, string $filename, bool $isResource = true, ?int $width = null, ?int $height = null, bool $smallImg = false): ?string {
+    public function getImgAttr(string $alt, string $filename, bool $isResource = true, ?int $width = null, ?int $height = null, bool $smallImg = false): ?string
+    {
 
         if ($isResource && $smallImg) {
             $filename = $this->resourceManager->getSmallFilename($filename);
@@ -108,22 +117,26 @@ class TemplateHelper
         return $attr;
     }
 
-    public function getItemId(string $url = ''): string {
+    public function getItemId(string $url = ''): string
+    {
         return "mappingfusion.fr{$url}";
     }
 
     /**
      * @return array<int, string>
      */
-    public function getLinkTypes(): array {
+    public function getLinkTypes(): array
+    {
         return LinkType::cases();
     }
 
-    public function getMd(): MarkdownService {
+    public function getMd(): MarkdownService
+    {
         return $this->md;
     }
 
-    public function getPageAncestors(Page $page): array {
+    public function getPageAncestors(Page $page): array
+    {
         $ancestors = [];
         while (null !== $page) {
             $ancestors[] = $page;
@@ -132,23 +145,28 @@ class TemplateHelper
         return array_reverse($ancestors);
     }
 
-    public function getResource(string $filename): string {
+    public function getResource(string $filename): string
+    {
         return $this->resourceManager->getResourceUrl($filename);
     }
 
-    public function getRm(): ResourceManager {
+    public function getRm(): ResourceManager
+    {
         return $this->resourceManager;
     }
 
-    public function getRouter(): Router {
+    public function getRouter(): Router
+    {
         return $this->router;
     }
 
-    public function getSession(): SessionManager {
+    public function getSession(): SessionManager
+    {
         return $this->session;
     }
 
-    public function getSha256(string $path): string {
+    public function getSha256(string $path): string
+    {
         $hash = hash_file('sha256', $this->resourceManager->getResourcePath($path));
         if (false === $hash) {
             throw new UnexpectedValueException();
@@ -157,8 +175,8 @@ class TemplateHelper
     }
 
     /**
-     * @param string $linkType The type that is tested for.
-     * @param AppObject[] $links The "links" property of the object.
+     * @param string      $linkType The type that is tested for.
+     * @param AppObject[] $links    The "links" property of the object.
      */
     public function hasLinksOfType(Traversable $links, string $linkType): bool
     {
@@ -170,15 +188,18 @@ class TemplateHelper
         return false;
     }
 
-    public function shorten(string $string, int $nCharacters, string $suffix): string {
+    public function shorten(string $string, int $nCharacters, string $suffix): string
+    {
         return mb_substr($string, 0, $nCharacters) . $suffix;
     }
 
-    public function t(string $text): string {
+    public function t(string $text): string
+    {
         return $this->translate($text);
     }
 
-    public function translate(string $text): string {
+    public function translate(string $text): string
+    {
         return $this->translator->translate($text);
     }
 }

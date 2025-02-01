@@ -65,21 +65,25 @@ class AdminImageController implements IController, SinglePageOwner
 
         if (isset($routeParams[1])) {
             switch ($routeParams[1]) {
-                case 'par-date':
-                    usort($images, function ($a, $b) {
-                        $aDate = filemtime($this->configuration->getPathOfUploadedFiles() . '/' . $a);
-                        $bDate = filemtime($this->configuration->getPathOfUploadedFiles() . '/' . $b);
-                        return $bDate - $aDate;
-                    });
-                    break;
+            case 'par-date':
+                usort(
+                    $images, function ($a, $b) {
+                            $aDate = filemtime($this->configuration->getPathOfUploadedFiles() . '/' . $a);
+                            $bDate = filemtime($this->configuration->getPathOfUploadedFiles() . '/' . $b);
+                            return $bDate - $aDate;
+                    }
+                );
+                break;
                 
-                case 'par-date-inversee':
-                    usort($images, function ($a, $b) {
-                        $aDate = filemtime($this->configuration->getPathOfUploadedFiles() . '/' . $a);
-                        $bDate = filemtime($this->configuration->getPathOfUploadedFiles() . '/' . $b);
-                        return $aDate - $bDate;
-                    });
-                    break;
+            case 'par-date-inversee':
+                usort(
+                    $images, function ($a, $b) {
+                            $aDate = filemtime($this->configuration->getPathOfUploadedFiles() . '/' . $a);
+                            $bDate = filemtime($this->configuration->getPathOfUploadedFiles() . '/' . $b);
+                            return $aDate - $bDate;
+                    }
+                );
+                break;
             }
         }
 
@@ -92,7 +96,8 @@ class AdminImageController implements IController, SinglePageOwner
         );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ADMINS;
     }
 

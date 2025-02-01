@@ -29,8 +29,7 @@ class ModelFactory
         bool $category = true,
         bool $chapterIndex = false,
         bool $review = false,
-    ): EntityModel
-    {
+    ): EntityModel {
         $model = $this->articleModelFactory->create(
             categoryModel: $category ? $this->getCategoryModel() : null,
             chapterIndexModel: $chapterIndex ? $this->getChapterIndexModel(isNew: true) : null,

@@ -20,7 +20,8 @@ class AdminPlayableListController implements IController, SinglePageOwner
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {    
         return $this->twig->respond(
             'admin_playable_list.html.twig',
             $this->getPage(),
@@ -30,11 +31,13 @@ class AdminPlayableListController implements IController, SinglePageOwner
         );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ADMINS;
     }
 
-    public function getPage(): Page {
+    public function getPage(): Page
+    {
         return $this->pageFactory->create(
             name: 'Gestion des jeux',
             controllerFqcn: self::class,

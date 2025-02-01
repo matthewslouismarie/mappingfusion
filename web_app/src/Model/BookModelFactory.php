@@ -42,8 +42,7 @@ class BookModelFactory
     {
         $articleModel = $this->articleModelFactory
             ->create()
-            ->prune(['id', 'title'])
-        ;
+            ->prune(['id', 'title']);
         $chapterIndexModel = $this->chapterIndexModelFactory->create(isNew: false, articleModel: $articleModel);
         return $this->create($this->chapterModelFactory->create($chapterIndexModel));
     }

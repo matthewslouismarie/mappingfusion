@@ -39,11 +39,13 @@ class AdminCategoryController implements IController
         $formErrors = null;
 
         $model = $this->categoryModelFactory->create();
-        $form = $this->formFactory->createForm($model, config: [
+        $form = $this->formFactory->createForm(
+            $model, config: [
             'id' => [
                 'required' => false,
             ],
-        ]);
+            ]
+        );
 
         if ('POST' === $request->getMethod()) {
             $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
@@ -81,7 +83,8 @@ class AdminCategoryController implements IController
         );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ADMINS;
     }
 

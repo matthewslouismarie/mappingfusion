@@ -20,4 +20,7 @@ RUN apt install libpng-dev libjpeg-dev libwebp-dev -y
 RUN docker-php-ext-configure gd --with-jpeg --with-webp
 RUN docker-php-ext-install gd
 
+# Install PHP extensions
+RUN  apt-get install -y libzip-dev zip && docker-php-ext-install zip
+
 WORKDIR /var/www/html/

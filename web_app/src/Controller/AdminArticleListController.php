@@ -17,11 +17,11 @@ class AdminArticleListController implements IController, SinglePageOwner
         private ArticleRepository $repo,
         private PageFactory $pageFactory,
         private TwigService $twig,
-
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface {    
+    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
+    {    
         return $this->twig->respond(
             'admin_article_list.html.twig',
             $this->getPage(),
@@ -31,11 +31,13 @@ class AdminArticleListController implements IController, SinglePageOwner
         );
     }
 
-    public function getAccessControl(): Clearance {
+    public function getAccessControl(): Clearance
+    {
         return Clearance::ADMINS;
     }
 
-    public function getPage(): Page {
+    public function getPage(): Page
+    {
         return $this->pageFactory->createPage(
             name: 'Gestion des articles',
             controllerFqcn: self::class,

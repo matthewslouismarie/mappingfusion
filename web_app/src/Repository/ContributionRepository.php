@@ -43,7 +43,8 @@ class ContributionRepository implements IConstIdRepository
         return 0 !== count($dbRows) ? $this->em->convertDbRowsToAppObject($dbRows, $this->model->create()) : null;
     }
 
-    public function filterOutPlayableContributions(string $playableId, array $ids): void {
+    public function filterOutPlayableContributions(string $playableId, array $ids): void
+    {
         if (0 === count($ids)) {
             $this->dbManager->run(
                 "DELETE FROM e_contribution WHERE contribution_playable_id = ?;",
