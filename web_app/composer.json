@@ -10,7 +10,7 @@
         "scssphp/scssphp": "^1.11",
         "guzzlehttp/psr7": "^2.5",
         "voku/portable-ascii": "^2.0",
-        "matthewslouismarie/lm-web-framework": "dev-master#dfa0e8e169a45cbd667d82af57f7a6a3dd03af8e",
+        "matthewslouismarie/lm-web-framework": "dev-master",
         "league/commonmark": "^2.4",
         "elgigi/commonmark-emoji": "^2.0"
     }
