@@ -48,7 +48,7 @@ class AdminCategoryController implements IController
         );
 
         if ('POST' === $request->getMethod()) {
-            $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
+            $formData = $form->transformSubmittedData($request->getParsedBody(), $request->getUploadedFiles());
             $formData['id'] = $formData['id'] ?? (null !== $formData['name'] ? (new Slug($formData['name'], true))->__toString() : null);
             $validator = new Validator($model);
             $formErrors = $validator->validate($formData, $model);

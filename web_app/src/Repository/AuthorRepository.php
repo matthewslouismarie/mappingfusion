@@ -4,6 +4,7 @@ namespace MF\Repository;
 
 use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
+use LM\WebFramework\DataStructures\AppList;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\DataStructure\SqlFilename;
 use MF\Model\AuthorModelFactory;
@@ -49,14 +50,14 @@ class AuthorRepository implements IUpdatableIdRepository
         }
     }
 
-    public function findAll(): array
+    public function findAll(): AppList
     {
         $authorRows = $this->dbManager->fetchRows('SELECT * FROM e_author;');
         
         return $this->em->convertDbRowsToEntityList($authorRows, $this->authorModelFactory->create());
     }
 
-    public function findAuthorsOf(string $playableId): array
+    public function findAuthorsOf(string $playableId): AppList
     {
         $dbRows = $this->dbManager->fetchRows('SELECT * FROM e_contribution LEFT JOIN e_author ON contribution_author_id = author_id WHERE contribution_playable_id = ? AND contribution_is_author;', [$playableId]);
 

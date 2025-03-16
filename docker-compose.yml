@@ -5,6 +5,7 @@ services:
             context: ./web_app
         ports:
             - "${MF_WEB_PORT_EXT:?error}:80"
+            - "443:443"
         volumes:
             - ./web_app:/var/www/html
         tty: true

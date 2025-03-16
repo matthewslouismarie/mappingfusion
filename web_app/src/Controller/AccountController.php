@@ -4,6 +4,7 @@ namespace MF\Controller;
 
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
+use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
@@ -17,7 +18,7 @@ use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AccountController implements IController
+class AccountController implements IController, SinglePageOwner
 {
     public function __construct(
         private AuthorRepository $authorRepository,
@@ -32,19 +33,20 @@ class AccountController implements IController
 
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
     {
+        $member = $this->repo->find($this->session->getCurrentMemberUsername());
+
         $model = $this->memberModelFactory
             ->create()
-            ->removeProperty('password')
-            ->addProperty('password', new StringModel(isNullable: true));
-
-        $formData = [
-            'id' => $this->session->getCurrentMemberUsername(),
-            'password' => null,
-        ];
-        $formErrors = null;
+            ->prune(['id', 'author_id'])
+            ->addProperty('password', new StringModel(isNullable: true))
+        ;
+        
         $form = $this->formFactory->createForm($model);
+        $formData = $member;
+        $formErrors = null;
+
         if ('POST' === $request->getMethod()) {
-            $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
+            $formData = $form->transformSubmittedData($request->getParsedBody(), $request->getUploadedFiles());
             $validator = new Validator($model);
             $formErrors = $validator->validate($formData, $model);
             if (0 === count($formErrors)) {
@@ -52,22 +54,21 @@ class AccountController implements IController
                 if (null !== $formData['password']) {
                     $this->repo->update($appObject, $this->session->getCurrentMemberUsername());
                 } else {
-                    $this->repo->update($appObject, $this->session->getCurrentMemberUsername(), false);
+                    $this->repo->updateExceptPassword($appObject, $this->session->getCurrentMemberUsername());
                 }
                 $this->session->setCurrentMemberUsername($appObject['id']);
                 $this->session->addMessage('Votre compte a été mis à jour.');
             }
-        } else {
-            $formData = $this->repo->find($this->session->getCurrentMemberUsername());
         }
 
         return $this->twig->respond(
             'account.html.twig',
             $this->getPage(),
             [
+                'authors' => $this->authorRepository->findAll(),
                 'formData' => $formData,
                 'formErrors' => $formErrors,
-                'authors' => $this->authorRepository->findAll(),
+                'member' => $member,
             ],
         );
     }

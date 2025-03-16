@@ -32,13 +32,13 @@ class LoginController implements IController
      */
     public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
     {
-        $model = $this->memberModelFactory->create()->removeProperty('author_id');
+        $model = $this->memberModelFactory->create()->prune(['id', 'password']);
         $form = $this->formFactory->createTransformer($model);
         $formErrors = [];
         $formData = null;
 
         if ('POST' === $request->getMethod()) {
-            $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
+            $formData = $form->transformSubmittedData($request->getParsedBody(), $request->getUploadedFiles());
             $validator = new Validator($model);
             $formErrors = $validator->validate($formData, $model);
             if (0 === count($formErrors)) {

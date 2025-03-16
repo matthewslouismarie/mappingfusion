@@ -79,7 +79,7 @@ class FormRequestHandler
                 }
             }
             else {
-                $formData = $form->extractValueFromRequest(
+                $formData = $form->transformSubmittedData(
                     $request->getParsedBody(),
                     $request->getUploadedFiles(),
                 );
@@ -132,7 +132,7 @@ class FormRequestHandler
             ],
             $this->csrfTransformer,
         );
-        $deleteFormData = $deleteForm->extractValueFromRequest(
+        $deleteFormData = $deleteForm->transformSubmittedData(
             $request->getParsedBody(),
             $request->getUploadedFiles(),
         );

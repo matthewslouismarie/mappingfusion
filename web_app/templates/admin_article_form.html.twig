@@ -45,7 +45,7 @@
     </div>
     <div class="form-row">
         <label class="label" for="category-id">Catégorie</label>
-        <select id="category-id" name="category_id" required>
+        <select class="input" id="category-id" name="category_id" required>
             {% for c in categories %}
             <option value="{{ c.id }}"{% if formData and c.id == formData.category_id %} selected{% endif %}>{{ c.name }}</option>
             {% endfor %}

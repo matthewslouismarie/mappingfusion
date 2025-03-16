@@ -56,7 +56,7 @@ class AdminImageController implements IController, SinglePageOwner
             } else {
                 $transformer = new FileTransformer($this->configuration->getPathOfUploadedFiles(), 'images', false);
                 
-                $transformer->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
+                $transformer->transformSubmittedData($request->getParsedBody(), $request->getUploadedFiles());
                 $this->sessionManager->addMessage('Le fichier a bien été ajouté.');
             }
         }

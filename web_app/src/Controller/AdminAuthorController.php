@@ -47,7 +47,7 @@ class AdminAuthorController implements IController
         );
 
         if ('POST' === $request->getMethod()) {
-            $formData = $form->extractValueFromRequest($request->getParsedBody(), $request->getUploadedFiles());
+            $formData = $form->transformSubmittedData($request->getParsedBody(), $request->getUploadedFiles());
             $formData['id'] = $formData['id'] === null && $formData['name'] !== null ? (new Slug($formData['name'], true))->__toString() : $formData['id'];
             $validator = new Validator($model);
             $formErrors = $validator->validate($formData, $model);
