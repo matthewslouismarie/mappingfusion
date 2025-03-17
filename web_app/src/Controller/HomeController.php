@@ -24,8 +24,11 @@ class HomeController implements IController, SinglePageOwner
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
-    {
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): ResponseInterface {
         return new Response(
             body: $this->twig->render(
                 'home.html.twig',

@@ -20,8 +20,11 @@ class AdminAuthorListController implements IController, SinglePageOwner
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
-    {    
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): ResponseInterface {    
         return $this->twig->respond(
             'admin_author_list.html.twig',
             $this->getPage(),

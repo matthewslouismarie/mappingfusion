@@ -30,8 +30,11 @@ class LoginController implements IController
      * @todo Are there HTTP response codes or attributes for login required / successful?
      * @todo Redirect to success / error page instead?
      */
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
-    {
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): ResponseInterface {
         $model = $this->memberModelFactory->create()->prune(['id', 'password']);
         $form = $this->formFactory->createTransformer($model);
         $formErrors = [];

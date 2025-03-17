@@ -48,8 +48,11 @@ class AdminArticleController implements IController
             ->removeProperty('last_update_date_time');
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
-    {
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): ResponseInterface {
         $formData = null;
         $formErrors = null;
         $lastUpdateDateTimeUtc = null;

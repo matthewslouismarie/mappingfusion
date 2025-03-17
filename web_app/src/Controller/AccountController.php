@@ -31,8 +31,11 @@ class AccountController implements IController, SinglePageOwner
     ) {
     }    
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
-    {
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): ResponseInterface {
         $member = $this->repo->find($this->session->getCurrentMemberUsername());
 
         $model = $this->memberModelFactory

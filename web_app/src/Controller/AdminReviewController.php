@@ -35,8 +35,11 @@ class AdminReviewController implements IFormController
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
-    {
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): ResponseInterface {
         $requestedId = $routeParams[1] ?? null;
 
         return $this->formRequestHandler->respondToRequest($this->repo, $request, $this, $requestedId);

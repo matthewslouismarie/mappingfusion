@@ -41,8 +41,11 @@ class AdminChapterIndexCreationController implements IController, IFormControlle
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
-    {
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): ResponseInterface {
         $chapterId = $routeParams[1];
         
         try {

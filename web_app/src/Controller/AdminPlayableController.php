@@ -42,8 +42,11 @@ class AdminPlayableController implements IFormController
         );
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
-    {
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): ResponseInterface {
         $id = $routeParams[1] ?? null;
         return $this->formRequestHandler->respondToRequest($this->repo, $request, $this, $id);
     }

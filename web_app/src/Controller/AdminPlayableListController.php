@@ -20,8 +20,11 @@ class AdminPlayableListController implements IController, SinglePageOwner
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
-    {    
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): ResponseInterface {    
         return $this->twig->respond(
             'admin_playable_list.html.twig',
             $this->getPage(),

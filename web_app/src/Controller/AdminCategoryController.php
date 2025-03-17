@@ -31,8 +31,11 @@ class AdminCategoryController implements IController
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
-    {    
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): ResponseInterface {    
         $requestedId = $routeParams[1] ?? null;
 
         $formData = null;

@@ -22,8 +22,11 @@ class LogoutController implements IController, SinglePageOwner
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
-    {
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): ResponseInterface {
         $formError = null;
         if ('POST' === $request->getMethod()) {
             $this->session->setCurrentMemberUsername(null);

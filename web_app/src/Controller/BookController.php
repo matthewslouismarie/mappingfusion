@@ -21,8 +21,11 @@ class BookController implements IController
     ) {
     }
 
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): ResponseInterface
-    {
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): ResponseInterface {
         $book = $this->bookRepository->find($routeParams[1]);
         if (null === $book) {
             throw new RequestedResourceNotFound();
