@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Configuration\Configuration;
 use LM\WebFramework\Controller\IController;
@@ -13,6 +12,7 @@ use LM\WebFramework\File\FileService;
 use LM\WebFramework\Form\Transformer\FileTransformer;
 use LM\WebFramework\Session\SessionManager;
 use MF\TwigService;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class AdminImageController implements IController, SinglePageOwner
