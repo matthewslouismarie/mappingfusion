@@ -3,7 +3,7 @@
 namespace MF\Database;
 
 use DateTimeImmutable;
-use LM\WebFramework\Configuration;
+use LM\WebFramework\Configuration\Configuration;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\Enum\LinkType;
 use MF\Enum\PlayableType;

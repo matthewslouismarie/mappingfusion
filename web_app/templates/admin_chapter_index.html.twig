@@ -15,7 +15,7 @@
 
     {% if entity %}
     {% for article in entity.articles %}
-    <h2><a href="{{ app.router.generateUrl('manage-article', [article.id]) }}">{{ article.title }}</a></h2>
+    <h2><a href="{{ app.router.generateUrl('admin/article', [article.id]) }}">{{ article.title }}</a></h2>
     {% endfor %}
     {% endif %}
 

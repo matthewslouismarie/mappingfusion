@@ -21,6 +21,7 @@ class AdminChapterArticlesController implements IController
         private TwigService $twigService,
     ) {
     }
+
     public function getAccessControl(): Clearance
     {
         return Clearance::ADMINS;
@@ -29,8 +30,9 @@ class AdminChapterArticlesController implements IController
     public function generateResponse(
         ServerRequestInterface $request,
         array $routeParams,
+        array $serverParams,
     ): ResponseInterface {
-        $id = $routeParams[1];
+        $id = $routeParams[0];
         try {
             $chapter = $this->chapterRepository->findOne($id);
         } catch (EntityNotFoundException $e) {

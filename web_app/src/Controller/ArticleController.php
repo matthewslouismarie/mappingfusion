@@ -33,11 +33,11 @@ class ArticleController implements IController
         array $routeParams,
         array $serverParams,
     ): ResponseInterface {
-        if (!key_exists(1, $routeParams)) {
+        if (!key_exists(0, $routeParams)) {
             throw new RequestedResourceNotFound();
         }
 
-        $article = $this->repo->find($routeParams[1], true, !$this->sessionManager->isUserLoggedIn());
+        $article = $this->repo->find($routeParams[0], true, !$this->sessionManager->isUserLoggedIn());
 
         if (null === $article) {
             throw new RequestedResourceNotFound();

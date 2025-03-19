@@ -4,7 +4,7 @@ namespace MF\Twig;
 
 use DateTimeInterface;
 use IteratorAggregate;
-use LM\WebFramework\Configuration;
+use LM\WebFramework\Configuration\Configuration;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\File\FileService;

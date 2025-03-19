@@ -37,8 +37,9 @@ class AdminBookController implements IFormController
     public function generateResponse(
         ServerRequestInterface $request,
         array $routeParams,
+        array $serverParams,
     ): ResponseInterface {
-        $requestedId = $routeParams[1] ?? null;
+        $requestedId = $routeParams[0] ?? null;
 
         return $this->formController->respondToRequest($this->bookRepository, $request, $this, $requestedId);
     }

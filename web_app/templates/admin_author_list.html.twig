@@ -3,12 +3,12 @@
 {% block bodyContent %}
 <h1 class="_h1">{{ page.name }}</h1>
 
-<a class="std-button _std" href="{{ app.router.generateUrl('admin-manage-author') }}">Créer un nouvel auteur</a>
+<a class="std-button _std" href="{{ app.router.generateUrl('admin/auteur') }}">Créer un nouvel auteur</a>
 
 <ul class="std-list _std">
     {% for a in authors %}
     <li class="item">
-        <a class="std-link" href="{{ app.router.generateUrl('admin-manage-author', {id: a.id}) }}">{{ a.name }}</a>
+        <a class="std-link" href="{{ app.router.generateUrl('admin/auteur', {id: a.id}) }}">{{ a.name }}</a>
     </li>
     {% endfor %}
 </ul>

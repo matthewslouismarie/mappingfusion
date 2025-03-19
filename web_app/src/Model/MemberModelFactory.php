@@ -18,6 +18,7 @@ class MemberModelFactory
         $properties = [
             'id' => $this->slugModelFactory->getSlugModel(),
             'password' => new StringModel(),
+            'uuid' => new StringModel(),
             'author_id' => $this->slugModelFactory->getSlugModel(true),
         ];
 

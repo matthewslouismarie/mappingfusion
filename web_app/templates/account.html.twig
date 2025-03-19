@@ -7,6 +7,17 @@
 
 <h1 class="_h1">{{ page.name }}</h1>
 
+<ul class="std-inline-list _marginm -mgbottom">
+    <li class="item">
+        <a class="std-button" href="{{ app.router.generateUrl('admin/passkey/ajout') }}">Ajouter une passkey</a>
+    </li>
+</ul>
+
+<dl>
+    <dt>Ton UIID :</dt>
+    <dd>{{ member.uuid }}</dd>
+</dl>
+
 <form class="form-row-container" autocomplete="on" method="post"{% if app.conf.dev %} novalidate{% endif %}>
     <div class="form-row">
         <label class="label" for="id">Nom d’utilisateur :</label>
@@ -20,7 +31,7 @@
     </div>
     <div class="form-row">
         <label class="label" for="author-id">Auteur associé</label>
-        <select id="author-id" name="author_id">
+        <select class="input" id="author-id" name="author_id">
             <option></option>
             {% for a in authors %}
             <option value="{{ a.id }}"{% if formData and a.id == formData.author_id %} selected{% endif %}>{{ a.name }}</option>

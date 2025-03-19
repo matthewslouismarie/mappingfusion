@@ -3,13 +3,13 @@
 {% block bodyContent %}
 <ul class="std-inline-list _std">
     <li class="item">
-        <a class="std-button" href="{{ app.router.generateUrl('admin-manage-images') }}">Par nom</a>
+        <a class="std-button" href="{{ app.router.generateUrl('admin/images') }}">Par nom</a>
     </li>
     <li class="item">
-        <a class="std-button" href="{{ app.router.generateUrl('admin-manage-images', ['par-date']) }}">Par date</a>
+        <a class="std-button" href="{{ app.router.generateUrl('admin/images', ['par-date']) }}">Par date</a>
     </li>
     <li class="item">
-        <a class="std-button" href="{{ app.router.generateUrl('admin-manage-images', ['par-date-inversee']) }}">Par date (anciens en premier)</a>
+        <a class="std-button" href="{{ app.router.generateUrl('admin/images', ['par-date-inversee']) }}">Par date (anciens en premier)</a>
     </li>
 </ul>
 

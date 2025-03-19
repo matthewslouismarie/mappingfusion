@@ -31,31 +31,31 @@
         <nav class="site-admin-nav">
             <ul class="list">
                 <li class="item">
-                    <a class="link" href="{{ app.router.generateUrl('manage-account') }}">{{ app.session.currentMemberUsername }}</a>
+                    <a class="link" href="{{ app.router.generateUrl('admin/compte') }}">{{ app.session.currentMemberUsername }}</a>
                 </li>
                 <li class="item">
-                    <a class="link" href="{{ app.router.generateUrl('admin-article-list') }}">Gérer les articles</a>
+                    <a class="link" href="{{ app.router.generateUrl('admin/articles') }}">Gérer les articles</a>
                 </li>
                 <li class="item">
-                    <a class="link" href="{{ app.router.generateUrl('admin-books') }}">Gérer les livres</a>
+                    <a class="link" href="{{ app.router.generateUrl('admin/livres') }}">Gérer les livres</a>
                 </li>
                 <li class="item">
-                    <a class="link" href="{{ app.router.generateUrl('admin-author-list') }}">Gérer les auteurs</a>
+                    <a class="link" href="{{ app.router.generateUrl('admin/authors') }}">Gérer les auteurs</a>
                 </li>
                 <li class="item">
-                    <a class="link" href="{{ app.router.generateUrl('admin-playable-list') }}">Gérer les jeux</a>
+                    <a class="link" href="{{ app.router.generateUrl('admin/jeux') }}">Gérer les jeux</a>
                 </li>
                 <li class="item">
-                    <a class="link" href="{{ app.router.generateUrl('admin-gestion-categories') }}">Gérer les catégories</a>
+                    <a class="link" href="{{ app.router.generateUrl('admin/categories') }}">Gérer les catégories</a>
                 </li>
                 <li class="item">
-                    <a class="link" href="{{ app.router.generateUrl('admin-review-list') }}">Gérer les tests</a>
+                    <a class="link" href="{{ app.router.generateUrl('admin/tests') }}">Gérer les tests</a>
                 </li>
                 <li class="item">
-                    <a class="link" href="{{ app.router.generateUrl('admin-manage-images') }}">Gérer les images</a>
+                    <a class="link" href="{{ app.router.generateUrl('admin/images') }}">Gérer les images</a>
                 </li>
                 <li class="item">
-                    <a class="link" href="{{ app.router.generateUrl('logout') }}">Déconnexion</a>
+                    <a class="link" href="{{ app.router.generateUrl('admin/deconnexion') }}">Déconnexion</a>
                 </li>
             </ul>
         </nav>

@@ -1,7 +1,7 @@
 #!/usr/local/bin/php
 <?php
 
-use LM\WebFramework\Configuration;
+use LM\WebFramework\Configuration\Configuration;
 use MF\Cli\Cli;
 use MF\Database\DatabaseManager;
 use MF\Database\Fixture;

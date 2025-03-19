@@ -23,6 +23,7 @@ class AdminBookListController implements IController, SinglePageOwner
     public function generateResponse(
         ServerRequestInterface $request,
         array $routeParams,
+        array $serverParams,
     ): ResponseInterface {
         $books = $this->bookRepository->findAll();
         return $this->twig->respond(

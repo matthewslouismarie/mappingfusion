@@ -35,7 +35,7 @@ class AdminAuthorController implements IController
         array $routeParams,
         array $serverParams,
     ): ResponseInterface {
-        $requestedId = $routeParams[1] ?? null;
+        $requestedId = $routeParams[0] ?? null;
         $requestedEntity = null;
         $formData = null;
         $formErrors = null;
@@ -63,7 +63,7 @@ class AdminAuthorController implements IController
                     } else {
                         $this->repo->update($author, $requestedId);
                     }
-                    return $this->router->generateRedirect('admin-manage-author', [$formData['id']]);
+                    return $this->router->generateRedirect('admin/auteur', [$formData['id']]);
                 } catch (PDOException $e) {
                     if ('23000' === $e->getCode()) {
                         $formErrors['id'][] = 'Il existe déjà un auteur avec le même ID.';

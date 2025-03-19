@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MF\Logging;
 
-use LM\WebFramework\Configuration;
+use LM\WebFramework\Configuration\Configuration;
 use LM\WebFramework\ErrorHandling\LoggedException;
 use Throwable;
 

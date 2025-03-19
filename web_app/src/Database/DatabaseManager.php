@@ -2,7 +2,7 @@
 
 namespace MF\Database;
 
-use LM\WebFramework\Configuration;
+use LM\WebFramework\Configuration\Configuration;
 use LM\WebFramework\Model\Constraints\IUploadedImageConstraint;
 use LM\WebFramework\Model\Factory\SlugModelFactory;
 use LM\WebFramework\Model\Factory\UrlModelFactory;

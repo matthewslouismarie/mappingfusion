@@ -1,7 +1,7 @@
 {% macro articleNav(app, article, relatedArticles, book = null) %}
 <nav class="article-nav _gap -gap-row-s2 _padding -padding-vert-l -padding-hori-s">
     {% if app.session.userLoggedIn %}
-    <a class="std-button -upper -white _padding -padding-vert-s" href="{{ app.router.generateUrl('manage-article', [article.id]) }}">
+    <a class="std-button -upper -white _padding -padding-vert-s" href="{{ app.router.generateUrl('admin/article', [article.id]) }}">
         <div class="text">
             <span class="bold _txt -bold -txtm">✎ Modifier</span>
         </div>
@@ -10,7 +10,7 @@
     {% if book %}
     <div class="frame -book">
         <h2 class="heading">
-            <a class="std-link -inverse" href="{{ app.router.generateUrl('book', [book.id]) }}">{{ book.title }}</a>
+            <a class="std-link -inverse" href="{{ app.router.generateUrl('livre', [book.id]) }}">{{ book.title }}</a>
         </h2>
         {% for chapter in book.chapters %}
         <h3 class="subheading">{{ chapter.title }}</h3>

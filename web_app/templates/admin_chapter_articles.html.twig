@@ -4,7 +4,7 @@
 
 {% if chapter.articles %}
 <div class="form-row">
-    <a class="std-button -big" href="{{ app.router.generateUrl('admin-index-chapitre', [chapter.id]) }}">Ajouter un article</a>
+    <a class="std-button -big" href="{{ app.router.generateUrl('admin/index-de-chapitre/creation', [chapter.id]) }}">Ajouter un article</a>
 </div>
 <ul>
     {% for a in chapter.articles %}

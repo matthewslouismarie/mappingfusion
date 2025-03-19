@@ -3,7 +3,7 @@
 namespace MF\Controller;
 
 use LM\WebFramework\AccessControl\Clearance;
-use LM\WebFramework\Configuration;
+use LM\WebFramework\Configuration\Configuration;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\DataStructures\Page;
 use MF\TwigService;

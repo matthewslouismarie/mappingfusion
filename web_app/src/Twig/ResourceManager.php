@@ -2,7 +2,7 @@
 
 namespace MF\Twig;
 
-use LM\WebFramework\Configuration;
+use LM\WebFramework\Configuration\Configuration;
 use LM\WebFramework\DataStructures\Filename;
 
 class ResourceManager

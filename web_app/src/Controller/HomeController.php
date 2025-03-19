@@ -4,7 +4,7 @@ namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
-use LM\WebFramework\Configuration;
+use LM\WebFramework\Configuration\Configuration;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\Page;

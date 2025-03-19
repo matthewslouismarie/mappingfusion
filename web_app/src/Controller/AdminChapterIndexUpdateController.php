@@ -47,7 +47,7 @@ class AdminChapterIndexUpdateController implements IController, IFormController
         array $routeParams,
         array $serverParams,
     ): ResponseInterface {
-        $chapterIndexId = $routeParams[1];
+        $chapterIndexId = $routeParams[0];
         
         try {
             $this->chapterIndex = $this->chapterIndexRepository->findOne($chapterIndexId);

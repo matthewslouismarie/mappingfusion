@@ -2,7 +2,7 @@
 
 namespace MF\Languages;
 
-use LM\WebFramework\Configuration;
+use LM\WebFramework\Configuration\Configuration;
 
 class Translator
 {

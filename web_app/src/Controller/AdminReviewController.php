@@ -40,7 +40,7 @@ class AdminReviewController implements IFormController
         array $routeParams,
         array $serverParams,
     ): ResponseInterface {
-        $requestedId = $routeParams[1] ?? null;
+        $requestedId = $routeParams[0] ?? null;
 
         return $this->formRequestHandler->respondToRequest($this->repo, $request, $this, $requestedId);
     }
@@ -116,7 +116,7 @@ class AdminReviewController implements IFormController
         ?array $formErrors,
         ?array $deleteFormErrors,
     ): ResponseInterface {
-        $id = $routeParams[1] ?? null;
+        $id = $routeParams[0] ?? null;
         return $this->twig->respond(
             'admin_review_form.html.twig',
             $this->getPage(is_null($id) ? null : new AppObject($formData)),
@@ -137,7 +137,7 @@ class AdminReviewController implements IFormController
     public function prepareFormData(ServerRequestInterface $request, array $formData): array
     {
         $routeParams = $this->router->getRouteParams($request);
-        $id = $routeParams[1] ?? null;
+        $id = $routeParams[0] ?? null;
         $formData['id'] = (int) $id;
         $formData['playable'] = $this->playableRepo->find($formData['playable_id']);
         return $formData;

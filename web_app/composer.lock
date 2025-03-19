@@ -700,12 +700,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthewslouismarie/lm-web-framework.git",
-                "reference": "0def74cd4272a3f0baba32739d73dfee2d9e8e11"
+                "reference": "99efe4f5f7b903da63a0572b90b3a55b17f8333e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/0def74cd4272a3f0baba32739d73dfee2d9e8e11",
-                "reference": "0def74cd4272a3f0baba32739d73dfee2d9e8e11",
+                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/99efe4f5f7b903da63a0572b90b3a55b17f8333e",
+                "reference": "99efe4f5f7b903da63a0572b90b3a55b17f8333e",
                 "shasum": ""
             },
             "require": {
@@ -747,7 +747,7 @@
                 "issues": "https://github.com/matthewslouismarie/lm-web-framework/issues",
                 "source": "https://github.com/matthewslouismarie/lm-web-framework/tree/master"
             },
-            "time": "2025-03-17T00:55:08+00:00"
+            "time": "2025-03-19T23:36:51+00:00"
         },
         {
             "name": "nette/schema",
@@ -1875,16 +1875,16 @@
     "packages-dev": [
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.11.3",
+            "version": "3.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "ba05f990e79cbe69b9f35c8c1ac8dca7eecc3a10"
+                "reference": "2d1b63db139c3c6ea0c927698e5160f8b3b8d630"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/ba05f990e79cbe69b9f35c8c1ac8dca7eecc3a10",
-                "reference": "ba05f990e79cbe69b9f35c8c1ac8dca7eecc3a10",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/2d1b63db139c3c6ea0c927698e5160f8b3b8d630",
+                "reference": "2d1b63db139c3c6ea0c927698e5160f8b3b8d630",
                 "shasum": ""
             },
             "require": {
@@ -1951,11 +1951,11 @@
                     "type": "open_collective"
                 },
                 {
-                    "url": "https://thanks.dev/phpcsstandards",
+                    "url": "https://thanks.dev/u/gh/phpcsstandards",
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-01-23T17:04:15+00:00"
+            "time": "2025-03-18T05:04:51+00:00"
         }
     ],
     "aliases": [],

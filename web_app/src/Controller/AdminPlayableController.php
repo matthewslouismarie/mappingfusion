@@ -47,7 +47,7 @@ class AdminPlayableController implements IFormController
         array $routeParams,
         array $serverParams,
     ): ResponseInterface {
-        $id = $routeParams[1] ?? null;
+        $id = $routeParams[0] ?? null;
         return $this->formRequestHandler->respondToRequest($this->repo, $request, $this, $id);
     }
 
@@ -111,21 +111,21 @@ class AdminPlayableController implements IFormController
     public function respondToDeletion(string $entityId): ResponseInterface
     {
         $this->sessionManager->addMessage('Le jeu a bien été supprimé.');
-        return $this->router->generateRedirect('admin-playable-list');
+        return $this->router->generateRedirect('admin/jeux');
     }
 
     public function respondToInsertion(AppObject $entity): ResponseInterface
     {
         $this->repo->add($entity);
         $this->sessionManager->addMessage('Le jeu a bien été ajouté.');
-        return $this->router->generateRedirect('admin-manage-playable', [$entity['id']]);
+        return $this->router->generateRedirect('admin/jeu', [$entity['id']]);
     }
 
     public function respondToUpdate(AppObject $entity, string $persistedId): ResponseInterface
     {
         $this->repo->update($entity, $persistedId);
         $this->sessionManager->addMessage('Le jeu a bien été mis à jour.');
-        return $this->router->generateRedirect('admin-manage-playable', [$entity['id']]);
+        return $this->router->generateRedirect('admin/jeu', [$entity['id']]);
     }
 
     public function respondToNonPersistedRequest(
@@ -135,7 +135,7 @@ class AdminPlayableController implements IFormController
         ?array $deleteFormErrors,
     ): ResponseInterface {
         $routeParams = $this->router->getRouteParams($request);
-        $id = $routeParams[1] ?? null;
+        $id = $routeParams[0] ?? null;
         return $this->twig->respond(
             'admin_playable_form.html.twig',
             $this->getPage($formData, $id),

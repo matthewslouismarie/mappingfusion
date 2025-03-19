@@ -4,7 +4,7 @@ namespace MF;
 
 use GuzzleHttp\Psr7\Response;
 use InvalidArgumentException;
-use LM\WebFramework\Configuration;
+use LM\WebFramework\Configuration\Configuration;
 use LM\WebFramework\DataStructures\Page;
 use MF\Twig\TemplateHelper;
 use Psr\Http\Message\ResponseInterface;

@@ -40,7 +40,7 @@ class LogoutController implements IController, SinglePageOwner
             );
         }
         return $this->twig->respond(
-            'logout.html.twig',
+            'admin/deconnexion.html.twig',
             $this->getPage(),
         );
     }

@@ -3,10 +3,12 @@
 namespace MF;
 
 use GuzzleHttp\Psr7\Response;
-use LM\WebFramework\Configuration;
+use LM\WebFramework\Configuration\Configuration;
+use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\Http\HttpRequestHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use UnexpectedValueException;
 
 class Router
 {
@@ -22,14 +24,30 @@ class Router
         return "{$uri->getScheme()}://{$uri->getHost()}{$uri->getPath()}";
     }
 
-    public function getRouteId(string $controllerfqcn): ?string
+    public function getRouteId(string $controllerFqcn): ?string
     {
-        foreach ($this->config->getRoutes() as $routeId => $fqcn) {
-            if ($controllerfqcn === $fqcn) {
-                return $routeId;
-            }
+        $routeId = $this->searchRoute($controllerFqcn, $this->config->getRoutes());
+        return $routeId ?? null;
+    }
+
+    private function searchRoute(
+        string $controllerFqcn,
+        AppObject $currentRoute
+    ): bool|string {
+        if ($currentRoute->hasProperty('controller') && $controllerFqcn === $currentRoute['controller']['class']) {
+            return true;
         }
-        return null;
+        
+        if ($currentRoute->hasProperty('routes')) {
+            foreach ($currentRoute['routes'] as $routeSegment => $route) {
+                if (true === $this->searchRoute($controllerFqcn, $route)) {
+                    return "/$routeSegment";
+                }
+            }
+
+        }
+        
+        return false;
     }
 
     /**
@@ -69,7 +87,7 @@ class Router
      */
     public function getRouteParams(ServerRequestInterface $request): array
     {
-        return $this->httpRequestHandler->extractRouteParams($request);
+        return HttpRequestHandler::getPathSegments($request);
     }
 
     public function redirect(string $controllerFqcn, $parameters = []): ResponseInterface

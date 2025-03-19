@@ -37,6 +37,7 @@ class AdminChapterController implements IController, IFormController
     public function generateResponse(
         ServerRequestInterface $request,
         array $routeParams,
+        array $serverParams,
     ): ResponseInterface {
         // @todo RequestHandler should check this.
         if (2 !== count($routeParams) && 3 !== count($routeParams)) {
@@ -45,7 +46,7 @@ class AdminChapterController implements IController, IFormController
 
         list($book, $chapter) = $this->getBookAndChapter($request);
 
-        // $freeArticles = 3 === count($routeParams) ? $this->articleRepository->findFreeArticles($routeParams[2]) : null;
+        // $freeArticles = 3 === count($routeParams) ? $this->articleRepository->findFreeArticles($routeParams[1]) : null;
 
         return $this->formController->respondToRequest($this->chapterRepository, $request, $this, $chapter['id'] ?? null);
     }
@@ -154,7 +155,7 @@ class AdminChapterController implements IController, IFormController
     private function getBookAndChapter(ServerRequestInterface $request): array
     {
         $routeParams = $this->router->getRouteParams($request);
-        $chapterId = $routeParams[2] ?? null;
+        $chapterId = $routeParams[1] ?? null;
         
         if (null !== $chapterId) {
             $chapter = $this->chapterRepository->find($chapterId);
@@ -162,7 +163,7 @@ class AdminChapterController implements IController, IFormController
         }
         else {
             $chapter = null;
-            $book = $this->bookRepository->find($routeParams[1]);
+            $book = $this->bookRepository->find($routeParams[0]);
         }
 
         return [$book, $chapter];

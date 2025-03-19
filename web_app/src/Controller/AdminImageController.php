@@ -4,7 +4,7 @@ namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
 use LM\WebFramework\AccessControl\Clearance;
-use LM\WebFramework\Configuration;
+use LM\WebFramework\Configuration\Configuration;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\Filename;
@@ -30,8 +30,11 @@ class AdminImageController implements IController, SinglePageOwner
      * @todo Use form with validation and success messages.
      * @todo Image deletion logic should be moved elsewhere. In ImageRepository?
      */
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): Response
-    {
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): ResponseInterface {
         $uploadPath = $this->configuration->getPathOfUploadedFiles();
 
         if ('POST' === $request->getMethod()) {
@@ -63,8 +66,8 @@ class AdminImageController implements IController, SinglePageOwner
 
         $images = $this->fileService->getUploadedImages(false);
 
-        if (isset($routeParams[1])) {
-            switch ($routeParams[1]) {
+        if (isset($routeParams[0])) {
+            switch ($routeParams[0]) {
             case 'par-date':
                 usort(
                     $images, function ($a, $b) {

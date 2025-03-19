@@ -4,21 +4,21 @@ namespace MF\Controller;
 
 use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
-use LM\WebFramework\Controller\SinglePageOwner;
-use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
-use LM\WebFramework\Model\Type\StringModel;
 use LM\WebFramework\Session\SessionManager;
 use LM\WebFramework\Validation\Validator;
+use MF\Auth\WebAuthn;
 use MF\Model\MemberModelFactory;
+use MF\Model\PublicKeyCredentialModelFactory;
 use MF\Repository\AuthorRepository;
 use MF\Repository\MemberRepository;
+use MF\Router;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AccountController implements IController, SinglePageOwner
+class AccountAddPasskey implements IController
 {
     public function __construct(
         private AuthorRepository $authorRepository,
@@ -27,7 +27,10 @@ class AccountController implements IController, SinglePageOwner
         private MemberRepository $repo,
         private PageFactory $pageFactory,
         private SessionManager $session,
+        private Router $router,
         private TwigService $twig,
+        private WebAuthn $webAutn,
+        private PublicKeyCredentialModelFactory $publicKeyCredentialModelFactory,
     ) {
     }
 
@@ -36,42 +39,27 @@ class AccountController implements IController, SinglePageOwner
         array $routeParams,
         array $serverParams,
     ): ResponseInterface {
-        $member = $this->repo->find($this->session->getCurrentMemberUsername());
-
-        $model = $this->memberModelFactory
-            ->create()
-            ->prune(['id', 'author_id'])
-            ->addProperty('password', new StringModel(isNullable: true))
-        ;
-        
+        $model = $this->publicKeyCredentialModelFactory->create();
         $form = $this->formFactory->createForm($model);
-        $formData = $member;
-        $formErrors = null;
 
         if ('POST' === $request->getMethod()) {
             $formData = $form->transformSubmittedData($request->getParsedBody(), $request->getUploadedFiles());
-            $validator = new Validator($model);
+            $validator = new Validator($model); // @todo check JSON format with JSON schema
             $formErrors = $validator->validate($formData, $model);
             if (0 === count($formErrors)) {
-                $appObject = new AppObject($formData);
-                if (null !== $formData['password']) {
-                    $this->repo->update($appObject, $this->session->getCurrentMemberUsername());
-                } else {
-                    $this->repo->updateExceptPassword($appObject, $this->session->getCurrentMemberUsername());
-                }
-                $this->session->setCurrentMemberUsername($appObject['id']);
-                $this->session->addMessage('Votre compte a été mis à jour.');
+                $credential = $formData['public-key-credential'];
+                $this->webAutn->registerCredential($credential);
+                $this->session->addMessage('La passkey a bien été ajoutée.');
+                return $this->router->redirect(AccountController::class);
             }
         }
-
+        
         return $this->twig->respond(
-            'account.html.twig',
+            'add_passkey_form.html.twig',
             $this->getPage(),
             [
-                'authors' => $this->authorRepository->findAll(),
-                'formData' => $formData,
-                'formErrors' => $formErrors,
-                'member' => $member,
+                'publicKeyCredentialCreationOptions' => json_encode($this->webAutn->getPublicKeyCredentialCreationOptions()),
+                'challenge' => $this->session->getCustom(WebAuthn::SESSION_KEY),
             ],
         );
     }
@@ -84,9 +72,9 @@ class AccountController implements IController, SinglePageOwner
     public function getPage(): Page
     {
         return $this->pageFactory->create(
-            name: 'Gestion du compte',
+            name: 'Ajouter une passkey au compte',
             controllerFqcn: self::class,
-            parentFqcn: HomeController::class,
+            parentFqcn: AccountController::class,
             isIndexed: false,
         );
     }

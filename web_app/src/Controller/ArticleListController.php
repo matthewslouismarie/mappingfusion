@@ -30,10 +30,11 @@ class ArticleListController implements IController
     public function generateResponse(
         ServerRequestInterface $request,
         array $routeParams,
+        array $serverParams,
     ): ResponseInterface {
         try {
-            if (key_exists(1, $routeParams)) {
-                $requestedCategoryId = $routeParams[1];
+            if (key_exists(0, $routeParams)) {
+                $requestedCategoryId = $routeParams[0];
                 $categories = $this->getCategories();
                 if (!key_exists($requestedCategoryId, $categories)) {
                     throw new RequestedResourceNotFound();

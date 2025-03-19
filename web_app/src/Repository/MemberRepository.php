@@ -22,7 +22,7 @@ class MemberRepository implements IUpdatableIdRepository
     public function add(AppObject $member): string
     {
         $this->dbManager->run(
-            'INSERT INTO e_member VALUES (:id, :password, :author_id );',
+            'INSERT INTO e_member VALUES (:id, :password, :author_id, UUID());',
             $this->em->toDbValue($member),
         );
         return $this->dbManager->getLastInsertId();

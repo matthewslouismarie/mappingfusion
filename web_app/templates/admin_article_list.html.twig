@@ -5,7 +5,7 @@
 
 <ul class="std-inline-list _marginm -mgbottom">
     <li class="item">
-        <a class="std-button _std" href="{{ app.router.generateUrl('manage-article') }}">Créer un nouvel article</a>
+        <a class="std-button _std" href="{{ app.router.generateUrl('admin/article') }}">Créer un nouvel article</a>
     </li>
     <li class="item">
         <a class="std-button _std" href="{{ app.router.generateUrl('admin-liste-des-tutoriels') }}">Gestion des tutoriels</a>
@@ -15,7 +15,7 @@
 <ul class="std-list _std">
     {% for a in articles %}
     <li class="item">
-        <a class="std-link" href="{{ app.router.generateUrl('manage-article', {id: a.id}) }}">{{ a.title }}</a>
+        <a class="std-link" href="{{ app.router.generateUrl('admin/article', {id: a.id}) }}">{{ a.title }}</a>
     </li>
     {% endfor %}
 </ul>

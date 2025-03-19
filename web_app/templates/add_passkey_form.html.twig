@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% from 'macros/macros.html.twig' import csrf, errorList %}
+
+{% block bodyContent %}
+
+<h1 class="_h1">{{ page.name }}</h1>
+
+<span>{{ challenge }}</span>
+
+{# @todo Put PublicKeyCredentialOptions in the form as well #}
+<form id="form" method="post">
+    <input id="public-key-credential" name="public-key-credential" type="text" value="">
+    {{ csrf(app) }}
+</form>
+
+<span class="" id="public-key-credential-creation-options">{{ publicKeyCredentialCreationOptions }}</span>
+{% endblock %}
+
+{% block scriptInit %}
+<script src="{{ app.asset('create_web_authn_credential.js') }}" type="module">
+</script>
+{% endblock %}

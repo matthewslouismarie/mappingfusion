@@ -24,8 +24,9 @@ class AdminChapterListController implements IController
     public function generateResponse(
         ServerRequestInterface $request,
         array $routeParams,
+        array $serverParams,
     ): ResponseInterface {
-        $book = $this->bookRepository->findOne($routeParams[1]);
+        $book = $this->bookRepository->findOne($routeParams[0]);
         return $this->twig->respond(
             'admin_chapter_list.html.twig',
             $this->getPage($book),

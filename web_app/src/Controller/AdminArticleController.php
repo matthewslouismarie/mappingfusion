@@ -56,7 +56,7 @@ class AdminArticleController implements IController
         $formData = null;
         $formErrors = null;
         $lastUpdateDateTimeUtc = null;
-        $requestedId = $routeParams[1] ?? null;
+        $requestedId = $routeParams[0] ?? null;
         $requestedEntity = null;
         $books = $this->bookRepository->findAll();
 
@@ -156,6 +156,6 @@ class AdminArticleController implements IController
                 $this->repo->update($article, $requestedId);
             }
         }
-        return $this->router->generateRedirect('manage-article', [$article['id']]);
+        return $this->router->generateRedirect('admin/article', [$article['id']]);
     }
 }

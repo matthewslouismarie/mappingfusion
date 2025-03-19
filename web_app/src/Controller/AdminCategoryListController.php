@@ -24,7 +24,7 @@ class AdminCategoryListController implements IController, SinglePageOwner
         ServerRequestInterface $request,
         array $routeParams,
         array $serverParams,
-    ): ResponseInterface {    
+    ): ResponseInterface {
         return $this->twig->respond(
             'admin_category_list.html.twig',
             $this->getPage(),

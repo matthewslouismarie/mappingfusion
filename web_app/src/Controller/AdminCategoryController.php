@@ -35,8 +35,8 @@ class AdminCategoryController implements IController
         ServerRequestInterface $request,
         array $routeParams,
         array $serverParams,
-    ): ResponseInterface {    
-        $requestedId = $routeParams[1] ?? null;
+    ): ResponseInterface {   
+        $requestedId = $routeParams[0] ?? null;
 
         $formData = null;
         $formErrors = null;
@@ -65,7 +65,7 @@ class AdminCategoryController implements IController
                     $this->repo->update($category, $requestedId);
                     $this->sessionManager->addMessage('La catégorie a bien été mise à jour.');
                 }
-                return $this->router->generateRedirect('admin-categorie', [$category['id']]);
+                return $this->router->generateRedirect('admin/categories', [$category['id']]);
             }
         } elseif (null !== $requestedId) {
             $formData = $this->repo->find($requestedId)?->toArray();

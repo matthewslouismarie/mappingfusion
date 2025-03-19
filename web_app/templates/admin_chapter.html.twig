@@ -19,9 +19,9 @@
 {% endif %}
 
 <div class="vertical-section">
-    <a class="std-button" href="{{ app.router.generateUrl('book', [book.id]) }}">Visualiser le tutoriel</a>
+    <a class="std-button" href="{{ app.router.generateUrl('livre', [book.id]) }}">Visualiser le tutoriel</a>
     {% if chapter %}
-    <a class="std-button" href="{{ app.router.generateUrl('admin-articles-du-chapitre', [chapter.id]) }}">Gérer les articles</a>
+    <a class="std-button" href="{{ app.router.generateUrl('admin/articles-du-chapitre', [chapter.id]) }}">Gérer les articles</a>
     {% endif %}
 </div>
 
@@ -59,10 +59,10 @@
 {# {% if entity %}
 {% for chapter in entity.chapters %}
 <h2>
-    <a href="{{ app.router.generateUrl('admin-chapitre', [entity.id, chapter.id]) }}">{{ chapter.title }}</a>
+    <a href="{{ app.router.generateUrl('admin/chapitre', [entity.id, chapter.id]) }}">{{ chapter.title }}</a>
 </h2>
 {% endfor %}
-<a class="std-link" href="{{ app.router.generateUrl('admin-chapitre', [entity.id]) }}">Nouveau chapitre</a>
+<a class="std-link" href="{{ app.router.generateUrl('admin/chapitre', [entity.id]) }}">Nouveau chapitre</a>
 {% endif %} #}
 {% endblock %}
 

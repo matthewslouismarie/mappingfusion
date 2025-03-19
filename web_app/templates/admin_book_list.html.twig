@@ -9,13 +9,13 @@
 <h1 class="_h1">{{ page.name }}</h1>
 
 <div class="vertical-section">
-    <a class="std-button _std" href="{{ app.router.generateUrl('admin-book') }}">Créer un nouveau tutoriel</a>
+    <a class="std-button _std" href="{{ app.router.generateUrl('admin/livre') }}">Créer un nouveau tutoriel</a>
 </div>
 
 <ul class="std-list _std">
     {% for b in books %}
     <li class="item">
-        <a class="std-link" href="{{ app.router.generateUrl('admin-book', {id: b.id}) }}">{{ b.title }}</a>
+        <a class="std-link" href="{{ app.router.generateUrl('admin/livre', {id: b.id}) }}">{{ b.title }}</a>
     </li>
     {% endfor %}
 </ul>

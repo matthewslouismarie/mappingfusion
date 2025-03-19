@@ -26,7 +26,7 @@ class BookController implements IController
         array $routeParams,
         array $serverParams,
     ): ResponseInterface {
-        $book = $this->bookRepository->find($routeParams[1]);
+        $book = $this->bookRepository->find($routeParams[0]);
         if (null === $book) {
             throw new RequestedResourceNotFound();
         }

@@ -56,7 +56,7 @@ class IntegrationTest implements IUnitTest
                 404,
             ],
             [
-                $this->router->generateUrl('admin-manage-author', ['neophus']),
+                $this->router->generateUrl('admin/auteur', ['neophus']),
                 403
             ]
         ];

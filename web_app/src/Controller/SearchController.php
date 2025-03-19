@@ -25,8 +25,11 @@ class SearchController implements IController
     /**
      * @todo There must be a better way to extract $queryStr.
      */
-    public function generateResponse(ServerRequestInterface $request, array $routeParams): Response
-    {
+    public function generateResponse(
+        ServerRequestInterface $request,
+        array $routeParams,
+        array $serverParams,
+    ): Response {
         $uriQuery = $request->getUri()->getQuery();
         $query = '';
         $articles = [];

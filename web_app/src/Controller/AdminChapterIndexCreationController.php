@@ -46,7 +46,7 @@ class AdminChapterIndexCreationController implements IController, IFormControlle
         array $routeParams,
         array $serverParams,
     ): ResponseInterface {
-        $chapterId = $routeParams[1];
+        $chapterId = $routeParams[0];
         
         try {
             $this->chapter = $this->chapterRepository->findOne($chapterId);

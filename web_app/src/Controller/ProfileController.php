@@ -30,10 +30,10 @@ class ProfileController implements IController
         array $routeParams,
         array $serverParams,
     ): ResponseInterface {
-        if (!key_exists(1, $routeParams)) {
+        if (!key_exists(0, $routeParams)) {
             throw new RequestedResourceNotFound();
         }
-        $author = $this->authorRepository->find($routeParams[1]);
+        $author = $this->authorRepository->find($routeParams[0]);
 
         if (null === $author) {
             throw new RequestedResourceNotFound();

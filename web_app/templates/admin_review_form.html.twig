@@ -11,7 +11,7 @@
         <a class="std-button" href="{{ app.router.generateUrl('article', [formData.article_id]) }}">Visualiser l’article associé</a>
     </li>
     <li class="item">
-        <a class="std-button" href="{{ app.router.generateUrl('manage-article', [formData.article_id]) }}">Modifier l’article associé</a>
+        <a class="std-button" href="{{ app.router.generateUrl('admin/article', [formData.article_id]) }}">Modifier l’article associé</a>
     </li>
 </ul>
 {% endif %}
