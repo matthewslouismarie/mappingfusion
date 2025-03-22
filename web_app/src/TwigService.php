@@ -28,7 +28,7 @@ class TwigService
         $this->twig = new Environment(
             $twigLoader, [
             'debug' => $dev ? true : false,
-            'cache' => $dev ? false : 'cache',
+            'cache' => $dev ? false : $configuration->getSetting('twigCachePath'),
             'strict_variables' => true,
             ]
         );
