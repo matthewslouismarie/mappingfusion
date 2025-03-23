@@ -40,7 +40,7 @@ class AdminChapterController implements IController, IFormController
         array $serverParams,
     ): ResponseInterface {
         // @todo RequestHandler should check this.
-        if (2 !== count($routeParams) && 3 !== count($routeParams)) {
+        if (1 !== count($routeParams) && 2 !== count($routeParams)) {
             throw new RequestedResourceNotFound();
         }
 
