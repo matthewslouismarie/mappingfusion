@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use MF\Enum\LinkType;
@@ -49,11 +48,6 @@ class AdminPlayableController implements IFormController
     ): ResponseInterface {
         $id = $routeParams[0] ?? null;
         return $this->formRequestHandler->respondToRequest($this->repo, $request, $this, $id);
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ADMINS;
     }
 
     public function getPage(?array $formData, ?string $id): Page

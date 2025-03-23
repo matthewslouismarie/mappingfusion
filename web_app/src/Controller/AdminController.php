@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
@@ -25,11 +24,6 @@ final class AdminController implements IController
         private PageFactory $pageFactory,
         private TwigService $twig,
     ) {
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ADMINS;
     }
 
     public function generateResponse(

@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\AppObject;
@@ -74,11 +73,6 @@ class AccountController implements IController, SinglePageOwner
                 'account' => $account,
             ],
         );
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ADMINS;
     }
 
     public function getPage(): Page

@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
@@ -34,11 +33,6 @@ class AdminChapterListController implements IController
                 'book' => $book,
             ],
         );
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ADMINS;
     }
 
     public function getPage(AppObject $book): Page

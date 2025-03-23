@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\DataStructures\AppObject;
@@ -31,11 +30,6 @@ class BookController implements IController
             throw new RequestedResourceNotFound();
         }
         return $this->twigService->respond('book.html.twig', $this->getPage($book), ['book' => $book]);
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ALL;
     }
 
     public function getPage(AppObject $book): Page

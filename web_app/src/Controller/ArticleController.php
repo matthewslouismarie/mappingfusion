@@ -3,7 +3,6 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
@@ -56,11 +55,6 @@ class ArticleController implements IController
                 ],
             ),
         );
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ALL;
     }
 
     public function getPage(AppObject $article): Page

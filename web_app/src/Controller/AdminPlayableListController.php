@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\Page;
@@ -32,11 +31,6 @@ class AdminPlayableListController implements IController, SinglePageOwner
                 'playables' => $this->repo->findAll(),
             ],
         );
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ADMINS;
     }
 
     public function getPage(): Page

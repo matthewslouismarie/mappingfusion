@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\Page;
@@ -34,11 +33,6 @@ class AdminReviewListController implements IController, SinglePageOwner
                 'MAX_RATING' => ReviewModelFactory::RATING_MAX,
             ],
         );
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ADMINS;
     }
 
     public function getPage(): Page

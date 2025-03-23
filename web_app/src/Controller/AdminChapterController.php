@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
@@ -49,11 +48,6 @@ class AdminChapterController implements IController, IFormController
         // $freeArticles = 3 === count($routeParams) ? $this->articleRepository->findFreeArticles($routeParams[1]) : null;
 
         return $this->formController->respondToRequest($this->chapterRepository, $request, $this, $chapter['id'] ?? null);
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ADMINS;
     }
 
     public function getPage(AppObject $book, ?AppObject $chapter): Page

@@ -2,17 +2,16 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Session\SessionManager;
 use LM\WebFramework\Validation\Validator;
 use MF\Auth\WebAuthn;
-use MF\Model\MemberModelFactory;
+use MF\Model\AccountModelFactory;
 use MF\Model\PublicKeyCredentialModelFactory;
 use MF\Repository\AuthorRepository;
-use MF\Repository\MemberRepository;
+use MF\Repository\AccountRepository;
 use MF\Router;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
@@ -23,8 +22,8 @@ class AccountAddPasskey implements IController
     public function __construct(
         private AuthorRepository $authorRepository,
         private FormFactory $formFactory,
-        private MemberModelFactory $memberModelFactory,
-        private MemberRepository $repo,
+        private AccountModelFactory $accountModelFactory,
+        private AccountRepository $repo,
         private PageFactory $pageFactory,
         private SessionManager $session,
         private Router $router,
@@ -62,11 +61,6 @@ class AccountAddPasskey implements IController
                 'challenge' => $this->session->getCustom(WebAuthn::SESSION_KEY),
             ],
         );
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ADMINS;
     }
 
     public function getPage(): Page

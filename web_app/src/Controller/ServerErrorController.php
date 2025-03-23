@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Configuration\Configuration;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\DataStructures\Page;
@@ -37,11 +36,6 @@ class ServerErrorController implements IController
             ],
             500,
         );
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ALL;
     }
 
     public function getPage(string $title, string $requestedUrl): Page

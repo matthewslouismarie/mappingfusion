@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\DataStructures\AppObject;
@@ -50,11 +49,6 @@ class ProfileController implements IController
                 'playables' => $this->playableRepository->findFromAuthor($author['id']),
             ],
         );
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ALL;
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
@@ -45,11 +44,6 @@ class AdminReviewController implements IFormController
         return $this->formRequestHandler->respondToRequest($this->repo, $request, $this, $requestedId);
     }
 
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ADMINS;
-    }
-
     public function getPage(?AppObject $review): Page
     {
         if (null === $review) {
@@ -60,7 +54,7 @@ class AdminReviewController implements IFormController
             );
         } else {
             return $this->pageFactory->create(
-                name: "Test de {$review->playable['name']}",
+                name: "Test de {$review['playable']['name']}",
                 controllerFqcn: self::class,
                 controllerParams: [$review['id']],
                 parentFqcn: AdminReviewListController::class,

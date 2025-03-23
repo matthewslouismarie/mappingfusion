@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Configuration\Configuration;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\Controller\SinglePageOwner;
@@ -97,11 +96,6 @@ class AdminImageController implements IController, SinglePageOwner
                 'images' => $images,
             ],
         );
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ADMINS;
     }
 
     public function getPage(): Page

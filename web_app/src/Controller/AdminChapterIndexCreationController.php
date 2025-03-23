@@ -3,9 +3,9 @@
 namespace MF\Controller;
 
 use BadMethodCallException;
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\Controller\IController;
+use LM\WebFramework\DataStructures\AppList;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Model\Type\IModel;
@@ -25,7 +25,7 @@ use Twig\Error\RuntimeError;
 class AdminChapterIndexCreationController implements IController, IFormController
 {
     private AppObject $chapter;
-    private array $articles;
+    private AppList $articles;
 
     public function __construct(
         private ArticleRepository $articleRepository,
@@ -56,11 +56,6 @@ class AdminChapterIndexCreationController implements IController, IFormControlle
 
         $this->articles = $this->articleRepository->findFreeArticles();
         return $this->formController->respondToRequest($this->chapterIndexRepository, $request, $this);
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ADMINS;
     }
 
     public function getPage(): Page

@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Form\FormFactory;
@@ -68,11 +67,6 @@ class LoginController implements IController
                 'formData' => $formData,
             ],
         );
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::VISITORS;
     }
 
     public function getPage(): Page

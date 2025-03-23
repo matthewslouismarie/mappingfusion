@@ -2,7 +2,6 @@
 
 namespace MF\Controller;
 
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\Exception\RequestedResourceNotFound;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\DataStructures\AppObject;
@@ -20,11 +19,6 @@ class AdminChapterArticlesController implements IController
         private PageFactory $pageFactory,
         private TwigService $twigService,
     ) {
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ADMINS;
     }
 
     public function generateResponse(

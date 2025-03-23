@@ -700,12 +700,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthewslouismarie/lm-web-framework.git",
-                "reference": "99efe4f5f7b903da63a0572b90b3a55b17f8333e"
+                "reference": "793268d96c4fe85c5323610bbaddc24aff570faa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/99efe4f5f7b903da63a0572b90b3a55b17f8333e",
-                "reference": "99efe4f5f7b903da63a0572b90b3a55b17f8333e",
+                "url": "https://api.github.com/repos/matthewslouismarie/lm-web-framework/zipball/793268d96c4fe85c5323610bbaddc24aff570faa",
+                "reference": "793268d96c4fe85c5323610bbaddc24aff570faa",
                 "shasum": ""
             },
             "require": {
@@ -747,7 +747,7 @@
                 "issues": "https://github.com/matthewslouismarie/lm-web-framework/issues",
                 "source": "https://github.com/matthewslouismarie/lm-web-framework/tree/master"
             },
-            "time": "2025-03-19T23:36:51+00:00"
+            "time": "2025-03-23T05:10:48+00:00"
         },
         {
             "name": "nette/schema",

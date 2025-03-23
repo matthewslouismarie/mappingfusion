@@ -3,7 +3,6 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Configuration\Configuration;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\Controller\SinglePageOwner;
@@ -42,11 +41,6 @@ class HomeController implements IController, SinglePageOwner
                 ],
             )
         );
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ALL;
     }
 
     public function getPage(): Page

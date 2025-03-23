@@ -3,7 +3,6 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\DataStructures\SearchQuery;
@@ -49,11 +48,6 @@ class SearchController implements IController
                 'articles' => $articles,
             ],
         );
-    }
-
-    public function getAccessControl(): Clearance
-    {
-        return Clearance::ALL;
     }
 
     public function getPage(?string $queryStr): Page
