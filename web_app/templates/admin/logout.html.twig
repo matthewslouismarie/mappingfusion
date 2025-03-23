@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% from 'macros/macros.html.twig' import csrf, errorList, form_start, form_end %}
+
+{% block bodyContent %}
+<p>Souhaitez-vous vous déconnecter ?</p>
+
+{{ form_start(app) }}
+{{ form_end(app, 'Se déconnecter') }}
+
+{% endblock %}
