@@ -3,14 +3,14 @@
 namespace MF\Controller;
 
 use GuzzleHttp\Psr7\Response;
-use LM\WebFramework\Controller\IResponseGenerator;
+use LM\WebFramework\Controller\IController;
 use LM\WebFramework\DataStructures\Page;
 use MF\Router;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ErrorPageNotFoundController implements IResponseGenerator
+class ErrorPageNotFoundController implements IController
 {
     public function __construct(
         private PageFactory $pageFactory,
