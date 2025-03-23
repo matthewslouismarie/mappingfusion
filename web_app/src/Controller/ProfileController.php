@@ -39,7 +39,7 @@ class ProfileController implements IController
             throw new RequestedResourceNotFound();
         }
 
-        $articles = null !== $author['account'] ? $this->articleRepository->findArticlesFrom($author['account']['id']) : null;
+        $articles = $this->articleRepository->findArticlesFrom($author['id']);
 
         return $this->twig->respond(
             'author.html.twig',

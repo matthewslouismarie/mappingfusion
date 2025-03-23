@@ -14,6 +14,7 @@ use LM\WebFramework\Validation\Validator;
 use MF\Model\ArticleModelFactory;
 use LM\WebFramework\DataStructures\Slug;
 use LM\WebFramework\Model\Type\EntityModel;
+use MF\Repository\AccountRepository;
 use MF\Repository\Exception\EntityNotFoundException;
 use MF\Repository\ArticleRepository;
 use MF\Repository\BookRepository;
@@ -29,13 +30,14 @@ class AdminArticleController implements IController
     private EntityModel $model;
 
     public function __construct(
+        private AccountRepository $accountRepo,
         private ArticleModelFactory $articleModelFactory,
         private ArticleRepository $repo,
         private BookRepository $bookRepository,
         private CategoryRepository $catRepo,
         private DbEntityManager $em,
-        private FormRequestHandler $formController,
         private FormFactory $formFactory,
+        private FormRequestHandler $formController,
         private PageFactory $pageFactory,
         private Router $router,
         private SessionManager $session,
@@ -66,7 +68,7 @@ class AdminArticleController implements IController
                 'cover_filename' => [
                     'required' => null === $requestedId,
                 ],
-                'writer_id' => [
+                'author_id' => [
                     'ignore' => true,
                 ],
             ],
@@ -76,7 +78,7 @@ class AdminArticleController implements IController
             $lastUpdateDateTimeUtc = time() * 1000;
             $formData = $form->transformSubmittedData($request->getParsedBody(), $request->getUploadedFiles());
             $formData['id'] = $formData['id'] ?? (null !== $formData['title'] ? (new Slug($formData['title'], true))->__toString() : null);
-            $formData['writer_id'] = $this->session->getCurrentUsername();
+            $formData['author_id'] = $this->accountRepo->find($this->session->getCurrentUsername())['author_id'];
             $validator = new Validator($this->model);
             $formErrors = $validator->validate($formData);
     

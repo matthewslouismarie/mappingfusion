@@ -5,6 +5,7 @@ namespace MF\Repository;
 use MF\Database\DatabaseManager;
 use LM\WebFramework\DataStructures\AppObject;
 use LM\WebFramework\Database\DbEntityManager;
+use LM\WebFramework\DataStructures\AppList;
 use LM\WebFramework\Session\SessionManager;
 use MF\Model\ModelFactory;
 use MF\Model\ReviewModelFactory;
@@ -53,7 +54,7 @@ class ReviewRepository implements IRepository
         }
     }
 
-    public function findAll(): array
+    public function findAll(): AppList
     {
         $dbRows = $this->dbManager->fetchRows('SELECT * FROM v_article WHERE review_id IS NOT NULL;');
         $model = $this->modelFactory->getReviewModel(playable: true);

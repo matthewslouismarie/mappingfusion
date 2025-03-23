@@ -47,7 +47,7 @@ class Fixture
 
         $loulimi = new AppObject(
             [
-            'id' => 'root',
+            'id' => 'louli',
             'name' => 'Root',
             'avatar_filename' => null,
             ]
@@ -91,7 +91,7 @@ class Fixture
             [
             'id' => 'root',
             'password' => password_hash($this->config->getSetting('rootAccountPwd'), PASSWORD_DEFAULT),
-            'author_id' => 'root',
+            'author_id' => 'louli',
             ]
         );
         $this->accountRepo->add($rootAccount);
@@ -337,7 +337,7 @@ class Fixture
         $article1 = new AppObject(
             [
             'id' => 'nouvel-article',
-            'writer_id' => $rootAccount['id'],
+            'author_id' => $loulimi['id'],
             'category_id' => $cat0['id'],
             'body' => file_get_contents(dirname(__FILE__) . '/../../fixtures/article.md'),
             'is_featured' => true,
@@ -353,7 +353,7 @@ class Fixture
         $article2 = new AppObject(
             [
             'id' => 'nouvel-version-tcm',
-            'writer_id' => $rootAccount['id'],
+            'author_id' => $loulimi['id'],
             'category_id' => $cat1['id'],
             'body' => 'The Crystal Mission a reçu une nouvelle mise à jour, et franchement elle vaut le coup de rejouer à la map.',
             'is_featured' => true,
@@ -369,7 +369,7 @@ class Fixture
         $article3 = new AppObject(
             [
             'id' => 'prout-lol-xptdr',
-            'writer_id' => $rootAccount['id'],
+            'author_id' => $neophus['id'],
             'category_id' => $cat1['id'],
             'body' => 'The Crystal Mission a reçu une nouvelle mise à jour, et franchement elle vaut le coup de rejouer à la map.',
             'is_featured' => true,
@@ -385,7 +385,7 @@ class Fixture
         $article4 = new AppObject(
             [
             'id' => 'bonjour-a-tous',
-            'writer_id' => $rootAccount['id'],
+            'author_id' => $valve['id'],
             'category_id' => $cat1['id'],
             'body' => 'The Crystal Mission a reçu une nouvelle mise à jour, et franchement elle vaut le coup de rejouer à la map.',
             'is_featured' => false,
@@ -401,7 +401,7 @@ class Fixture
         $article5 = new AppObject(
             [
             'id' => 'commencement',
-            'writer_id' => $rootAccount['id'],
+            'author_id' => $scTeam['id'],
             'category_id' => $cat1['id'],
             'body' => 'Ceci est le tout début… Bienvenue à tout le monde ! Commencons sans plus attendre. Blah blah blah…',
             'is_featured' => false,
@@ -417,7 +417,7 @@ class Fixture
         $article6 = new AppObject(
             [
             'id' => 'la-compet',
-            'writer_id' => $rootAccount['id'],
+            'author_id' => $loulimi['id'],
             'category_id' => $cat1['id'],
             'body' => 'Rien de plus important que de réussir sa compétition. Une fois le jour J arrivé, tout l’entraînement n’aura servi à rien si l’on ne donne pas son maximum.',
             'is_featured' => false,
@@ -433,7 +433,7 @@ class Fixture
         $article7 = new AppObject(
             [
             'id' => 'article-with-thumbnail',
-            'writer_id' => $rootAccount['id'],
+            'author_id' => $neophus['id'],
             'category_id' => $cat1['id'],
             'body' => '',
             'is_featured' => false,
@@ -449,7 +449,7 @@ class Fixture
         $article8 = new AppObject(
             [
             'id' => 'goldsource-review',
-            'writer_id' => $rootAccount['id'],
+            'author_id' => $neophus['id'],
             'category_id' => $cat1['id'],
             'body' => 'Un moteur tout à fait génial !!!!',
             'is_featured' => true,
@@ -465,7 +465,7 @@ class Fixture
         $article9 = new AppObject(
             [
             'id'=> 'crossed-paths',
-            'writer_id'=> $rootAccount['id'],
+            'author_id'=> $valve['id'],
             'category_id'=> $cat1['id'],
             'body' => file_get_contents($this->config->getPathOfAppDirectory() .'/fixtures/crossed_paths.md'),
             'is_featured' => true,

@@ -18,8 +18,8 @@
 <div class="author-link"{% if itemprop %} itemprop="{{ itemprop }}"{% endif %} itemscope itemtype="https://schema.org/Person">
     <a class="link" href="{{ app.router.generateUrl('profil', [author.id]) }}" itemprop="url">
         <meta itemprop="identifier" content="{{ author.id }}">
-        {# {% if writer_id.avatar_filename %}
-        <img {{ app.imgAttr("Avatar de #{writer_id}", writer_id.avatar_filename, true, null, imgHeight, true)|raw }}>
+        {# {% if author_id.avatar_filename %}
+        <img {{ app.imgAttr("Avatar de #{author_id}", author_id.avatar_filename, true, null, imgHeight, true)|raw }}>
         {% endif %} #}
         <span itemprop="name">{{ author.name }}</span>
     </a>

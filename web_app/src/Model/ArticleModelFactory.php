@@ -29,7 +29,7 @@ class ArticleModelFactory
         $slugModel = $this->slugFactory->getSlugModel();
         $properties = [
             'id' => $slugModel,
-            'writer_id' => $slugModel,
+            'author_id' => $slugModel,
             'category_id' => $slugModel,
             'body' => new StringModel(),
             'is_featured' => new BoolModel(),
@@ -60,10 +60,10 @@ class ArticleModelFactory
             );
         }
         if (null !== $authorModel) {
-            $properties['writer'] = new ForeignEntityModel(
+            $properties['author'] = new ForeignEntityModel(
                 $authorModel,
                 'id',
-                'writer_id',
+                'author_id',
             );
         }
         if (null !== $chapterIndexModel) {

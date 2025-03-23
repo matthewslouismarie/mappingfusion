@@ -45,7 +45,7 @@ class ArticleRepository implements IUpdatableIdRepository
     public function add(AppObject $appObject): string
     {
         $this->dbManager->run(
-            'INSERT INTO e_article SET article_id = :id, article_writer_id = :writer_id, article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_sub_title = :sub_title, article_title = :title, article_cover_filename = :cover_filename, article_thumbnail_filename = :thumbnail_filename;',
+            'INSERT INTO e_article SET article_id = :id, article_author_id = :author_id, article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_sub_title = :sub_title, article_title = :title, article_cover_filename = :cover_filename, article_thumbnail_filename = :thumbnail_filename;',
             $this->em->toDbValue($appObject),
         );
 
@@ -127,7 +127,7 @@ class ArticleRepository implements IUpdatableIdRepository
      */
     public function findArticlesFrom(string $authorId): AppList
     {
-        $articleRows = $this->dbManager->fetchRows('SELECT * FROM v_article WHERE article_is_published = 1 AND article_writer_id = ? ORDER BY article_last_update_date_time DESC;', [$authorId]);
+        $articleRows = $this->dbManager->fetchRows('SELECT * FROM v_article WHERE article_is_published = 1 AND article_author_id = ? ORDER BY article_last_update_date_time DESC;', [$authorId]);
 
         $model = $this->articleModelFactory->create(categoryModel: $this->categoryModelFactory->create());
         $articles = $this->em->convertDbRowsToEntityList($articleRows, $model);
@@ -254,10 +254,10 @@ class ArticleRepository implements IUpdatableIdRepository
 
         $this->dbManager->getPdo()->beginTransaction();
 
-        $stmt = $this->dbManager->prepare('UPDATE e_article SET article_id = :id, ' . ($updateAuthor ? 'article_writer_id = :writer_id, ' : '') . 'article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_title = :title, article_sub_title = :sub_title, article_cover_filename = :cover_filename, article_last_update_date_time = NOW(), article_thumbnail_filename = :thumbnail_filename WHERE article_id = :persisted_id;');
+        $stmt = $this->dbManager->prepare('UPDATE e_article SET article_id = :id, ' . ($updateAuthor ? 'article_author_id = :author_id, ' : '') . 'article_category_id = :category_id, article_body = :body, article_is_featured = :is_featured, article_is_published = :is_published, article_title = :title, article_sub_title = :sub_title, article_cover_filename = :cover_filename, article_last_update_date_time = NOW(), article_thumbnail_filename = :thumbnail_filename WHERE article_id = :persisted_id;');
         
         if (!$updateAuthor) {
-            unset($dbArray['writer_id']);
+            unset($dbArray['author_id']);
         }
 
         $dbArray['persisted_id'] = $persistedId ?? $dbArray['id'];

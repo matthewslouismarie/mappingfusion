@@ -101,9 +101,9 @@ class PlayableRepository implements IUpdatableIdRepository
     }
 
     /**
-     * @return AppObject[]
+     * @return AppList[]
      */
-    public function findAll(): array
+    public function findAll(): AppList
     {
         $dbRows = $this->dbManager->fetchRows('SELECT * FROM e_playable;');
         $playables = $this->em->convertDbRowsToList($dbRows, $this->modelFactory->getPlayableModel());
@@ -113,7 +113,7 @@ class PlayableRepository implements IUpdatableIdRepository
     /**
      * @return AppObject[]
      */
-    public function findFromAuthor(string $authorId): array
+    public function findFromAuthor(string $authorId): AppList
     {
         $model = $this->modelFactory->getPlayableModel()->addProperty('article_id', new StringModel(isNullable: true));
         $dbRows = $this->dbManager->fetchRowsFromQueryFile(new SqlFilename('stmt_find_playables_from_author.sql'), [$authorId]);
@@ -129,10 +129,10 @@ class PlayableRepository implements IUpdatableIdRepository
     /**
      * Persists a list of entities, removing existing entities not part of the new list.
      * 
-     * @param EntityModel                                       $model              The model of the entities.
-     * @param IConstIdRepository The repository of the entities.
-     * @param AppObject[]                                       $newEntityList      The new entity list to persist.
-     * @param AppObject[]                                       $previousEntityList The previous, currently-persisted entity list.
+     * @param $model              The model of the entities.
+     * @param $repo               The repository of the entities.
+     * @param $newEntityList      The new entity list to persist.
+     * @param $previousEntityList The previous, currently-persisted entity list.
      */
     public function persistListProperty(
         EntityModel $model,

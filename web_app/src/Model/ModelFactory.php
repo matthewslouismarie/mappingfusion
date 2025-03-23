@@ -45,7 +45,7 @@ class ModelFactory
             playableModel: $this->getPlayableModel(contributions: true, game: true, links: true),
         );
         $model = $this->articleModelFactory->create(
-            authorModel: $this->getAuthorModel()->setIdentifier('writer')->removeProperty('avatar_filename'),
+            authorModel: $this->getAuthorModel()->removeProperty('avatar_filename'),
             categoryModel: $this->getCategoryModel(),
             reviewModel: $reviewModel,
             chapterIndexModel: $this->getChapterIndexModel(isNew: false, withArticleModel: false),
