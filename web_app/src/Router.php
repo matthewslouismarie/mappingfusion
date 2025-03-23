@@ -30,24 +30,26 @@ class Router
         return $routeId ?? null;
     }
 
-    private function searchRoute(
-        string $controllerFqcn,
-        AppObject $currentRoute
-    ): bool|string {
-        if ($currentRoute->hasProperty('controller') && $controllerFqcn === $currentRoute['controller']['class']) {
-            return true;
-        }
-        
-        if ($currentRoute->hasProperty('routes')) {
-            foreach ($currentRoute['routes'] as $routeSegment => $route) {
-                if (true === $this->searchRoute($controllerFqcn, $route)) {
-                    return "/$routeSegment";
+    /**
+     * @todo Recursive function.
+     */
+    private function searchRoute(string $fqcn, AppObject $route, string $routeId = ''): ?string
+    {
+        if ($route->hasProperty('controller') && $fqcn === $route['controller']['class']) {
+            return $routeId;
+        } elseif ($route->hasProperty('routes')) {
+            foreach ($route['routes'] as $subrouteId => $subroute) {
+                $idsToFqcn = $this->searchRoute($fqcn, $subroute, $subrouteId);
+                if (null !== $idsToFqcn) {
+                    if ('' !== $routeId) {
+                        return "{$routeId}/{$idsToFqcn}";
+                    } else {
+                        return $idsToFqcn;
+                    }
                 }
             }
-
         }
-        
-        return false;
+        return null;
     }
 
     /**

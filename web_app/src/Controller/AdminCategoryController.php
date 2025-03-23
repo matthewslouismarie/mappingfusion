@@ -93,7 +93,7 @@ class AdminCategoryController implements IController
 
     public function getPage(?AppObject $category): Page
     {
-        return $this->pageFactory->create(
+        return $this->pageFactory->createPage(
             is_null($category) ? 'Nouvelle catégorie' : $category['name'],
             self::class,
             is_null($category) ? [] : [$category['id']],
