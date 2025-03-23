@@ -6,6 +6,8 @@ use LM\WebFramework\AccessControl\Clearance;
 use LM\WebFramework\Controller\IController;
 use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\Page;
+use LM\WebFramework\Form\FormFactory;
+use LM\WebFramework\Model\Type\DataArrayModel;
 use LM\WebFramework\Session\SessionManager;
 use MF\Repository\AccountRepository;
 use MF\TwigService;
@@ -18,6 +20,7 @@ class LogoutController implements IController, SinglePageOwner
         private AccountRepository $repo,
         private PageFactory $pageFactory,
         private SessionManager $session,
+        private FormFactory $formFactory,
         private TwigService $twig,
     ) {
     }
@@ -28,7 +31,9 @@ class LogoutController implements IController, SinglePageOwner
         array $serverParams,
     ): ResponseInterface {
         $formError = null;
+        $form = $this->formFactory->createForm(new DataArrayModel([]));
         if ('POST' === $request->getMethod()) {
+            $form->transformSubmittedData($request->getParsedBody(), $request->getUploadedFiles());
             $this->session->setCurrentUsername(null);
             return $this->twig->respond(
                 'success.html.twig',
@@ -40,7 +45,7 @@ class LogoutController implements IController, SinglePageOwner
             );
         }
         return $this->twig->respond(
-            'admin/deconnexion.html.twig',
+            'admin/logout.html.twig',
             $this->getPage(),
         );
     }
