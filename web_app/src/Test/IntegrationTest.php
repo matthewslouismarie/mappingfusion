@@ -82,7 +82,7 @@ class IntegrationTest implements IUnitTest
             $this->tester->assertStringContains(
                 $httpResponseCode,
                 $url[1],
-                "HTTP response code is $httpResponseCode, should contain 200 OK.",
+                "HTTP response code is {$httpResponseCode}, should be {$url[1]}, for {$url[0]}.",
             );
         }
 
