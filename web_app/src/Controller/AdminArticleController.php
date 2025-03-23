@@ -76,7 +76,7 @@ class AdminArticleController implements IController
             $lastUpdateDateTimeUtc = time() * 1000;
             $formData = $form->transformSubmittedData($request->getParsedBody(), $request->getUploadedFiles());
             $formData['id'] = $formData['id'] ?? (null !== $formData['title'] ? (new Slug($formData['title'], true))->__toString() : null);
-            $formData['writer_id'] = $this->session->getCurrentMemberUsername();
+            $formData['writer_id'] = $this->session->getCurrentUsername();
             $validator = new Validator($this->model);
             $formErrors = $validator->validate($formData);
     
