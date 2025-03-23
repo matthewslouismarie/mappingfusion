@@ -59,7 +59,7 @@ class AdminPlayableController implements IFormController
     public function getPage(?array $formData, ?string $id): Page
     {
         return $this->pageFactory->create(
-            null === $id ? 'Nouveau jeu' : $formData['name'],
+            null === $formData ? 'Nouveau jeu' : $formData['name'],
             self::class,
             null === $id ? [] : [$id],
             parentFqcn: AdminPlayableListController::class,
