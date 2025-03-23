@@ -87,7 +87,7 @@ class Router
      */
     public function getRouteParams(ServerRequestInterface $request): array
     {
-        return HttpRequestHandler::getPathSegments($request);
+        return HttpRequestHandler::getPathSegments($request->getRequestTarget());
     }
 
     public function redirect(string $controllerFqcn, $parameters = []): ResponseInterface
