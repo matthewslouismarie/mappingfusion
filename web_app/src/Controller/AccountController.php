@@ -11,9 +11,9 @@ use LM\WebFramework\Form\FormFactory;
 use LM\WebFramework\Model\Type\StringModel;
 use LM\WebFramework\Session\SessionManager;
 use LM\WebFramework\Validation\Validator;
-use MF\Model\MemberModelFactory;
+use MF\Model\AccountModelFactory;
 use MF\Repository\AuthorRepository;
-use MF\Repository\MemberRepository;
+use MF\Repository\AccountRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -23,8 +23,8 @@ class AccountController implements IController, SinglePageOwner
     public function __construct(
         private AuthorRepository $authorRepository,
         private FormFactory $formFactory,
-        private MemberModelFactory $memberModelFactory,
-        private MemberRepository $repo,
+        private AccountModelFactory $accountModelFactory,
+        private AccountRepository $repo,
         private PageFactory $pageFactory,
         private SessionManager $session,
         private TwigService $twig,
@@ -36,16 +36,16 @@ class AccountController implements IController, SinglePageOwner
         array $routeParams,
         array $serverParams,
     ): ResponseInterface {
-        $member = $this->repo->find($this->session->getCurrentMemberUsername());
+        $account = $this->repo->find($this->session->getCurrentUsername());
 
-        $model = $this->memberModelFactory
+        $model = $this->accountModelFactory
             ->create()
             ->prune(['id', 'author_id'])
             ->addProperty('password', new StringModel(isNullable: true))
         ;
         
         $form = $this->formFactory->createForm($model);
-        $formData = $member;
+        $formData = $account;
         $formErrors = null;
 
         if ('POST' === $request->getMethod()) {
@@ -55,11 +55,11 @@ class AccountController implements IController, SinglePageOwner
             if (0 === count($formErrors)) {
                 $appObject = new AppObject($formData);
                 if (null !== $formData['password']) {
-                    $this->repo->update($appObject, $this->session->getCurrentMemberUsername());
+                    $this->repo->update($appObject, $this->session->getCurrentUsername());
                 } else {
-                    $this->repo->updateExceptPassword($appObject, $this->session->getCurrentMemberUsername());
+                    $this->repo->updateExceptPassword($appObject, $this->session->getCurrentUsername());
                 }
-                $this->session->setCurrentMemberUsername($appObject['id']);
+                $this->session->setCurrentUsername($appObject['id']);
                 $this->session->addMessage('Votre compte a été mis à jour.');
             }
         }
@@ -71,7 +71,7 @@ class AccountController implements IController, SinglePageOwner
                 'authors' => $this->authorRepository->findAll(),
                 'formData' => $formData,
                 'formErrors' => $formErrors,
-                'member' => $member,
+                'account' => $account,
             ],
         );
     }

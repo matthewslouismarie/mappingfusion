@@ -1,6 +1,6 @@
-UPDATE e_member
+UPDATE e_account
 SET
-    member_id = :id,
-    member_author_id = :author_id
-WHERE member_id = :persisted_id
+    account_id = :id,
+    account_author_id = :author_id
+WHERE account_id = :persisted_id
 ;

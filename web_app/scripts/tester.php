@@ -1,14 +1,14 @@
 <?php
 
+$container = require_once(dirname(__FILE__) . '/../index.php');
+
 use MF\Logging\Logger;
 use MF\Test\IUnitTest;
-
-$container = require_once(dirname(__FILE__) . '/../index.php');
 
 $logger = $container->get(Logger::class);
 
 if (count($argv) < 2) {
-    echo('No unit test was passed.');
+    echo("No unit test was passed.\n");
     exit -1;
 }
 
@@ -16,7 +16,7 @@ $allFailures = [];
 foreach (array_slice($argv, 1) as $unitTestClass) {
     $unitTest = $container->get($unitTestClass);
     if (!$unitTest instanceof IUnitTest) {
-        echo('Argument is not a IUnitTest implementation class.');
+        echo("Argument is not a IUnitTest implementation class.\n");
         exit -2;
     }
     $unitTestFailures = $unitTest->run();
@@ -27,14 +27,15 @@ foreach (array_slice($argv, 1) as $unitTestClass) {
 }
 
 if (count($allFailures) > 0) {
-    echo('Some tests failed');
+    echo("Some tests failed.\n");
     foreach ($allFailures as $unitTestClass => $failures) {
-        echo("{$unitTestClass} failed!");
+        echo("{$unitTestClass} failed!\n");
         foreach ($failures as $failure) {
-            echo($failure->getTitle());
-            echo("\t" . str_replace("\n", "\t\n", $failure->getMessage()));
+            echo("{$failure->getTitle()}\n");
+            $formattedMessage = str_replace("\n", "\t\n", $failure->getMessage());
+            echo("\t{$formattedMessage}\n");
         }
     }
 } else {
-    echo('Tests completed successfully.');
+    echo("Tests completed successfully.\n");
 }

@@ -17,7 +17,7 @@ class ModelFactory
         private ChapterIndexModelFactory $chapterIndexModelFactory,
         private ChapterModelFactory $chapterModelFactory,
         private ContributionModelFactory $contributionModelFactory,
-        private MemberModelFactory $memberModelFactory,
+        private AccountModelFactory $accountModelFactory,
         private PlayableLinkModelFactory $playableLinkModelFactory,
         private PlayableModelFactory $playableModelFactory,
         private ReviewModelFactory $reviewModelFactory,
@@ -93,9 +93,9 @@ class ModelFactory
         return $this->contributionModelFactory->create($author ? $this->getAuthorModel() : null);
     }
 
-    public function getMemberModel(): EntityModel
+    public function getAccountModel(): EntityModel
     {
-        return $this->memberModelFactory->create();
+        return $this->accountModelFactory->create();
     }
 
     public function getPlayableLinkModel(): EntityModel

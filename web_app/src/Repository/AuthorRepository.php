@@ -8,7 +8,7 @@ use LM\WebFramework\DataStructures\AppList;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\DataStructure\SqlFilename;
 use MF\Model\AuthorModelFactory;
-use MF\Model\MemberModelFactory;
+use MF\Model\AccountModelFactory;
 use UnexpectedValueException;
 
 class AuthorRepository implements IUpdatableIdRepository
@@ -17,7 +17,7 @@ class AuthorRepository implements IUpdatableIdRepository
         private AuthorModelFactory $authorModelFactory,
         private DatabaseManager $dbManager,
         private DbEntityManager $em,
-        private MemberModelFactory $memberModelFactory,
+        private AccountModelFactory $accountModelFactory,
     ) {
     }
 
@@ -43,7 +43,7 @@ class AuthorRepository implements IUpdatableIdRepository
         if (0 === count($dbRows)) {
             return null;
         } elseif (1 === count($dbRows)) {
-            $model = $this->authorModelFactory->create($this->memberModelFactory->create());
+            $model = $this->authorModelFactory->create($this->accountModelFactory->create());
             return $this->em->convertDbRowsToAppObject($dbRows, $model);
         } else {
             throw new UnexpectedValueException();

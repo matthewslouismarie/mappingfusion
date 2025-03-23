@@ -16,5 +16,5 @@ FROM e_article
     LEFT JOIN e_review ON article_id = review_article_id
     LEFT JOIN e_playable ON review_playable_id = playable_id
     LEFT JOIN e_playable AS game ON e_playable.playable_game_id = game.playable_id
-    LEFT JOIN (e_member, e_author) ON (article_writer_id = member_id AND member_author_id = author_id)
+    LEFT JOIN (e_account, e_author) ON (article_writer_id = account_id AND account_author_id = author_id)
 ;

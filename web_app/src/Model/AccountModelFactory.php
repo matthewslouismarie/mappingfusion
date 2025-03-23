@@ -6,7 +6,7 @@ use LM\WebFramework\Model\Factory\SlugModelFactory;
 use LM\WebFramework\Model\Type\EntityModel;
 use LM\WebFramework\Model\Type\StringModel;
 
-class MemberModelFactory
+class AccountModelFactory
 {
     public function __construct(
         private SlugModelFactory $slugModelFactory,
@@ -27,7 +27,7 @@ class MemberModelFactory
         }
         
         return new EntityModel(
-            'member',
+            'account',
             $properties,
             'id',
             $isNullable,

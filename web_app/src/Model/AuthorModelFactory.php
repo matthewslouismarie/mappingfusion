@@ -20,7 +20,7 @@ class AuthorModelFactory
     ) {
     }
 
-    public function create(?EntityModel $memberModel = null): EntityModel
+    public function create(?EntityModel $accountModel = null): EntityModel
     {
         $properties = [
             'id' => $this->slugModelFactory->getSlugModel(),
@@ -28,8 +28,8 @@ class AuthorModelFactory
             'avatar_filename' => $this->uploadedImageModelFactory->getModel(isNullable: true),
         ];
         
-        if (null !== $memberModel) {
-            $properties['member'] = new ForeignEntityModel($memberModel, 'author_id', 'id', true);
+        if (null !== $accountModel) {
+            $properties['account'] = new ForeignEntityModel($accountModel, 'author_id', 'id', true);
         }
         
         return new EntityModel(

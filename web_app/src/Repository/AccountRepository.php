@@ -6,24 +6,24 @@ use MF\Database\DatabaseManager;
 use LM\WebFramework\Database\DbEntityManager;
 use LM\WebFramework\DataStructures\AppObject;
 use MF\Model\AuthorModelFactory;
-use MF\Model\MemberModelFactory;
+use MF\Model\AccountModelFactory;
 use UnexpectedValueException;
 
-class MemberRepository implements IUpdatableIdRepository
+class AccountRepository implements IUpdatableIdRepository
 {
     public function __construct(
         private AuthorModelFactory $authorModelFactory,
         private DatabaseManager $dbManager,
         private DbEntityManager $em,
-        private MemberModelFactory $memberModelFactory,
+        private AccountModelFactory $accountModelFactory,
     ) {
     }
 
-    public function add(AppObject $member): string
+    public function add(AppObject $account): string
     {
         $this->dbManager->run(
-            'INSERT INTO e_member VALUES (:id, :password, :author_id, UUID());',
-            $this->em->toDbValue($member),
+            'INSERT INTO e_account VALUES (:id, :password, :author_id, UUID());',
+            $this->em->toDbValue($account),
         );
         return $this->dbManager->getLastInsertId();
     }
@@ -31,7 +31,7 @@ class MemberRepository implements IUpdatableIdRepository
     public function delete(string $id): void
     {
         $this->dbManager->run(
-            'DELETE FROM e_member WHERE member_id = :id;',
+            'DELETE FROM e_account WHERE account_id = :id;',
             [
                 'id' => $id,
             ],
@@ -41,7 +41,7 @@ class MemberRepository implements IUpdatableIdRepository
     public function find(string $username): ?AppObject
     {
         $data = $this->dbManager->fetchRows(
-            'SELECT * FROM e_member LEFT JOIN e_author ON member_author_id = author_id WHERE (member_id=?) LIMIT 1;',
+            'SELECT * FROM e_account LEFT JOIN e_author ON account_author_id = author_id WHERE (account_id=?) LIMIT 1;',
             [$username],
         );
 
@@ -49,9 +49,9 @@ class MemberRepository implements IUpdatableIdRepository
             return null;
         } elseif (1 === count($data)) {
             if (null === $data[0]['author_id']) {
-                $model = $this->memberModelFactory->create();
+                $model = $this->accountModelFactory->create();
             } else {
-                $model = $this->memberModelFactory->create($this->authorModelFactory->create());
+                $model = $this->accountModelFactory->create($this->authorModelFactory->create());
             }
             return $this->em->convertDbRowsToAppObject($data, $model);
         } else {

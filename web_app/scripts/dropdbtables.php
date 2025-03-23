@@ -11,7 +11,7 @@ $dbName = $container->get(Configuration::class)->getSetting('dbName');
 $connection->run('DROP TABLE e_article;');
 $connection->run('DROP TABLE e_contribution;');
 $connection->run('DROP TABLE e_category;');
-$connection->run('DROP TABLE e_member;');
+$connection->run('DROP TABLE e_account;');
 $connection->run('DROP TABLE e_playable_link;');
 $connection->run('DROP TABLE e_review;');
 $connection->run('DROP TABLE e_playable;');

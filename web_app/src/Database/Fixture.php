@@ -13,7 +13,7 @@ use MF\Repository\BookRepository;
 use MF\Repository\CategoryRepository;
 use MF\Repository\ChapterRepository;
 use MF\Repository\ContributionRepository;
-use MF\Repository\MemberRepository;
+use MF\Repository\AccountRepository;
 use MF\Repository\PlayableLinkRepository;
 use MF\Repository\PlayableRepository;
 use MF\Repository\ReviewRepository;
@@ -29,7 +29,7 @@ class Fixture
         private Configuration $config,
         private ContributionRepository $contribRepo,
         private DatabaseManager $dbManager,
-        private MemberRepository $memberRepo,
+        private AccountRepository $accountRepo,
         private PlayableLinkRepository $playableLinkRepo,
         private PlayableRepository $playableRepo,
         private ReviewRepository $reviewRepo,
@@ -90,11 +90,11 @@ class Fixture
         $rootAccount = new AppObject(
             [
             'id' => 'root',
-            'password' => password_hash($this->config->getSetting('rootMemberPwd'), PASSWORD_DEFAULT),
+            'password' => password_hash($this->config->getSetting('rootAccountPwd'), PASSWORD_DEFAULT),
             'author_id' => 'root',
             ]
         );
-        $this->memberRepo->add($rootAccount);
+        $this->accountRepo->add($rootAccount);
 
 
         /**

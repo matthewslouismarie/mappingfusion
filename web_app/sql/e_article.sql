@@ -11,6 +11,6 @@ CREATE TABLE e_article (
     article_creation_date_time TIMESTAMP NOT NULL DEFAULT NOW(),
     article_last_update_date_time TIMESTAMP NOT NULL DEFAULT NOW(),
     article_thumbnail_filename VARCHAR(%1$s),
-    FOREIGN KEY (article_writer_id) REFERENCES e_member (member_id) ON UPDATE CASCADE,
+    FOREIGN KEY (article_writer_id) REFERENCES e_account (account_id) ON UPDATE CASCADE,
     FOREIGN KEY (article_category_id) REFERENCES e_category (category_id) ON UPDATE CASCADE
 )

@@ -125,9 +125,9 @@ class ArticleRepository implements IUpdatableIdRepository
      * @todo   Create and use fetchRows method that takes the filename of a SQL query?
      * @return AppObject[]
      */
-    public function findArticlesFrom(string $memberId): AppList
+    public function findArticlesFrom(string $authorId): AppList
     {
-        $articleRows = $this->dbManager->fetchRows('SELECT * FROM v_article WHERE article_is_published = 1 AND article_writer_id = ? ORDER BY article_last_update_date_time DESC;', [$memberId]);
+        $articleRows = $this->dbManager->fetchRows('SELECT * FROM v_article WHERE article_is_published = 1 AND article_writer_id = ? ORDER BY article_last_update_date_time DESC;', [$authorId]);
 
         $model = $this->articleModelFactory->create(categoryModel: $this->categoryModelFactory->create());
         $articles = $this->em->convertDbRowsToEntityList($articleRows, $model);

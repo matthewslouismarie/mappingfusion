@@ -7,7 +7,7 @@ use LM\WebFramework\Controller\IController;
 use LM\WebFramework\Controller\SinglePageOwner;
 use LM\WebFramework\DataStructures\Page;
 use LM\WebFramework\Session\SessionManager;
-use MF\Repository\MemberRepository;
+use MF\Repository\AccountRepository;
 use MF\TwigService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,7 +15,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class LogoutController implements IController, SinglePageOwner
 {
     public function __construct(
-        private MemberRepository $repo,
+        private AccountRepository $repo,
         private PageFactory $pageFactory,
         private SessionManager $session,
         private TwigService $twig,
@@ -29,7 +29,7 @@ class LogoutController implements IController, SinglePageOwner
     ): ResponseInterface {
         $formError = null;
         if ('POST' === $request->getMethod()) {
-            $this->session->setCurrentMemberUsername(null);
+            $this->session->setCurrentUsername(null);
             return $this->twig->respond(
                 'success.html.twig',
                 $this->getPage(),
