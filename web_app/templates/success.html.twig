@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% from 'macros/macros.html.twig' import positiveMessage %}
+
 {% block bodyContent %}
-<p class="_txt -textcentered">{{ message }}</p>
+{% macro positiveMessage(message) %}
 {% endblock %}

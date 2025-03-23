@@ -168,6 +168,11 @@ class DatabaseManager
             LinkType::Other->value,
         );
 
+        $this->createViews();
+    }
+
+    public function createViews(): void
+    {
         $this->runFilename('v_book.sql');
         $this->runFilename('v_article.sql');
         $this->runFilename('v_article_published.sql');

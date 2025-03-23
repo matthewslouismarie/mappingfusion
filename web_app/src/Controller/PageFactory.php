@@ -8,6 +8,10 @@ use LM\WebFramework\DataStructures\Page;
 use MF\Router;
 use Psr\Container\ContainerInterface;
 
+/**
+ * @todo Remove/merge duplicate methods? Or document their difference
+ * better.
+ */
 class PageFactory
 {
     public function __construct(

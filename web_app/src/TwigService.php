@@ -37,6 +37,9 @@ class TwigService
         }
     }
 
+    /**
+     * @todo To delete (obsoleted by respond?)?
+     */
     public function render(string $filename, Page $page, array $parameters = []): string
     {
         if (isset($parameters['app'])) {
